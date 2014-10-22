@@ -1,0 +1,2 @@
+22/10/2014 12:48PM JOEY:
+I included a folder named appcompat_v7. If your android project could not find R, import appcompat_v7 as an android project and include the project under IsLibrary in Configure Build Path.
