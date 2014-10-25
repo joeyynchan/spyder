@@ -3,7 +3,7 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="g1436218.spyder.MainActivity"
+    tools:context="com.g1436218.spyder.MainActivity"
     tools:ignore="MergeRootFrame" >
 
     <Button
