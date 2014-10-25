@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 public class MainActivity extends Activity {
 	
+	//this device's own bluetooth adapter
 	private BluetoothAdapter BTAdapter = BluetoothAdapter.getDefaultAdapter();
 
 	private final BroadcastReceiver receiver = new BroadcastReceiver(){
@@ -30,7 +31,9 @@ public class MainActivity extends Activity {
 	                int rssi = intent.getShortExtra(BluetoothDevice.EXTRA_RSSI,Short.MIN_VALUE);
 	                String name = intent.getStringExtra(BluetoothDevice.EXTRA_NAME);
 	                TextView rssi_msg = (TextView) findViewById(R.id.textView1);
-	                rssi_msg.setText(rssi_msg.getText() + name + " => " + rssi + "dBm\n");
+	                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+	                
+	                rssi_msg.setText(rssi_msg.getText() + name + " ( " + device.getAddress() + " ) => " + rssi + "dBm\n");
 	            }
 	        }
 	    };
