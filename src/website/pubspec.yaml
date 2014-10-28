@@ -1,0 +1,4 @@
+name: prox_sensing
+description: Social Networks in the Real World through Proximity Sensing
+environment:
+  sdk: '>=1.6.0 <2.0.0'
