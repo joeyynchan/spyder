@@ -1,10 +1,10 @@
 package com.g1436218.Activity;
 
+import g1436218.spyder.R;
+
+import java.util.Calendar;
 import java.util.HashSet;
 
-import com.g1436218.Object.Connection;
-
-import g1436218.spyder.R;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -13,6 +13,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,46 +25,85 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.g1436218.Object.Connection;
+
 public class MainActivity extends Activity {
 	
-	//this device's own bluetooth adapter
+	private final int TASK_DELAY_DURATION = 30; /* in seconds */
+	
 	private BluetoothAdapter BTAdapter = BluetoothAdapter.getDefaultAdapter();
 	private HashSet<Connection> connections;
+	private Handler handler = new Handler();
+	private Calendar calendar = Calendar.getInstance();
+	private String currentTime;
 	
 	private final BroadcastReceiver receiver = new BroadcastReceiver(){
 		@Override
 		public void onReceive(Context context, Intent intent) {
-	            String action = intent.getAction();
-	            if(BluetoothDevice.ACTION_FOUND.equals(action)) {
-	                int rssi = intent.getShortExtra(BluetoothDevice.EXTRA_RSSI,Short.MIN_VALUE);
-	                String name = intent.getStringExtra(BluetoothDevice.EXTRA_NAME);
-	                TextView rssi_msg = (TextView) findViewById(R.id.textView1);
-	                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-	                connections.add(new Connection(device.getAddress(), rssi));
-	                
-	                rssi_msg.setText(rssi_msg.getText() + connections.toString() + "\n");
-	            }
-	        }
-	    };
+
+        	TextView textview = (TextView) findViewById(R.id.textView1);
+        	String action = intent.getAction();
+	            
+            if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+                int rssi = intent.getShortExtra(BluetoothDevice.EXTRA_RSSI, Short.MIN_VALUE);
+                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                connections.add(new Connection(device.getAddress(), rssi));
+                Log.d("MainActivity", "Device, " + device.getName() + " (" + device.getAddress() + ") has been detected with rssi: " + rssi + " dBm.");
+            } else if (BluetoothAdapter.ACTION_DISCOVERY_STARTED.equals(action)) {
+            	getCurrentTime();
+	            Log.d("MainActivity", "ACTION_DISCOVERY_STARTED");
+            } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
+	            textview.setText(connections.toString() + "\n");
+	            Log.d("MainActivity", "ACTION_DISCOVERY_FINISHED");
+	            Log.d("MainActivity", connections.toString());
+            }
+        }
+    };
+    
+    private Runnable mDiscoveryTask = new Runnable() {
+		@Override
+		public void run() {
+			/* Reset the list of connections */
+        	connections = new HashSet<Connection>();
+            BTAdapter.startDiscovery();
+            handler.postDelayed(this, TASK_DELAY_DURATION * 1000);
+		}
+    };
+    
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		registerReceiver(receiver, new IntentFilter(BluetoothDevice.ACTION_FOUND));
-		connections = new HashSet<Connection>();
 		
-		Button boton = (Button) findViewById(R.id.button1);
+		Button button = (Button) findViewById(R.id.button1);
+		
+		initializeIntentFilter();
 		
 		if (!BTAdapter.isEnabled()) {
-			boton.setText("Bluetooth is not enabled");
+			button.setText("Bluetooth is not enabled");
 		}
-        boton.setOnClickListener(new OnClickListener(){
+        button.setOnClickListener(new OnClickListener(){
             public void onClick(View v) {
-            	BTAdapter.cancelDiscovery();
-                BTAdapter.startDiscovery();
+            	handler.post(mDiscoveryTask);
+            	Log.d("MainActivity", "Handler has posted mDiscoveryTask");
             }
         });
+        
+	}
+	
+	private void initializeIntentFilter() {
+		IntentFilter filter = new IntentFilter();
+		filter.addAction(BluetoothDevice.ACTION_FOUND);
+		filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED);
+		filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
+		this.registerReceiver(receiver, filter);
+	}
+	
+	private void getCurrentTime() {
+		currentTime = calendar.get(Calendar.YEAR) + "-" + calendar.get(Calendar.MONTH) + "-" + calendar.get(Calendar.DAY_OF_MONTH) + " " +
+						calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE) + ":" + calendar.get(Calendar.SECOND);
 	}
 
 	@Override
