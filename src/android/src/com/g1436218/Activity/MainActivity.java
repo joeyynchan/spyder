@@ -1,4 +1,8 @@
-package com.g1436218.spyder;
+package com.g1436218.Activity;
+
+import java.util.HashSet;
+
+import com.g1436218.Object.Connection;
 
 import g1436218.spyder.R;
 import android.app.Activity;
@@ -10,6 +14,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,7 +28,8 @@ public class MainActivity extends Activity {
 	
 	//this device's own bluetooth adapter
 	private BluetoothAdapter BTAdapter = BluetoothAdapter.getDefaultAdapter();
-
+	private HashSet<Connection> connections;
+	
 	private final BroadcastReceiver receiver = new BroadcastReceiver(){
 		@Override
 		public void onReceive(Context context, Intent intent) {
@@ -33,8 +39,9 @@ public class MainActivity extends Activity {
 	                String name = intent.getStringExtra(BluetoothDevice.EXTRA_NAME);
 	                TextView rssi_msg = (TextView) findViewById(R.id.textView1);
 	                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+	                connections.add(new Connection(device.getAddress(), rssi));
 	                
-	                rssi_msg.setText(rssi_msg.getText() + name + " ( " + device.getAddress() + " ) => " + rssi + "dBm\n");
+	                rssi_msg.setText(rssi_msg.getText() + connections.toString() + "\n");
 	            }
 	        }
 	    };
@@ -44,13 +51,16 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		registerReceiver(receiver, new IntentFilter(BluetoothDevice.ACTION_FOUND));
-
+		connections = new HashSet<Connection>();
+		
 		Button boton = (Button) findViewById(R.id.button1);
+		
 		if (!BTAdapter.isEnabled()) {
 			boton.setText("Bluetooth is not enabled");
 		}
         boton.setOnClickListener(new OnClickListener(){
             public void onClick(View v) {
+            	BTAdapter.cancelDiscovery();
                 BTAdapter.startDiscovery();
             }
         });
