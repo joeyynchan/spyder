@@ -6,37 +6,48 @@
 
 __author__ = 'Gun Pinyo (gunpinyo@gmail.com)'
 
-import bottle
+from bottle import Bottle, static_file, response, request, run
 import environment
 import db_interface
 
-app = bottle.Bottle()
+app = Bottle()
 
 
 @app.get('/')
 def index():
-    base_template = environment.JINJA_ENV.get_template('/views/simple.html')
+    base_template = environment.JINJA_ENV.get_template(
+        '/views/simple.html.jinja')
     return base_template.render({})
 
 
 @app.get('/assets/<filepath:path>')
-def static_assets(filepath):
-    return bottle.static_file('/assets/'+filepath, root=environment.ROOT_PATH)
+def serve_static_assets(filepath):
+    return static_file(
+        '/assets/'+filepath, root=environment.ROOT_PATH)
+
+
+@app.get('/packages/<filepath:path>')
+def serve_static_dart_package(filepath):
+    return static_file(
+        '/packages/'+filepath, root=environment.ROOT_PATH)
 
 
 @app.get('/ajax/conferences')
-def list_conferences():
+def get_list_conferences():
+    response.content_type = 'application/json'
     return db_interface.list_conferences()
 
 
-@app.get('/ajax/conference/<conference_id>/contact-list')
-def contact_list(conference_id):
-    return db_interface.contact_list(conference_id)
+# @app.get('/ajax/conference/<conference_id>/contact-list')
+# def contact_list(conference_id):
+#     response.content_type = 'application/json'
+#     return db_interface.contact_list(conference_id)
 
 
-@app.get('/ajax/conference/<conference_id>/contact-interval')
-def contact_interval(conference_id):
-    return db_interface.contact_interval(conference_id)
+@app.get('/ajax/contact-interval')
+def contact_interval():
+    response.content_type = 'application/json'
+    return db_interface.contact_interval(int(request.query.conference_id))
 
 
-bottle.run(app, host='localhost', port=8080, debug=True)
+run(app, host='localhost', port=8080, debug=True, reloader=True)
