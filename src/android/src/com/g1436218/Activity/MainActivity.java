@@ -2,7 +2,6 @@ package com.g1436218.Activity;
 
 import g1436218.spyder.R;
 
-import java.util.Calendar;
 import java.util.HashSet;
 
 import android.app.Activity;
@@ -30,12 +29,11 @@ import com.g1436218.Object.Connection;
 public class MainActivity extends Activity {
 	
 	private final int TASK_DELAY_DURATION = 30; /* in seconds */
+	private final String TAG = "MainActivity";
 	
 	private BluetoothAdapter BTAdapter = BluetoothAdapter.getDefaultAdapter();
 	private HashSet<Connection> connections;
 	private Handler handler = new Handler();
-	private Calendar calendar = Calendar.getInstance();
-	private String currentTime;
 	
 	private final BroadcastReceiver receiver = new BroadcastReceiver(){
 		@Override
@@ -48,14 +46,13 @@ public class MainActivity extends Activity {
                 int rssi = intent.getShortExtra(BluetoothDevice.EXTRA_RSSI, Short.MIN_VALUE);
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 connections.add(new Connection(device.getAddress(), rssi));
-                Log.d("MainActivity", "Device, " + device.getName() + " (" + device.getAddress() + ") has been detected with rssi: " + rssi + " dBm.");
+                Log.d(TAG, "Device, " + device.getName() + " (" + device.getAddress() + ") has been detected with rssi: " + rssi + " dBm.");
             } else if (BluetoothAdapter.ACTION_DISCOVERY_STARTED.equals(action)) {
-            	getCurrentTime();
-	            Log.d("MainActivity", "ACTION_DISCOVERY_STARTED");
+	            Log.d(TAG, "ACTION_DISCOVERY_STARTED");
             } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
 	            textview.setText(connections.toString() + "\n");
-	            Log.d("MainActivity", "ACTION_DISCOVERY_FINISHED");
-	            Log.d("MainActivity", connections.toString());
+	            Log.d(TAG, "ACTION_DISCOVERY_FINISHED");
+	            Log.d(TAG, connections.toString());
             }
         }
     };
@@ -75,19 +72,17 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		registerReceiver(receiver, new IntentFilter(BluetoothDevice.ACTION_FOUND));
-		
-		Button button = (Button) findViewById(R.id.button1);
 		
 		initializeIntentFilter();
 		
+		Button button = (Button) findViewById(R.id.button1);
 		if (!BTAdapter.isEnabled()) {
 			button.setText("Bluetooth is not enabled");
 		}
         button.setOnClickListener(new OnClickListener(){
             public void onClick(View v) {
             	handler.post(mDiscoveryTask);
-            	Log.d("MainActivity", "Handler has posted mDiscoveryTask");
+            	Log.d(TAG, "Handler has posted mDiscoveryTask");
             }
         });
         
@@ -99,11 +94,6 @@ public class MainActivity extends Activity {
 		filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED);
 		filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
 		this.registerReceiver(receiver, filter);
-	}
-	
-	private void getCurrentTime() {
-		currentTime = calendar.get(Calendar.YEAR) + "-" + calendar.get(Calendar.MONTH) + "-" + calendar.get(Calendar.DAY_OF_MONTH) + " " +
-						calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE) + ":" + calendar.get(Calendar.SECOND);
 	}
 
 	@Override
