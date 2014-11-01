@@ -28,7 +28,7 @@ import com.g1436218.Object.Connection;
 
 public class MainActivity extends Activity {
 	
-	private final int TASK_DELAY_DURATION = 30; /* in seconds */
+	private final int TASK_DELAY_DURATION = 15; /* in seconds */
 	private final String TAG = "MainActivity";
 	
 	private BluetoothAdapter BTAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -73,18 +73,15 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
-		initializeIntentFilter();
-		
-		Button button = (Button) findViewById(R.id.button1);
+		/* Enable Bluetooth */
 		if (!BTAdapter.isEnabled()) {
-			button.setText("Bluetooth is not enabled");
+			BTAdapter.enable();
 		}
-        button.setOnClickListener(new OnClickListener(){
-            public void onClick(View v) {
-            	handler.post(mDiscoveryTask);
-            	Log.d(TAG, "Handler has posted mDiscoveryTask");
-            }
-        });
+		
+		initializeIntentFilter();
+
+    	handler.post(mDiscoveryTask);
+    	Log.d(TAG, "Handler has posted mDiscoveryTask");
         
 	}
 	
