@@ -1,41 +1,35 @@
 #!/usr/bin/env python3
 
-# IMPORTANCE: in order to run this server, bottle framework is required
-# simply just execute "sudo pip3 install bottle" to get it
-# then execute this as normal python script
+# IMPORTANCE: in order to run this server, flask framework is required
+# simply just execute "sudo pip3 install flask" to get it
+# then execute this as normal python3 script
 
 __author__ = 'Gun Pinyo (gunpinyo@gmail.com)'
 
-from bottle import Bottle, static_file, response, request, run
-import environment
+from flask import Flask, render_template, request, json
 import db_interface
 
-app = Bottle()
+app = Flask(__name__)
 
 
-@app.get('/')
+@app.route('/', methods=['GET'])
 def index():
-    base_template = environment.JINJA_ENV.get_template(
-        '/views/simple.html.jinja')
-    return base_template.render({})
+    return render_template('simple.html.jinja')
 
 
-@app.get('/assets/<filepath:path>')
-def serve_static_assets(filepath):
-    return static_file(
-        '/assets/'+filepath, root=environment.ROOT_PATH)
+@app.route('/static/<path:filepath>', methods=['GET'])
+def serve_static(filepath):
+    return app.send_static_file(filepath)
 
 
-@app.get('/packages/<filepath:path>')
+@app.route('/packages/<path:filepath>', methods=['GET'])
 def serve_static_dart_package(filepath):
-    return static_file(
-        '/packages/'+filepath, root=environment.ROOT_PATH)
+    return app.send_static_file('packages/' + filepath)
 
 
-@app.get('/ajax/conferences')
+@app.route('/ajax/conferences', methods=['GET'])
 def get_list_conferences():
-    response.content_type = 'application/json'
-    return db_interface.list_conferences()
+    return json.jsonify(db_interface.list_conferences())
 
 
 # @app.get('/ajax/conference/<conference_id>/contact-list')
@@ -44,10 +38,12 @@ def get_list_conferences():
 #     return db_interface.contact_list(conference_id)
 
 
-@app.get('/ajax/contact-interval')
+@app.route('/ajax/contact-interval', methods=['GET'])
 def contact_interval():
-    response.content_type = 'application/json'
-    return db_interface.contact_interval(int(request.query.conference_id))
+    return json.jsonify(
+        db_interface.contact_interval(
+            int(request.args.get('conference_id', '-1'))))
 
 
-run(app, host='localhost', port=8080, debug=True, reloader=True)
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=8080, debug=True)

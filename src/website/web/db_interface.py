@@ -46,7 +46,7 @@ def contact_list(conference_id):
 
 def contact_interval(conference_id):
     # TODO(gunpinyo): correct this
-    with open('assets/example_data/ht09_contact_intervals.json', 'rt') as f:
+    with open('static/example_data/ht09_contact_intervals.json', 'rt') as f:
         ht09_json = json.load(f)
     switch = {
         0: {'0': {'1': [[20, 40], [80, 100]]}},

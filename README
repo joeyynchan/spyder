@@ -4,7 +4,7 @@ I included a folder named appcompat_v7. If your android project could not find R
 GUN:
 Web dependencies so far
     - python3.x
-    - bottlepy (sudo pip3 install bottle) -> will change to flask
+    - flask (sudo pip3 install flask)
     - jinja2 (pip install Jinja2)
     - dart
     - polymer.dart

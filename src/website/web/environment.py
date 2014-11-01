@@ -1,3 +1,5 @@
+# TODO(gunpinyo): deprecated, will be remove
+
 import jinja2
 import os
 
