@@ -1,0 +1,38 @@
+{% extends 'base.html.jinja' %}
+
+{% block title %}
+  <title> simple report </title>
+{% endblock %}
+
+{% block polymer_import %}
+  <style>
+    table, th, td {
+        border: 1px solid black;
+    }
+  </style>
+  <link rel="import" href="/packages/paper_elements/paper_button.html">
+  <link rel="import" href="/packages/core_elements/core_scaffold.html">
+  <link rel="import" href="/packages/core_elements/core_header_panel.html">
+  <link rel="import" href="/packages/core_elements/core_toolbar.html">
+  <link rel="import" href="/packages/core_elements/core_menu.html">
+  <link rel="import" href="/packages/core_elements/core_item.html">
+{% endblock %}
+
+{% block content %}
+  <core-scaffold>
+    <core-header-panel navigation flex mode="seamed">
+      <core-toolbar>Group 18</core-toolbar>
+      <core-menu id="manu-bar" theme="core-light-theme">
+      </core-menu>
+    </core-header-panel>
+    <div tool>Social Networks in the Real World through Proximity Sensing</div>
+    <div id="main-content">
+      Click one of conference to see contact interval ...<br/>
+    </div>
+  </core-scaffold>
+{% endblock %}
+
+{% block script %}
+  <script type="application/dart" src="/static/dart/simple.dart"></script>
+  <script src="/packages/browser/dart.js"></script>
+{% endblock %}

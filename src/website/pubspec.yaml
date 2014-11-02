@@ -1,0 +1,13 @@
+name: social_proximity_sensing
+version: 0.0.1
+description: Social Networks in the Real World through Proximity Sensing
+environment:
+  sdk: ">=1.6.0 <2.0.0"
+dependencies:
+  core_elements: ">=0.4.0+2 <0.5.0"
+  paper_elements: ">=0.5.0 <0.6.0"
+  polymer: ">=0.15.1+3 <0.16.0"
+dev_dependencies:
+  unittest: '>=0.11.0 <0.12.0'
+transformers:
+  - polymer
