@@ -32,20 +32,19 @@ public class BackgroundDiscovery extends AsyncTask<Void, Void, Void>{
 		@Override
 		public void onReceive(Context context, Intent intent) {
 
-        	TextView textview = (TextView) activity.findViewById(R.id.textView1);
         	String action = intent.getAction();
 	            
             if (BluetoothDevice.ACTION_FOUND.equals(action)) {
                 int rssi = intent.getShortExtra(BluetoothDevice.EXTRA_RSSI, Short.MIN_VALUE);
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 connections.add(new Connection(device.getAddress(), rssi));
-                Log.d(TAG, "Device, " + device.getName() + " (" + device.getAddress() + ") has been detected with rssi: " + rssi + " dBm.");
+	            Log.d(TAG, connections.toString());
+                //Log.d(TAG, "Device, " + device.getName() + " (" + device.getAddress() + ") has been detected with rssi: " + rssi + " dBm.");
             } else if (BluetoothAdapter.ACTION_DISCOVERY_STARTED.equals(action)) {
 	            Log.d(TAG, "ACTION_DISCOVERY_STARTED");
             } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
-	            textview.setText(connections.toString() + "\n");
 	            Log.d(TAG, "ACTION_DISCOVERY_FINISHED");
-	            Log.d(TAG, connections.toString());
+	            showResult();
             }
         }
     };
@@ -53,8 +52,6 @@ public class BackgroundDiscovery extends AsyncTask<Void, Void, Void>{
     private Runnable mDiscoveryTask = new Runnable() {
 		@Override
 		public void run() {
-			/* Reset the list of connections */
-        	connections = new HashSet<Connection>();
             BTAdapter.startDiscovery();
             handler.postDelayed(this, TASK_DELAY_DURATION * 1000);
 		}
@@ -74,6 +71,8 @@ public class BackgroundDiscovery extends AsyncTask<Void, Void, Void>{
 	@Override
 	protected Void doInBackground(Void... params) {
 		
+    	connections = new HashSet<Connection>();
+    	
 		/* Enable Bluetooth */
 		if (!BTAdapter.isEnabled()) {
 			BTAdapter.enable();
@@ -93,6 +92,15 @@ public class BackgroundDiscovery extends AsyncTask<Void, Void, Void>{
 		filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED);
 		filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
 		activity.registerReceiver(receiver, filter);
+	}
+	
+	private void showResult() {
+    	TextView textview = (TextView) activity.findViewById(R.id.textView1);
+        textview.setText(connections.toString() + "\n");
+        Log.d(TAG, connections.toString());
+        
+		/* Reset the list of connections */
+    	connections = new HashSet<Connection>();
 	}
 
 }
