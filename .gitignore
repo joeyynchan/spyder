@@ -12,3 +12,10 @@ src/website/build/
 
 # ignore all of .pyc
 src/website/web/__pycache__/
+
+###########
+# Android #
+###########
+
+# ignore all bin files
+src/android/bin/
