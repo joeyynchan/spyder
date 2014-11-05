@@ -5,8 +5,8 @@ import java.util.List;
 
 import org.bson.types.ObjectId;
 
-import com.journaldev.mongodb.converter.PersonConverter;
-import com.journaldev.mongodb.model.Person;
+import com.journaldev.mongodb.converter.EventConverter;
+import com.journaldev.mongodb.model.Event;
 import com.mongodb.BasicDBObjectBuilder;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
@@ -16,50 +16,50 @@ import com.mongodb.MongoClient;
 //DAO class for different MongoDB CRUD operations
 //take special note of "id" String to ObjectId conversion and vice versa
 //also take note of "_id" key for primary key
-public class MongoDBPersonDAO {
+public class MongoDBEventDAO {
 
 	private DBCollection col;
 
-	public MongoDBPersonDAO(MongoClient mongo) {
-		this.col = mongo.getDB("SpyderDB").getCollection("Persons");
+	public MongoDBEventDAO(MongoClient mongo) {
+		this.col = mongo.getDB("SpyderDB").getCollection("Events");
 	}
 
-	public Person createPerson(Person p) {
-		DBObject doc = PersonConverter.toDBObject(p);
+	public Event createEvent(Event e) {
+		DBObject doc = EventConverter.toDBObject(e);
 		this.col.insert(doc);
 		ObjectId id = (ObjectId) doc.get("_id");
-		p.setId(id.toString());
-		return p;
+		e.setId(id.toString());
+		return e;
 	}
 
-	public void updatePerson(Person p) {
+	public void updateEvent(Event e) {
 		DBObject query = BasicDBObjectBuilder.start()
-				.append("_id", new ObjectId(p.getId())).get();
-		this.col.update(query, PersonConverter.toDBObject(p));
+				.append("_id", new ObjectId(e.getId())).get();
+		this.col.update(query, EventConverter.toDBObject(e));
 	}
 
-	public List<Person> readAllPerson() {
-		List<Person> data = new ArrayList<Person>();
+	public List<Event> readAllEvent() {
+		List<Event> data = new ArrayList<Event>();
 		DBCursor cursor = col.find();
 		while (cursor.hasNext()) {
 			DBObject doc = cursor.next();
-			Person p = PersonConverter.toPerson(doc);
-			data.add(p);
+			Event e = EventConverter.toEvent(doc);
+			data.add(e);
 		}
 		return data;
 	}
 
-	public void deletePerson(Person p) {
+	public void deleteEvent(Event e) {
 		DBObject query = BasicDBObjectBuilder.start()
-				.append("_id", new ObjectId(p.getId())).get();
+				.append("_id", new ObjectId(e.getId())).get();
 		this.col.remove(query);
 	}
 
-	public Person readPerson(Person p) {
+	public Event readEvent(Event e) {
 		DBObject query = BasicDBObjectBuilder.start()
-				.append("_id", new ObjectId(p.getId())).get();
+				.append("_id", new ObjectId(e.getId())).get();
 		DBObject data = this.col.findOne(query);
-		return PersonConverter.toPerson(data);
+		return EventConverter.toEvent(data);
 	}
 
 }
