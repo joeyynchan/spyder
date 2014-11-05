@@ -1,0 +1,7 @@
+com/journaldev/mongodb/dao/MongoDBPersonDAO.class
+com/journaldev/mongodb/servlets/EditPersonServlet.class
+com/journaldev/mongodb/listener/MongoDBContextListener.class
+com/journaldev/mongodb/servlets/AddPersonServlet.class
+com/journaldev/mongodb/model/Person.class
+com/journaldev/mongodb/converter/PersonConverter.class
+com/journaldev/mongodb/servlets/DeletePersonServlet.class
