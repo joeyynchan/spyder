@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import g1436218.com.spyder.R;
 import g1436218.com.spyder.object.BackgroundDiscovery;
@@ -23,6 +24,10 @@ public class MainActivity extends Activity {
             getFragmentManager().beginTransaction().add(R.id.container, new PlaceholderFragment()).commit();
         }
         BackgroundDiscovery.getInstance(this).execute();
+
+        TextView textview = (TextView) findViewById(R.id.textView1);
+        textview.setText("HI");
+
     }
 
 

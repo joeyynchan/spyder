@@ -83,6 +83,7 @@ public class BackgroundDiscovery extends AsyncTask<Void, Void, Void> {
 
         handler.post(mDiscoveryTask);
         Log.d(TAG, "Handler has posted mDiscoveryTask");
+        //activity.unregisterReceiver(receiver);
         return null;
 
     }
@@ -97,7 +98,7 @@ public class BackgroundDiscovery extends AsyncTask<Void, Void, Void> {
 
     private void showResult() {
         TextView textview = (TextView) activity.findViewById(R.id.textView1);
-        textview.setText(connections.toString() + "\n");
+        textview.setText(connections.toString());
         Log.d(TAG, connections.toString());
 
 		/* Reset the list of connections */
