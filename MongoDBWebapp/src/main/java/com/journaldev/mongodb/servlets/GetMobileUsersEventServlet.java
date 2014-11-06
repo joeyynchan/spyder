@@ -51,7 +51,7 @@ public class GetMobileUsersEventServlet extends HttpServlet {
 			JSONObject jo = new JSONObject();
 			try {
 				jo.put("mac_address", mob_user.getMacAddress());
-				jo.put("user_id", mob_user.getId());
+				jo.put("user_name", mob_user.getUserName());
 			} catch (JSONException e) {
 			}
 			ja.put(jo);
