@@ -10,8 +10,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.journaldev.mongodb.dao.MongoDBPersonDAO;
-import com.journaldev.mongodb.model.Person;
+import com.journaldev.mongodb.dao.MongoDBMobileUsersDAO;
+import com.journaldev.mongodb.model.MobileUser;
 import com.mongodb.MongoClient;
 
 @WebServlet("/deletePerson")
@@ -19,7 +19,7 @@ public class DeletePersonServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 6798036766148281767L;
 
-	protected void doGet(HttpServletRequest request,
+/*	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		String id = request.getParameter("id");
 		if (id == null || "".equals(id)) {
@@ -27,18 +27,18 @@ public class DeletePersonServlet extends HttpServlet {
 		}
 		MongoClient mongo = (MongoClient) request.getServletContext()
 				.getAttribute("MONGO_CLIENT");
-		MongoDBPersonDAO personDAO = new MongoDBPersonDAO(mongo);
-		Person p = new Person();
+		MongoDBMobileUsersDAO personDAO = new MongoDBMobileUsersDAO(mongo);
+		MobileUser p = new MobileUser();
 		p.setId(id);
 		personDAO.deletePerson(p);
 		System.out.println("Person deleted successfully with id=" + id);
 		request.setAttribute("success", "Person deleted successfully");
-		List<Person> persons = personDAO.readAllPerson();
+		List<MobileUser> persons = personDAO.readAllPerson();
 		request.setAttribute("persons", persons);
 
 		RequestDispatcher rd = getServletContext().getRequestDispatcher(
 				"/persons.jsp");
 		rd.forward(request, response);
-	}
+	} */
 
 }
