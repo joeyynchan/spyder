@@ -1,6 +1,7 @@
 package g1436218.com.spyder.asyncTask;
 
 import g1436218.com.spyder.R;
+import g1436218.com.spyder.backbone.QueryExecutor;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
@@ -34,6 +35,7 @@ public class DisplayMacAddress extends AsyncTask<Void, Void, Void> {
 
         TextView textview1 = (TextView) activity.findViewById(R.id.textView1);
         textview1.setText("Device name : " + adapterName + "\n Bluetooth MAC Address :" + adapterAddress);
+        //textview1.setText("Device name : " + adapterName + "\n Bluetooth MAC Address :" + adapterAddress + "\n" + QueryExecutor.test() +"!");
 
         return null;
     }

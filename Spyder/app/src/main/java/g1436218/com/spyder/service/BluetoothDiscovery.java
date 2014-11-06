@@ -24,7 +24,7 @@ public class BluetoothDiscovery extends Service {
     public static final String RESET_LIST = "RESET_LIST";
 
     private final int TASK_DELAY_DURATION = 15; /* in seconds */
-    private final String TAG = "BackgroundDiscovery";
+    private final String TAG = "BluetoothDiscovery";
 
     private BluetoothAdapter BTAdapter = BluetoothAdapter.getDefaultAdapter();
     private HashSet<Connection> connections;
