@@ -9,9 +9,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import g1436218.com.spyder.R;
+import g1436218.com.spyder.asyncTask.DisplayMacAddress;
 import g1436218.com.spyder.service.BluetoothDiscovery;
 
 
@@ -24,9 +24,8 @@ public class MainActivity extends Activity {
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction().add(R.id.container, new PlaceholderFragment()).commit();
         }
-        //BackgroundDiscovery.getInstance(this).execute();
+        DisplayMacAddress.getInstance(this).execute();
         startService(new Intent(getBaseContext(), BluetoothDiscovery.class));
-
     }
 
 
