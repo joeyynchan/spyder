@@ -20,6 +20,9 @@ import g1436218.com.spyder.object.Connection;
 
 public class BluetoothDiscovery extends Service {
 
+    public static final String DEVICE_DETECTED = "DEVICE_DETECTED";
+    public static final String RESET_LIST = "RESET_LIST";
+
     private final int TASK_DELAY_DURATION = 15; /* in seconds */
     private final String TAG = "BackgroundDiscovery";
 
@@ -37,14 +40,29 @@ public class BluetoothDiscovery extends Service {
                 int rssi = intent.getShortExtra(BluetoothDevice.EXTRA_RSSI, Short.MIN_VALUE);
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 connections.add(new Connection(device.getAddress(), rssi));
+                broadcastDeviceDetected(device.getAddress());
                 Log.d(TAG, connections.toString());
                 //Log.d(TAG, "Device, " + device.getName() + " (" + device.getAddress() + ") has been detected with rssi: " + rssi + " dBm.");
             } else if (BluetoothAdapter.ACTION_DISCOVERY_STARTED.equals(action)) {
+                broadcastResetList();
                 Log.d(TAG, "ACTION_DISCOVERY_STARTED");
             } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
                 Log.d(TAG, "ACTION_DISCOVERY_FINISHED");
                 showResult();
             }
+        }
+
+        private void broadcastDeviceDetected(String address) {
+            Intent intent = new Intent();
+            intent.setAction(DEVICE_DETECTED);
+            intent.putExtra("MAC_ADDRESS", address);
+            sendBroadcast(intent);
+        }
+
+        private void broadcastResetList() {
+            Intent intent = new Intent();
+            intent.setAction(RESET_LIST);
+            sendBroadcast(intent);
         }
     };
 

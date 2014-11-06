@@ -2,13 +2,17 @@ package g1436218.com.spyder.activity;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import g1436218.com.spyder.R;
 import g1436218.com.spyder.asyncTask.DisplayMacAddress;
@@ -16,6 +20,18 @@ import g1436218.com.spyder.service.BluetoothDiscovery;
 
 
 public class MainActivity extends Activity {
+
+    UIUpdateReceiver receiver;
+
+    @Override
+    protected void onStart() {
+        receiver = new UIUpdateReceiver(this);
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(BluetoothDiscovery.DEVICE_DETECTED);
+        intentFilter.addAction(BluetoothDiscovery.RESET_LIST);
+        registerReceiver(receiver, intentFilter);
+        super.onStart();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +44,11 @@ public class MainActivity extends Activity {
         startService(new Intent(getBaseContext(), BluetoothDiscovery.class));
     }
 
+    @Override
+    protected void onStop() {
+        unregisterReceiver(receiver);
+        super.onStop();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -64,6 +85,27 @@ public class MainActivity extends Activity {
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
             return rootView;
+        }
+    }
+
+    private class UIUpdateReceiver extends BroadcastReceiver {
+
+        Activity activity;
+
+        public UIUpdateReceiver(Activity activity) {
+            this.activity = activity;
+        }
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            TextView textView = (TextView) findViewById(R.id.textView2);
+            String action = intent.getAction();
+            if (BluetoothDiscovery.DEVICE_DETECTED.equals(action)) {
+                String address = intent.getStringExtra("MAC_ADDRESS");
+                textView.setText(textView.getText() + "\n" + address);
+            } else if (BluetoothDiscovery.RESET_LIST.equals(action)) {
+                textView.setText("Results:");
+            }
         }
     }
 }
