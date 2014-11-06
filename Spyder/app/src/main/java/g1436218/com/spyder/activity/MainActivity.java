@@ -2,6 +2,7 @@ package g1436218.com.spyder.activity;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -11,7 +12,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import g1436218.com.spyder.R;
-import g1436218.com.spyder.object.BackgroundDiscovery;
+import g1436218.com.spyder.service.BluetoothDiscovery;
 
 
 public class MainActivity extends Activity {
@@ -23,10 +24,8 @@ public class MainActivity extends Activity {
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction().add(R.id.container, new PlaceholderFragment()).commit();
         }
-        BackgroundDiscovery.getInstance(this).execute();
-
-        TextView textview = (TextView) findViewById(R.id.textView1);
-        textview.setText("HI");
+        //BackgroundDiscovery.getInstance(this).execute();
+        startService(new Intent(getBaseContext(), BluetoothDiscovery.class));
 
     }
 
