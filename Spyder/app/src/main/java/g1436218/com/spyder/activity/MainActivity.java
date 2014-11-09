@@ -51,7 +51,8 @@ public class MainActivity extends BaseActivity {
 
 
         /* Start BluetoothDiscovery Service */
-        startService(new Intent(getBaseContext(), BluetoothDiscovery.class));
+        bluetoothDiscoveryIntent = new Intent(getBaseContext(), BluetoothDiscovery.class);
+        startService(bluetoothDiscoveryIntent);
 
         super.onStart();
     }
