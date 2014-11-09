@@ -19,19 +19,24 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 
 import g1436218.com.spyder.R;
+import g1436218.com.spyder.object.UserMap;
 
 public class FetchAttendeeList extends BaseAsyncTask {
 
     private final String TAG = "FetchAttendeeList";
     private final String URL = "http://146.169.46.38:8080/MongoDBWebapp/eventUsers?event_id=545ad315e4b0f46082caaef3";
 
+    private UserMap userMap;
+
     public FetchAttendeeList(Activity activity) {
         super(activity);
+        userMap = UserMap.getInstance();
     }
 
     @Override
     protected Void doInBackground(Void... params) {
         result = getStringFromUrl(URL);
+        resultJObj = toJSONObject(result);
         return null;
     }
 
@@ -39,5 +44,8 @@ public class FetchAttendeeList extends BaseAsyncTask {
     public void onPostExecute(Void v) {
         TextView textView3 = (TextView) activity.findViewById(R.id.textView3);
         textView3.setText(result);
+
+        userMap.updateList(resultJObj);
+        Log.d(TAG, userMap.toString());
     }
 }

@@ -28,6 +28,7 @@ public abstract class BaseAsyncTask extends AsyncTask<Void, Void, Void> {
     protected Activity activity;
     protected InputStream inputStream;
     protected String result;
+    protected JSONObject resultJObj;
     protected ArrayList<NameValuePair> params;
 
     protected BaseAsyncTask(Activity activity) {
@@ -74,6 +75,10 @@ public abstract class BaseAsyncTask extends AsyncTask<Void, Void, Void> {
 
     protected JSONObject getJSONFromUrl(String url) {
         String result = getStringFromUrl(url);
+        return toJSONObject(result);
+    }
+
+    protected JSONObject toJSONObject(String result) {
         JSONObject jObj = null;
         try {
             jObj = new JSONObject(result);
