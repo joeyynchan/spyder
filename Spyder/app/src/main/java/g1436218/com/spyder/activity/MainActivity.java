@@ -1,6 +1,7 @@
 package g1436218.com.spyder.activity;
 
 import android.app.Activity;
+import android.app.FragmentTransaction;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import g1436218.com.spyder.R;
 import g1436218.com.spyder.asyncTask.DisplayMacAddress;
 import g1436218.com.spyder.asyncTask.FetchAttendeeList;
+import g1436218.com.spyder.fragment.BaseFragment;
 import g1436218.com.spyder.object.UserMap;
 import g1436218.com.spyder.service.BluetoothDiscovery;
 
@@ -23,12 +25,15 @@ public class MainActivity extends BaseActivity {
     private Intent bluetoothDiscoveryIntent;
     private UserMap userMap;
 
+    private TextView textview_show_attendee;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.customOnCreate(savedInstanceState, R.layout.activity_main);
 
         /*Display Device Information */
         new DisplayMacAddress(this).execute();
+
         new FetchAttendeeList(this).execute();
 
     }
@@ -69,16 +74,32 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        finish();
+        if (getFragmentManager().getBackStackEntryCount() == 0) {
+            finish();
+        } else {
+            getFragmentManager().popBackStack();
+        }
     }
 
     @Override
     public void onClick(View v) {
-
+        switch (v.getId()) {
+            case R.id.textview_show_attendee: showAttendee(); break;
+            default: break;
+        }
     }
 
     @Override
     public void initializeView() {
+        textview_show_attendee = (TextView) findViewById(R.id.textview_show_attendee);
+        textview_show_attendee.setOnClickListener(this);
+    }
+
+    private void showAttendee() {
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.container, new BaseFragment());
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
     }
 
     private class UIUpdateReceiver extends BroadcastReceiver {

@@ -1,6 +1,7 @@
 package g1436218.com.spyder.asyncTask;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.TextView;
@@ -42,10 +43,10 @@ public class FetchAttendeeList extends BaseAsyncTask {
 
     @Override
     public void onPostExecute(Void v) {
-        TextView textView3 = (TextView) activity.findViewById(R.id.textView3);
-        textView3.setText(result);
-
         userMap.updateList(resultJObj);
         Log.d(TAG, userMap.toString());
+
+        TextView textView3 = (TextView) activity.findViewById(R.id.textView3);
+        textView3.setText(userMap.toString());
     }
 }
