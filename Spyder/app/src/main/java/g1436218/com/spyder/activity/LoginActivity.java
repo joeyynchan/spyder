@@ -3,27 +3,30 @@ package g1436218.com.spyder.activity;
 import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
+import android.widget.Button;
 
 import g1436218.com.spyder.R;
+import g1436218.com.spyder.fragment.RegisterFragment;
 
-public class LoginActivity extends Activity {
+public class LoginActivity extends BaseActivity {
+
+    private final String TAG = "LoginActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-        if (savedInstanceState == null) {
-            getFragmentManager().beginTransaction()
-                    .add(R.id.container, new PlaceholderFragment())
-                    .commit();
-        }
+        super.customOnCreate(savedInstanceState, R.layout.activity_login);
     }
 
 
@@ -35,33 +38,31 @@ public class LoginActivity extends Activity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-
-        public PlaceholderFragment() {
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_login, container, false);
-            return rootView;
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.button_sign_up:   displayRegisterFragment(); break;
+            case R.id.button_main_activity: gotoMainActivity(); break;
+            default:    break;
         }
     }
+
+    @Override
+    public void initializeView() {
+        Button button_sign_up = (Button) findViewById(R.id.button_sign_up);
+        button_sign_up.setOnClickListener(this);
+        Button button_main_activity = (Button) findViewById(R.id.button_main_activity);
+        button_main_activity.setOnClickListener(this);
+    }
+
+    private void displayRegisterFragment() {
+        Log.d(TAG, "displayRegisterFragment()");
+        FragmentManager fragmentManager = getFragmentManager();
+        new RegisterFragment().show(fragmentManager, "Sign Up");
+    }
+
+    private void gotoMainActivity() {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
+
 }

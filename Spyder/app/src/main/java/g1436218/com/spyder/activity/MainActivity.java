@@ -6,12 +6,14 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import g1436218.com.spyder.R;
@@ -23,9 +25,10 @@ import g1436218.com.spyder.object.UserMap;
 import g1436218.com.spyder.service.BluetoothDiscovery;
 
 
-public class MainActivity extends Activity {
+public class MainActivity extends BaseActivity {
 
     private UIUpdateReceiver receiver;
+    private Intent bluetoothDiscoveryIntent;
     private UserMap userMap;
 
     @Override
@@ -35,25 +38,24 @@ public class MainActivity extends Activity {
         intentFilter.addAction(BluetoothDiscovery.DEVICE_DETECTED);
         intentFilter.addAction(BluetoothDiscovery.RESET_LIST);
         registerReceiver(receiver, intentFilter);
+
+        bluetoothDiscoveryIntent = new Intent(this, BluetoothDiscovery.class);
+        startService(bluetoothDiscoveryIntent);
+
         super.onStart();
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        if (savedInstanceState == null) {
-            getFragmentManager().beginTransaction().add(R.id.container, new PlaceholderFragment()).commit();
-        }
-
-        DisplayMacAddress.getInstance(this).execute();
+        super.customOnCreate(savedInstanceState, R.layout.activity_main);
+        new DisplayMacAddress(this).execute();
         startService(new Intent(getBaseContext(), BluetoothDiscovery.class));
-
     }
 
     @Override
     protected void onStop() {
         unregisterReceiver(receiver);
+        stopService(bluetoothDiscoveryIntent);
         super.onStop();
     }
 
@@ -65,27 +67,17 @@ public class MainActivity extends Activity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+    public void onBackPressed() {
+        finish();
     }
 
-    public static class PlaceholderFragment extends Fragment {
+    @Override
+    public void onClick(View v) {
 
-        public PlaceholderFragment() {
-        }
+    }
 
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            return rootView;
-        }
+    @Override
+    public void initializeView() {
     }
 
     private class UIUpdateReceiver extends BroadcastReceiver {

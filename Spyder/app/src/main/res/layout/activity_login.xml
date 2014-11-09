@@ -26,4 +26,19 @@
             android:hint="@string/Password" />
 
     </LinearLayout>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sign Up"
+        android:id="@+id/button_sign_up"
+        android:layout_gravity="center_horizontal|bottom" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Main Activity"
+        android:id="@+id/button_main_activity"
+        android:layout_gravity="right|bottom" />
+
 </FrameLayout>
