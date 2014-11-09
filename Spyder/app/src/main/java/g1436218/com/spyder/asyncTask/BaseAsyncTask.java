@@ -11,6 +11,7 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -87,4 +88,8 @@ public abstract class BaseAsyncTask extends AsyncTask<Void, Void, Void> {
         return jObj;
     }
 
+    /* Helper method for adding a BasicNameValuePair to the list of params for httpPost request */
+    protected void addToParams(String name, String value){
+        params.add(new BasicNameValuePair(name, value));
+    }
 }
