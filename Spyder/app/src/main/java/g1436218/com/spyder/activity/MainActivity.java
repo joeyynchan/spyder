@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 
 import g1436218.com.spyder.R;
 import g1436218.com.spyder.asyncTask.DisplayMacAddress;
+import g1436218.com.spyder.asyncTask.FetchAttendeeList;
 import g1436218.com.spyder.asyncTask.UpdateUserMap;
 import g1436218.com.spyder.backbone.JSONParser;
 import g1436218.com.spyder.backbone.QueryExecutor;
@@ -37,6 +39,8 @@ public class MainActivity extends BaseActivity {
 
         /*Display Device Information */
         new DisplayMacAddress(this).execute();
+        new FetchAttendeeList(this).execute();
+
     }
 
     @Override
@@ -48,7 +52,6 @@ public class MainActivity extends BaseActivity {
         intentFilter.addAction(BluetoothDiscovery.DEVICE_DETECTED);
         intentFilter.addAction(BluetoothDiscovery.RESET_LIST);
         registerReceiver(receiver, intentFilter);
-
 
         /* Start BluetoothDiscovery Service */
         bluetoothDiscoveryIntent = new Intent(getBaseContext(), BluetoothDiscovery.class);

@@ -1,69 +1,51 @@
-package g1436218.com.spyder.backbone;
+package g1436218.com.spyder.asyncTask;
 
+import android.app.Activity;
+import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.TextView;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.util.List;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.json.JSONException;
-import org.json.JSONObject;
+import g1436218.com.spyder.R;
 
-public class JSONParser {
+public class FetchAttendeeList extends AsyncTask<Void, Void, Void> {
 
-    private final String TAG = "JSONParser";
+    private final String TAG = "FecthAttendeeList";
+    private final String URL = "http://146.169.46.38:8080/MongoDBWebapp/eventUsers?event_id=545ad315e4b0f46082caaef3";
 
-    private static JSONParser instance;
+    private Activity activity;
+    private String json;
+    private InputStream is;
 
-    private InputStream is = null;
-    private static JSONObject jObj = null;
-    private String json = "";
-
-
-    // Empty constructor
-    public JSONParser() {}
-
-    public static JSONParser getInstance() {
-        if (instance == null) {
-            instance = new JSONParser();
-        }
-        return instance;
+    public FetchAttendeeList(Activity activity) {
+        this.activity = activity;
     }
 
-    public static JSONObject toJSONObject(String json) {
-        // Parse the string to a JSON object
-        try {
-            jObj = new JSONObject(json);
-        } catch (JSONException e) {
-        }
-
-        return jObj;
-    }
-
-    public String getStringFromUrl(String url, List<NameValuePair> params) {
-
+    @Override
+    protected Void doInBackground(Void... params) {
         try {
             // defaultHttpClient
             DefaultHttpClient httpClient = new DefaultHttpClient();
-            HttpPost httpPost = new HttpPost(url);
-            httpPost.setEntity(new UrlEncodedFormEntity(params));
+            HttpPost httpPost = new HttpPost(URL);
 
             HttpResponse httpResponse = httpClient.execute(httpPost);
             HttpEntity httpEntity = httpResponse.getEntity();
             is = httpEntity.getContent();
 
         } catch (UnsupportedEncodingException e) {
-            Log.e(TAG+"UnsupportedEncodingException", e.getMessage());
+            Log.e(TAG + "UnsupportedEncodingException", e.getMessage());
         } catch (ClientProtocolException e) {
             Log.e(TAG+"ClientProtocalException", e.getMessage());
         } catch (IOException e) {
@@ -84,7 +66,13 @@ public class JSONParser {
         } catch (Exception e) {
             Log.e(TAG, e.getMessage());
         }
-        return json;
+
+        return null;
     }
 
+    @Override
+    public void onPostExecute(Void v) {
+        TextView textView3 = (TextView) activity.findViewById(R.id.textView3);
+        textView3.setText(json);
+    }
 }

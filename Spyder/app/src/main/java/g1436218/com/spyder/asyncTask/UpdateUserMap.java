@@ -9,25 +9,29 @@ import g1436218.com.spyder.backbone.JSONParser;
 import g1436218.com.spyder.backbone.QueryExecutor;
 import g1436218.com.spyder.object.UserMap;
 
-public class UpdateUserMap extends AsyncTask<Void, Void, Void> {
+public class UpdateUserMap extends BaseAsyncTask {
 
     Activity activity;
-    
-    UserMap userMap = UserMap.getInstance();
+    UserMap userMap;
+    TextView textView;
 
     public UpdateUserMap(Activity activity){
-        this.activity = activity;
+        super(activity);
+        this.userMap = UserMap.getInstance();
+        this.textView = (TextView) activity.findViewById(R.id.textView3);
     }
 
     @Override
     protected Void doInBackground(Void... params) {
-        userMap.updateList(JSONParser.toJSONObject(QueryExecutor.test()));
+        textView.setText("YOLO");
+        //userMap.updateList(JSONParser.toJSONObject(QueryExecutor.test()));
         return null;
     }
     
     @Override
     protected void onPostExecute(Void result) {
         TextView textView = (TextView) activity.findViewById(R.id.textView3);
-        textView.setText(userMap.toString());
+        textView.setText(QueryExecutor.test());
+
     }
 }
