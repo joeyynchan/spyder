@@ -32,29 +32,36 @@ public class MainActivity extends BaseActivity {
     private UserMap userMap;
 
     @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.customOnCreate(savedInstanceState, R.layout.activity_main);
+
+        /*Display Device Information */
+        new DisplayMacAddress(this).execute();
+    }
+
+    @Override
     protected void onStart() {
+
+        /* Register UIUpdateReceiver */
         receiver = new UIUpdateReceiver(this);
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(BluetoothDiscovery.DEVICE_DETECTED);
         intentFilter.addAction(BluetoothDiscovery.RESET_LIST);
         registerReceiver(receiver, intentFilter);
 
-        bluetoothDiscoveryIntent = new Intent(this, BluetoothDiscovery.class);
-        startService(bluetoothDiscoveryIntent);
+
+        /* Start BluetoothDiscovery Service */
+        startService(new Intent(getBaseContext(), BluetoothDiscovery.class));
 
         super.onStart();
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.customOnCreate(savedInstanceState, R.layout.activity_main);
-        new DisplayMacAddress(this).execute();
-        startService(new Intent(getBaseContext(), BluetoothDiscovery.class));
-    }
-
-    @Override
     protected void onStop() {
+        /* Unregister Receiver */
         unregisterReceiver(receiver);
+
+        /* Stop BluetoothDiscovery Service */
         stopService(bluetoothDiscoveryIntent);
         super.onStop();
     }
