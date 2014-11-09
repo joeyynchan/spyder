@@ -14,16 +14,7 @@ public class DisplayMacAddress extends AsyncTask<Void, Void, Void> {
 
     private Activity activity;
 
-    public static DisplayMacAddress instance;
-
-    public static DisplayMacAddress getInstance(Activity activity){
-        if (instance == null) {
-            instance = new DisplayMacAddress(activity);
-        }
-        return instance;
-    }
-
-    private DisplayMacAddress(Activity activity) {
+    public DisplayMacAddress(Activity activity) {
         this.activity = activity;
     }
 

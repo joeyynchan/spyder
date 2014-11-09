@@ -31,6 +31,7 @@ public class BluetoothDiscovery extends Service {
     private Handler handler = new Handler();
 
     private final BroadcastReceiver receiver = new BroadcastReceiver(){
+
         @Override
         public void onReceive(Context context, Intent intent) {
 
@@ -67,8 +68,12 @@ public class BluetoothDiscovery extends Service {
     };
 
     private Runnable mDiscoveryTask = new Runnable() {
+
         @Override
         public void run() {
+            if (BTAdapter.isDiscovering()) {
+                BTAdapter.cancelDiscovery();
+            }
             BTAdapter.startDiscovery();
             handler.postDelayed(this, TASK_DELAY_DURATION * 1000);
         }
