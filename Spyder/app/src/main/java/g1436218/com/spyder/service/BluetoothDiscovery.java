@@ -71,9 +71,6 @@ public class BluetoothDiscovery extends Service {
 
         @Override
         public void run() {
-            if (BTAdapter.isDiscovering()) {
-                BTAdapter.cancelDiscovery();
-            }
             BTAdapter.startDiscovery();
             handler.postDelayed(this, TASK_DELAY_DURATION * 1000);
         }
@@ -115,7 +112,6 @@ public class BluetoothDiscovery extends Service {
 
         handler.post(mDiscoveryTask);
         Log.d(TAG, "Handler has posted mDiscoveryTask");
-        //activity.unregisterReceiver(receiver);
         return START_STICKY;
     }
 
@@ -123,5 +119,6 @@ public class BluetoothDiscovery extends Service {
     public void onDestroy() {
         super.onDestroy();
         unregisterReceiver(receiver);
+        handler.removeCallbacks(mDiscoveryTask);
     }
 }
