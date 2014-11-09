@@ -8,14 +8,12 @@ import android.bluetooth.BluetoothAdapter;
 import android.os.AsyncTask;
 import android.widget.TextView;
 
-public class DisplayMacAddress extends AsyncTask<Void, Void, Void> {
+public class DisplayMacAddress extends BaseAsyncTask {
 
     private final String TAG = "displayMacAddress";
 
-    private Activity activity;
-
     public DisplayMacAddress(Activity activity) {
-        this.activity = activity;
+       super(activity);
     }
 
     @Override

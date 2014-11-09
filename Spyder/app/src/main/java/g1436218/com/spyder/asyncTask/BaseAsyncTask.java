@@ -20,12 +20,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.List;
 
 public abstract class BaseAsyncTask extends AsyncTask<Void, Void, Void> {
 
     private final String TAG = "BaseAsyncTask";
-    private final String URL = "";
 
     protected Activity activity;
     protected InputStream inputStream;
@@ -35,6 +33,7 @@ public abstract class BaseAsyncTask extends AsyncTask<Void, Void, Void> {
     protected BaseAsyncTask(Activity activity) {
         this.activity = activity;
         this.params = new ArrayList<NameValuePair>();
+        this.result = "Result cannot be fetched";
     }
 
     protected String getStringFromUrl(String url) {
