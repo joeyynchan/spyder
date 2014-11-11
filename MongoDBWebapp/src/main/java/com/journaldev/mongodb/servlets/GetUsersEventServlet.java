@@ -15,12 +15,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.journaldev.mongodb.dao.MongoDBEventDAO;
-import com.journaldev.mongodb.dao.MongoDBMobileUsersDAO;
-import com.journaldev.mongodb.model.MobileUser;
+import com.journaldev.mongodb.dao.MongoDBUsersDAO;
+import com.journaldev.mongodb.model.User;
 import com.mongodb.MongoClient;
 
 @WebServlet("/eventUsers")
-public class GetMobileUsersEventServlet extends HttpServlet {
+public class GetUsersEventServlet extends HttpServlet {
 
 	private static final long serialVersionUID = -6554920927964049383L;
 
@@ -35,10 +35,10 @@ public class GetMobileUsersEventServlet extends HttpServlet {
 		MongoClient mongo = (MongoClient) request.getServletContext()
 				.getAttribute("MONGO_CLIENT");
 		MongoDBEventDAO eventDAO = new MongoDBEventDAO(mongo);
-		MongoDBMobileUsersDAO mobileDAO = new MongoDBMobileUsersDAO(mongo);
+		MongoDBUsersDAO mobileDAO = new MongoDBUsersDAO(mongo);
 
 		List<String> user_id_list = eventDAO.getAllUsersIDEvent(event_id);
-		List<MobileUser> user_list = mobileDAO.getAllUsers(user_id_list);
+		List<User> user_list = mobileDAO.getAllUsers(user_id_list);
 
 		response.setContentType("application/json");
 		response.setHeader("Cache-Control", "nocache");
@@ -47,7 +47,7 @@ public class GetMobileUsersEventServlet extends HttpServlet {
 		PrintWriter printout = response.getWriter();
 
 		JSONArray ja = new JSONArray();
-		for (MobileUser mob_user : user_list) {
+		for (User mob_user : user_list) {
 			JSONObject jo = new JSONObject();
 			try {
 				jo.put("mac_address", mob_user.getMacAddress());

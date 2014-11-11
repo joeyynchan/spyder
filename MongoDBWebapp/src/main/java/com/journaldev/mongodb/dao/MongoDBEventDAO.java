@@ -6,9 +6,8 @@ import java.util.List;
 import org.bson.types.ObjectId;
 
 import com.journaldev.mongodb.converter.EventConverter;
-import com.journaldev.mongodb.converter.MobileUserConverter;
+import com.journaldev.mongodb.converter.UserConverter;
 import com.journaldev.mongodb.model.Event;
-import com.journaldev.mongodb.model.MobileUser;
 import com.mongodb.BasicDBObjectBuilder;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
@@ -70,7 +69,7 @@ public class MongoDBEventDAO {
 		System.out.println(query.toString());
 		DBObject data = this.col.findOne(query);
 		System.out.println("data: " + data);
-		return MobileUserConverter.getMobileUsers(data);
+		return UserConverter.getUsers(data);
 	}
 
 }

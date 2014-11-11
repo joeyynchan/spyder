@@ -1,8 +1,3 @@
-com/journaldev/mongodb/servlets/AddMobileUserServlet.class
 com/journaldev/mongodb/servlets/EditPersonServlet.class
-com/journaldev/mongodb/servlets/GetMobileUsersEventServlet.class
 com/journaldev/mongodb/listener/MongoDBContextListener.class
-com/journaldev/mongodb/dao/MongoDBMobileUsersDAO.class
-com/journaldev/mongodb/model/MobileUser.class
 com/journaldev/mongodb/servlets/DeletePersonServlet.class
-com/journaldev/mongodb/converter/MobileUserConverter.class

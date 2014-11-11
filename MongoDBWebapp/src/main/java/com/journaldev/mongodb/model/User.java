@@ -1,15 +1,18 @@
 package com.journaldev.mongodb.model;
 
-public class MobileUser {
+public class User {
 
 	// id will be used for primary key in MongoDB
 	// We could use ObjectId, but I am keeping it
 	// independent of MongoDB API classes
 	private String id;
-
 	private String user_name;
-
+	private String password;
 	private String mac_address;
+	
+	public String getPassword(){
+		return password;
+	}
 
 	public String getUserName() {
 		return user_name;
@@ -25,6 +28,10 @@ public class MobileUser {
 
 	public void setMacAddress(String mac_addr) {
 		this.mac_address = mac_addr;
+	}
+	
+	public void setPassword(String password){
+		this.password = password;
 	}
 
 	public String getId() {

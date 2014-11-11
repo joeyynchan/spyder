@@ -5,15 +5,15 @@ import java.util.List;
 
 import org.bson.types.ObjectId;
 
-import com.journaldev.mongodb.model.MobileUser;
+import com.journaldev.mongodb.model.User;
 import com.mongodb.BasicDBObjectBuilder;
 import com.mongodb.DBObject;
 
-public class MobileUserConverter {
+public class UserConverter {
 
 	// convert Person Object to MongoDB DBObject
 	// take special note of converting id String to ObjectId
-	public static DBObject toDBObject(MobileUser p) {
+	public static DBObject toDBObject(User p) {
 
 		BasicDBObjectBuilder builder = BasicDBObjectBuilder.start()
 				.append("user_name", p.getUserName()).append("mac_address", p.getMacAddress());
@@ -24,8 +24,8 @@ public class MobileUserConverter {
 
 	// convert DBObject Object to Person
 	// take special note of converting ObjectId to String
-	public static MobileUser toMobileUser(DBObject doc) {
-		MobileUser p = new MobileUser();
+	public static User toUser(DBObject doc) {
+		User p = new User();
 		p.setUserName((String) doc.get("user_name"));
 		p.setMacAddress((String) doc.get("mac_address"));
 		ObjectId id = (ObjectId) doc.get("_id");
@@ -34,7 +34,7 @@ public class MobileUserConverter {
 
 	}
 
-	public static List<String> getMobileUsers(DBObject doc) {
+	public static List<String> getUsers(DBObject doc) {
 		String userData = (String)doc.get("attendees");
 		System.out.println(userData);
 		String[] users = userData.split(",");
