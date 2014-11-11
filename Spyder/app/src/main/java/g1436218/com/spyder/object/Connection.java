@@ -19,7 +19,7 @@ public class Connection {
 
     @Override
     public boolean equals(Object obj){
-        if(!obj instanceof Connection){
+        if(!(obj instanceof Connection)){
             return false;
         }
         return macAddress.equals(((Connection) obj).getMacAddress());
