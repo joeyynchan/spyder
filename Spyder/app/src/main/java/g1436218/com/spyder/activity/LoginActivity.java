@@ -16,8 +16,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
 import android.widget.Button;
+import android.widget.EditText;
 
 import g1436218.com.spyder.R;
+import g1436218.com.spyder.asyncTask.DisplayMacAddress;
+import g1436218.com.spyder.asyncTask.LinkDevice;
 import g1436218.com.spyder.fragment.RegisterFragment;
 
 public class LoginActivity extends BaseActivity {
@@ -40,17 +43,17 @@ public class LoginActivity extends BaseActivity {
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.button_sign_up:   displayRegisterFragment(); break;
-            case R.id.button_main_activity: gotoMainActivity(); break;
+            case R.id.login_button_sign_up:   displayRegisterFragment(); break;
+            case R.id.login_button_login: attemptLogin(); break;
             default:    break;
         }
     }
 
     @Override
     public void initializeView() {
-        Button button_sign_up = (Button) findViewById(R.id.button_sign_up);
+        Button button_sign_up = (Button) findViewById(R.id.login_button_sign_up);
         button_sign_up.setOnClickListener(this);
-        Button button_main_activity = (Button) findViewById(R.id.button_main_activity);
+        Button button_main_activity = (Button) findViewById(R.id.login_button_login);
         button_main_activity.setOnClickListener(this);
     }
 
@@ -58,6 +61,13 @@ public class LoginActivity extends BaseActivity {
         Log.d(TAG, "displayRegisterFragment()");
         FragmentManager fragmentManager = getFragmentManager();
         new RegisterFragment().show(fragmentManager, "Sign Up");
+    }
+
+    private void attemptLogin(){
+        //send login data to api
+        Log.d(TAG, "attemptLogin");
+        new LinkDevice(this).execute();
+
     }
 
     private void gotoMainActivity() {
