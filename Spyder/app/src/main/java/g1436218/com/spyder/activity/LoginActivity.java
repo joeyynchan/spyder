@@ -65,17 +65,8 @@ public class LoginActivity extends BaseActivity {
 
     private void attemptLogin(){
         //send login data to api
-        EditText login_edittext_username = (EditText) findViewById(R.id.login_edittext_username);
-        EditText login_edittext_password = (EditText) findViewById(R.id.login_edittext_password);
         Log.d(TAG, "attemptLogin");
         new LinkDevice(this).execute();
-        /*if(success){
-         *gotoMainActivity();
-         * }else{
-         * clear password and restart
-         * or display error msg
-         * }
-         */
 
     }
 

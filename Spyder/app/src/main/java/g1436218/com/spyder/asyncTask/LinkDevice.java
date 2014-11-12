@@ -28,9 +28,9 @@ public class LinkDevice extends BaseAsyncTask{
         EditText editText_login_password = (EditText) activity.findViewById(R.id.login_edittext_password);
         String password = editText_login_password.getText().toString();
 
-        addToParams("username", username);
-        addToParams("password", password);
-        addToParams("mac", getDefaultAdapter().getAddress());
+        addToParams("user_name", username);
+        addToParams("pass", password);
+        addToParams("mac_address", getDefaultAdapter().getAddress());
 
         //getJSONFromUrl(url)
         /* todo: decode the data received from api call
@@ -39,22 +39,24 @@ public class LinkDevice extends BaseAsyncTask{
          * 2) prompt user to unlink previous device and login with this device
          * 3) account not created, prompt user to register
          */
+
+        linked = true;
         return null;
     }
 
     //Start MainActivity if login succeed
     @Override
     public void onPostExecute(Void v) {
-        //if (linked) {
+        if (linked) {
         Log.d(TAG, "onPostExecute");
             Intent intent = new Intent(activity, MainActivity.class);
             activity.startActivity(intent);
-//        } else {
-//            //display error message
-//            TextView login_text_errmsg = (TextView) activity.findViewById(R.id.login_text_errmsg);
-//            login_text_errmsg.setText("Login failed\n");
-//
-//        }
+        } else {
+            //display error message
+            TextView login_text_errmsg = (TextView) activity.findViewById(R.id.login_text_errmsg);
+            login_text_errmsg.setText("Login failed\n");
+
+        }
 
     }
 }
