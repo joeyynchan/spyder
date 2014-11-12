@@ -44,7 +44,7 @@ public class LoginServlet extends HttpServlet {
 			User login_user = muDAO.getUserByQuery(user_name, password);
 			System.out.println(login_user);
 
-			if (login_user != null) {
+			if (login_user != null && login_user.getMacAddress() == null) {
 				login_user.setMacAddress(mac_address);
 				muDAO.updateUser(login_user);
 				operation = true;
