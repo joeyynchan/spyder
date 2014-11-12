@@ -41,4 +41,9 @@ public class User {
 	public void setId(String id) {
 		this.id = id;
 	}
+	
+	@Override
+	public String toString(){
+		return "(" + user_name + ", " + password + ", " + mac_address + ")";
+	}
 }

@@ -1,6 +1,8 @@
 package com.journaldev.mongodb.servlets;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
@@ -22,36 +24,49 @@ public class LoginServlet extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
+
 		boolean operation = false;
-		String user_name = request.getParameter("user_name");
-		String password = request.getParameter("password");
-		String mac_address = request.getParameter("mac_address");
-
-		MongoClient mongo = (MongoClient) request.getServletContext()
-				.getAttribute("MONGO_CLIENT");
-		MongoDBUsersDAO muDAO = new MongoDBUsersDAO(mongo);
-		User login_user = muDAO.getUserByQuery(user_name, password);
-
-		if (login_user != null) {
-			login_user.setMacAddress(mac_address);
-			muDAO.updateUser(login_user);
-			operation = true;
+		BufferedReader br = new BufferedReader(new InputStreamReader(
+				request.getInputStream()));
+		String json = "";
+		if (br != null) {
+			json = br.readLine();
 		}
-
-		response.setContentType("application/json");
-		response.setHeader("Cache-Control", "nocache");
-		response.setCharacterEncoding("utf-8");
-
-		PrintWriter printout = response.getWriter();
-		JSONObject JObject = new JSONObject();
 		try {
-			JObject.put("res", operation);
-		} catch (JSONException excep) {
-			System.out.println("JSON Exception");
-		}
+			JSONObject jsonObj = new JSONObject(json);
+			String user_name = (String) jsonObj.get("user_name");
+			String password = (String) jsonObj.get("password");
+			String mac_address = (String) jsonObj.get("mac_address");
 
-		printout.print(JObject);
-		printout.flush();
+			MongoClient mongo = (MongoClient) request.getServletContext()
+					.getAttribute("MONGO_CLIENT");
+			MongoDBUsersDAO muDAO = new MongoDBUsersDAO(mongo);
+			User login_user = muDAO.getUserByQuery(user_name, password);
+			System.out.println(login_user);
+
+			if (login_user != null) {
+				login_user.setMacAddress(mac_address);
+				muDAO.updateUser(login_user);
+				operation = true;
+			}
+
+			response.setContentType("application/json");
+			response.setHeader("Cache-Control", "nocache");
+			response.setCharacterEncoding("utf-8");
+
+			PrintWriter printout = response.getWriter();
+			JSONObject JObject = new JSONObject();
+			try {
+				JObject.put("res", operation);
+			} catch (JSONException excep) {
+				System.out.println("JSON Exception");
+			}
+
+			printout.print(JObject);
+			printout.flush();
+		} catch (JSONException main_excp) {
+			System.out.println("INVALID JSON OBJECT !!");
+		}
 	}
 
 }

@@ -16,7 +16,7 @@ public class UserConverter {
 	public static DBObject toDBObject(User p) {
 
 		BasicDBObjectBuilder builder = BasicDBObjectBuilder.start()
-				.append("user_name", p.getUserName()).append("mac_address", p.getMacAddress());
+				.append("user_name", p.getUserName()).append("password",p.getPassword()).append("mac_address", p.getMacAddress());
 		if (p.getId() != null)
 			builder = builder.append("_id", new ObjectId(p.getId()));
 		return builder.get();
@@ -27,6 +27,7 @@ public class UserConverter {
 	public static User toUser(DBObject doc) {
 		User p = new User();
 		p.setUserName((String) doc.get("user_name"));
+		p.setPassword((String) doc.get("password"));
 		p.setMacAddress((String) doc.get("mac_address"));
 		ObjectId id = (ObjectId) doc.get("_id");
 		p.setId(id.toString());

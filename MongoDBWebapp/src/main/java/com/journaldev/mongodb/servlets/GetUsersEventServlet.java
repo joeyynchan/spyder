@@ -24,7 +24,7 @@ public class GetUsersEventServlet extends HttpServlet {
 
 	private static final long serialVersionUID = -6554920927964049383L;
 
-	protected void doPost(HttpServletRequest request,
+	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		String event_id = request.getParameter("event_id");
 		System.out.println(event_id);

@@ -74,6 +74,8 @@ public class MongoDBUsersDAO {
 	}
 
 	public User getUserByQuery(String user_name, String password) {
+		System.out.println(user_name);
+		System.out.println(password);
 		DBObject query = BasicDBObjectBuilder.start()
 				.append("user_name", user_name).append("password", password)
 				.get();

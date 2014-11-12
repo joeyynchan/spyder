@@ -1,6 +1,8 @@
 package com.journaldev.mongodb.servlets;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
@@ -23,32 +25,48 @@ public class AddUserServlet extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		String user_name = request.getParameter("user_name");
-		String password = request.getParameter("password");
-		User mu = new User();
-		mu.setUserName(user_name);
-		mu.setPassword(password);
-		MongoClient mongo = (MongoClient) request.getServletContext()
-				.getAttribute("MONGO_CLIENT");
-		MongoDBUsersDAO muDAO = new MongoDBUsersDAO(mongo);
-		muDAO.createUser(mu);
-		System.out.println("id" + mu.getId());
+
+		BufferedReader br = new BufferedReader(new InputStreamReader(
+				request.getInputStream()));
+		String json = "";
+		if (br != null) {
+			json = br.readLine();
+		}
 		
-		response.setContentType("application/json");
-		response.setHeader("Cache-Control", "nocache");
-		response.setCharacterEncoding("utf-8");
-
-		PrintWriter printout = response.getWriter();
-
-		JSONObject JObject = new JSONObject();
 		try {
-			JObject.put("UserID", mu.getId());
-		} catch (JSONException excep) {
+			JSONObject jsonObj = new JSONObject(json);
+			String user_name = (String) jsonObj.get("user_name");
+			String password = (String) jsonObj.get("password");
+			User mu = new User();
+			mu.setUserName(user_name);
+			mu.setPassword(password);
+			MongoClient mongo = (MongoClient) request.getServletContext()
+					.getAttribute("MONGO_CLIENT");
+			MongoDBUsersDAO muDAO = new MongoDBUsersDAO(mongo);
+			muDAO.createUser(mu);
+			System.out.println("id" + mu.getId());
+
+			response.setContentType("application/json");
+			response.setHeader("Cache-Control", "nocache");
+			response.setCharacterEncoding("utf-8");
+
+			PrintWriter printout = response.getWriter();
+
+			JSONObject JObject = new JSONObject();
+			try {
+				JObject.put("UserID", mu.getId());
+			} catch (JSONException excep) {
+
+			}
+
+			printout.print(JObject);
+			printout.flush();
 			
+		} catch (JSONException exp) {
+			System.out.println("INVALID JSON OBJECT !!");
 		}
 
-		printout.print(JObject);
-		printout.flush();
+		
 
 	}
 
