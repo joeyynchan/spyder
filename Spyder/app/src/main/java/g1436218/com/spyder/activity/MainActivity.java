@@ -75,7 +75,7 @@ public class MainActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         if (getFragmentManager().getBackStackEntryCount() == 0) {
-            finish();
+            // Do nothing
         } else {
             getFragmentManager().popBackStack();
         }
@@ -115,8 +115,8 @@ public class MainActivity extends BaseActivity {
             TextView textView = (TextView) findViewById(R.id.textView2);
             String action = intent.getAction();
             if (BluetoothDiscovery.DEVICE_DETECTED.equals(action)) {
-                String address = intent.getStringExtra("MAC_ADDRESS");
-                textView.setText(textView.getText() + "\n" + address);
+                String username = intent.getStringExtra("USERNAME");
+                textView.setText(textView.getText() + "\n" + username);
             } else if (BluetoothDiscovery.RESET_LIST.equals(action)) {
                 textView.setText("Results:");
             }

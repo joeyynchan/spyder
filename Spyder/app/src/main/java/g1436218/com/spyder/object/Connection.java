@@ -5,31 +5,31 @@ package g1436218.com.spyder.object;
  */
 public class Connection {
 
-    private String macAddress;
+    private String username;
     private int strength;
 
-    public Connection(String macAddress, int strength){
-        this.macAddress = macAddress;
+    public Connection(String username, int strength){
+        this.username = username;
         this.strength = strength;
     }
 
-    public String getMacAddress(){
-        return macAddress;
+    public String getUsername(){
+        return username;
     }
 
     @Override
     public boolean equals(Object obj){
-        return macAddress.equals(((Connection) obj).getMacAddress());
+        return username.equals(((Connection) obj).getUsername());
     }
 
     @Override
     public int hashCode(){
-        return this.macAddress.hashCode();
+        return this.username.hashCode();
     }
 
     @Override
     public String toString(){
-        return macAddress + " : " + strength + "dBm";
+        return username + " : " + strength + "dBm";
     }
 
 }
