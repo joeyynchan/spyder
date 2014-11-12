@@ -64,12 +64,15 @@ public class MongoDBEventDAO {
 	}
 
 	public List<String> getAllUsersIDEvent(String event_id) {
-		DBObject query = BasicDBObjectBuilder.start()
-				.append("_id", new ObjectId(event_id)).get();
-		System.out.println(query.toString());
-		DBObject data = this.col.findOne(query);
-		System.out.println("data: " + data);
-		return UserConverter.getUsers(data);
+		if (event_id.matches("/^[0-9a-fA-F]{24}$/")) {
+			DBObject query = BasicDBObjectBuilder.start()
+					.append("_id", new ObjectId(event_id)).get();
+			System.out.println(query.toString());
+			DBObject data = this.col.findOne(query);
+			System.out.println("data: " + data);
+			return UserConverter.getUsers(data);
+		}
+		return new ArrayList<String>();
 	}
 
 }
