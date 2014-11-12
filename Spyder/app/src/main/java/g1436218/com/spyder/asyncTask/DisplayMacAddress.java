@@ -1,11 +1,9 @@
 package g1436218.com.spyder.asyncTask;
 
 import g1436218.com.spyder.R;
-import g1436218.com.spyder.backbone.QueryExecutor;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
-import android.os.AsyncTask;
 import android.widget.TextView;
 
 public class DisplayMacAddress extends BaseAsyncTask {

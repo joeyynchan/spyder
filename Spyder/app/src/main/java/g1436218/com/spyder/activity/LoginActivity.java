@@ -67,7 +67,6 @@ public class LoginActivity extends BaseActivity {
         //send login data to api
         Log.d(TAG, "attemptLogin");
         new LinkDevice(this).execute();
-
     }
 
     private void gotoMainActivity() {

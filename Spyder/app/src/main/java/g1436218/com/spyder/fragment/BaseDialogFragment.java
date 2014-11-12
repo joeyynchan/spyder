@@ -5,9 +5,7 @@ import android.app.DialogFragment;
 import android.os.Bundle;
 import android.view.Window;
 
-/**
- * Created by Joey on 09/11/2014.
- */
+
 public class BaseDialogFragment extends DialogFragment {
 
     @Override
