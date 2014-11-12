@@ -97,7 +97,7 @@ public class MainActivity extends BaseActivity {
 
     private void showAttendee() {
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.container, new BaseFragment());
+        fragmentTransaction.replace(R.id.fragment_container, new BaseFragment());
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }

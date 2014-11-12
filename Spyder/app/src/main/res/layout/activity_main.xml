@@ -1,45 +1,56 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:id="@+id/container"
     android:layout_width="match_parent" android:layout_height="match_parent"
     tools:context=".MainActivity" tools:ignore="MergeRootFrame">
 
-    <TextView
-        android:text="@string/hello_world"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView1"
-    />
+    <RelativeLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal|top"
+        android:layout_above="@+id/bottom_bar">
 
-    <TextView
-        android:text="@string/hello_world"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:id="@+id/textView2"
-    />
+        <TextView
+            android:text="@string/hello_world"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView1"
+        />
 
-    <TextView
-        android:text="@string/hello_world"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="200dp"
-        android:id="@+id/textView3"
-     />
+        <TextView
+            android:text="@string/hello_world"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:id="@+id/textView2"
+        />
+
+        <TextView
+            android:text="@string/hello_world"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="200dp"
+            android:id="@+id/textView3"
+         />
+    </RelativeLayout>
+
+
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="fill_parent"
         android:layout_height="60dp"
-        android:layout_gravity="center_horizontal|bottom"
-        android:background="#ff102030">
+        android:background="#ff102030"
+        android:id="@+id/bottom_bar"
+        android:layout_alignParentBottom="true">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Show Attendee"
-            android:id="@+id/textview_show_attendee"
-            android:layout_weight="1"
-            android:clickable="true"/>
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:id="@+id/textview_show_attendee" />
     </LinearLayout>
 
-</FrameLayout>
+
+</RelativeLayout>
+
