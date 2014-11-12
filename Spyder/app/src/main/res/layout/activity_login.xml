@@ -12,13 +12,13 @@
         android:focusableInTouchMode="true"
         android:orientation="vertical"
         android:layout_width="220dp"
-        android:layout_height="83dp"
+        android:layout_height="173dp"
         android:layout_gravity="center">
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/login_username"
+            android:id="@+id/login_edittext_username"
             android:layout_gravity="center_horizontal"
             android:hint="@string/username" />
 
@@ -27,24 +27,37 @@
             android:layout_height="wrap_content"
             android:inputType="textPassword"
             android:ems="10"
-            android:id="@+id/login_password"
+            android:id="@+id/login_edittext_password"
             android:layout_gravity="center_horizontal"
             android:hint="@string/Password" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:id="@+id/login_text_errmsg"
+            android:textColor="@color/errorColor"
+            android:layout_gravity="center_horizontal" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="172dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/signup"
+                android:id="@+id/login_button_sign_up" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/login"
+                android:id="@+id/login_button_login" />
+        </LinearLayout>
+
     </LinearLayout>
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Sign Up"
-        android:id="@+id/button_sign_up"
-        android:layout_gravity="center_horizontal|bottom" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Main Activity"
-        android:id="@+id/button_main_activity"
-        android:layout_gravity="right|bottom" />
 
 </FrameLayout>
