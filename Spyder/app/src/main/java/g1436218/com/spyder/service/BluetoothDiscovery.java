@@ -17,6 +17,7 @@ import java.util.HashSet;
 
 import g1436218.com.spyder.R;
 import g1436218.com.spyder.object.Connection;
+import g1436218.com.spyder.object.UserMap;
 
 public class BluetoothDiscovery extends Service {
 
@@ -29,6 +30,7 @@ public class BluetoothDiscovery extends Service {
     private BluetoothAdapter BTAdapter = BluetoothAdapter.getDefaultAdapter();
     private HashSet<Connection> connections;
     private Handler handler = new Handler();
+    private UserMap userMap;
 
     private final BroadcastReceiver receiver = new BroadcastReceiver(){
 
@@ -38,12 +40,18 @@ public class BluetoothDiscovery extends Service {
             String action = intent.getAction();
 
             if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+
                 int rssi = intent.getShortExtra(BluetoothDevice.EXTRA_RSSI, Short.MIN_VALUE);
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                connections.add(new Connection(device.getAddress(), rssi));
-                broadcastDeviceDetected(device.getAddress());
-                Log.d(TAG, connections.toString());
+
+                if (userMap.containsKey(device.getAddress())) {
+                    String username = userMap.get(device.getAddress());
+                    connections.add(new Connection(username, rssi));
+                    broadcastDeviceDetected(username);
+                    Log.d(TAG, connections.toString());
+                }
                 //Log.d(TAG, "Device, " + device.getName() + " (" + device.getAddress() + ") has been detected with rssi: " + rssi + " dBm.");
+
             } else if (BluetoothAdapter.ACTION_DISCOVERY_STARTED.equals(action)) {
                 broadcastResetList();
                 Log.d(TAG, "ACTION_DISCOVERY_STARTED");
@@ -53,10 +61,10 @@ public class BluetoothDiscovery extends Service {
             }
         }
 
-        private void broadcastDeviceDetected(String address) {
+        private void broadcastDeviceDetected(String username) {
             Intent intent = new Intent();
             intent.setAction(DEVICE_DETECTED);
-            intent.putExtra("MAC_ADDRESS", address);
+            intent.putExtra("USERNAME", username);
             sendBroadcast(intent);
         }
 
@@ -85,8 +93,6 @@ public class BluetoothDiscovery extends Service {
     }
 
     private void showResult() {
-        //TextView textview = (TextView) activity.findViewById(R.id.textView1);
-        //textview.setText(connections.toString());
         Log.d(TAG, connections.toString());
 		/* Reset the list of connections */
         connections = new HashSet<Connection>();
@@ -108,6 +114,8 @@ public class BluetoothDiscovery extends Service {
             BTAdapter.enable();
         }
 
+
+        userMap = UserMap.getInstance();
         initializeIntentFilter();
 
         handler.post(mDiscoveryTask);
