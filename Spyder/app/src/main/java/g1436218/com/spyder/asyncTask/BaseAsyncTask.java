@@ -10,6 +10,7 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
@@ -30,11 +31,12 @@ public abstract class BaseAsyncTask extends AsyncTask<Void, Void, Void> {
     protected InputStream inputStream;
     protected String result;
     protected JSONObject resultJObj;
-    protected ArrayList<NameValuePair> params;
+    protected JSONObject params;
+    protected int statusCode;
 
     protected BaseAsyncTask(Activity activity) {
         this.activity = activity;
-        this.params = new ArrayList<NameValuePair>();
+        this.params = new JSONObject();
         this.result = "Result cannot be fetched";
     }
 
@@ -43,12 +45,12 @@ public abstract class BaseAsyncTask extends AsyncTask<Void, Void, Void> {
         try {
             DefaultHttpClient httpClient = new DefaultHttpClient();
             HttpPost httpPost = new HttpPost(url);
-            httpPost.setEntity(new UrlEncodedFormEntity(params));
-
+            httpPost.setEntity(new StringEntity(params.toString()));
+            httpPost.setHeader("Content-type", "application/json");
             HttpResponse httpResponse = httpClient.execute(httpPost);
             HttpEntity httpEntity = httpResponse.getEntity();
             inputStream = httpEntity.getContent();
-
+            statusCode = httpResponse.getStatusLine().getStatusCode();
         } catch (UnsupportedEncodingException e) {
             Log.e(TAG + "UnsupportedEncodingException", e.getMessage());
         } catch (ClientProtocolException e) {
@@ -88,8 +90,12 @@ public abstract class BaseAsyncTask extends AsyncTask<Void, Void, Void> {
         return jObj;
     }
 
-    /* Helper method for adding a BasicNameValuePair to the list of params for httpPost request */
     protected void addToParams(String name, String value){
-        params.add(new BasicNameValuePair(name, value));
+        Log.d(TAG, name + " " + value);
+        try {
+            params.put(name, value);
+        } catch (JSONException e) {
+            Log.e(TAG, "Failed to put new pair into JSON");
+        }
     }
 }
