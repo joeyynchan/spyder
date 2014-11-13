@@ -38,6 +38,7 @@ public class GetUsersEventServlet extends HttpServlet {
 		MongoDBUsersDAO mobileDAO = new MongoDBUsersDAO(mongo);
 
 		List<String> user_id_list = eventDAO.getAllUsersIDEvent(event_id);
+		System.out.println(user_id_list);
 		List<User> user_list = mobileDAO.getAllUsers(user_id_list);
 
 		response.setContentType("application/json");

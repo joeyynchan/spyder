@@ -64,7 +64,7 @@ public class MongoDBEventDAO {
 	}
 
 	public List<String> getAllUsersIDEvent(String event_id) {
-		if (event_id.matches("/^[0-9a-fA-F]{24}$/")) {
+		if (event_id.length() == 24) {
 			DBObject query = BasicDBObjectBuilder.start()
 					.append("_id", new ObjectId(event_id)).get();
 			System.out.println(query.toString());
