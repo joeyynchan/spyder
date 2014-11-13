@@ -1,6 +1,7 @@
 package g1436218.com.spyder.activity;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -8,6 +9,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -73,6 +75,16 @@ public class MainActivity extends BaseActivity {
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_log_out:
+                finish();
+            default :
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
     public void onBackPressed() {
         if (getFragmentManager().getBackStackEntryCount() == 0) {
             // Do nothing
@@ -96,10 +108,14 @@ public class MainActivity extends BaseActivity {
     }
 
     private void showAttendee() {
-        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container, new BaseFragment());
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
+        Fragment fragment = getFragmentManager().findFragmentByTag("CURRENT_FRAGMENT");
+        if (!(fragment instanceof BaseFragment)) {
+            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+            //fragmentTransaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right);
+            fragmentTransaction.replace(R.id.fragment_container, new BaseFragment(), "CURRENT_FRAGMENT");
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
+        }
     }
 
     private class UIUpdateReceiver extends BroadcastReceiver {
