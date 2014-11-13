@@ -48,6 +48,10 @@ public class LoginServlet extends HttpServlet {
 				login_user.setMacAddress(mac_address);
 				muDAO.updateUser(login_user);
 				operation = true;
+			} else if (login_user != null
+					&& login_user.getMacAddress().equals(mac_address)
+					&& login_user.getPassword().endsWith(password)) {
+				operation = true;
 			}
 
 			response.setContentType("application/json");

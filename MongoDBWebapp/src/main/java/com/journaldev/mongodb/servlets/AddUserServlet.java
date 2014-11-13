@@ -43,8 +43,8 @@ public class AddUserServlet extends HttpServlet {
 			MongoClient mongo = (MongoClient) request.getServletContext()
 					.getAttribute("MONGO_CLIENT");
 			MongoDBUsersDAO muDAO = new MongoDBUsersDAO(mongo);
-			muDAO.createUser(mu);
-			System.out.println("id" + mu.getId());
+			mu.setId(muDAO.createUser(mu).getId());
+			System.out.println("id " + mu.getId());
 
 			response.setContentType("application/json");
 			response.setHeader("Cache-Control", "nocache");

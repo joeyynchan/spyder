@@ -25,11 +25,16 @@ public class MongoDBUsersDAO {
 	}
 
 	public User createUser(User p) {
-		DBObject doc = UserConverter.toDBObject(p);
-		this.col.insert(doc);
-		ObjectId id = (ObjectId) doc.get("_id");
-		p.setId(id.toString());
-		return p;
+		User temp_user = getUserByName(p.getUserName());
+		System.out.println(temp_user);
+		if (temp_user == null) {
+			DBObject doc = UserConverter.toDBObject(p);
+			this.col.insert(doc);
+			ObjectId id = (ObjectId) doc.get("_id");
+			p.setId(id.toString());
+			return p;
+		}
+		return temp_user;
 	}
 
 	public void updateUser(User p) {
@@ -73,6 +78,16 @@ public class MongoDBUsersDAO {
 		return result;
 	}
 
+	public User getUserByName(String user_name) {
+		DBObject query = BasicDBObjectBuilder.start()
+				.append("user_name", user_name).get();
+		DBObject data = this.col.findOne(query);
+		if (data != null) {
+			return UserConverter.toUser(data);
+		}
+		return null;
+	}
+
 	public User getUserByQuery(String user_name, String password) {
 		System.out.println(user_name);
 		System.out.println(password);
@@ -80,7 +95,11 @@ public class MongoDBUsersDAO {
 				.append("user_name", user_name).append("password", password)
 				.get();
 		DBObject data = this.col.findOne(query);
-		return UserConverter.toUser(data);
+		if (data != null) {
+			return UserConverter.toUser(data);
+		}
+
+		return null;
 	}
-	
+
 }
