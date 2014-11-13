@@ -1,12 +1,8 @@
 package g1436218.com.spyder.activity;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,6 +12,7 @@ import android.widget.TextView;
 import g1436218.com.spyder.R;
 import g1436218.com.spyder.asyncTask.DisplayMacAddress;
 import g1436218.com.spyder.asyncTask.FetchAttendeeList;
+import g1436218.com.spyder.fragment.AttendeeFragment;
 import g1436218.com.spyder.fragment.BaseFragment;
 import g1436218.com.spyder.fragment.InteractionFragment;
 import g1436218.com.spyder.object.UserMap;
@@ -27,7 +24,8 @@ public class MainActivity extends BaseActivity {
     private Intent bluetoothDiscoveryIntent;
     private UserMap userMap;
 
-    private TextView textview_show_attendee;
+    private TextView textview_attendee;
+    private TextView textview_interaction;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +33,6 @@ public class MainActivity extends BaseActivity {
 
         /*Display Device Information */
         new DisplayMacAddress(this).execute();
-
         new FetchAttendeeList(this).execute();
 
     }
@@ -87,23 +84,39 @@ public class MainActivity extends BaseActivity {
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.textview_show_attendee: showAttendee(); break;
+            case R.id.textview_attendee: showAttendees(); break;
+            case R.id.textview_interaction: showInteractions(); break;
             default: break;
         }
     }
 
     @Override
     public void initializeView() {
-        textview_show_attendee = (TextView) findViewById(R.id.textview_show_attendee);
-        textview_show_attendee.setOnClickListener(this);
+        textview_attendee = (TextView) findViewById(R.id.textview_attendee);
+        textview_attendee.setOnClickListener(this);
+        textview_interaction = (TextView) findViewById(R.id.textview_interaction);
+        textview_interaction.setOnClickListener(this);
     }
 
-    private void showAttendee() {
+    private void showInteractions() {
         Fragment fragment = getFragmentManager().findFragmentByTag("CURRENT_FRAGMENT");
-        if (!(fragment instanceof BaseFragment)) {
+        if (!(fragment instanceof InteractionFragment)) {
             FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
             //fragmentTransaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right);
             fragmentTransaction.replace(R.id.fragment_container, new InteractionFragment(), "CURRENT_FRAGMENT");
+            getFragmentManager().popBackStack();
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
+        }
+    }
+
+    private void showAttendees() {
+        Fragment fragment = getFragmentManager().findFragmentByTag("CURRENT_FRAGMENT");
+        if (!(fragment instanceof AttendeeFragment)) {
+            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+            //fragmentTransaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right);
+            fragmentTransaction.replace(R.id.fragment_container, new AttendeeFragment(), "CURRENT_FRAGMENT");
+            getFragmentManager().popBackStack();
             fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
         }

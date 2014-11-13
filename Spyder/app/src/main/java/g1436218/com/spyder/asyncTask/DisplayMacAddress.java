@@ -20,8 +20,8 @@ public class DisplayMacAddress extends BaseAsyncTask {
         String adapterName = adapter.getName();
         String adapterAddress = adapter.getAddress();
 
-        TextView textview1 = (TextView) activity.findViewById(R.id.textView1);
-        textview1.setText("Device name : " + adapterName + "\n Bluetooth MAC Address :" + adapterAddress);
+        TextView textview = (TextView) activity.findViewById(R.id.textview_device_information);
+        textview.setText("Device name : " + adapterName + "\n Bluetooth MAC Address :" + adapterAddress);
 
         return null;
     }
