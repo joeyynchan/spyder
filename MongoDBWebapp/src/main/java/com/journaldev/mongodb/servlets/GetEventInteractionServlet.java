@@ -22,29 +22,25 @@ import com.mongodb.MongoClient;
 @WebServlet("/event/interaction")
 public class GetEventInteractionServlet extends HttpServlet {
 
-    protected void doGet(HttpServletRequest request,
-                         HttpServletResponse response) {
+	protected void doGet(HttpServletRequest request,
+			HttpServletResponse response) throws IOException {
 
-        String event_id = request.getParameter("event_id");
+		String event_id = request.getParameter("event_id");
 
-        try {
-            response.setContentType("application/json");
-            response.setHeader("Cache-Control", "nocache");
-            response.setCharacterEncoding("utf-8");
+		response.setContentType("application/json");
+		response.setHeader("Cache-Control", "nocache");
+		response.setCharacterEncoding("utf-8");
 
-            PrintWriter printout = response.getWriter();
-            JSONObject JObject = new JSONObject();
-            try {
-                JObject.put("interaction", "");
-            } catch (JSONException excep) {
-                System.out.println("JSON Exception");
-            }
+		PrintWriter printout = response.getWriter();
+		JSONObject JObject = new JSONObject();
+		try {
+			JObject.put("interaction", "");
+		} catch (JSONException excep) {
+			System.out.println("JSON Exception");
+		}
 
-            printout.print(JObject);
-            printout.flush();
-        } catch (JSONException main_excp) {
-            System.out.println("INVALID JSON OBJECT !!");
-        }
-    }
+		printout.print(JObject);
+		printout.flush();
+	}
 
 }
