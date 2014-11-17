@@ -6,5 +6,5 @@ Web dependencies so far
     - python3.x
     - flask (sudo pip3 install flask)
     - jinja2 (pip install Jinja2)
-    - dart
-    - polymer.dart
+    - jquery
+    - bootstrap

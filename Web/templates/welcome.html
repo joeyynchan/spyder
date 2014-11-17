@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <style>
+    #login-panel {
+      margin: 10px;
+    }
+  </style>
+  <form id="login-panel" class="form-inline" role="form" action="/login" method="post">
+    <div class="form-group">
+      <label class="sr-only" for="login-username">Username</label>
+      <input type="text" name="username" class="form-control" id="login-username" placeholder="Enter username" required>
+    </div>
+    <div class="form-group">
+      <label class="sr-only" for="login-password">Password</label>
+      <input type="password" class="form-control" id="login-password" placeholder="Enter password" required>
+    </div>
+    <button type="submit" name="password" class="btn btn-default">Sign in</button>
+  </form>
+  <script>
+    $('#login-panel').submit(function(event) {
+      var hashedPassword = hashPassword($('#login-password').val());
+      $('#login-password').val(hashedPassword);
+    });
+
+    function hashPassword(password) {
+      return 'pw' + password + 'eiei';
+    }
+  </script>
+{% endblock %}
