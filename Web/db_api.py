@@ -180,17 +180,17 @@ event_db = {
 def login(username, hashed_password):
     if username not in login_db.keys():
         return {
-            'is_valid': False,
-            'error_massage': 'The username is invalid'
+            'is_success': False,
+            'error_message': 'The username is invalid'
         }
     elif hashed_password != login_db[username]['hashed_password']:
         return {
-            'is_valid': False,
-            'error_massage': 'The password is invalid'
+            'is_success': False,
+            'error_message': 'The password is invalid'
         }
     else:
         return {
-            'is_valid': True,
+            'is_success': True,
             'user_id': login_db[username]['user_id']
         }
 
@@ -234,26 +234,26 @@ def create_event(
 def get_user(user_id):
     if user_id in user_db.keys():
         return {
-            'is_valid': True,
+            'is_success': True,
             'user_profile': user_db[user_id]
         }
     else:
         return {
-            'is_valid': False,
-            'error_massage': 'This user_id is invalid'
+            'is_success': False,
+            'error_message': 'This user_id is invalid'
         }
 
 
 def get_event(event_id):
     if event_id in event_db.keys():
         return {
-            'is_valid': True,
+            'is_success': True,
             'event_profile': event_db[event_id]
         }
     else:
         return {
-            'is_valid': False,
-            'error_massage': 'This event_id is invalid'
+            'is_success': False,
+            'error_message': 'This event_id is invalid'
         }
 
 
