@@ -1,0 +1,86 @@
+<!-- Copyright (c) 2012, the Dart project authors.  Please see the AUTHORS file
+     for details. All rights reserved. Use of this source code is governed by a
+     BSD-style license that can be found in the LICENSE file.
+-->
+
+<!DOCTYPE html>
+
+<html>
+  <body>   
+  
+  <link rel="import" href="packages/polymer/polymer.html">
+  <polymer-element name="tute-page-form" extends="form">
+    <template>
+    <style>
+      #pageform {
+        width: 500px;
+      }
+      
+      .entry {
+        float: left;
+        padding: 3px 3px 3px 3px;
+        width: 100%;
+      }
+      
+      .entry label {
+        display: inline-block;
+        width: 150px;
+        text-align: right;
+        vertical-align: middle;
+      }
+      
+      label.andrews {
+        width:auto;
+      }
+      
+      .submitarea {
+        padding: 10px 10px 10px 10px;
+        margin: 10px 10px 10px 10px;
+        border-style: solid;
+        border-width: 1px;
+        border-color: SlateBlue;
+        clear: left;
+      }
+      
+    </style>
+      <div id="pageform">
+        <div class="entry">
+          <label>Full name:</label>
+          <input type="text" value="{{theData['fullName']}}">
+        </div>
+        <div class="entry">
+          <label>Username:</label>
+          <!--<textarea value="{{theData['username']}}"></textarea>-->
+          <input type="text" value="{{theData['username']}}">
+        </div> 
+        <div class="entry">
+          <label>Email:</label>
+          <!--<textarea value="{{theData['email']}}"></textarea>-->
+          <input type="text" value="{{theData['email']}}">
+        </div> 
+        <div class="entry">
+          <label>Password:</label>
+          <input type="text" value="{{theData['password']}}">
+        </div>
+        <div class="entry">
+          <label>Repeat Password:</label>
+          <input type="text" value="{{theData['repeatpassword']}}">
+        </div>
+        <div class="entry">
+          <label>Birthday:</label>
+          <input type="date" value="{{theData['birthday']}}">
+        </div>
+        <div class="submitarea">
+          <input type="submit" value="Submit" on-click="{{submitForm}}">
+          <input type="reset"  value="Clear"  on-click="{{resetForm}}"> <br>    
+          <!--<p class="responsetext"> {{serverResponse}} </p>-->
+        </div>
+      </div>
+    </template>
+      
+    <script type="application/dart" src="tute_pageform.dart">
+    </script>
+  </polymer-element>
+
+  </body>
+</html>
