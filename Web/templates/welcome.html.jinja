@@ -5,25 +5,10 @@
     .navbar {
       padding: 10px;
     }
-    body {
-      padding-top: 70px;
-    }
     .jumbotron {
       padding: 50px;
     }
   </style>
-
-  {% if success_message %}
-    <div class="alert alert-success" role="alert">
-      {{ success_message }}
-    </div>
-  {% endif %}
-
-  {% if error_message %}
-    <div class="alert alert-danger" role="alert">
-      {{ error_message }}
-    </div>
-  {% endif %}
 
   <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
     <div class="container">

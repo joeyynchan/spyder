@@ -2,15 +2,15 @@
 
 login_db = {
     'alice': {
-        'user_id': '0',
+        'user_id': 0,
         'hashed_password': 'pwaaaeiei'
     },
     'bob': {
-        'user_id': '1',
+        'user_id': 1,
         'hashed_password': 'pwbbbeiei'
     },
     'charlie': {
-        'user_id': '2',
+        'user_id': 2,
         'hashed_password': 'pwccceiei'
     },
 }
@@ -235,7 +235,7 @@ def get_user(user_id):
     if user_id in user_db.keys():
         return {
             'is_success': True,
-            'user_profile': user_db[user_id]
+            'user_record': user_db[user_id]
         }
     else:
         return {
@@ -244,17 +244,29 @@ def get_user(user_id):
         }
 
 
+def get_name_user(user_id):
+    return (user_db[user_id]['name']
+            if user_id in user_db.keys()
+            else 'unknown')
+
+
 def get_event(event_id):
     if event_id in event_db.keys():
         return {
             'is_success': True,
-            'event_profile': event_db[event_id]
+            'event_record': event_db[event_id]
         }
     else:
         return {
             'is_success': False,
             'error_message': 'This event_id is invalid'
         }
+
+
+def get_name_event(event_id):
+    return (event_db[event_id]['name']
+            if event_id in event_db.keys()
+            else 'unknown')
 
 
 # def list_conferences():

@@ -1,6 +1,43 @@
 {% extends 'privileged_base.html.jinja' %}
 
 {% block privileged_base_content %}
-  ha
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">General information</h3>
+    </div>
+    <div class="panel-body">
+      <dl class="dl-horizontal">
+        <dt>user_id</dt>       <dd>{{user_record['user_id']}}</dd>
+        <dt>username</dt>      <dd>{{user_record['username']}}</dd>
+        <dt>name</dt>          <dd>{{user_record['name']}}</dd>
+        <dt>gender</dt>        <dd>{{user_record['gender']}}</dd>
+        <dt>occupation</dt>    <dd>{{user_record['occupation']}}</dd>
+        <dt>organization</dt>  <dd>{{user_record['organization']}}</dd>
+        <dt>email</dt>         <dd>{{user_record['email']}}</dd>
+        <dt>phone</dt>         <dd>{{user_record['phone']}}</dd>
+        <dt>external_link</dt> <dd>{{user_record['external_link']}}</dd>
+      </dl>
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">Events</h3>
+    </div>
+    <table class="table table-hover">
+      <tr>
+        <th>#</th>
+        <th>Event name</th>
+        <th>Role</th>
+        <th>Status</th>
+      </tr>
+      {% for event_record in user_event_table %}
+        <tr>
+          <td>{{ event_record['event_id'] }}</td>
+          <td>{{ event_record['event_name'] }}</td>
+          <td>{{ event_record['role'] }}</td>
+          <td>{{ event_record['status'] }}</td>
+        </tr>
+      {% endfor %}
+    </table>
+  </div>
 {% endblock %}
-

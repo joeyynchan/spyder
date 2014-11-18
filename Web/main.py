@@ -6,13 +6,13 @@
 
 __author__ = 'Gun Pinyo (gunpinyo@gmail.com)'
 
-from os import urandom
+import os
+import json
 
 from flask import (
     Flask,
     request,
     session,
-    # json,
     render_template,
     redirect,
     url_for
@@ -26,7 +26,7 @@ app = Flask(__name__)
 @app.route('/', methods=['GET'])
 def index():
     if 'current_user_id' in session:
-        return redirect(url_for('user_profile'))
+        return redirect(url_for('dashboard'))
     else:
         return redirect(url_for('welcome'))
 
@@ -37,17 +37,16 @@ def serve_static(filepath):
 
 
 @app.route('/welcome', methods=['GET'])
-@app.route('/welcome/error_message/<error_message>', methods=['GET'])
-@app.route('/welcome/success_message/<success_message>', methods=['GET'])
-def welcome(**input_dict):
-    return render_template('welcome.html.jinja', **input_dict)
+def welcome():
+    param_dict = session.pop('next_page_param_dict', {})
+    return render_template('welcome.html.jinja', **param_dict)
 
 
 @app.route('/login', methods=['POST'])
 def login():
     # TODO(gunpinyo): change to assertion to redirection
     assert ('current_user_id' not in session)
-    print(request.form['username'] + 'iii' + request.form['password'])
+
     param_dict = {
         'username': request.form['username'],
         'hashed_password': request.form['password']
@@ -57,10 +56,15 @@ def login():
 
     if(login_dict['is_success']):
         session['current_user_id'] = login_dict['user_id']
-        return redirect(url_for('user_profile'))
+        session['next_page_param_dict'] = {
+            'success_message': 'You have successfully signed in.'
+        }
+        return redirect(url_for('dashboard'))
     else:
-        return redirect(
-            url_for('welcome', error_message=login_dict['error_message']))
+        session['next_page_param_dict'] = {
+            'error_message': login_dict['error_message']
+        }
+        return redirect(url_for('welcome'))
 
 
 @app.route('/logout', methods=['POST'])
@@ -69,9 +73,17 @@ def logout():
     assert ('current_user_id' in session)
 
     session.pop('current_user_id')
+    session['next_page_param_dict'] = {
+        'success_message': 'You have successfully signed out.'
+    }
 
-    return redirect(url_for(
-        'welcome', success_message='You have successfully signed out.'))
+    return redirect(url_for('welcome'))
+
+
+@app.route('/dashboard', methods=['GET'])
+def dashboard():
+    # TODO(gunpinyo): (low-priority) implement a proper dashboard
+    return redirect(url_for('user_profile'))
 
 
 @app.route('/user/profile', methods=['GET'])
@@ -83,10 +95,29 @@ def user_profile(user_id=None):
     if user_id is None:
         user_id = session['current_user_id']
 
+    user_dict = db_api.get_user(user_id)
+
+    # if not user_dict['is_success']:
+    #     session['next_page_param_dict'] = {
+    #         'error_message': user_dict['error_message']
+    #     }
+
     param_dict = {
         'user_id': user_id,
-        'user_record': db_api.get_user(user_id)
+        'user_record': user_dict['user_record'],
+        'user_event_table': [
+            {
+                'event_id': event_id,
+                'event_name': db_api.get_name_event(event_id),
+                'role': role,
+                'status': status
+            }
+            for status, helper_1 in user_dict['user_record']['events'].items()
+            for role, helper_2 in helper_1.items()
+            for event_id in helper_2
+        ]
     }
+    param_dict.update(session.pop('next_page_param_dict', {}))
 
     return render_template('user_profile.html.jinja', **param_dict)
 
@@ -129,6 +160,6 @@ def user_profile(user_id=None):
 
 if __name__ == '__main__':
     # secret key for flask session
-    app.secret_key = urandom(40)
+    app.secret_key = os.urandom(40)
 
     app.run(host='0.0.0.0', port=55556, debug=True)
