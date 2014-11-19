@@ -1,6 +1,5 @@
 package g1436218.com.spyder.service;
 
-import android.app.Activity;
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -11,11 +10,10 @@ import android.content.IntentFilter;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
-import android.widget.TextView;
 
 import java.util.HashSet;
 
-import g1436218.com.spyder.R;
+import g1436218.com.spyder.asyncTask.SubmitBluetoothData;
 import g1436218.com.spyder.object.Connection;
 import g1436218.com.spyder.object.UserMap;
 
@@ -50,13 +48,14 @@ public class BluetoothDiscovery extends Service {
                     broadcastDeviceDetected(username);
                     Log.d(TAG, connections.toString());
                 }
-                //Log.d(TAG, "Device, " + device.getName() + " (" + device.getAddress() + ") has been detected with rssi: " + rssi + " dBm.");
+                Log.d(TAG, "Device, " + device.getName() + " (" + device.getAddress() + ") has been detected with rssi: " + rssi + " dBm.");
 
             } else if (BluetoothAdapter.ACTION_DISCOVERY_STARTED.equals(action)) {
                 broadcastResetList();
                 Log.d(TAG, "ACTION_DISCOVERY_STARTED");
             } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
                 Log.d(TAG, "ACTION_DISCOVERY_FINISHED");
+                new SubmitBluetoothData(connections).execute();
                 showResult();
             }
         }

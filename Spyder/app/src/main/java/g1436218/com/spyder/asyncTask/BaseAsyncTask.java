@@ -22,6 +22,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public abstract class BaseAsyncTask extends AsyncTask<Void, Void, Void> {
 
@@ -33,6 +34,11 @@ public abstract class BaseAsyncTask extends AsyncTask<Void, Void, Void> {
     protected JSONObject resultJObj;
     protected JSONObject params;
     protected int statusCode;
+
+    protected BaseAsyncTask(){
+        this.params = new JSONObject();
+        this.result = "Result cannot be fetched";
+    }
 
     protected BaseAsyncTask(Activity activity) {
         this.activity = activity;
@@ -90,7 +96,7 @@ public abstract class BaseAsyncTask extends AsyncTask<Void, Void, Void> {
         return jObj;
     }
 
-    protected void addToParams(String name, String value){
+    protected void addToParams(String name, Object value){
         Log.d(TAG, name + " " + value);
         try {
             params.put(name, value);

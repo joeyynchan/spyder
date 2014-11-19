@@ -39,7 +39,7 @@ public class FetchAttendeeList extends BaseAsyncTask {
         result = getStringFromUrl(URL);
 
         /* Dummy response since the API is not ready; */
-        result = "{\"user_mappings\":[{\"mac_address\":\"38:2D:D1:1B:09:2A\",\"user_name\":\"Joey\"},{\"mac_address\":\"F0:E7:7E:52:57:3E\",\"user_name\":\"Joey2\"}]}";
+        result = "{\"user_mappings\":[{\"mac_address\":\"38:2D:D1:1B:09:2A\",\"user_name\":\"Joey\"},{\"mac_address\":\"F0:E7:7E:52:57:3E\",\"user_name\":\"Joey2\"},{\"mac_address\":\"54:27:1E:AB:B7:5A\",\"user_name\":\"Cherie-PC\"}]}";
 
         resultJObj = toJSONObject(result);
         return null;

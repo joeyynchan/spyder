@@ -14,9 +14,13 @@ public class Connection {
     }
 
     public String getUsername(){
+
         return username;
     }
 
+    public int getStrength(){
+        return strength;
+    }
     @Override
     public boolean equals(Object obj){
 
