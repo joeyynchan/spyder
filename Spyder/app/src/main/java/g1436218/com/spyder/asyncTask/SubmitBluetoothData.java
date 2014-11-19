@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.util.Log;
 
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -32,8 +34,10 @@ public class SubmitBluetoothData extends BaseAsyncTask{
         Log.d(TAG, "doInBackground");
         addToParams("time_interval", Integer.toString(TIME_INTERVAL));
         addToParams("data", convertListToJSONArray());
-        Log.d(TAG, convertListToJSONArray().toString());
+
         Log.d(TAG, this.params.toString());
+        JSONObject obj = getJSONFromUrl(URL);
+        Log.d(TAG, obj.toString());
         return null;
     }
 
@@ -42,9 +46,16 @@ public class SubmitBluetoothData extends BaseAsyncTask{
         JSONArray array = new JSONArray();
         while(iterator.hasNext()) {
             Connection conn = iterator.next();
-            array.put(conn.getUsername() + "," + conn.getStrength());
+            JSONObject obj = new JSONObject();
+            try {
+                obj.put("user_name", conn.getUsername());
+                obj.put("strength", conn.getStrength());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            array.put(obj);
         }
-        array.put("Joey,38:2D:D1:1B:09:2A");
+
         return array;
     }
 

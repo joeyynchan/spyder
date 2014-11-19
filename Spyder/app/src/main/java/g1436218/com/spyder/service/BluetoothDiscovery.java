@@ -48,7 +48,7 @@ public class BluetoothDiscovery extends Service {
                     broadcastDeviceDetected(username);
                     Log.d(TAG, connections.toString());
                 }
-                Log.d(TAG, "Device, " + device.getName() + " (" + device.getAddress() + ") has been detected with rssi: " + rssi + " dBm.");
+                //Log.d(TAG, "Device, " + device.getName() + " (" + device.getAddress() + ") has been detected with rssi: " + rssi + " dBm.");
 
             } else if (BluetoothAdapter.ACTION_DISCOVERY_STARTED.equals(action)) {
                 broadcastResetList();
