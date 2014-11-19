@@ -177,6 +177,61 @@ event_db = {
 }
 
 
+def register(
+        username, hashed_password, hashed_confirm_password, name, gender,
+        occupation, organization, picture, email, phone, external_link):
+    if username in login_db.keys():
+        return {
+            'is_success': False,
+            'error_message': 'This username has already taken'
+        }
+    elif hashed_password != hashed_confirm_password:
+        return {
+            'is_success': False,
+            'error_message': 'This password and password_confirm is not match.'
+        }
+
+    user_id = len(user_db)
+
+    login_db[username] = {
+        'user_id': user_id,
+        'hashed_password': hashed_password
+    }
+
+    user_db[user_id] = {
+        'user_id': user_id,
+        'username': username,
+        'name': name,
+        'gender': gender,
+        'occupation': occupation,
+        'organization': organization,
+        'picture': picture,
+        'email': email,
+        'phone': phone,
+        'external_link': external_link,
+        'events': {
+            'accepted': {
+                'organizer': [],
+                'speaker': [],
+                'attendee': []
+            },
+            'requested': {
+                'speaker': [],
+                'attendee': []
+            },
+            'invited': {
+                'speaker': [],
+                'attendee': []
+            }
+        }
+    }
+
+    return {
+        'is_success': True,
+        'user_id': user_id
+    }
+
+
 def login(username, hashed_password):
     if username not in login_db.keys():
         return {
@@ -201,7 +256,10 @@ def create_event(
     event_id = len(event_db)
 
     if organizer_id not in user_db.keys():
-        return False
+        return {
+            'is_success': False,
+            'error_message': 'organizer_id is not valid.'
+        }
 
     event_db[event_id] = {
         'event_id': event_id,
@@ -228,7 +286,10 @@ def create_event(
         }
     }
 
-    return True
+    return {
+        'is_success': True,
+        'user_id': user_id
+    }
 
 
 def get_user(user_id):

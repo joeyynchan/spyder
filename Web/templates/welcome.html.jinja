@@ -1,5 +1,9 @@
 {% extends 'base.html.jinja' %}
 
+{% block title %}
+  <title>Welcome - SPYDER - social proximity sensing</title>
+{% endblock %}
+
 {% block base_content %}
   <style>
     .navbar {
@@ -28,11 +32,13 @@
     </div>
   </nav>
   
-  <div class="jumbotron">
-    <h1>SPYDER</h1>
-    <p>Welcome to Social Networks in the Real World through Proximity Sensing</p>
-    <p><a class="btn btn-primary btn-lg" href="#" role="button">Register</a></p>
-  </div>
+  {% block welcome_content %}
+    <div class="jumbotron">
+      <h1>SPYDER</h1>
+      <p>Welcome to Social Networks in the Real World through Proximity Sensing</p>
+      <p><a class="btn btn-primary btn-lg" href="/register" role="button">Register</a></p>
+    </div>
+  {% endblock %}
 
   <script>
     $('#login-panel').submit(function(event) {

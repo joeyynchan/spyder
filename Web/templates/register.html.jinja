@@ -1,0 +1,92 @@
+{% extends 'welcome.html.jinja' %}
+
+{% block title %}
+  <title>Register - SPYDER - social proximity sensing</title>
+{% endblock %}
+
+{% block welcome_content %}
+  <form id="register-panel" class="form-horizontal" role="form" action="/register" method="post">
+    <div class="form-group">
+      <label for="register-username" class="col-sm-3 control-label">Username</label>
+      <div class="col-sm-7">
+        <input type="text" class="form-control" name="username" id="register-username" placeholder="username">
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="register-password" class="col-sm-3 control-label">Password</label>
+      <div class="col-sm-7">
+        <input type="password" class="form-control" name="password" id="register-password" placeholder="password">
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="register-confirm-password" class="col-sm-3 control-label">Confirm Password</label>
+      <div class="col-sm-7">
+        <input type="password" class="form-control" name="confirm_password" id="register-confirm-password" placeholder="confirm-password">
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="register-name" class="col-sm-3 control-label">Name</label>
+      <div class="col-sm-7">
+        <input type="text" class="form-control" name="name" id="register-name" placeholder="name">
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="register-gender" class="col-sm-3 control-label">Gender</label>
+      <div class="col-sm-7">
+        <input type="text" class="form-control" name="gender" id="register-gender" placeholder="gender">
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="register-occupation" class="col-sm-3 control-label">Occupation</label>
+      <div class="col-sm-7">
+        <input type="text" class="form-control" name="occupation" id="register-occupation" placeholder="occupation">
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="register-organization" class="col-sm-3 control-label">Organization</label>
+      <div class="col-sm-7">
+        <input type="text" class="form-control" name="organization" id="register-organization" placeholder="organization">
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="register-picture" class="col-sm-3 control-label">picture</label>
+      <div class="col-sm-7">
+        <input type="text" class="form-control" name="picture" id="register-picture" placeholder="picture">
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="register-email" class="col-sm-3 control-label">E-mail</label>
+      <div class="col-sm-7">
+        <input type="email" class="form-control" name="email" id="register-email" placeholder="email">
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="register-phone" class="col-sm-3 control-label">Telephone</label>
+      <div class="col-sm-7">
+        <input type="text" class="form-control" name="phone" id="register-phone" placeholder="phone">
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="register-external-link" class="col-sm-3 control-label">External Link</label>
+      <div class="col-sm-7">
+        <input type="text" class="form-control" name="external_link" id="register-external-link" placeholder="external_link">
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-sm-offset-3 col-sm-9">
+        <button type="submit" class="btn btn-primary">Register</button>
+        <a class="btn btn-default" href="/register" role="button">Cancel</a>
+      </div>
+    </div>
+  </form>
+
+  <script>
+    $('#register-panel').submit(function(event) {
+      // hashPassword function is in welcome.html.jinja
+      var hashedPassword = hashPassword($('#register-password').val());
+      $('#register-password').val(hashedPassword);
+      var hashedConfirmPassword = hashPassword($('#register-confirm-password').val());
+      $('#register-confirm-password').val(hashedConfirmPassword);
+    });
+  </script>
+{% endblock %}

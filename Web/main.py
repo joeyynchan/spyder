@@ -7,7 +7,6 @@
 __author__ = 'Gun Pinyo (gunpinyo@gmail.com)'
 
 import os
-import json
 
 from flask import (
     Flask,
@@ -28,7 +27,7 @@ def index():
     if 'current_user_id' in session:
         return redirect(url_for('dashboard'))
     else:
-        return redirect(url_for('welcome'))
+        return redirect(url_for('welcome_page'))
 
 
 @app.route('/static/<path:filepath>', methods=['GET'])
@@ -37,9 +36,55 @@ def serve_static(filepath):
 
 
 @app.route('/welcome', methods=['GET'])
-def welcome():
+def welcome_page():
+    # TODO(gunpinyo): change to assertion to redirection
+    assert ('current_user_id' not in session)
+
     param_dict = session.pop('next_page_param_dict', {})
     return render_template('welcome.html.jinja', **param_dict)
+
+
+@app.route('/register', methods=['GET'])
+def register_page():
+    # TODO(gunpinyo): change to assertion to redirection
+    assert ('current_user_id' not in session)
+
+    param_dict = session.pop('next_page_param_dict', {})
+    return render_template('register.html.jinja', **param_dict)
+
+
+@app.route('/register', methods=['POST'])
+def register():
+    # TODO(gunpinyo): change to assertion to redirection
+    assert ('current_user_id' not in session)
+
+    param_dict = {
+        'username': request.form['username'],
+        'hashed_password': request.form['password'],
+        'hashed_confirm_password': request.form['confirm_password'],
+        'name': request.form['name'],
+        'gender': request.form['gender'],
+        'occupation': request.form['occupation'],
+        'organization': request.form['organization'],
+        'picture': request.form['picture'],
+        'email': request.form['email'],
+        'phone': request.form['phone'],
+        'external_link': request.form['external_link']
+    }
+
+    register_dict = db_api.register(**param_dict)
+
+    if(register_dict['is_success']):
+        session['current_user_id'] = register_dict['user_id']
+        session['next_page_param_dict'] = {
+            'success_message': 'You have successfully registered.'
+        }
+        return redirect(url_for('dashboard'))
+    else:
+        session['next_page_param_dict'] = {
+            'error_message': register_dict['error_message']
+        }
+        return redirect(url_for('register_page'))
 
 
 @app.route('/login', methods=['POST'])
@@ -64,7 +109,7 @@ def login():
         session['next_page_param_dict'] = {
             'error_message': login_dict['error_message']
         }
-        return redirect(url_for('welcome'))
+        return redirect(url_for('welcome_page'))
 
 
 @app.route('/logout', methods=['POST'])
@@ -72,12 +117,13 @@ def logout():
     # TODO(gunpinyo): change to assertion to redirection
     assert ('current_user_id' in session)
 
-    session.pop('current_user_id')
+    # TODO(gunpiyo): research how to disable undo cache after logout
+    session.clear()
     session['next_page_param_dict'] = {
         'success_message': 'You have successfully signed out.'
     }
 
-    return redirect(url_for('welcome'))
+    return redirect(url_for('welcome_page'))
 
 
 @app.route('/dashboard', methods=['GET'])
