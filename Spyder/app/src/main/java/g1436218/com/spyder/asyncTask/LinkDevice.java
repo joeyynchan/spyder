@@ -6,6 +6,9 @@ import android.util.Log;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import g1436218.com.spyder.R;
 import g1436218.com.spyder.activity.MainActivity;
 
@@ -16,8 +19,9 @@ import static android.bluetooth.BluetoothAdapter.getDefaultAdapter;
  */
 public class LinkDevice extends BaseAsyncTask{
 
-    private boolean linked;
+    private boolean linked = false;
     private static String TAG = "LinkDevice";
+    private static String URL = "http://146.169.46.38:8080/MongoDBWebapp/login";
     public LinkDevice(Activity activity) { super(activity); }
 
     @Override
@@ -29,10 +33,17 @@ public class LinkDevice extends BaseAsyncTask{
         String password = editText_login_password.getText().toString();
 
         addToParams("user_name", username);
-        addToParams("pass", password);
+        addToParams("password", password);
         addToParams("mac_address", getDefaultAdapter().getAddress());
 
-        //getJSONFromUrl(url)
+        JSONObject jsonObject = getJSONFromUrl(URL);
+        try {
+            Log.d(TAG, jsonObject.toString());
+            linked = jsonObject.getString("res").equals("true");
+        } catch (JSONException e) {
+            Log.e(TAG, "Couldn't get result from JSONObject");
+        }
+
         /* todo: decode the data received from api call
          * 3 cases
          * 1) logged in successfully (either already in system/create new link by db
@@ -40,7 +51,7 @@ public class LinkDevice extends BaseAsyncTask{
          * 3) account not created, prompt user to register
          */
 
-        linked = true;
+        //linked = true;
         return null;
     }
 
