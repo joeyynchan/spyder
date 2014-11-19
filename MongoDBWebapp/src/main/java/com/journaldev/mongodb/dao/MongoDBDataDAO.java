@@ -1,8 +1,13 @@
 package com.journaldev.mongodb.dao;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.journaldev.mongodb.converter.DataConverter;
 import com.journaldev.mongodb.model.Data;
+import com.mongodb.BasicDBObjectBuilder;
 import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 
@@ -20,6 +25,20 @@ public class MongoDBDataDAO {
 	public void createData(Data d) {
 		DBObject doc = DataConverter.toDBObject(d);
 		this.col.insert(doc);
+	}
+
+	public List<String> getAllData(String user_name) {
+			DBObject query = BasicDBObjectBuilder.start()
+					.append("user_name", user_name).get();
+			System.out.println(query.toString());
+			DBCursor cursor = this.col.find(query);
+			List<String> res = new ArrayList<String>();
+			while(cursor.hasNext()){
+				DBObject data = cursor.next();
+				String user_data = DataConverter.getData(data);
+				res.add(user_data);
+			}
+			return res;
 	}
 
 }

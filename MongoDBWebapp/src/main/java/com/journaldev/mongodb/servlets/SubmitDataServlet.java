@@ -49,7 +49,7 @@ public class SubmitDataServlet extends HttpServlet {
 			try {
 				JSONObject jsonObj = new JSONObject(json);
 				JSONArray data = (JSONArray) jsonObj.get("data");
-				Integer time_interval = (Integer) jsonObj.get("time_interval");
+				Integer time_interval = Integer.parseInt((String) jsonObj.get("time_interval"));
 
 				List<Pair<String, Integer>> strengths = new ArrayList<Pair<String, Integer>>();
 				for (int i = 0; i < data.length(); i++) {

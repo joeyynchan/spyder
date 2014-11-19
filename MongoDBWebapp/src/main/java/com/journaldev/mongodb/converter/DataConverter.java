@@ -28,18 +28,27 @@ public class DataConverter {
 		String s = (String) doc.get("data");
 		// "[(a b),(c d)]"
 
-		List<Pair<String, String>> bluetooth_data = new ArrayList<Pair<String, String>>();
+		List<Pair<String, Integer>> bluetooth_data = new ArrayList<Pair<String, Integer>>();
 		s = s.replace("[", "").replace("]", "");
 		String[] split = s.split(",");
 		for (int i = 0; i < split.length; i++) {
-			bluetooth_data.add(new Pair<String, String>(split[i].split(" ")[0],
-					split[i].split(" ")[1]));
+			bluetooth_data.add(new Pair<String,Integer>(split[i].split(" ")[0],
+					Integer.parseInt(split[i].split(" ")[1])));
 		}
 
 		return new Data((String) doc.get("user_name"),
 				(String) doc.get("event_id"),
 				(Integer) doc.get("time_interval"), bluetooth_data);
 
+	}
+
+	public static String getData(DBObject doc) {
+		String user_name = (String)doc.get("user_name");
+		String event_id = (String)doc.get("event_id");
+		Integer time_interval = (Integer)doc.get("time_interval");
+		String data = (String)doc.get("data");
+		return "{user_name : " + user_name + " , event_id : " + event_id + " , time_interval : " + time_interval.toString() + " , data : " + data +  " }";
+		
 	}
 
 }
