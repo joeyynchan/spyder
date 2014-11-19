@@ -45,7 +45,7 @@ public class BluetoothDiscovery extends Service {
                 if (userMap.containsKey(device.getAddress())) {
                     String username = userMap.get(device.getAddress());
                     connections.add(new Connection(username, rssi));
-                    broadcastDeviceDetected(username);
+                    broadcastDeviceDetected(username, rssi);
                     Log.d(TAG, connections.toString());
                 }
                 //Log.d(TAG, "Device, " + device.getName() + " (" + device.getAddress() + ") has been detected with rssi: " + rssi + " dBm.");
@@ -60,10 +60,11 @@ public class BluetoothDiscovery extends Service {
             }
         }
 
-        private void broadcastDeviceDetected(String username) {
+        private void broadcastDeviceDetected(String username, int rssi) {
             Intent intent = new Intent();
             intent.setAction(DEVICE_DETECTED);
             intent.putExtra("USERNAME", username);
+            intent.putExtra("RSSI", Integer.toString(rssi));
             sendBroadcast(intent);
         }
 

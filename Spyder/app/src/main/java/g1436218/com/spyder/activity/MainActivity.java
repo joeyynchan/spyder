@@ -116,7 +116,8 @@ public class MainActivity extends BaseActivity {
             String action = intent.getAction();
             if (BluetoothDiscovery.DEVICE_DETECTED.equals(action)) {
                 String username = intent.getStringExtra("USERNAME");
-                textView.setText(textView.getText() + "\n" + username);
+                String rssi = intent.getStringExtra("RSSI");
+                textView.setText(textView.getText() + "\n" + username + " - " + rssi);
             } else if (BluetoothDiscovery.RESET_LIST.equals(action)) {
                 textView.setText("Results:");
             }
