@@ -37,12 +37,12 @@ public class LinkDevice extends BaseAsyncTask{
         addToParams("mac_address", getDefaultAdapter().getAddress());
 
         JSONObject jsonObject = getJSONFromUrl(URL);
-        /*try {
+        try {
             Log.d(TAG, jsonObject.toString());
             linked = jsonObject.getString("res").equals("true");
         } catch (JSONException e) {
             Log.e(TAG, "Couldn't get result from JSONObject");
-        }*/
+        }
 
         /* todo: decode the data received from api call
          * 3 cases
@@ -51,7 +51,7 @@ public class LinkDevice extends BaseAsyncTask{
          * 3) account not created, prompt user to register
          */
 
-        linked = true;
+        //linked = true;
         return null;
     }
 
