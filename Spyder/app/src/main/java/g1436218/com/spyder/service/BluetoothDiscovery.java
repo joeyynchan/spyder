@@ -43,7 +43,7 @@ public class BluetoothDiscovery extends Service {
 
                 int rssi = intent.getShortExtra(BluetoothDevice.EXTRA_RSSI, Short.MIN_VALUE);
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-
+                
                 if (userMap.containsKey(device.getAddress())) {
                     String username = userMap.get(device.getAddress());
                     connections.add(new Connection(username, rssi));
