@@ -14,24 +14,9 @@
             android:text="@string/hello_world"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textView1"
+            android:id="@+id/textview_device_information"
         />
 
-        <TextView
-            android:text="@string/hello_world"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
-            android:id="@+id/textView2"
-        />
-
-        <TextView
-            android:text="@string/hello_world"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="200dp"
-            android:id="@+id/textView3"
-         />
     </RelativeLayout>
 
 
@@ -48,7 +33,17 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:id="@+id/textview_show_attendee" />
+            android:layout_weight="1"
+            android:clickable="true"
+            android:id="@+id/textview_interaction" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Attendee List"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:id="@+id/textview_attendee" />
     </LinearLayout>
 
 
