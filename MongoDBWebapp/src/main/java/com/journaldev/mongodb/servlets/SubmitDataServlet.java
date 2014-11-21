@@ -17,8 +17,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.journaldev.mongodb.dao.MongoDBDataDAO;
+import com.journaldev.mongodb.dao.MongoDBEventDAO;
 import com.journaldev.mongodb.dao.MongoDBUsersDAO;
 import com.journaldev.mongodb.model.Data;
+import com.journaldev.mongodb.model.User;
 import com.journaldev.mongodb.utils.Pair;
 import com.mongodb.MongoClient;
 
@@ -33,6 +35,8 @@ public class SubmitDataServlet extends HttpServlet {
 		boolean success = false;
 		String user_name = request.getParameter("user_name");
 		String event_id = request.getParameter("event_id");
+		
+		
 
 		BufferedReader br = new BufferedReader(new InputStreamReader(
 				request.getInputStream()));
@@ -44,8 +48,20 @@ public class SubmitDataServlet extends HttpServlet {
 		MongoClient mongo = (MongoClient) request.getServletContext()
 				.getAttribute("MONGO_CLIENT");
 		MongoDBUsersDAO userDAO = new MongoDBUsersDAO(mongo);
+		
+		boolean user_attended = false;
+		MongoDBEventDAO eventDAO = new MongoDBEventDAO(mongo);
+		List<String> user_id_list = eventDAO.getAllUsersIDEvent(event_id);
+		List<User> user_list = userDAO.getAllUsers(user_id_list);
+		
+		for(User user: user_list){
+			if(user.getUserName().equals(user_name)){
+				user_attended = true;
+				break;
+			}
+		}
 
-		if (userDAO.getUserByName(user_name) != null) {
+		if (userDAO.getUserByName(user_name) != null && user_attended) {
 			try {
 				JSONObject jsonObj = new JSONObject(json);
 				JSONArray data = (JSONArray) jsonObj.get("data");
