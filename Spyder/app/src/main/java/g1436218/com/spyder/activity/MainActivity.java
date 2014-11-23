@@ -39,6 +39,15 @@ public class MainActivity extends BaseActivity {
     }
 
     @Override
+    public void initializeView() {
+        textview_attendee = (TextView) findViewById(R.id.textview_attendee);
+        textview_attendee.setOnClickListener(this);
+        textview_interaction = (TextView) findViewById(R.id.textview_interaction);
+        textview_interaction.setOnClickListener(this);
+    }
+
+    /* BluetoothDiscovery Service should be turned on when MainActivity is at the front */
+    @Override
     protected void onStart() {
 
         /* Start BluetoothDiscovery Service */
@@ -48,6 +57,7 @@ public class MainActivity extends BaseActivity {
         super.onStart();
     }
 
+    /* Turns off BluetoothDiscovery when switching from MainAcitivity to other activities */
     @Override
     protected void onStop() {
 
@@ -56,9 +66,9 @@ public class MainActivity extends BaseActivity {
         super.onStop();
     }
 
+    /* Options Menu Setting */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
@@ -92,12 +102,15 @@ public class MainActivity extends BaseActivity {
         }
     }
 
-    @Override
-    public void initializeView() {
-        textview_attendee = (TextView) findViewById(R.id.textview_attendee);
-        textview_attendee.setOnClickListener(this);
-        textview_interaction = (TextView) findViewById(R.id.textview_interaction);
-        textview_interaction.setOnClickListener(this);
+    private void showAttendees() {
+        Fragment fragment = getFragmentManager().findFragmentByTag("CURRENT_FRAGMENT");
+        if (!(fragment instanceof AttendeeFragment)) {
+            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.fragment_container, new AttendeeFragment(), "CURRENT_FRAGMENT");
+            getFragmentManager().popBackStack();
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
+        }
     }
 
     private void showInteractions() {
@@ -111,16 +124,6 @@ public class MainActivity extends BaseActivity {
         }
     }
 
-    private void showAttendees() {
-        Fragment fragment = getFragmentManager().findFragmentByTag("CURRENT_FRAGMENT");
-        if (!(fragment instanceof AttendeeFragment)) {
-            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-            //fragmentTransaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right);
-            fragmentTransaction.replace(R.id.fragment_container, new AttendeeFragment(), "CURRENT_FRAGMENT");
-            getFragmentManager().popBackStack();
-            fragmentTransaction.addToBackStack(null);
-            fragmentTransaction.commit();
-        }
-    }
+
 
 }

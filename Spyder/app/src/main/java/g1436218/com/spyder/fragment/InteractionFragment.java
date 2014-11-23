@@ -21,6 +21,8 @@ import g1436218.com.spyder.service.BluetoothDiscovery;
 
 public class InteractionFragment extends BaseFragment {
 
+    private final String TITLE = "Ongoing Interactions";
+
     private UIUpdateReceiver receiver;
     private InteractionAdapter adapter;
 
@@ -38,7 +40,7 @@ public class InteractionFragment extends BaseFragment {
 
     @Override
     public void onResume()  {
-        getActivity().setTitle("Ongoing Interactions");
+        getActivity().setTitle(TITLE);
 
         /* Register UIUpdateReceiver */
         receiver = new UIUpdateReceiver(this);
@@ -57,6 +59,7 @@ public class InteractionFragment extends BaseFragment {
     @Override
     public void onPause() {
         super.onPause();
+
         /* Unregister Receiver */
         this.getActivity().unregisterReceiver(receiver);
     }

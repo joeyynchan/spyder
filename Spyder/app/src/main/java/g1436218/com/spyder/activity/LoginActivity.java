@@ -52,8 +52,11 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     public void initializeView() {
+        /* Sign up Button */
         Button button_sign_up = (Button) findViewById(R.id.login_button_sign_up);
         button_sign_up.setOnClickListener(this);
+
+        /* Log in Button */
         Button button_main_activity = (Button) findViewById(R.id.login_button_login);
         button_main_activity.setOnClickListener(this);
     }

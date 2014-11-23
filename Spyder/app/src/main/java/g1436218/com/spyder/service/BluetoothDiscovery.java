@@ -14,6 +14,7 @@ import android.util.Log;
 import java.util.HashSet;
 
 import g1436218.com.spyder.asyncTask.SubmitBluetoothData;
+import g1436218.com.spyder.config.GlobalConfiguration;
 import g1436218.com.spyder.object.Interaction;
 import g1436218.com.spyder.object.UserMap;
 
@@ -22,7 +23,6 @@ public class BluetoothDiscovery extends Service {
     public static final String DEVICE_DETECTED = "DEVICE_DETECTED";
     public static final String RESET_LIST = "RESET_LIST";
 
-    private final int TASK_DELAY_DURATION = 15; /* in seconds */
     private final String TAG = "BluetoothDiscovery";
 
     private BluetoothAdapter BTAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -80,7 +80,7 @@ public class BluetoothDiscovery extends Service {
         @Override
         public void run() {
             BTAdapter.startDiscovery();
-            handler.postDelayed(this, TASK_DELAY_DURATION * 1000);
+            handler.postDelayed(this, GlobalConfiguration.BLUETOOTH_TIME_INTERVAL * 1000);
         }
     };
 

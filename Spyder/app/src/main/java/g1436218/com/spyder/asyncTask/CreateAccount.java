@@ -8,6 +8,7 @@ import android.widget.TextView;
 import org.json.JSONObject;
 
 import g1436218.com.spyder.R;
+import g1436218.com.spyder.config.GlobalConfiguration;
 import g1436218.com.spyder.fragment.RegisterFragment;
 
 /**
@@ -17,7 +18,7 @@ public class CreateAccount extends BaseAsyncTask {
 
     private RegisterFragment fragment;
     private final String TAG = "RegisterFragment";
-    private final String URL = "http://146.169.46.38:8080/MongoDBWebapp/register";
+    private final String URL = GlobalConfiguration.DEFAULT_URL + "register";
 
     public CreateAccount(RegisterFragment fragment) {
         super(fragment.getActivity());

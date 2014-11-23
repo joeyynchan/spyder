@@ -11,6 +11,7 @@ import org.json.JSONObject;
 
 import g1436218.com.spyder.R;
 import g1436218.com.spyder.activity.MainActivity;
+import g1436218.com.spyder.config.GlobalConfiguration;
 
 import static android.bluetooth.BluetoothAdapter.getDefaultAdapter;
 
@@ -21,7 +22,7 @@ public class LinkDevice extends BaseAsyncTask{
 
     private boolean linked = false;
     private static String TAG = "LinkDevice";
-    private static String URL = "http://146.169.46.38:8080/MongoDBWebapp/login";
+    private static String URL = GlobalConfiguration.DEFAULT_URL + "login";
     public LinkDevice(Activity activity) { super(activity); }
 
     @Override

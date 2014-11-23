@@ -25,7 +25,7 @@ public class InteractionAdapter extends ArrayAdapter<Interaction> {
         this.list = new ArrayList<Interaction>();
     }
 
-    /* Added interacion to local cache */
+    /* Added interaction to local cache */
     public void addToList(Interaction interaction) {
         list.add(interaction);
     }

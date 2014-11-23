@@ -9,6 +9,7 @@ import org.json.JSONObject;
 import java.util.HashSet;
 import java.util.Iterator;
 
+import g1436218.com.spyder.config.GlobalConfiguration;
 import g1436218.com.spyder.object.Interaction;
 
 /**
@@ -17,8 +18,7 @@ import g1436218.com.spyder.object.Interaction;
 public class SubmitBluetoothData extends BaseAsyncTask{
 
     private static String TAG = "SubmitBluetoothData";
-    private static String URL = "http://146.169.46.38:8080/MongoDBWebapp/submit_data?user_name=Gun&event_id=5463faffe4b0c72e310cff42";
-    private static int TIME_INTERVAL = 15;
+    private static String URL = GlobalConfiguration.DEFAULT_URL + "submit_data?user_name=Gun&event_id=5463faffe4b0c72e310cff42";
     private HashSet<Interaction> connections;
 
     public SubmitBluetoothData(HashSet<Interaction> connections) {
@@ -30,7 +30,7 @@ public class SubmitBluetoothData extends BaseAsyncTask{
     @Override
     protected Void doInBackground(Void... params) {
         Log.d(TAG, "doInBackground");
-        addToParams("time_interval", Integer.toString(TIME_INTERVAL));
+        addToParams("time_interval", Integer.toString(GlobalConfiguration.BLUETOOTH_TIME_INTERVAL));
         addToParams("data", convertListToJSONArray());
 
         Log.d(TAG, this.params.toString());

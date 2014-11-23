@@ -20,6 +20,7 @@ public class AttendeeFragment extends BaseFragment {
 
     private ListView listview_attendee;
     private AttendeeAdapter attendeeAdapter;
+    private final String TITLE = "Attendee List";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -28,7 +29,7 @@ public class AttendeeFragment extends BaseFragment {
 
     @Override
     public void onResume() {
-        getActivity().setTitle("Attendee List");
+        getActivity().setTitle(TITLE);
         attendeeAdapter = new AttendeeAdapter(getActivity(), R.layout.listview_attendees);
         listview_attendee = (ListView) getActivity().findViewById(R.id.listview_attendee);
         listview_attendee.setAdapter(attendeeAdapter);

@@ -20,12 +20,13 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 
 import g1436218.com.spyder.R;
+import g1436218.com.spyder.config.GlobalConfiguration;
 import g1436218.com.spyder.object.UserMap;
 
 public class FetchAttendeeList extends BaseAsyncTask {
 
     private final String TAG = "FetchAttendeeList";
-    private final String URL = "http://146.169.46.38:8080/MongoDBWebapp/eventUsers?event_id=545ad315e4b0f46082caaef3";
+    private final String URL = GlobalConfiguration.DEFAULT_URL + "eventUsers?event_id=545ad315e4b0f46082caaef3";
 
     private UserMap userMap;
 
