@@ -15,6 +15,7 @@ import g1436218.com.spyder.asyncTask.DisplayMacAddress;
 import g1436218.com.spyder.asyncTask.FetchAttendeeList;
 import g1436218.com.spyder.fragment.AttendeeFragment;
 import g1436218.com.spyder.fragment.BaseFragment;
+import g1436218.com.spyder.fragment.EventListFragment;
 import g1436218.com.spyder.fragment.InteractionFragment;
 import g1436218.com.spyder.object.UserMap;
 import g1436218.com.spyder.service.BluetoothDiscovery;
@@ -27,6 +28,7 @@ public class MainActivity extends BaseActivity {
 
     private TextView textview_attendee;
     private TextView textview_interaction;
+    private TextView textview_event_list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,10 +42,15 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public void initializeView() {
+
         textview_attendee = (TextView) findViewById(R.id.textview_attendee);
         textview_attendee.setOnClickListener(this);
+
         textview_interaction = (TextView) findViewById(R.id.textview_interaction);
         textview_interaction.setOnClickListener(this);
+
+        textview_event_list = (TextView) findViewById(R.id.textview_event_list);
+        textview_event_list.setOnClickListener(this);
     }
 
     /* BluetoothDiscovery Service should be turned on when MainActivity is at the front */
@@ -98,9 +105,11 @@ public class MainActivity extends BaseActivity {
         switch (v.getId()) {
             case R.id.textview_attendee: showAttendees(); break;
             case R.id.textview_interaction: showInteractions(); break;
+            case R.id.textview_event_list: showEventList(); break;
             default: break;
         }
     }
+
 
     private void showAttendees() {
         Fragment fragment = getFragmentManager().findFragmentByTag("CURRENT_FRAGMENT");
@@ -124,6 +133,15 @@ public class MainActivity extends BaseActivity {
         }
     }
 
-
+    private void showEventList() {
+        Fragment fragment = getFragmentManager().findFragmentByTag("CURRENT_FRAGMENT");
+        if (!(fragment instanceof EventListFragment)) {
+            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.fragment_container, new EventListFragment(), "CURRENT_FRAGMENT");
+            getFragmentManager().popBackStack();
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
+        }
+    }
 
 }

@@ -49,6 +49,16 @@
             android:clickable="true"
             android:id="@+id/textview_attendee"
             android:background="@drawable/login_button" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Event List"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:id="@+id/textview_event_list"
+            android:background="@drawable/login_button" />
+
     </LinearLayout>
 
 
