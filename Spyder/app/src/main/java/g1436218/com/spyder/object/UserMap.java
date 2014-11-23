@@ -35,11 +35,9 @@ public class UserMap extends HashMap<String, String> {
         if (jsonObj != null) {
             try {
                 JSONArray array = jsonObj.getJSONArray(USER_MAPPINGS);
-                Log.d(TAG, "User_mapping = " + array.toString());
                 String macAddress, userName;
                 for (int i = 0; i < array.length(); i++) {
                     JSONObject item = array.getJSONObject(i);
-                    Log.d(TAG, "User = " + item.toString());
                     macAddress = item.getString(MAC_ADDRESS);
                     userName = item.getString(USER_NAME);
                     this.put(macAddress, userName);

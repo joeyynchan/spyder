@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 
+import g1436218.com.spyder.activity.MainActivity;
 import g1436218.com.spyder.config.GlobalConfiguration;
 import g1436218.com.spyder.object.Interaction;
 
@@ -21,9 +22,11 @@ public class SubmitBluetoothData extends BaseAsyncTask{
     private static String TAG = "SubmitBluetoothData";
     private static String URL = GlobalConfiguration.DEFAULT_URL + "submit_data?user_name=Gun&event_id=5463faffe4b0c72e310cff42";
     private ArrayList<HashSet<Interaction>> interactionsArray;
+    private MainActivity activity;
 
-    public SubmitBluetoothData(ArrayList<HashSet<Interaction>> interactionsArray) {
+    public SubmitBluetoothData(MainActivity activity, ArrayList<HashSet<Interaction>> interactionsArray) {
         super();
+        this.activity = activity;
         this.interactionsArray = interactionsArray;
     }
 
@@ -72,5 +75,6 @@ public class SubmitBluetoothData extends BaseAsyncTask{
     @Override
     public void onPostExecute(Void v){
         Log.d(TAG, "onPostExecute");
+        activity.clearArray();
     }
 }

@@ -49,6 +49,5 @@ public class FetchAttendeeList extends BaseAsyncTask {
     @Override
     public void onPostExecute(Void v) {
         userMap.updateList(resultJObj);
-        Log.d(TAG, userMap.toString());
     }
 }

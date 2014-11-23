@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 
 import g1436218.com.spyder.R;
@@ -25,15 +26,10 @@ public class InteractionAdapter extends ArrayAdapter<Interaction> {
         this.list = new ArrayList<Interaction>();
     }
 
-    /* Added interaction to local cache */
-    public void addToList(Interaction interaction) {
-        list.add(interaction);
-    }
-
     /* Update the adapter from the entries in the local cache list */
-    public void addAllToAdapter() {
+    public void addAllToAdapter(HashSet<Interaction> interactions) {
         clear();
-        Iterator<Interaction> iterator = list.iterator();
+        Iterator<Interaction> iterator = interactions.iterator();
         while (iterator.hasNext()) {
             Interaction interaction = iterator.next();
             add(interaction);

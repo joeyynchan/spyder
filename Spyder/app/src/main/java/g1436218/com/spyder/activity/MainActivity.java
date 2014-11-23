@@ -100,7 +100,6 @@ public class MainActivity extends BaseActivity {
         textview_event_list.setOnClickListener(this);
     }
 
-    /* Options Menu Setting */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
@@ -153,7 +152,7 @@ public class MainActivity extends BaseActivity {
         Fragment fragment = getFragmentManager().findFragmentByTag("CURRENT_FRAGMENT");
         if (!(fragment instanceof InteractionFragment)) {
             FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.fragment_container, new InteractionFragment(), "CURRENT_FRAGMENT");
+            fragmentTransaction.replace(R.id.fragment_container, new InteractionFragment(this), "CURRENT_FRAGMENT");
             getFragmentManager().popBackStack();
             fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
@@ -171,6 +170,14 @@ public class MainActivity extends BaseActivity {
         }
     }
 
+    public HashSet<Interaction> getInteractions() {
+        return interactions;
+    }
+
+    public ArrayList<HashSet<Interaction>> getInteractionsArray() {
+        return interactionsArray;
+    }
+
     public void addToInteractions(Interaction interaction) {
         interactions.add(interaction);
     }
@@ -180,11 +187,15 @@ public class MainActivity extends BaseActivity {
         interactions = new HashSet<Interaction>();
     }
 
+    public void clearArray() {
+        interactionsArray.clear();
+    }
+
     private class UIUpdateReceiver extends BroadcastReceiver {
 
-        Activity activity;
+        MainActivity activity;
 
-        public UIUpdateReceiver(Activity activity) {
+        public UIUpdateReceiver(MainActivity activity) {
             this.activity = activity;
         }
 
@@ -194,13 +205,12 @@ public class MainActivity extends BaseActivity {
             if (BluetoothDiscovery.DEVICE_DETECTED.equals(action)) {
                 String username = intent.getStringExtra("USERNAME");
                 int strength = intent.getIntExtra("STRENGTH", 0);
-                addToInteractions(new Interaction(username, strength));
-                Log.d("MainActivity", interactions.toString());
+                activity.addToInteractions(new Interaction(username, strength));
             } else if (BluetoothDiscovery.RESET_LIST.equals(action)) {
-                addInteractionsToArray();
-                Log.d("MainActivity", interactionsArray.toString());
+                activity.addInteractionsToArray();
+                Log.d("MainActivity", activity.getInteractionsArray().toString());
             } else if (BluetoothDiscovery.SEND_DATA.equals(action)) {
-                new SubmitBluetoothData(interactionsArray).execute();
+                new SubmitBluetoothData(activity, activity.getInteractionsArray()).execute();
             }
         }
     }

@@ -23,6 +23,7 @@ public class BluetoothDiscovery extends Service {
     public static final String DEVICE_DETECTED = "DEVICE_DETECTED";
     public static final String RESET_LIST = "RESET_LIST";
     public static final String SEND_DATA = "SEND_DATA";
+    public static final String UPDATE_ADAPTER = "UPDATE_ADAPTER";
 
     private final String TAG = "BluetoothDiscovery";
 
@@ -52,12 +53,10 @@ public class BluetoothDiscovery extends Service {
 
             } else if (BluetoothAdapter.ACTION_DISCOVERY_STARTED.equals(action)) {
                 Log.d(TAG, "ACTION_DISCOVERY_STARTED");
-		        /* Reset the list of connections */
-                //connections = new HashSet<Interaction>();
 
             } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
                 Log.d(TAG, "ACTION_DISCOVERY_FINISHED: " + connections.toString());
-                //new SubmitBluetoothData(connections).execute();
+                broadcastUpdateAdapter();
                 broadcastResetList();
 
             }
@@ -75,10 +74,16 @@ public class BluetoothDiscovery extends Service {
             Intent intent = new Intent();
             intent.setAction(RESET_LIST);
             sendBroadcast(intent);
-            Log.d(TAG, "count = " + count + "count % 4 == 0" + (count % 4 == 0));
-            if (count++ % 4 == 0) {
+            if (count++ % GlobalConfiguration.NUMBER_OF_MINI_BATCHES == 0) {
+                count = 1;
                 broadcastSendData();
             }
+        }
+
+        private void broadcastUpdateAdapter() {
+            Intent intent = new Intent();
+            intent.setAction(UPDATE_ADAPTER);
+            sendBroadcast(intent);
         }
 
         private void broadcastSendData() {
@@ -92,6 +97,7 @@ public class BluetoothDiscovery extends Service {
 
         @Override
         public void run() {
+            BTAdapter.cancelDiscovery();
             BTAdapter.startDiscovery();
             handler.postDelayed(this, GlobalConfiguration.BLUETOOTH_TIME_INTERVAL * 1000);
         }
