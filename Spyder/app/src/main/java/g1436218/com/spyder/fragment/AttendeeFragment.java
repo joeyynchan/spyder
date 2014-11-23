@@ -4,31 +4,35 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.TextView;
 
+import org.json.JSONObject;
+import org.w3c.dom.Text;
+
+import java.util.ArrayList;
+
 import g1436218.com.spyder.R;
+import g1436218.com.spyder.adapter.AttendeeAdapter;
 import g1436218.com.spyder.object.UserMap;
 
-/**
- * Created by Joey on 13/11/2014.
- */
 public class AttendeeFragment extends BaseFragment {
 
-    private UserMap userMap;
+    private ListView listview_attendee;
+    private AttendeeAdapter attendeeAdapter;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_attendee, container, false);
-
     }
 
     @Override
     public void onResume() {
-        userMap = UserMap.getInstance();
-        TextView textView = (TextView) getActivity().findViewById(R.id.textview_attendee_list);
-        textView.setText("Attendee List:\n" + userMap.toString());
+        getActivity().setTitle("Attendee List");
+        attendeeAdapter = new AttendeeAdapter(getActivity(), R.layout.listview_attendees);
+        listview_attendee = (ListView) getActivity().findViewById(R.id.listview_attendee);
+        listview_attendee.setAdapter(attendeeAdapter);
+
         super.onResume();
     }
 

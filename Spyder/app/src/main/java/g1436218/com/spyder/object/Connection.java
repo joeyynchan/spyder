@@ -1,8 +1,5 @@
 package g1436218.com.spyder.object;
 
-/**
- * Created by Joey on 03/11/2014.
- */
 public class Connection {
 
     private String username;

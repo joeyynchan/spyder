@@ -29,6 +29,7 @@ public class InteractionFragment extends BaseFragment {
 
     @Override
     public void onResume()  {
+        getActivity().setTitle("Interactions");
         /* Register UIUpdateReceiver */
         receiver = new UIUpdateReceiver(this.getActivity());
         IntentFilter intentFilter = new IntentFilter();
