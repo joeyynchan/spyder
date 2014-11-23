@@ -4,6 +4,7 @@ import android.app.Instrumentation;
 import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.TouchUtils;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -21,22 +22,25 @@ public class LoginTest extends ActivityInstrumentationTestCase2<LoginActivity> {
     private Button login_button_login;
     private Instrumentation.ActivityMonitor mainActivityMonitor;
     private int TIMEOUT_IN_MS = 100;
+    private static String TAG = "LoginTest";
+
     public LoginTest() {
         super(LoginActivity.class);
     }
 
     @Override
     protected void setUp() throws Exception{
+        Log.d(TAG, "setup");
         super.setUp();
         setActivityInitialTouchMode(false);
         activity = getActivity();
         editText_login_username = (EditText) activity.findViewById(R.id.login_edittext_username);
         editText_login_password = (EditText) activity.findViewById(R.id.login_edittext_password);
         login_button_login = (Button) activity.findViewById(R.id.login_button_login);
-
     }
 
-    public void test() {
+    public void testLoginToMainActivity() {
+        Log.d(TAG, "testLoginToMainActivity");
         // Send string input value
         getInstrumentation().runOnMainSync(new Runnable() {
             @Override
@@ -79,4 +83,11 @@ public class LoginTest extends ActivityInstrumentationTestCase2<LoginActivity> {
     }
 
 
+    @Override
+    protected void tearDown() throws Exception{
+        Log.d(TAG, "tearDown");
+        super.tearDown();
+
+
+    }
 }
