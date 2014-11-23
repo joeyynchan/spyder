@@ -1,22 +1,31 @@
 package g1436218.com.spyder.activity;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+
 import g1436218.com.spyder.R;
 import g1436218.com.spyder.asyncTask.DisplayMacAddress;
 import g1436218.com.spyder.asyncTask.FetchAttendeeList;
+import g1436218.com.spyder.asyncTask.SubmitBluetoothData;
 import g1436218.com.spyder.fragment.AttendeeFragment;
 import g1436218.com.spyder.fragment.BaseFragment;
 import g1436218.com.spyder.fragment.EventListFragment;
 import g1436218.com.spyder.fragment.InteractionFragment;
+import g1436218.com.spyder.object.Interaction;
 import g1436218.com.spyder.object.UserMap;
 import g1436218.com.spyder.service.BluetoothDiscovery;
 
@@ -24,6 +33,9 @@ import g1436218.com.spyder.service.BluetoothDiscovery;
 public class MainActivity extends BaseActivity {
 
     private Intent bluetoothDiscoveryIntent;
+    private ArrayList<HashSet<Interaction>> interactionsArray;
+    private HashSet<Interaction> interactions;
+    private UIUpdateReceiver receiver;
     private UserMap userMap;
 
     private TextView textview_attendee;
@@ -34,23 +46,21 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.customOnCreate(savedInstanceState, R.layout.activity_main);
 
+        interactionsArray = new ArrayList<HashSet<Interaction>>();
+        interactions = new HashSet<Interaction>();
+
+        /* Register UIUpdateReceiver */
+        receiver = new UIUpdateReceiver(this);
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(BluetoothDiscovery.DEVICE_DETECTED);
+        intentFilter.addAction(BluetoothDiscovery.RESET_LIST);
+        intentFilter.addAction(BluetoothDiscovery.SEND_DATA);
+        registerReceiver(receiver, intentFilter);
+
         /*Display Device Information */
         new DisplayMacAddress(this).execute();
         new FetchAttendeeList(this).execute();
 
-    }
-
-    @Override
-    public void initializeView() {
-
-        textview_attendee = (TextView) findViewById(R.id.textview_attendee);
-        textview_attendee.setOnClickListener(this);
-
-        textview_interaction = (TextView) findViewById(R.id.textview_interaction);
-        textview_interaction.setOnClickListener(this);
-
-        textview_event_list = (TextView) findViewById(R.id.textview_event_list);
-        textview_event_list.setOnClickListener(this);
     }
 
     /* BluetoothDiscovery Service should be turned on when MainActivity is at the front */
@@ -66,11 +76,28 @@ public class MainActivity extends BaseActivity {
 
     /* Turns off BluetoothDiscovery when switching from MainAcitivity to other activities */
     @Override
-    protected void onStop() {
+    protected void onDestroy() {
 
         /* Stop BluetoothDiscovery Service */
         stopService(bluetoothDiscoveryIntent);
+
+        /* Unregister Receiver */
+        unregisterReceiver(receiver);
+
         super.onStop();
+    }
+
+    @Override
+    public void initializeView() {
+
+        textview_attendee = (TextView) findViewById(R.id.textview_attendee);
+        textview_attendee.setOnClickListener(this);
+
+        textview_interaction = (TextView) findViewById(R.id.textview_interaction);
+        textview_interaction.setOnClickListener(this);
+
+        textview_event_list = (TextView) findViewById(R.id.textview_event_list);
+        textview_event_list.setOnClickListener(this);
     }
 
     /* Options Menu Setting */
@@ -141,6 +168,40 @@ public class MainActivity extends BaseActivity {
             getFragmentManager().popBackStack();
             fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
+        }
+    }
+
+    public void addToInteractions(Interaction interaction) {
+        interactions.add(interaction);
+    }
+
+    public void addInteractionsToArray() {
+        interactionsArray.add(interactions);
+        interactions = new HashSet<Interaction>();
+    }
+
+    private class UIUpdateReceiver extends BroadcastReceiver {
+
+        Activity activity;
+
+        public UIUpdateReceiver(Activity activity) {
+            this.activity = activity;
+        }
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (BluetoothDiscovery.DEVICE_DETECTED.equals(action)) {
+                String username = intent.getStringExtra("USERNAME");
+                int strength = intent.getIntExtra("STRENGTH", 0);
+                addToInteractions(new Interaction(username, strength));
+                Log.d("MainActivity", interactions.toString());
+            } else if (BluetoothDiscovery.RESET_LIST.equals(action)) {
+                addInteractionsToArray();
+                Log.d("MainActivity", interactionsArray.toString());
+            } else if (BluetoothDiscovery.SEND_DATA.equals(action)) {
+                new SubmitBluetoothData(interactionsArray).execute();
+            }
         }
     }
 

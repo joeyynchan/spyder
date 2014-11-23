@@ -6,6 +6,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 
@@ -19,11 +20,11 @@ public class SubmitBluetoothData extends BaseAsyncTask{
 
     private static String TAG = "SubmitBluetoothData";
     private static String URL = GlobalConfiguration.DEFAULT_URL + "submit_data?user_name=Gun&event_id=5463faffe4b0c72e310cff42";
-    private HashSet<Interaction> connections;
+    private ArrayList<HashSet<Interaction>> interactionsArray;
 
-    public SubmitBluetoothData(HashSet<Interaction> connections) {
+    public SubmitBluetoothData(ArrayList<HashSet<Interaction>> interactionsArray) {
         super();
-        this.connections = connections;
+        this.interactionsArray = interactionsArray;
     }
 
 
@@ -40,20 +41,31 @@ public class SubmitBluetoothData extends BaseAsyncTask{
     }
 
     private JSONArray convertListToJSONArray() {
-        Iterator<Interaction> iterator = connections.iterator();
+        Iterator<HashSet<Interaction>> iterator = interactionsArray.iterator();
         JSONArray array = new JSONArray();
         while(iterator.hasNext()) {
-            Interaction conn = iterator.next();
+            HashSet<Interaction> interactions = iterator.next();
+            JSONArray subArray = convertSetToJSONArray(interactions);
+            array.put(subArray);
+        }
+
+        return array;
+    }
+
+    private JSONArray convertSetToJSONArray(HashSet<Interaction> interactions) {
+        Iterator<Interaction> iterator = interactions.iterator();
+        JSONArray array = new JSONArray();
+        while(iterator.hasNext()) {
+            Interaction interaction = iterator.next();
             JSONObject obj = new JSONObject();
             try {
-                obj.put("user_name", conn.getUsername());
-                obj.put("strength", conn.getStrength());
+                obj.put("user_name", interaction.getUsername());
+                obj.put("strength", interaction.getStrength());
             } catch (JSONException e) {
                 e.printStackTrace();
             }
             array.put(obj);
         }
-
         return array;
     }
 

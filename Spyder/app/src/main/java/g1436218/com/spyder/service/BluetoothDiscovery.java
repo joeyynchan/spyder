@@ -22,6 +22,7 @@ public class BluetoothDiscovery extends Service {
 
     public static final String DEVICE_DETECTED = "DEVICE_DETECTED";
     public static final String RESET_LIST = "RESET_LIST";
+    public static final String SEND_DATA = "SEND_DATA";
 
     private final String TAG = "BluetoothDiscovery";
 
@@ -29,6 +30,7 @@ public class BluetoothDiscovery extends Service {
     private HashSet<Interaction> connections;
     private Handler handler = new Handler();
     private UserMap userMap;
+    private int count = 1;
 
     private final BroadcastReceiver receiver = new BroadcastReceiver(){
 
@@ -43,20 +45,21 @@ public class BluetoothDiscovery extends Service {
                 
                 if (userMap.containsKey(device.getAddress())) {
                     String username = userMap.get(device.getAddress());
-                    connections.add(new Interaction(username, strength));
+                    //connections.add(new Interaction(username, strength));
                     broadcastDeviceDetected(username, strength);
-                    Log.d(TAG, connections.toString());
+                    //Log.d(TAG, connections.toString());
                 }
 
             } else if (BluetoothAdapter.ACTION_DISCOVERY_STARTED.equals(action)) {
                 Log.d(TAG, "ACTION_DISCOVERY_STARTED");
 		        /* Reset the list of connections */
-                connections = new HashSet<Interaction>();
+                //connections = new HashSet<Interaction>();
 
             } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
                 Log.d(TAG, "ACTION_DISCOVERY_FINISHED: " + connections.toString());
-                new SubmitBluetoothData(connections).execute();
+                //new SubmitBluetoothData(connections).execute();
                 broadcastResetList();
+
             }
         }
 
@@ -71,6 +74,16 @@ public class BluetoothDiscovery extends Service {
         private void broadcastResetList() {
             Intent intent = new Intent();
             intent.setAction(RESET_LIST);
+            sendBroadcast(intent);
+            Log.d(TAG, "count = " + count + "count % 4 == 0" + (count % 4 == 0));
+            if (count++ % 4 == 0) {
+                broadcastSendData();
+            }
+        }
+
+        private void broadcastSendData() {
+            Intent intent = new Intent();
+            intent.setAction(SEND_DATA);
             sendBroadcast(intent);
         }
     };
