@@ -1,17 +1,15 @@
 package g1436218.com.spyder.asyncTask;
 
-import android.app.Activity;
 import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 
-import g1436218.com.spyder.object.Connection;
+import g1436218.com.spyder.object.Interaction;
 
 /**
  * Created by Cherie on 11/19/2014.
@@ -21,9 +19,9 @@ public class SubmitBluetoothData extends BaseAsyncTask{
     private static String TAG = "SubmitBluetoothData";
     private static String URL = "http://146.169.46.38:8080/MongoDBWebapp/submit_data?user_name=Gun&event_id=5463faffe4b0c72e310cff42";
     private static int TIME_INTERVAL = 15;
-    private HashSet<Connection> connections;
+    private HashSet<Interaction> connections;
 
-    public SubmitBluetoothData(HashSet<Connection> connections) {
+    public SubmitBluetoothData(HashSet<Interaction> connections) {
         super();
         this.connections = connections;
     }
@@ -42,10 +40,10 @@ public class SubmitBluetoothData extends BaseAsyncTask{
     }
 
     private JSONArray convertListToJSONArray() {
-        Iterator<Connection> iterator = connections.iterator();
+        Iterator<Interaction> iterator = connections.iterator();
         JSONArray array = new JSONArray();
         while(iterator.hasNext()) {
-            Connection conn = iterator.next();
+            Interaction conn = iterator.next();
             JSONObject obj = new JSONObject();
             try {
                 obj.put("user_name", conn.getUsername());

@@ -1,30 +1,29 @@
 package g1436218.com.spyder.object;
 
-public class Connection {
+public class Interaction {
 
     private String username;
     private int strength;
 
-    public Connection(String username, int strength){
+    public Interaction(String username, int strength){
         this.username = username;
         this.strength = strength;
     }
 
     public String getUsername(){
-
         return username;
     }
 
     public int getStrength(){
-        return strength;
+       return strength;
     }
     @Override
     public boolean equals(Object obj){
 
-        if(!(obj instanceof Connection)){
+        if(!(obj instanceof Interaction)){
             return false;
         }
-        return username.equals(((Connection) obj).getUsername());
+        return username.equals(((Interaction) obj).getUsername());
     }
 
     @Override
