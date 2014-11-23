@@ -104,7 +104,6 @@ public class MainActivity extends BaseActivity {
         Fragment fragment = getFragmentManager().findFragmentByTag("CURRENT_FRAGMENT");
         if (!(fragment instanceof InteractionFragment)) {
             FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-            //fragmentTransaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right);
             fragmentTransaction.replace(R.id.fragment_container, new InteractionFragment(), "CURRENT_FRAGMENT");
             getFragmentManager().popBackStack();
             fragmentTransaction.addToBackStack(null);

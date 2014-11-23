@@ -38,7 +38,8 @@ public class InteractionFragment extends BaseFragment {
 
     @Override
     public void onResume()  {
-        getActivity().setTitle("Interactions");
+        getActivity().setTitle("Ongoing Interactions");
+
         /* Register UIUpdateReceiver */
         receiver = new UIUpdateReceiver(this);
         IntentFilter intentFilter = new IntentFilter();
@@ -46,18 +47,11 @@ public class InteractionFragment extends BaseFragment {
         intentFilter.addAction(BluetoothDiscovery.RESET_LIST);
         this.getActivity().registerReceiver(receiver, intentFilter);
 
+        /* Initialize Listview */
         ListView listview_interactions = (ListView) getActivity().findViewById(R.id.listview_interaction_list);
         listview_interactions.setAdapter(adapter);
 
         super.onResume();
-    }
-
-    public void add(Interaction interaction) {
-        adapter.add(interaction);
-    }
-
-    public void clearAdapter() {
-        adapter.clear();
     }
 
     @Override
@@ -81,10 +75,9 @@ public class InteractionFragment extends BaseFragment {
             String action = intent.getAction();
             if (BluetoothDiscovery.DEVICE_DETECTED.equals(action)) {
                 String username = intent.getStringExtra("USERNAME");
-                int rssi = intent.getIntExtra("STRENGTH", 0);
-                adapter.addToList(new Interaction(username, rssi));
+                int strength = intent.getIntExtra("STRENGTH", 0);
+                adapter.addToList(new Interaction(username, strength));
             } else if (BluetoothDiscovery.RESET_LIST.equals(action)) {
-                Log.d("InteractoinFragment", "RESET_LIST");
                 adapter.addAllToAdapter();
             }
         }

@@ -38,7 +38,8 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:layout_weight="1"
             android:clickable="true"
-            android:id="@+id/textview_interaction" />
+            android:id="@+id/textview_interaction"
+            android:background="@drawable/login_button" />
 
         <TextView
             android:layout_width="match_parent"
@@ -46,7 +47,8 @@
             android:text="Attendee List"
             android:layout_weight="1"
             android:clickable="true"
-            android:id="@+id/textview_attendee" />
+            android:id="@+id/textview_attendee"
+            android:background="@drawable/login_button" />
     </LinearLayout>
 
 

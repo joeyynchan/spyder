@@ -25,10 +25,12 @@ public class InteractionAdapter extends ArrayAdapter<Interaction> {
         this.list = new ArrayList<Interaction>();
     }
 
+    /* Added interacion to local cache */
     public void addToList(Interaction interaction) {
         list.add(interaction);
     }
 
+    /* Update the adapter from the entries in the local cache list */
     public void addAllToAdapter() {
         clear();
         Iterator<Interaction> iterator = list.iterator();
@@ -52,7 +54,7 @@ public class InteractionAdapter extends ArrayAdapter<Interaction> {
 
         Interaction item = getItem(position);
         username.setText(item.getUsername());
-        strength.setText(new Integer(item.getStrength()).toString());
+        strength.setText(new Integer(item.getStrength()).toString() + "dBm");
 
         return v;
     }
