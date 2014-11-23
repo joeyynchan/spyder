@@ -31,17 +31,14 @@ public class InteractionFragment extends BaseFragment {
     private IntentFilter intentFilter;
 
     public InteractionFragment(MainActivity activity) {
-
         this.activity = activity;
-        this.receiver = new UIUpdateReceiver(this);
-        this.intentFilter = new IntentFilter();
-        this.intentFilter.addAction(BluetoothDiscovery.UPDATE_ADAPTER);
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.adapter = new InteractionAdapter(getActivity(), R.layout.listview_interaction);
+        this.receiver = new UIUpdateReceiver(this);
     }
 
     @Override
@@ -53,6 +50,8 @@ public class InteractionFragment extends BaseFragment {
     public void onResume()  {
         getActivity().setTitle(TITLE);
 
+        intentFilter = new IntentFilter();
+        intentFilter.addAction(BluetoothDiscovery.UPDATE_ADAPTER);
         getActivity().registerReceiver(receiver, intentFilter);
 
         /* Initialize Listview */
