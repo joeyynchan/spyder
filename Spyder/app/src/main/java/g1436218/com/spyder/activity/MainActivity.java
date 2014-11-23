@@ -207,8 +207,8 @@ public class MainActivity extends BaseActivity {
                 int strength = intent.getIntExtra("STRENGTH", 0);
                 activity.addToInteractions(new Interaction(username, strength));
             } else if (BluetoothDiscovery.RESET_LIST.equals(action)) {
+                Log.i("MainActivity", interactions.toString());
                 activity.addInteractionsToArray();
-                Log.d("MainActivity", activity.getInteractionsArray().toString());
             } else if (BluetoothDiscovery.SEND_DATA.equals(action)) {
                 new SubmitBluetoothData(activity, activity.getInteractionsArray()).execute();
             }

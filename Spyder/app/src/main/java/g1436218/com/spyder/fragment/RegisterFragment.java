@@ -20,7 +20,9 @@ import g1436218.com.spyder.activity.BaseActivity;
 import g1436218.com.spyder.asyncTask.CreateAccount;
 
 public class RegisterFragment extends BaseDialogFragment implements View.OnClickListener {
+
     private final String TAG = "RegisterFragment";
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -34,7 +36,6 @@ public class RegisterFragment extends BaseDialogFragment implements View.OnClick
 
     @Override
     public void onClick(View v) {
-        Log.d(TAG, "onClick");
         new CreateAccount(this).execute();
     }
 }

@@ -28,7 +28,6 @@ public class BluetoothDiscovery extends Service {
     private final String TAG = "BluetoothDiscovery";
 
     private BluetoothAdapter BTAdapter = BluetoothAdapter.getDefaultAdapter();
-    private HashSet<Interaction> connections;
     private Handler handler = new Handler();
     private UserMap userMap;
     private int count = 1;
@@ -46,16 +45,13 @@ public class BluetoothDiscovery extends Service {
                 
                 if (userMap.containsKey(device.getAddress())) {
                     String username = userMap.get(device.getAddress());
-                    //connections.add(new Interaction(username, strength));
                     broadcastDeviceDetected(username, strength);
-                    //Log.d(TAG, connections.toString());
                 }
 
             } else if (BluetoothAdapter.ACTION_DISCOVERY_STARTED.equals(action)) {
-                Log.d(TAG, "ACTION_DISCOVERY_STARTED");
+                Log.i ("BluetoothDiscovery", "START_DISCOVERY");
 
             } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
-                Log.d(TAG, "ACTION_DISCOVERY_FINISHED: " + connections.toString());
                 broadcastUpdateAdapter();
                 broadcastResetList();
 
@@ -119,8 +115,6 @@ public class BluetoothDiscovery extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-
-        connections = new HashSet<Interaction>();
 
 		/* Enable Bluetooth */
         if (!BTAdapter.isEnabled()) {

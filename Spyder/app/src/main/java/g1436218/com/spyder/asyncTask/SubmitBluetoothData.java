@@ -33,13 +33,12 @@ public class SubmitBluetoothData extends BaseAsyncTask{
 
     @Override
     protected Void doInBackground(Void... params) {
-        Log.d(TAG, "doInBackground");
         addToParams("time_interval", Integer.toString(GlobalConfiguration.BLUETOOTH_TIME_INTERVAL));
         addToParams("data", convertListToJSONArray());
 
-        Log.d(TAG, this.params.toString());
+        Log.i(TAG, this.params.toString());
         JSONObject obj = getJSONFromUrl(URL);
-        Log.d(TAG, obj.toString());
+        Log.i(TAG, obj.toString());
         return null;
     }
 
@@ -74,7 +73,6 @@ public class SubmitBluetoothData extends BaseAsyncTask{
 
     @Override
     public void onPostExecute(Void v){
-        Log.d(TAG, "onPostExecute");
         activity.clearArray();
     }
 }

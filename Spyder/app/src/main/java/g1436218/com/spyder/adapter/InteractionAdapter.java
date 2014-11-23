@@ -1,6 +1,7 @@
 package g1436218.com.spyder.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,15 +19,12 @@ import g1436218.com.spyder.object.Interaction;
 public class InteractionAdapter extends ArrayAdapter<Interaction> {
 
     private Context context;
-    private ArrayList<Interaction> list;
 
     public InteractionAdapter(Context context, int resource) {
         super(context, resource);
         this.context = context;
-        this.list = new ArrayList<Interaction>();
     }
 
-    /* Update the adapter from the entries in the local cache list */
     public void addAllToAdapter(HashSet<Interaction> interactions) {
         clear();
         Iterator<Interaction> iterator = interactions.iterator();
@@ -34,7 +32,6 @@ public class InteractionAdapter extends ArrayAdapter<Interaction> {
             Interaction interaction = iterator.next();
             add(interaction);
         }
-        list.clear();
         notifyDataSetChanged();
     }
 
