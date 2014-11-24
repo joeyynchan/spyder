@@ -1,5 +1,6 @@
 package g1436218.com.spyder.fragment;
 
+import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,19 +14,14 @@ import org.w3c.dom.Text;
 import java.util.ArrayList;
 
 import g1436218.com.spyder.R;
-import g1436218.com.spyder.activity.MainActivity;
 import g1436218.com.spyder.adapter.AttendeeAdapter;
 import g1436218.com.spyder.object.UserMap;
 
-public class AttendeeFragment extends BaseFragment {
+public class AttendeeFragment extends Fragment {
 
     private ListView listview_attendee;
     private AttendeeAdapter attendeeAdapter;
     private final String TITLE = "Attendee List";
-
-    public AttendeeFragment(MainActivity activity) {
-        super(activity);
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

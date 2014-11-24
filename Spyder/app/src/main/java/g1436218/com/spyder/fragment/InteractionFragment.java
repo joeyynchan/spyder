@@ -21,7 +21,7 @@ import g1436218.com.spyder.asyncTask.SubmitBluetoothData;
 import g1436218.com.spyder.object.Interaction;
 import g1436218.com.spyder.service.BluetoothDiscovery;
 
-public class InteractionFragment extends BaseFragment {
+public class InteractionFragment extends Fragment {
 
     private final String TITLE = "Ongoing Interactions";
 
@@ -31,7 +31,7 @@ public class InteractionFragment extends BaseFragment {
     private IntentFilter intentFilter;
 
     public InteractionFragment(MainActivity activity) {
-        super(activity);
+        this.activity = activity;
     }
 
     @Override

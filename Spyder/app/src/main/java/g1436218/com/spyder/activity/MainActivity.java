@@ -141,7 +141,7 @@ public class MainActivity extends BaseActivity {
         Fragment fragment = getFragmentManager().findFragmentByTag("CURRENT_FRAGMENT");
         if (!(fragment instanceof AttendeeFragment)) {
             FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.fragment_container, new AttendeeFragment(this), "CURRENT_FRAGMENT");
+            fragmentTransaction.replace(R.id.fragment_container, new AttendeeFragment(), "CURRENT_FRAGMENT");
             getFragmentManager().popBackStack();
             fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
