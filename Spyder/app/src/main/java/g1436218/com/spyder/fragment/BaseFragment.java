@@ -9,16 +9,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import g1436218.com.spyder.R;
+import g1436218.com.spyder.activity.MainActivity;
 import g1436218.com.spyder.asyncTask.FetchAttendeeList;
 
 public class BaseFragment extends Fragment {
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_main, container, false);
+    protected MainActivity activity;
 
+    public BaseFragment(MainActivity activity){
+        this.activity = activity;
     }
 
 }

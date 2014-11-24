@@ -31,7 +31,7 @@ public class InteractionFragment extends BaseFragment {
     private IntentFilter intentFilter;
 
     public InteractionFragment(MainActivity activity) {
-        this.activity = activity;
+        super(activity);
     }
 
     @Override

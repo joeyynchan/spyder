@@ -3,5 +3,6 @@
     <color name="errorColor">#ffff0000</color>
     <color name="themeColor">#ff102030</color>
     <color name="login_button_normal">#ff192939</color>
+    <color name="backgroundColor">#ffe0e0e0</color>
 
 </resources>

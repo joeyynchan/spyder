@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:longClickable="false"
     android:weightSum="1"
-    android:background="#ffe0e0e0">
+    android:background="@color/backgroundColor">
 
     <!-- Dummy item to prevent AutoCompleteTextView from receiving focus -->
     <LinearLayout
