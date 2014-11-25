@@ -32,6 +32,11 @@ public class LoginServlet extends HttpServlet {
 		if (br != null) {
 			json = br.readLine();
 		}
+
+        response.setContentType("application/json");
+        response.setHeader("Cache-Control", "nocache");
+        response.setCharacterEncoding("utf-8");
+
 		try {
 			JSONObject jsonObj = new JSONObject(json);
 			String user_name = (String) jsonObj.get("user_name");
@@ -44,21 +49,26 @@ public class LoginServlet extends HttpServlet {
 			User login_user = muDAO.getUserByQuery(user_name, password);
 			System.out.println(login_user);
 
-			if (login_user != null
-					&& login_user.getPassword().endsWith(password)
-					&& login_user.getMacAddress() == null) {
-				login_user.setMacAddress(mac_address);
-				muDAO.updateUser(login_user);
-				operation = true;
+
+            if (login_user == null || !login_user.getPassword().endsWith(password)) {
+                response.sendError(HttpServletResponse.SC_NOT_FOUND);
+                return;
+            }
+
+			if (login_user != null && login_user.getMacAddress() == null) {
+                login_user.setMacAddress(mac_address);
+                muDAO.updateUser(login_user);
+                operation = true;
+                response.sendError(HttpServletResponse.SC_CREATED);
+            } else if (login_user != null && login_user.getPassword().endsWith(password)
+                    && !login_user.getMacAddress().equals(mac_address)) {
+                response.sendError(HttpServletResponse.SC_CONFLICT);
+                return;
 			} else if (login_user != null
 					&& login_user.getMacAddress().equals(mac_address)
 					&& login_user.getPassword().endsWith(password)) {
 				operation = true;
 			}
-
-			response.setContentType("application/json");
-			response.setHeader("Cache-Control", "nocache");
-			response.setCharacterEncoding("utf-8");
 
 			PrintWriter printout = response.getWriter();
 			JSONObject JObject = new JSONObject();

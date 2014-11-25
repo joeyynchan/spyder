@@ -26,7 +26,7 @@ public class DataConverter {
 	// take special note of converting ObjectId to String
 	public static Data toEvent(DBObject doc) {
 		String s = (String) doc.get("data");
-		// "[(a b),(c d)]"
+		// "[[(a b),(c d)]]"
 
 		List<Pair<String, Integer>> bluetooth_data = new ArrayList<Pair<String, Integer>>();
 		s = s.replace("[", "").replace("]", "");

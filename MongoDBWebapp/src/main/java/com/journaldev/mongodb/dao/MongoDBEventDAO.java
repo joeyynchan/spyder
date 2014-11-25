@@ -67,9 +67,7 @@ public class MongoDBEventDAO {
 		if (event_id.length() == 24) {
 			DBObject query = BasicDBObjectBuilder.start()
 					.append("_id", new ObjectId(event_id)).get();
-			System.out.println(query.toString());
 			DBObject data = this.col.findOne(query);
-			System.out.println("data: " + data);
 			return UserConverter.getUsers(data);
 		}
 		return new ArrayList<String>();

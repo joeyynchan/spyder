@@ -35,8 +35,6 @@ public class SubmitDataServlet extends HttpServlet {
 		boolean success = false;
 		String user_name = request.getParameter("user_name");
 		String event_id = request.getParameter("event_id");
-		
-		
 
 		BufferedReader br = new BufferedReader(new InputStreamReader(
 				request.getInputStream()));
@@ -48,14 +46,14 @@ public class SubmitDataServlet extends HttpServlet {
 		MongoClient mongo = (MongoClient) request.getServletContext()
 				.getAttribute("MONGO_CLIENT");
 		MongoDBUsersDAO userDAO = new MongoDBUsersDAO(mongo);
-		
+
 		boolean user_attended = false;
 		MongoDBEventDAO eventDAO = new MongoDBEventDAO(mongo);
 		List<String> user_id_list = eventDAO.getAllUsersIDEvent(event_id);
 		List<User> user_list = userDAO.getAllUsers(user_id_list);
-		
-		for(User user: user_list){
-			if(user.getUserName().equals(user_name)){
+
+		for (User user : user_list) {
+			if (user.getUserName().equals(user_name)) {
 				user_attended = true;
 				break;
 			}
@@ -63,15 +61,22 @@ public class SubmitDataServlet extends HttpServlet {
 
 		if (userDAO.getUserByName(user_name) != null && user_attended) {
 			try {
+				System.out.println(json);
 				JSONObject jsonObj = new JSONObject(json);
-				JSONArray data = (JSONArray) jsonObj.get("data");
-				Integer time_interval = Integer.parseInt((String) jsonObj.get("time_interval"));
+				JSONArray data = (JSONArray) jsonObj.get("block");
+				Integer time_interval = Integer.parseInt((String) jsonObj
+						.get("time_interval"));
 
 				List<Pair<String, Integer>> strengths = new ArrayList<Pair<String, Integer>>();
 				for (int i = 0; i < data.length(); i++) {
-					strengths.add(new Pair<String, Integer>(data
-							.getJSONObject(i).getString("user_name"), data
-							.getJSONObject(i).getInt("strength")));
+					JSONArray nested_data = (JSONArray) data.getJSONObject(i)
+							.get("data");
+					for (int j = 0; j < nested_data.length(); j++) {
+
+						strengths.add(new Pair<String, Integer>(nested_data
+								.getJSONObject(j).getString("user_name"), nested_data
+								.getJSONObject(j).getInt("strength")));
+					}
 				}
 
 				Data interaction_data = new Data(user_name, event_id,

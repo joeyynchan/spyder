@@ -41,4 +41,17 @@ public class MongoDBDataDAO {
 			return res;
 	}
 
+    public List<String> getDataForEvent(String event_id) {
+        DBObject query = BasicDBObjectBuilder.start()
+                .append("event_id", event_id).get();
+        DBCursor cursor = this.col.find(query);
+        List<String> res = new ArrayList<String>();
+        while(cursor.hasNext()){
+            DBObject data = cursor.next();
+            String user_data = DataConverter.getData(data);
+            res.add(user_data);
+        }
+        return res;
+    }
+
 }

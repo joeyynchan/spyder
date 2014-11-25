@@ -35,7 +35,13 @@ public class GetUserInteractionServlet extends HttpServlet {
 		MongoClient mongo = (MongoClient) request.getServletContext()
 				.getAttribute("MONGO_CLIENT");
 		MongoDBDataDAO dataDAO = new MongoDBDataDAO(mongo);
-		
+
+        MongoDBUsersDAO userDAO = new MongoDBUsersDAO(mongo);
+        if (userDAO.getUserByName(user_name) == null) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            return;
+        }
+
 		List<String> user_interactions = dataDAO.getAllData(user_name);
 		StringBuilder sb = new StringBuilder();
 
