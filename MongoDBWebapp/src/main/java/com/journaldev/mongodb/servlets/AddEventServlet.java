@@ -38,26 +38,48 @@ public class AddEventServlet extends HttpServlet {
 		MongoClient mongo = (MongoClient) request.getServletContext()
 				.getAttribute("MONGO_CLIENT");
 		MongoDBEventDAO eventDAO = new MongoDBEventDAO(mongo);
-		eventDAO.createEvent(e);
-		System.out.println("Event Added Successfully with id=" + e.getId());
+        List<Event> allEvents = eventDAO.readAllEvent();
 
-		response.setContentType("application/json");
-		response.setHeader("Cache-Control", "nocache");
-		response.setCharacterEncoding("utf-8");
+        response.setContentType("application/json");
+        response.setHeader("Cache-Control", "nocache");
+        response.setCharacterEncoding("utf-8");
 
-		PrintWriter printout = response.getWriter();
+        PrintWriter printout = response.getWriter();
 
-		JSONObject JObject = new JSONObject();
-		try {
-			JObject.put("Response", "1");
-		} catch (JSONException excep) {
+        for (Event event : allEvents) {
+            if (event.getName().equals(name)) {
 
-		}
-		try {
-			JObject.put("Message", "Event " + e.getId() + " added successfully");
-		} catch (JSONException excep) {
+                response.sendError(HttpServletResponse.SC_CONFLICT);
+                JSONObject JObject = new JSONObject();
+                JObject.put("start_time", event.getStart_time());
+                JObject.put("end_time", event.getEnd_time());
+                JObject.put("address", event.getAddress());
+                JObject.put("name", event.getName());
+                JObject.put("description", event.getDescription());
+                JObject.put("speaker_id", event.getSpeaker_id());
+                JObject.put("organiser_id", event.getOrganiser_id());
+                JObject.put("attendees", event.getAttendees());
 
-		}
+                printout.print(JObject);
+                printout.flush();
+                return;
+
+            }
+        }
+        eventDAO.createEvent(e);
+        System.out.println("Event Added Successfully with id=" + e.getId());
+
+        JSONObject JObject = new JSONObject();
+        try {
+            JObject.put("Response", "1");
+        } catch (JSONException excep) {
+
+        }
+        try {
+            JObject.put("Message", "Event " + e.getId() + " added successfully");
+        } catch (JSONException excep) {
+
+        }
 
 		printout.print(JObject);
 		printout.flush();
