@@ -63,20 +63,20 @@ public class SubmitDataServlet extends HttpServlet {
 			try {
 				System.out.println(json);
 				JSONObject jsonObj = new JSONObject(json);
-				JSONArray data = (JSONArray) jsonObj.get("block");
+				JSONArray data = (JSONArray) jsonObj.get("data");
 				Integer time_interval = Integer.parseInt((String) jsonObj
 						.get("time_interval"));
 
-				List<Pair<String, Integer>> strengths = new ArrayList<Pair<String, Integer>>();
+				List<List<Pair<String, Integer>>> strengths = new ArrayList<List<Pair<String, Integer>>>();
 				for (int i = 0; i < data.length(); i++) {
-					JSONArray nested_data = (JSONArray) data.getJSONObject(i)
-							.get("data");
-					for (int j = 0; j < nested_data.length(); j++) {
-
-						strengths.add(new Pair<String, Integer>(nested_data
-								.getJSONObject(j).getString("user_name"), nested_data
-								.getJSONObject(j).getInt("strength")));
+					List<Pair<String,Integer>> inner_strengths = new ArrayList<Pair<String,Integer>>();
+					JSONArray inner_data = (JSONArray)data.get(i);
+					for(int j=0; j<inner_data.length();j++){
+						inner_strengths.add(new Pair<String, Integer>(inner_data.getJSONObject(
+								j).getString("user_name"), inner_data.getJSONObject(j)
+								.getInt("strength")));
 					}
+					strengths.add(inner_strengths);
 				}
 
 				Data interaction_data = new Data(user_name, event_id,
