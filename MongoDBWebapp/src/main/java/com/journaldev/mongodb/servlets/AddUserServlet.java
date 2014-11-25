@@ -43,12 +43,18 @@ public class AddUserServlet extends HttpServlet {
 			MongoClient mongo = (MongoClient) request.getServletContext()
 					.getAttribute("MONGO_CLIENT");
 			MongoDBUsersDAO muDAO = new MongoDBUsersDAO(mongo);
+
+            response.setContentType("application/json");
+            response.setHeader("Cache-Control", "nocache");
+            response.setCharacterEncoding("utf-8");
+
+            if (muDAO.getUserByName(user_name) != null) {
+                response.sendError(HttpServletResponse.SC_CONFLICT);
+                return;
+            }
+
 			mu.setId(muDAO.createUser(mu).getId());
 			System.out.println("id " + mu.getId());
-
-			response.setContentType("application/json");
-			response.setHeader("Cache-Control", "nocache");
-			response.setCharacterEncoding("utf-8");
 
 			PrintWriter printout = response.getWriter();
 
@@ -59,6 +65,8 @@ public class AddUserServlet extends HttpServlet {
 
 			}
 
+            response.sendError(HttpServletResponse.SC_CREATED);
+
 			printout.print(JObject);
 			printout.flush();
 			
@@ -66,8 +74,46 @@ public class AddUserServlet extends HttpServlet {
 			System.out.println("INVALID JSON OBJECT !!");
 		}
 
-		
-
 	}
+
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        BufferedReader br = new BufferedReader(new InputStreamReader(
+                request.getInputStream()));
+        String json = "";
+        if (br != null) {
+            json = br.readLine();
+        }
+
+        try {
+            JSONObject jsonObj = new JSONObject(json);
+            String user_name = (String) jsonObj.get("user_name");
+            String password = (String) jsonObj.get("password");
+            MongoClient mongo = (MongoClient) request.getServletContext()
+                    .getAttribute("MONGO_CLIENT");
+            MongoDBUsersDAO muDAO = new MongoDBUsersDAO(mongo);
+
+            response.setContentType("application/json");
+            response.setHeader("Cache-Control", "nocache");
+            response.setCharacterEncoding("utf-8");
+
+            User user = muDAO.getUserByName(user_name);
+
+            if (user == null || !user.getPassword().equals(password)) {
+                response.sendError(HttpServletResponse.SC_NOT_FOUND);
+                return;
+            }
+
+            muDAO.deleteUser(user);
+
+            response.sendError(HttpServletResponse.SC_NO_CONTENT);
+
+        } catch (JSONException exp) {
+            System.out.println("INVALID JSON OBJECT !!");
+        }
+
+    }
+
 
 }

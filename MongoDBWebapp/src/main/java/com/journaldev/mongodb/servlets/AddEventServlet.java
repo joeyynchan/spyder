@@ -81,6 +81,8 @@ public class AddEventServlet extends HttpServlet {
 
         }
 
+        response.sendError(HttpServletResponse.SC_CREATED);
+
 		printout.print(JObject);
 		printout.flush();
 

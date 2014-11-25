@@ -31,10 +31,22 @@ public class GetEventInteractionServlet extends HttpServlet {
 		response.setHeader("Cache-Control", "nocache");
 		response.setCharacterEncoding("utf-8");
 
+        MongoClient mongo = (MongoClient) request.getServletContext()
+                .getAttribute("MONGO_CLIENT");
+        MongoDBEventDAO eventDAO = new MongoDBEventDAO(mongo);
+        MongoDBDataDAO dataDAO = new MongoDBDataDAO(mongo);
+
+        if (eventDAO.getEventByID(event_id) == null) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            return;
+        }
+
+        List<String> event_interactions = dataDAO.getDataForEvent(event_id);
+
 		PrintWriter printout = response.getWriter();
 		JSONObject JObject = new JSONObject();
 		try {
-			JObject.put("interaction", "");
+			JObject.put("interaction", event_interactions.toString());
 		} catch (JSONException excep) {
 			System.out.println("JSON Exception");
 		}
