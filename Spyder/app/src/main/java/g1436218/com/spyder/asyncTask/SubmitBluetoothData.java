@@ -14,9 +14,6 @@ import g1436218.com.spyder.activity.MainActivity;
 import g1436218.com.spyder.config.GlobalConfiguration;
 import g1436218.com.spyder.object.Interaction;
 
-/**
- * Created by Cherie on 11/19/2014.
- */
 public class SubmitBluetoothData extends BaseAsyncTask{
 
     private static String TAG = "SubmitBluetoothData";
@@ -37,8 +34,8 @@ public class SubmitBluetoothData extends BaseAsyncTask{
         addToParams("data", convertListToJSONArray());
 
         Log.i(TAG, this.params.toString());
-        JSONObject obj = getJSONFromUrl(URL);
-        Log.i(TAG, obj.toString());
+
+        JSONObject obj = getJSONFromUrl(URL, Responses.POST);
         return null;
     }
 

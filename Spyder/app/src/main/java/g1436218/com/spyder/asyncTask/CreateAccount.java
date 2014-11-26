@@ -38,7 +38,7 @@ public class CreateAccount extends BaseAsyncTask {
 
         addToParams("user_name", username);
         addToParams("password", password);
-        JSONObject jsonObject = getJSONFromUrl(URL);
+        JSONObject jsonObject = getJSONFromUrl(URL, Responses.POST);
 
         return null;
     }
@@ -55,6 +55,7 @@ public class CreateAccount extends BaseAsyncTask {
         }else{
             TextView login_text_errmsg = (TextView) fragment.getView().findViewById(R.id.textview_fragment_register_errmsg);
             login_text_errmsg.setText("Registration failed\n");
+
         }
     }
 }

@@ -4,13 +4,14 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+
 
 import g1436218.com.spyder.R;
 import g1436218.com.spyder.asyncTask.LinkDevice;
@@ -61,7 +62,6 @@ public class LoginActivity extends BaseActivity {
         /* Log in Button */
         button_login = (Button) findViewById(R.id.button_activity_login_login);
         button_login.setOnClickListener(this);
-
     }
 
     public void displayRegisterFragment() {

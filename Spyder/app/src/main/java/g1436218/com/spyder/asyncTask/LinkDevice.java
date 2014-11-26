@@ -38,8 +38,8 @@ public class LinkDevice extends BaseAsyncTask{
         addToParams("password", password);
         addToParams("mac_address", getDefaultAdapter().getAddress());
 
-        JSONObject jsonObject = getJSONFromUrl(URL);
-        Log.d(TAG, username + password + getDefaultAdapter().getAddress() + this.statusCode + "");
+        JSONObject jsonObject = getJSONFromUrl(URL, Responses.POST);
+        Log.d(TAG, this.statusCode + "");
 
         return null;
     }

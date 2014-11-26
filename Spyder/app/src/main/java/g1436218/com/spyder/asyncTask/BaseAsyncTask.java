@@ -9,7 +9,11 @@ import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpDelete;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
+import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
@@ -24,7 +28,15 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Objects;
 
+
 public abstract class BaseAsyncTask extends AsyncTask<Void, Void, Void> {
+
+    public enum Responses{
+        DELETE,
+        GET,
+        POST,
+        PUT;
+    }
 
     private final String TAG = "BaseAsyncTask";
 
@@ -33,7 +45,7 @@ public abstract class BaseAsyncTask extends AsyncTask<Void, Void, Void> {
     protected String result;
     protected JSONObject resultJObj;
     protected JSONObject params;
-    protected int statusCode;
+    protected int statusCode = 0;
 
     protected BaseAsyncTask(){
         this.params = new JSONObject();
@@ -46,14 +58,48 @@ public abstract class BaseAsyncTask extends AsyncTask<Void, Void, Void> {
         this.result = "Result cannot be fetched";
     }
 
-    protected String getStringFromUrl(String url) {
+    protected String getStringFromUrl(String url, Responses response) {
 
         try {
             DefaultHttpClient httpClient = new DefaultHttpClient();
-            HttpPost httpPost = new HttpPost(url);
-            httpPost.setEntity(new StringEntity(params.toString()));
-            httpPost.setHeader("Content-type", "application/json");
-            HttpResponse httpResponse = httpClient.execute(httpPost);
+
+            HttpRequestBase httpRequest = new HttpRequestBase() {
+                @Override
+                public String getMethod() {
+                    return null;
+                }
+            };
+
+            switch(response){
+                case DELETE:
+                    Log.d(TAG, "HttpDelete");
+                    httpRequest = new HttpDelete(url);
+                    break;
+
+                case GET:
+                    Log.d(TAG, "HttpGet");
+                    httpRequest = new HttpGet(url);
+                    break;
+
+                case POST:
+                {
+                    Log.d(TAG, "HttpPost");
+                    httpRequest = new HttpPost(url);
+                    ((HttpPost)httpRequest).setEntity(new StringEntity(params.toString()));
+                }
+                    break;
+
+                case PUT: {
+                    Log.d(TAG, "HttpPut");
+                    httpRequest = new HttpPut(url);
+                    ((HttpPut) httpRequest).setEntity(new StringEntity(params.toString()));
+                }
+                    break;
+
+            }
+
+            httpRequest.setHeader("Content-type", "application/json");
+            HttpResponse httpResponse = httpClient.execute(httpRequest);
             HttpEntity httpEntity = httpResponse.getEntity();
             inputStream = httpEntity.getContent();
             statusCode = httpResponse.getStatusLine().getStatusCode();
@@ -82,8 +128,8 @@ public abstract class BaseAsyncTask extends AsyncTask<Void, Void, Void> {
         return result;
     }
 
-    protected JSONObject getJSONFromUrl(String url) {
-        String result = getStringFromUrl(url);
+    protected JSONObject getJSONFromUrl(String url, Responses response) {
+        String result = getStringFromUrl(url, response);
         return toJSONObject(result);
     }
 
