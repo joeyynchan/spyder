@@ -172,12 +172,21 @@
 
     </LinearLayout>
 
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:text=""
+        android:textColor="@color/errorColor"
+        android:id="@+id/register_testview_errmsg"
+        android:layout_gravity="center_horizontal" />
+
     <Button
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="Register"
         android:id="@+id/register_button_register"
-        android:layout_gravity="center_horizontal"
         android:background="@drawable/login_button"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"

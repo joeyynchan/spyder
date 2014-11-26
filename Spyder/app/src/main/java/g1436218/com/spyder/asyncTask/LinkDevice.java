@@ -20,7 +20,6 @@ import static android.bluetooth.BluetoothAdapter.getDefaultAdapter;
  */
 public class LinkDevice extends BaseAsyncTask{
 
-    private boolean linked = false;
     private static String TAG = "LinkDevice";
     private static String URL = GlobalConfiguration.DEFAULT_URL + "login";
     public LinkDevice(Activity activity) { super(activity); }
@@ -47,16 +46,17 @@ public class LinkDevice extends BaseAsyncTask{
     @Override
     public void onPostExecute(Void v) {
         Log.d(TAG, "onPostExecute");
-        setStatusCode(404);
         switch(this.statusCode) {
             case (200):{
+                setErrMsgToNotFound();
                 gotoMainActivity();
-                setErrMsgToNotFound();}
+                }
                 break;
 
             case (201):{
+                setErrMsgToNotFound();
                 gotoMainActivity();
-                setErrMsgToNotFound();}
+                }
                 break;
 
             case (404):
@@ -84,13 +84,13 @@ public class LinkDevice extends BaseAsyncTask{
         switch(this.statusCode) {
             case(200): login_text_errmsg.setText("Login successfully\n");
                 break;
-            case(201): login_text_errmsg.setText("Successfull linked device\n");
+            case(201): login_text_errmsg.setText("Successfully linked device\n");
                 break;
             case(404): login_text_errmsg.setText("Username/Password not match\n");
                 break;
             case(409): login_text_errmsg.setText("User is already linked with other device\n");
                 break;
-            default:
+            default: login_text_errmsg.setText("No response from server, please try again later\n");
                 break;
 
         }

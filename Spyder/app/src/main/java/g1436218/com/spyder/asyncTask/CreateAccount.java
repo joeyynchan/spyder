@@ -38,7 +38,6 @@ public class CreateAccount extends BaseAsyncTask {
         addToParams("user_name", username);
         addToParams("password", password);
         JSONObject jsonObject = getJSONFromUrl(URL);
-        Log.d(TAG, jsonObject.toString());
 
         return null;
     }
@@ -46,11 +45,16 @@ public class CreateAccount extends BaseAsyncTask {
     @Override
     public void onPostExecute(Void v){
         Log.d(TAG, "onPostExecute");
-        //Registration was successful
-        if(statusCode == 200) {
+
+        Log.d(TAG, statusCode + "");
+        if(statusCode == 201) {
+            //Registration was successful
             TextView login_text_errmsg = (TextView) activity.findViewById(R.id.login_text_errmsg);
             login_text_errmsg.setText("Account has been successfully created\n");
             fragment.dismiss();
+        }else{
+            TextView login_text_errmsg = (TextView) fragment.getView().findViewById(R.id.login_text_errmsg);
+            //login_text_errmsg.setText("Registration failed\n");
         }
     }
 }

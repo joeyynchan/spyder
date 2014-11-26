@@ -37,6 +37,7 @@ public class MainActivity extends BaseActivity {
     private HashSet<Interaction> interactions;
     private UIUpdateReceiver receiver;
     private UserMap userMap;
+    private String TAG = "MainActivity";
 
     private TextView textview_attendee;
     private TextView textview_interaction;
@@ -120,6 +121,7 @@ public class MainActivity extends BaseActivity {
     public void onBackPressed() {
         if (getFragmentManager().getBackStackEntryCount() == 0) {
             // Do nothing
+            Log.d(TAG, "Back was pressed");
         } else {
             getFragmentManager().popBackStack();
             setTitle("Spyder");
@@ -207,7 +209,7 @@ public class MainActivity extends BaseActivity {
                 int strength = intent.getIntExtra("STRENGTH", 0);
                 activity.addToInteractions(new Interaction(username, strength));
             } else if (BluetoothDiscovery.RESET_LIST.equals(action)) {
-                Log.i("MainActivity", interactions.toString());
+                Log.i(TAG, interactions.toString());
                 activity.addInteractionsToArray();
             } else if (BluetoothDiscovery.SEND_DATA.equals(action)) {
                 new SubmitBluetoothData(activity, activity.getInteractionsArray()).execute();

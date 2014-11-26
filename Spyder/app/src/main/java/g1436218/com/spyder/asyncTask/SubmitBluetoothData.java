@@ -38,7 +38,6 @@ public class SubmitBluetoothData extends BaseAsyncTask{
 
         Log.i(TAG, this.params.toString());
         JSONObject obj = getJSONFromUrl(URL);
-        Log.i(TAG, obj.toString());
         return null;
     }
 
