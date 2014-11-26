@@ -41,6 +41,7 @@ public class LinkDevice extends BaseAsyncTask{
         addToParams("mac_address", getDefaultAdapter().getAddress());
 
         JSONObject jsonObject = getJSONFromUrl(URL, Responses.POST);
+        Log.d(TAG, username + ":" + password);
         Log.d(TAG, this.statusCode + "");
 
         return null;
@@ -78,6 +79,7 @@ public class LinkDevice extends BaseAsyncTask{
     }
 
     private void gotoMainActivity(){
+        /* insert (username, password) into sharedPreference */
         Context context = activity;
         SharedPreferences sharedPref = context.getSharedPreferences(
                 context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
@@ -85,24 +87,32 @@ public class LinkDevice extends BaseAsyncTask{
         editor.putString(context.getString(R.string.username), username);
         editor.putString(context.getString(R.string.password), password);
         editor.commit();
+        /* start mainActivity */
         Intent intent = new Intent(activity, MainActivity.class);
         activity.startActivity(intent);
     }
 
     private void setErrMsgToNotFound(){
         TextView login_text_errmsg = (TextView) activity.findViewById(R.id.textview_fragment_login_errmsg);
-        switch(this.statusCode) {
-            case(200): login_text_errmsg.setText("Login successfully\n");
-                break;
-            case(201): login_text_errmsg.setText("Successfully linked device\n");
-                break;
-            case(404): login_text_errmsg.setText("Username/Password not match\n");
-                break;
-            case(409): login_text_errmsg.setText("User is already linked with other device\n");
-                break;
-            default: login_text_errmsg.setText("No response from server, please try again later\n");
-                break;
+        if(login_text_errmsg != null) {
+            switch (this.statusCode) {
+                case (200):
+                    login_text_errmsg.setText("Login successfully\n");
+                    break;
+                case (201):
+                    login_text_errmsg.setText("Successfully linked device\n");
+                    break;
+                case (404):
+                    login_text_errmsg.setText("Username/Password not match\n");
+                    break;
+                case (409):
+                    login_text_errmsg.setText("User is already linked with other device\n");
+                    break;
+                default:
+                    login_text_errmsg.setText("No response from server, please try again later\n");
+                    break;
 
+            }
         }
     }
 
