@@ -26,7 +26,7 @@ import g1436218.com.spyder.object.UserMap;
 public class FetchAttendeeList extends BaseAsyncTask {
 
     private final String TAG = "FetchAttendeeList";
-    private final String URL = GlobalConfiguration.DEFAULT_URL + "eventUsers?event_id=545ad315e4b0f46082caaef3";
+    private final String URL = GlobalConfiguration.DEFAULT_URL + "eventUsers?event_id=54751551e4b08c8af4a64db3";
 
     private UserMap userMap;
 
