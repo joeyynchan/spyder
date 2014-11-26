@@ -17,7 +17,7 @@ import g1436218.com.spyder.object.Interaction;
 public class SubmitBluetoothData extends BaseMainAsyncTask{
 
     private static String TAG = "SubmitBluetoothData";
-    private static String URL = GlobalConfiguration.DEFAULT_URL + "submit_data?user_name=cherrie&event_id=54751551e4b08c8af4a64db3";
+    private static String URL = GlobalConfiguration.DEFAULT_URL + "submit_data";
     private ArrayList<HashSet<Interaction>> interactionsArray;
 
     public SubmitBluetoothData(MainActivity activity, ArrayList<HashSet<Interaction>> interactionsArray) {
@@ -28,6 +28,8 @@ public class SubmitBluetoothData extends BaseMainAsyncTask{
 
     @Override
     protected Void doInBackground(Void... params) {
+        addToParams("user_name", GlobalConfiguration.USER_NAME);
+        addToParams("event_id", GlobalConfiguration.EVENT_ID);
         addToParams("time_interval", Integer.toString(GlobalConfiguration.BLUETOOTH_TIME_INTERVAL));
         addToParams("data", convertListToJSONArray());
 
