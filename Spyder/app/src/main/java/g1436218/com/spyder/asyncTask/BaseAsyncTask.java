@@ -32,15 +32,11 @@ import java.util.Objects;
 public abstract class BaseAsyncTask extends AsyncTask<Void, Void, Void> {
 
     public enum Responses{
-        DELETE,
-        GET,
-        POST,
-        PUT;
+        DELETE, GET, POST, PUT;
     }
 
     private final String TAG = "BaseAsyncTask";
 
-    protected Activity activity;
     protected InputStream inputStream;
     protected String result;
     protected JSONObject resultJObj;
@@ -48,12 +44,6 @@ public abstract class BaseAsyncTask extends AsyncTask<Void, Void, Void> {
     protected int statusCode = 0;
 
     protected BaseAsyncTask(){
-        this.params = new JSONObject();
-        this.result = "Result cannot be fetched";
-    }
-
-    protected BaseAsyncTask(Activity activity) {
-        this.activity = activity;
         this.params = new JSONObject();
         this.result = "Result cannot be fetched";
     }

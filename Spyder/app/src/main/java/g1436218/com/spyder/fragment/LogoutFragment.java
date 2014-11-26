@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import g1436218.com.spyder.R;
+import g1436218.com.spyder.activity.MainActivity;
 import g1436218.com.spyder.asyncTask.UnlinkDevice;
 
 /**
@@ -25,7 +26,7 @@ public class LogoutFragment extends BaseDialogFragment {
                 .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         Log.d(TAG, "Yes, please log me out");
-                        new UnlinkDevice(getActivity()).execute();
+                        new UnlinkDevice((MainActivity)getActivity()).execute();
                         getActivity().finish();
                     }
                 })

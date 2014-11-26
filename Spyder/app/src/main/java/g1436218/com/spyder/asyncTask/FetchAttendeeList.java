@@ -20,19 +20,20 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 
 import g1436218.com.spyder.R;
+import g1436218.com.spyder.activity.MainActivity;
 import g1436218.com.spyder.config.GlobalConfiguration;
 import g1436218.com.spyder.object.UserMap;
 
-public class FetchAttendeeList extends BaseAsyncTask {
+public class FetchAttendeeList extends BaseMainAsyncTask {
 
     private final String TAG = "FetchAttendeeList";
     private final String URL = GlobalConfiguration.DEFAULT_URL + "eventUsers?event_id=54751551e4b08c8af4a64db3";
 
     private UserMap userMap;
 
-    public FetchAttendeeList(Activity activity) {
+    public FetchAttendeeList(MainActivity activity) {
         super(activity);
-        userMap = UserMap.getInstance();
+        this.userMap = UserMap.getInstance();
     }
 
     @Override

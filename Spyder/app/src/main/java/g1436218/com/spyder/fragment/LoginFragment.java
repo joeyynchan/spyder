@@ -11,6 +11,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import g1436218.com.spyder.R;
+import g1436218.com.spyder.activity.LoginActivity;
+import g1436218.com.spyder.activity.MainActivity;
 import g1436218.com.spyder.asyncTask.CreateAccount;
 import g1436218.com.spyder.asyncTask.LinkDevice;
 
@@ -46,7 +48,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         Log.d(TAG, "attemptLogin");
         String username = edittext_username.getText().toString();
         String password = edittext_password.getText().toString();
-        new LinkDevice(getActivity(), username, password).execute();
+        new LinkDevice((LoginActivity) getActivity(), username, password).execute();
     }
 
 

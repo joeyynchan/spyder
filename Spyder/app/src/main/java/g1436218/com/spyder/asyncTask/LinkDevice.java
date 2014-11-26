@@ -9,16 +9,14 @@ import android.widget.TextView;
 import org.json.JSONObject;
 
 import g1436218.com.spyder.R;
+import g1436218.com.spyder.activity.LoginActivity;
 import g1436218.com.spyder.activity.MainActivity;
 import g1436218.com.spyder.config.GlobalConfiguration;
 import g1436218.com.spyder.fragment.LoginFragment;
 
 import static android.bluetooth.BluetoothAdapter.getDefaultAdapter;
 
-/**
- * Created by Cherie on 11/9/2014.
- */
-public class LinkDevice extends BaseAsyncTask{
+public class LinkDevice extends BaseLoginAsyncTask{
 
     private static String TAG = "LinkDevice";
     private static String URL = GlobalConfiguration.DEFAULT_URL + "login";
@@ -26,7 +24,7 @@ public class LinkDevice extends BaseAsyncTask{
     private String username;
     private String password;
 
-    public LinkDevice(Activity activity, String username, String password) {
+    public LinkDevice(LoginActivity activity, String username, String password) {
         super(activity);
         this.username = username;
         this.password = password;

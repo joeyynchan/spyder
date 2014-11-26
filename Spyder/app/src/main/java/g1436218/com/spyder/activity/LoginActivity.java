@@ -1,21 +1,16 @@
 package g1436218.com.spyder.activity;
 
 import android.app.Fragment;
-import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 
 
 import g1436218.com.spyder.R;
-import g1436218.com.spyder.asyncTask.LinkDevice;
-import g1436218.com.spyder.fragment.AttendeeFragment;
 import g1436218.com.spyder.fragment.LoginFragment;
 import g1436218.com.spyder.fragment.RegisterFragment;
 

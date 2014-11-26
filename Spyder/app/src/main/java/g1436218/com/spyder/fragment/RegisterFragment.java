@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import g1436218.com.spyder.R;
+import g1436218.com.spyder.activity.LoginActivity;
 import g1436218.com.spyder.asyncTask.CreateAccount;
 
 public class RegisterFragment extends Fragment implements View.OnClickListener {
@@ -27,6 +28,6 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        new CreateAccount(this).execute();
+        new CreateAccount((LoginActivity)this.getActivity()).execute();
     }
 }

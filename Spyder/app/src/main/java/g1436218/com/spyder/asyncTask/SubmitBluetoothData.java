@@ -14,16 +14,14 @@ import g1436218.com.spyder.activity.MainActivity;
 import g1436218.com.spyder.config.GlobalConfiguration;
 import g1436218.com.spyder.object.Interaction;
 
-public class SubmitBluetoothData extends BaseAsyncTask{
+public class SubmitBluetoothData extends BaseMainAsyncTask{
 
     private static String TAG = "SubmitBluetoothData";
     private static String URL = GlobalConfiguration.DEFAULT_URL + "submit_data?user_name=cherrie&event_id=54751551e4b08c8af4a64db3";
     private ArrayList<HashSet<Interaction>> interactionsArray;
-    private MainActivity activity;
 
     public SubmitBluetoothData(MainActivity activity, ArrayList<HashSet<Interaction>> interactionsArray) {
-        super();
-        this.activity = activity;
+        super(activity);
         this.interactionsArray = interactionsArray;
     }
 
@@ -36,6 +34,7 @@ public class SubmitBluetoothData extends BaseAsyncTask{
         Log.i(TAG, this.params.toString());
 
         JSONObject obj = getJSONFromUrl(URL, Responses.POST);
+        Log.i(TAG, obj.toString());
         return null;
     }
 

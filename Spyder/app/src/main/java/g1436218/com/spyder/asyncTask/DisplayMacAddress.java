@@ -1,16 +1,17 @@
 package g1436218.com.spyder.asyncTask;
 
 import g1436218.com.spyder.R;
+import g1436218.com.spyder.activity.MainActivity;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.widget.TextView;
 
-public class DisplayMacAddress extends BaseAsyncTask {
+public class DisplayMacAddress extends BaseMainAsyncTask {
 
     private final String TAG = "displayMacAddress";
 
-    public DisplayMacAddress(Activity activity) {
+    public DisplayMacAddress(MainActivity activity) {
        super(activity);
     }
 
