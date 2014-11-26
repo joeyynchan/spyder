@@ -2,6 +2,7 @@ package g1436218.com.spyder.activity;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -25,6 +26,8 @@ import g1436218.com.spyder.fragment.AttendeeFragment;
 import g1436218.com.spyder.fragment.BaseFragment;
 import g1436218.com.spyder.fragment.EventListFragment;
 import g1436218.com.spyder.fragment.InteractionFragment;
+import g1436218.com.spyder.fragment.LogoutFragment;
+import g1436218.com.spyder.fragment.RegisterFragment;
 import g1436218.com.spyder.object.Interaction;
 import g1436218.com.spyder.object.UserMap;
 import g1436218.com.spyder.service.BluetoothDiscovery;
@@ -111,17 +114,21 @@ public class MainActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_log_out:
-                finish();
+                logout();
             default :
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void logout() {
+        FragmentManager fragmentManager = getFragmentManager();
+        new LogoutFragment().show(fragmentManager, "Logout");
     }
 
     @Override
     public void onBackPressed() {
         if (getFragmentManager().getBackStackEntryCount() == 0) {
             // Do nothing
-            Log.d(TAG, "Back was pressed");
         } else {
             getFragmentManager().popBackStack();
             setTitle("Spyder");

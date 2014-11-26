@@ -33,7 +33,7 @@ public abstract class BaseAsyncTask extends AsyncTask<Void, Void, Void> {
     protected String result;
     protected JSONObject resultJObj;
     protected JSONObject params;
-    protected int statusCode;
+    protected int statusCode = 0;
 
     protected BaseAsyncTask(){
         this.params = new JSONObject();
