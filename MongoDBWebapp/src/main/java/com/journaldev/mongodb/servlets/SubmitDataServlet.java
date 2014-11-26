@@ -49,8 +49,8 @@ public class SubmitDataServlet extends HttpServlet {
 
 		boolean user_attended = false;
 		MongoDBEventDAO eventDAO = new MongoDBEventDAO(mongo);
-		List<String> user_id_list = eventDAO.getAllUsersIDEvent(event_id);
-		List<User> user_list = userDAO.getAllUsers(user_id_list);
+		List<String> user_name_list = eventDAO.getAllUsersIDEvent(event_id);
+		List<User> user_list = userDAO.getAllUsers(user_name_list);
 
 		for (User user : user_list) {
 			if (user.getUserName().equals(user_name)) {

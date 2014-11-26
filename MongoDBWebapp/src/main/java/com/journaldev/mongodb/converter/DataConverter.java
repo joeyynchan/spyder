@@ -28,12 +28,19 @@ public class DataConverter {
 		String s = (String) doc.get("data");
 		// "[[(a b),(c d)]]"
 
-		List<Pair<String, Integer>> bluetooth_data = new ArrayList<Pair<String, Integer>>();
+		List<List<Pair<String, Integer>>> bluetooth_data = new ArrayList<List<Pair<String, Integer>>>();
 		s = s.replace("[", "").replace("]", "");
 		String[] split = s.split(",");
 		for (int i = 0; i < split.length; i++) {
-			bluetooth_data.add(new Pair<String,Integer>(split[i].split(" ")[0],
-					Integer.parseInt(split[i].split(" ")[1])));
+			String k = s.replace("[","").replace("]", "");
+			String[] split_inner = k.split(",");
+			List<Pair<String,Integer>> inner_data = new ArrayList<Pair<String,Integer>>();
+			for(int j = 0; j<split_inner.length; j++){
+				inner_data.add(new Pair<String,Integer>(split[j].split(" ")[0],
+						Integer.parseInt(split[j].split(" ")[1])));
+			}
+			bluetooth_data.add(inner_data);
+			
 		}
 
 		return new Data((String) doc.get("user_name"),

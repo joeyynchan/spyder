@@ -71,7 +71,7 @@ public class MongoDBUsersDAO {
 		List<User> result = new ArrayList<User>();
 		for (String id : user_id_list) {
 			DBObject query = BasicDBObjectBuilder.start()
-					.append("_id", new ObjectId(id)).get();
+					.append("user_name",id).get();
 			DBObject data = this.col.findOne(query);
 			result.add(UserConverter.toUser(data));
 		}

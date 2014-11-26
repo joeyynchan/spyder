@@ -35,6 +35,7 @@ public class AddUserServlet extends HttpServlet {
 		
 		try {
 			JSONObject jsonObj = new JSONObject(json);
+			System.out.println(json);
 			String user_name = (String) jsonObj.get("user_name");
 			String password = (String) jsonObj.get("password");
 			User mu = new User();

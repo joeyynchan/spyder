@@ -37,9 +37,9 @@ public class GetUsersEventServlet extends HttpServlet {
 		MongoDBEventDAO eventDAO = new MongoDBEventDAO(mongo);
 		MongoDBUsersDAO mobileDAO = new MongoDBUsersDAO(mongo);
 
-		List<String> user_id_list = eventDAO.getAllUsersIDEvent(event_id);
-		System.out.println(user_id_list);
-		List<User> user_list = mobileDAO.getAllUsers(user_id_list);
+		List<String> user_name_list = eventDAO.getAllUsersIDEvent(event_id);
+		System.out.println(user_name_list);
+		List<User> user_list = mobileDAO.getAllUsers(user_name_list);
 
 		response.setContentType("application/json");
 		response.setHeader("Cache-Control", "nocache");
