@@ -64,7 +64,7 @@ public class LoginActivity extends BaseActivity {
 
     }
 
-    private void displayRegisterFragment() {
+    public void displayRegisterFragment() {
         Fragment fragment = getFragmentManager().findFragmentByTag("CURRENT_FRAGMENT");
         if (!(fragment instanceof RegisterFragment)) {
             FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
@@ -75,7 +75,7 @@ public class LoginActivity extends BaseActivity {
         button_login.setBackground(getResources().getDrawable(R.drawable.button_activity_login_normal));
     }
 
-    private void displayLoginFragment() {
+    public void displayLoginFragment() {
         Fragment fragment = getFragmentManager().findFragmentByTag("CURRENT_FRAGMENT");
         if (!(fragment instanceof LoginFragment)) {
             FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
@@ -86,7 +86,7 @@ public class LoginActivity extends BaseActivity {
         button_login.setBackground(getResources().getDrawable(R.drawable.button_activity_login_focused));
     }
 
-    private void gotoMainActivity() {
+    public void gotoMainActivity() {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }

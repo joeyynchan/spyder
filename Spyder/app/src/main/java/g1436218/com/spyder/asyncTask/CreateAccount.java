@@ -7,6 +7,7 @@ import android.widget.TextView;
 import org.json.JSONObject;
 
 import g1436218.com.spyder.R;
+import g1436218.com.spyder.activity.LoginActivity;
 import g1436218.com.spyder.config.GlobalConfiguration;
 import g1436218.com.spyder.fragment.RegisterFragment;
 
@@ -16,11 +17,12 @@ import g1436218.com.spyder.fragment.RegisterFragment;
 public class CreateAccount extends BaseAsyncTask {
 
     private RegisterFragment fragment;
+    private LoginActivity activity;
     private final String TAG = "RegisterFragment";
     private final String URL = GlobalConfiguration.DEFAULT_URL + "register";
 
     public CreateAccount(RegisterFragment fragment) {
-        super(fragment.getActivity());
+        this.activity = (LoginActivity)fragment.getActivity();
         this.fragment = fragment;
     }
 
@@ -49,6 +51,7 @@ public class CreateAccount extends BaseAsyncTask {
             //Registration was successful
             TextView login_text_errmsg = (TextView) activity.findViewById(R.id.textview_fragment_register_errmsg);
             login_text_errmsg.setText("Account has been successfully created\n");
+            activity.displayLoginFragment();
         }else{
             TextView login_text_errmsg = (TextView) fragment.getView().findViewById(R.id.textview_fragment_register_errmsg);
             login_text_errmsg.setText("Registration failed\n");
