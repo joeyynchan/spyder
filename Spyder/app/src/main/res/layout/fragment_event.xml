@@ -4,7 +4,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/backgroundColor">
+    android:background="@drawable/background_activity_main">
 
     <TextView
         android:id="@+id/textview_fragment_event_name"
@@ -22,7 +22,7 @@
         android:layout_marginTop="10dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:background="@drawable/login_textedit">
+        android:background="@drawable/textedit_activity_login">
 
         <TextView
             android:layout_width="match_parent"
@@ -52,7 +52,7 @@
         android:layout_marginTop="10dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:background="@drawable/login_textedit">
+        android:background="@drawable/textedit_activity_login">
 
         <TextView
             android:layout_width="match_parent"
@@ -81,7 +81,7 @@
         android:layout_marginTop="10dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:background="@drawable/login_textedit">
+        android:background="@drawable/textedit_activity_login">
 
         <TextView
             android:layout_width="match_parent"
@@ -102,7 +102,7 @@
         android:layout_marginRight="10dp"
         android:text="Request"
         android:clickable="true"
-        android:background="@drawable/login_button"
+        android:background="@drawable/button_activity_main"
         android:id="@+id/textview_fragment_event_request"
         android:textColor="#ffffffff" />
 

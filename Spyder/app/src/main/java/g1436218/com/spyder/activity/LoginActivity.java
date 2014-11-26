@@ -1,39 +1,39 @@
 package g1436218.com.spyder.activity;
 
-import android.app.Activity;
-import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.os.Build;
 import android.widget.Button;
-import android.widget.EditText;
 
 import g1436218.com.spyder.R;
-import g1436218.com.spyder.asyncTask.CreateAccount;
-import g1436218.com.spyder.asyncTask.DisplayMacAddress;
 import g1436218.com.spyder.asyncTask.LinkDevice;
+import g1436218.com.spyder.fragment.AttendeeFragment;
+import g1436218.com.spyder.fragment.LoginFragment;
 import g1436218.com.spyder.fragment.RegisterFragment;
 
 public class LoginActivity extends BaseActivity {
 
     private final String TAG = "LoginActivity";
 
+    private Button button_signUp;
+    private Button button_login;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.customOnCreate(savedInstanceState, R.layout.activity_login);
         getActionBar().hide();
-    }
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.login_container, new LoginFragment(), "CURRENT_FRAGMENT");
+        fragmentTransaction.commit();
 
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -44,33 +44,46 @@ public class LoginActivity extends BaseActivity {
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.login_button_sign_up:   displayRegisterFragment(); break;
-            case R.id.login_button_login: attemptLogin(); break;
+            case R.id.button_activity_login_signUp:   displayRegisterFragment(); break;
+            case R.id.button_activity_login_login: displayLoginFragment(); break;
             default:    break;
         }
     }
 
+
+
     @Override
     public void initializeView() {
         /* Sign up Button */
-        Button button_sign_up = (Button) findViewById(R.id.login_button_sign_up);
-        button_sign_up.setOnClickListener(this);
+        button_signUp = (Button) findViewById(R.id.button_activity_login_signUp);
+        button_signUp.setOnClickListener(this);
 
         /* Log in Button */
-        Button button_main_activity = (Button) findViewById(R.id.login_button_login);
-        button_main_activity.setOnClickListener(this);
+        button_login = (Button) findViewById(R.id.button_activity_login_login);
+        button_login.setOnClickListener(this);
+
     }
 
     private void displayRegisterFragment() {
-        Log.d(TAG, "displayRegisterFragment()");
-        FragmentManager fragmentManager = getFragmentManager();
-        new RegisterFragment().show(fragmentManager, "Sign Up");
+        Fragment fragment = getFragmentManager().findFragmentByTag("CURRENT_FRAGMENT");
+        if (!(fragment instanceof RegisterFragment)) {
+            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.login_container, new RegisterFragment(), "CURRENT_FRAGMENT");
+            fragmentTransaction.commit();
+        }
+        button_signUp.setBackground(getResources().getDrawable(R.drawable.button_activity_login_focused));
+        button_login.setBackground(getResources().getDrawable(R.drawable.button_activity_login_normal));
     }
 
-    private void attemptLogin(){
-        //send login data to api
-        Log.d(TAG, "attemptLogin");
-        new LinkDevice(this).execute();
+    private void displayLoginFragment() {
+        Fragment fragment = getFragmentManager().findFragmentByTag("CURRENT_FRAGMENT");
+        if (!(fragment instanceof LoginFragment)) {
+            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.login_container, new LoginFragment(), "CURRENT_FRAGMENT");
+            fragmentTransaction.commit();
+        }
+        button_signUp.setBackground(getResources().getDrawable(R.drawable.button_activity_login_normal));
+        button_login.setBackground(getResources().getDrawable(R.drawable.button_activity_login_focused));
     }
 
     private void gotoMainActivity() {

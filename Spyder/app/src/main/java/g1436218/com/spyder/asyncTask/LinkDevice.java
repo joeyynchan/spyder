@@ -6,12 +6,12 @@ import android.util.Log;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import g1436218.com.spyder.R;
 import g1436218.com.spyder.activity.MainActivity;
 import g1436218.com.spyder.config.GlobalConfiguration;
+import g1436218.com.spyder.fragment.LoginFragment;
 
 import static android.bluetooth.BluetoothAdapter.getDefaultAdapter;
 
@@ -22,22 +22,24 @@ public class LinkDevice extends BaseAsyncTask{
 
     private static String TAG = "LinkDevice";
     private static String URL = GlobalConfiguration.DEFAULT_URL + "login";
-    public LinkDevice(Activity activity) { super(activity); }
+
+    private String username;
+    private String password;
+
+    public LinkDevice(Activity activity, String username, String password) {
+        super(activity);
+        this.username = username;
+        this.password = password;
+    }
 
     @Override
     protected Void doInBackground(Void... params) {
-        Log.d(TAG, "doInBackground");
-        EditText editText_login_username = (EditText) activity.findViewById(R.id.login_edittext_username);
-        String username = editText_login_username.getText().toString();
-        EditText editText_login_password = (EditText) activity.findViewById(R.id.login_edittext_password);
-        String password = editText_login_password.getText().toString();
-
         addToParams("user_name", username);
         addToParams("password", password);
         addToParams("mac_address", getDefaultAdapter().getAddress());
 
         JSONObject jsonObject = getJSONFromUrl(URL);
-        Log.d(TAG, this.statusCode + "");
+        Log.d(TAG, username + password + getDefaultAdapter().getAddress() + this.statusCode + "");
 
         return null;
     }
@@ -79,8 +81,7 @@ public class LinkDevice extends BaseAsyncTask{
     }
 
     private void setErrMsgToNotFound(){
-        TextView login_text_errmsg = (TextView) activity.findViewById(R.id.login_text_errmsg);
-
+        TextView login_text_errmsg = (TextView) activity.findViewById(R.id.textview_fragment_login_errmsg);
         switch(this.statusCode) {
             case(200): login_text_errmsg.setText("Login successfully\n");
                 break;

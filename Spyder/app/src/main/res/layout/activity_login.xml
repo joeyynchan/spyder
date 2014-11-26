@@ -1,48 +1,27 @@
-<FrameLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/login_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/themeColor"
+    android:background="@drawable/background_activity_login"
     tools:context="g1436218.com.spyder.activity.LoginActivity"
-    tools:ignore="MergeRootFrame" >
+    tools:ignore="MergeRootFrame"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="0dp"
+        android:layout_height="fill_parent"
+        android:layout_weight="1"/>
 
     <LinearLayout
         android:focusable="true"
         android:focusableInTouchMode="true"
         android:orientation="vertical"
-        android:layout_width="200dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="center">
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:id="@+id/login_edittext_username"
-            android:layout_gravity="center_horizontal"
-            android:hint="@string/username"
-            android:inputType="text|textEmailAddress"
-            android:background="@drawable/login_textedit" />
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:inputType="textPassword"
-            android:ems="10"
-            android:id="@+id/login_edittext_password"
-            android:layout_gravity="center_horizontal"
-            android:hint="@string/Password"
-            android:layout_marginTop="15dp"
-            android:background="@drawable/login_textedit" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:id="@+id/login_text_errmsg"
-            android:textColor="@color/errorColor"
-            android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center"
+        android:layout_weight="5">
 
         <LinearLayout
             android:orientation="horizontal"
@@ -50,27 +29,43 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal">
 
+
             <Button
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:layout_marginRight="5dp"
+                android:layout_marginRight="1dp"
                 android:text="@string/signup"
-                android:id="@+id/login_button_sign_up"
-                android:background="@drawable/login_button"
+                android:id="@+id/button_activity_login_signUp"
+                android:background="@drawable/button_activity_login_normal"
                 android:textColor="#ffffffff" />
 
             <Button
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:layout_marginLeft="5dp"
+                android:layout_marginLeft="1dp"
                 android:text="@string/login"
-                android:id="@+id/login_button_login"
-                android:background="@drawable/login_button"
+                android:id="@+id/button_activity_login_login"
+                android:background="@drawable/button_activity_login_focused"
                 android:textColor="#ffffffff" />
+
         </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="400dp"
+            android:id="@+id/login_container"
+            android:background="@drawable/container_activity_login_background"
+            android:baselineAligned="true" />
 
     </LinearLayout>
 
-</FrameLayout>
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="0dp"
+        android:layout_height="fill_parent"
+        android:layout_weight="1"/>
+
+</LinearLayout>

@@ -1,6 +1,5 @@
 package g1436218.com.spyder.asyncTask;
 
-import android.app.Activity;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -28,10 +27,10 @@ public class CreateAccount extends BaseAsyncTask {
     @Override
     protected Void doInBackground(Void... params) {
 
-        EditText register_edittext_name = (EditText) fragment.getView().findViewById(R.id.register_edittext_name);
+        EditText register_edittext_name = (EditText) fragment.getView().findViewById(R.id.edittext_fragment_register_name);
         String username = register_edittext_name.getText().toString();
         Log.d(TAG, username);
-        EditText register_edittext_password1 = (EditText) fragment.getView().findViewById(R.id.register_edittext_password1);
+        EditText register_edittext_password1 = (EditText) fragment.getView().findViewById(R.id.edittext_fragment_register_password1);
         String password = register_edittext_password1.getText().toString();
         Log.d(TAG, password);
 
@@ -48,12 +47,11 @@ public class CreateAccount extends BaseAsyncTask {
         Log.d(TAG, statusCode + "");
         if(statusCode == 201) {
             //Registration was successful
-            TextView login_text_errmsg = (TextView) activity.findViewById(R.id.login_text_errmsg);
+            TextView login_text_errmsg = (TextView) activity.findViewById(R.id.textview_fragment_register_errmsg);
             login_text_errmsg.setText("Account has been successfully created\n");
-            fragment.dismiss();
         }else{
-            TextView login_text_errmsg = (TextView) fragment.getView().findViewById(R.id.login_text_errmsg);
-            //login_text_errmsg.setText("Registration failed\n");
+            TextView login_text_errmsg = (TextView) fragment.getView().findViewById(R.id.textview_fragment_register_errmsg);
+            login_text_errmsg.setText("Registration failed\n");
         }
     }
 }

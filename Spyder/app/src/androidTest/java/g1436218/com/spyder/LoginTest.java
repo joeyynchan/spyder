@@ -1,7 +1,6 @@
 package g1436218.com.spyder;
 
 import android.app.Instrumentation;
-import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.TouchUtils;
 import android.util.Log;
@@ -10,7 +9,6 @@ import android.widget.EditText;
 
 import g1436218.com.spyder.activity.LoginActivity;
 import g1436218.com.spyder.activity.MainActivity;
-import g1436218.com.spyder.asyncTask.LinkDevice;
 
 /**
  * Created by Cherie on 11/23/2014.
@@ -34,9 +32,9 @@ public class LoginTest extends ActivityInstrumentationTestCase2<LoginActivity> {
         super.setUp();
         setActivityInitialTouchMode(false);
         activity = getActivity();
-        editText_login_username = (EditText) activity.findViewById(R.id.login_edittext_username);
-        editText_login_password = (EditText) activity.findViewById(R.id.login_edittext_password);
-        login_button_login = (Button) activity.findViewById(R.id.login_button_login);
+        editText_login_username = (EditText) activity.findViewById(R.id.edittext_activity_login_username);
+        editText_login_password = (EditText) activity.findViewById(R.id.edittext_activity_login_password);
+        login_button_login = (Button) activity.findViewById(R.id.button_activity_login_login);
     }
 
     public void testLoginToMainActivity() {

@@ -8,10 +8,10 @@
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center_horizontal|top"
+        android:background="@drawable/background_activity_main"
         android:layout_above="@+id/bottom_bar">
 
         <TextView
-            android:text="@string/hello_world"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginRight="10dp"
@@ -40,7 +40,7 @@
             android:layout_weight="1"
             android:clickable="true"
             android:id="@+id/button_interaction"
-            android:background="@drawable/login_button" />
+            android:background="@drawable/button_activity_main" />
 
         <Button
             android:layout_width="match_parent"
@@ -50,7 +50,7 @@
             android:layout_weight="1"
             android:clickable="true"
             android:id="@+id/button_attendee"
-            android:background="@drawable/login_button" />
+            android:background="@drawable/button_activity_main" />
 
         <Button
             android:layout_width="match_parent"
@@ -60,7 +60,7 @@
             android:layout_weight="1"
             android:clickable="true"
             android:id="@+id/button_event_list"
-            android:background="@drawable/login_button" />
+            android:background="@drawable/button_activity_main" />
 
     </LinearLayout>
 
