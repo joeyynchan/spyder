@@ -1,26 +1,15 @@
 package g1436218.com.spyder.activity;
 
-import android.app.Activity;
-import android.app.ActionBar;
-import android.app.Fragment;
 import android.app.FragmentManager;
-import android.app.FragmentTransaction;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.os.Build;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import g1436218.com.spyder.R;
-import g1436218.com.spyder.asyncTask.CreateAccount;
-import g1436218.com.spyder.asyncTask.DisplayMacAddress;
 import g1436218.com.spyder.asyncTask.LinkDevice;
 import g1436218.com.spyder.fragment.RegisterFragment;
 
@@ -53,12 +42,25 @@ public class LoginActivity extends BaseActivity {
     @Override
     public void initializeView() {
         /* Sign up Button */
-        Button button_sign_up = (Button) findViewById(R.id.login_button_sign_up);
-        button_sign_up.setOnClickListener(this);
+        Button login_button_sign_up = (Button) findViewById(R.id.login_button_sign_up);
+        login_button_sign_up.setOnClickListener(this);
 
         /* Log in Button */
-        Button button_main_activity = (Button) findViewById(R.id.login_button_login);
-        button_main_activity.setOnClickListener(this);
+        Button login_button_login = (Button) findViewById(R.id.login_button_login);
+        login_button_login.setOnClickListener(this);
+    }
+
+    @Override
+    public void onRestart() {
+        Log.d(TAG, "onRestart()");
+        EditText editText_login_username = (EditText) findViewById(R.id.login_edittext_username);
+        EditText editText_login_password = (EditText) findViewById(R.id.login_edittext_password);
+        TextView textview_login_errmsg = (TextView) findViewById(R.id.login_textview_errmsg);
+        editText_login_username.setText("");
+        editText_login_password.setText("");
+        textview_login_errmsg.setText("");
+
+        super.onRestart();
     }
 
     private void displayRegisterFragment() {
@@ -73,9 +75,5 @@ public class LoginActivity extends BaseActivity {
         new LinkDevice(this).execute();
     }
 
-    private void gotoMainActivity() {
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
-    }
 
 }
