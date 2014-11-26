@@ -45,7 +45,6 @@ public class CreateAccount extends BaseAsyncTask {
     @Override
     public void onPostExecute(Void v){
         Log.d(TAG, "onPostExecute");
-
         Log.d(TAG, statusCode + "");
         if(statusCode == 201) {
             //Registration was successful
