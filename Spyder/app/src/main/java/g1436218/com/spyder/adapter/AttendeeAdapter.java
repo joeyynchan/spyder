@@ -49,11 +49,9 @@ public class AttendeeAdapter extends ArrayAdapter<Attendee> {
         }
 
         TextView username = (TextView) v.findViewById(R.id.textview_listview_attendees_username);
-        TextView macAddress = (TextView) v.findViewById(R.id.textview_listview_attendees_macAddress);
 
         Attendee item = getItem(position);
         username.setText(item.getUsername());
-        macAddress.setText(item.getMacAddress());
 
         return v;
     }

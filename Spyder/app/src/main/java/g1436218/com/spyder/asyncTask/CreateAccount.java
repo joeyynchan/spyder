@@ -47,7 +47,7 @@ public class CreateAccount extends BaseAsyncTask {
     public void onPostExecute(Void v){
         Log.d(TAG, "onPostExecute");
         //Registration was successful
-        if(statusCode == 200) {
+        if(statusCode == 201) {
             TextView login_text_errmsg = (TextView) activity.findViewById(R.id.login_text_errmsg);
             login_text_errmsg.setText("Account has been successfully created\n");
             fragment.dismiss();

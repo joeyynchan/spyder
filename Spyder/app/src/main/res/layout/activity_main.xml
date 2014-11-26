@@ -32,31 +32,34 @@
         android:id="@+id/bottom_bar"
         android:layout_alignParentBottom="true">
 
-        <TextView
+        <Button
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Interactions"
+            android:textColor="#ffffffff"
             android:layout_weight="1"
             android:clickable="true"
-            android:id="@+id/textview_interaction"
+            android:id="@+id/button_interaction"
             android:background="@drawable/login_button" />
 
-        <TextView
+        <Button
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="Attendee List"
+            android:textColor="#ffffffff"
             android:layout_weight="1"
             android:clickable="true"
-            android:id="@+id/textview_attendee"
+            android:id="@+id/button_attendee"
             android:background="@drawable/login_button" />
 
-        <TextView
+        <Button
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="Event List"
+            android:textColor="#ffffffff"
             android:layout_weight="1"
             android:clickable="true"
-            android:id="@+id/textview_event_list"
+            android:id="@+id/button_event_list"
             android:background="@drawable/login_button" />
 
     </LinearLayout>
