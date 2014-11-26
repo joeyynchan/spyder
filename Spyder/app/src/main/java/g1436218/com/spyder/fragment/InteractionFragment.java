@@ -21,45 +21,34 @@ import g1436218.com.spyder.asyncTask.SubmitBluetoothData;
 import g1436218.com.spyder.object.Interaction;
 import g1436218.com.spyder.service.BluetoothDiscovery;
 
-public class InteractionFragment extends Fragment {
+public class InteractionFragment extends BaseMainFragment {
 
     private final String TITLE = "Ongoing Interactions";
 
     private InteractionAdapter adapter;
     private UIUpdateReceiver receiver;
-    private MainActivity activity;
     private IntentFilter intentFilter;
 
     public InteractionFragment(MainActivity activity) {
-        this.activity = activity;
+        super(activity, R.layout.fragment_interaction);
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        this.adapter = new InteractionAdapter(getActivity(), R.layout.listview_interaction);
-        this.receiver = new UIUpdateReceiver(this);
-    }
+    protected void initializeView() {
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_interaction, container, false);
-    }
-
-    @Override
-    public void onResume()  {
         getActivity().setTitle(TITLE);
 
+        /* Initialize BroadcastReceiver */
         intentFilter = new IntentFilter();
         intentFilter.addAction(BluetoothDiscovery.UPDATE_ADAPTER);
-        getActivity().registerReceiver(receiver, intentFilter);
+        this.receiver = new UIUpdateReceiver(this);
+        activity.registerReceiver(receiver, intentFilter);
 
         /* Initialize Listview */
+        this.adapter = new InteractionAdapter(getActivity(), R.layout.listview_interaction);
         ListView listview_interactions = (ListView) getActivity().findViewById(R.id.listview_interaction_list);
         listview_interactions.setAdapter(adapter);
         adapter.addAllToAdapter(activity.getInteractions());
-
-        super.onResume();
     }
 
     @Override
@@ -68,7 +57,7 @@ public class InteractionFragment extends Fragment {
         super.onPause();
     }
 
-    public class UIUpdateReceiver extends BroadcastReceiver {
+    private class UIUpdateReceiver extends BroadcastReceiver {
 
         InteractionFragment fragment;
         MainActivity activity;

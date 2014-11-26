@@ -23,10 +23,10 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.customOnCreate(savedInstanceState, R.layout.activity_login);
+        super.onCreate(savedInstanceState, R.layout.activity_login);
         getActionBar().hide();
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.login_container, new LoginFragment(), "CURRENT_FRAGMENT");
+        fragmentTransaction.replace(R.id.login_container, new LoginFragment(this), "CURRENT_FRAGMENT");
         fragmentTransaction.commit();
 
     }
@@ -63,7 +63,7 @@ public class LoginActivity extends BaseActivity {
         Fragment fragment = getFragmentManager().findFragmentByTag("CURRENT_FRAGMENT");
         if (!(fragment instanceof RegisterFragment)) {
             FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.login_container, new RegisterFragment(), "CURRENT_FRAGMENT");
+            fragmentTransaction.replace(R.id.login_container, new RegisterFragment(this), "CURRENT_FRAGMENT");
             fragmentTransaction.commit();
         }
         button_signUp.setBackground(getResources().getDrawable(R.drawable.button_activity_login_focused));
@@ -74,7 +74,7 @@ public class LoginActivity extends BaseActivity {
         Fragment fragment = getFragmentManager().findFragmentByTag("CURRENT_FRAGMENT");
         if (!(fragment instanceof LoginFragment)) {
             FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.login_container, new LoginFragment(), "CURRENT_FRAGMENT");
+            fragmentTransaction.replace(R.id.login_container, new LoginFragment(this), "CURRENT_FRAGMENT");
             fragmentTransaction.commit();
         }
         button_signUp.setBackground(getResources().getDrawable(R.drawable.button_activity_login_normal));

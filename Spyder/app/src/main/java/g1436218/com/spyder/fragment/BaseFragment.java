@@ -12,12 +12,26 @@ import g1436218.com.spyder.R;
 import g1436218.com.spyder.activity.MainActivity;
 import g1436218.com.spyder.asyncTask.FetchAttendeeList;
 
-public class BaseFragment extends Fragment {
+public abstract class BaseFragment extends Fragment {
 
-    protected MainActivity activity;
+    protected int resourceId;
 
-    public BaseFragment(MainActivity activity){
-        this.activity = activity;
+    protected abstract void initializeView();
+
+    public BaseFragment(int resourceId) {
+        this.resourceId = resourceId;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        initializeView();
+    }
+
+    /* resouceId tells Fragment which layout resource file should be inflated */
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(resourceId, container, false);
     }
 
 }

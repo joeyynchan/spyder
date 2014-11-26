@@ -10,7 +10,7 @@ import g1436218.com.spyder.R;
 
 public abstract class BaseActivity extends Activity implements View.OnClickListener {
 
-    protected void customOnCreate(Bundle savedInstanceState, int layoutResID) {
+    protected void onCreate(Bundle savedInstanceState, int layoutResID) {
         super.onCreate(savedInstanceState);
         setContentView(layoutResID);
         initializeView();

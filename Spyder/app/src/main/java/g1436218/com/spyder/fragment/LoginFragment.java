@@ -16,7 +16,7 @@ import g1436218.com.spyder.activity.MainActivity;
 import g1436218.com.spyder.asyncTask.CreateAccount;
 import g1436218.com.spyder.asyncTask.LinkDevice;
 
-public class LoginFragment extends Fragment implements View.OnClickListener {
+public class LoginFragment extends BaseLoginFragment implements View.OnClickListener {
 
     private final String TAG = "RegisterFragment";
 
@@ -24,23 +24,17 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     EditText edittext_username;
     EditText edittext_password;
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_login, container, false);
-
-        button_attemptLogin = (Button) rootView.findViewById(R.id.button_fraagment_login_attemptLogin);
-        button_attemptLogin.setOnClickListener(this);
-
-        edittext_username = (EditText) rootView.findViewById(R.id.edittext_fragment_login_username);
-        edittext_password = (EditText) rootView.findViewById(R.id.edittext_fragment_login_password);
-
-        return rootView;
+    public LoginFragment(LoginActivity activity) {
+        super(activity, R.layout.fragment_login);
     }
 
     @Override
-    public void onClick(View v) {
-        attemptLogin();
+    protected void initializeView() {
+        button_attemptLogin = (Button) activity.findViewById(R.id.button_fraagment_login_attemptLogin);
+        button_attemptLogin.setOnClickListener(this);
+
+        edittext_username = (EditText) activity.findViewById(R.id.edittext_fragment_login_username);
+        edittext_password = (EditText) activity.findViewById(R.id.edittext_fragment_login_password);
     }
 
     private void attemptLogin(){
@@ -51,5 +45,9 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         new LinkDevice((LoginActivity) getActivity(), username, password).execute();
     }
 
+    @Override
+    public void onClick(View v) {
+        attemptLogin();
+    }
 
 }

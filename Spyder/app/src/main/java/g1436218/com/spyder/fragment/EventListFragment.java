@@ -17,7 +17,7 @@ import g1436218.com.spyder.adapter.EventListAdapter;
 import g1436218.com.spyder.adapter.InteractionAdapter;
 import g1436218.com.spyder.object.Event;
 
-public class EventListFragment extends BaseFragment implements AdapterView.OnItemClickListener {
+public class EventListFragment extends BaseMainFragment implements AdapterView.OnItemClickListener {
 
     private final String TITLE = "Event List";
 
@@ -25,27 +25,16 @@ public class EventListFragment extends BaseFragment implements AdapterView.OnIte
     private EventListAdapter adapter;
 
     public EventListFragment(MainActivity activity) {
-        super(activity);
+        super(activity, R.layout.fragment_eventlist);
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        this.adapter = new EventListAdapter(getActivity(), R.layout.listview_interaction);
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_eventlist, container, false);
-    }
-
-    @Override
-    public void onResume() {
+    protected void initializeView() {
         getActivity().setTitle(TITLE);
+        this.adapter = new EventListAdapter(activity, R.layout.listview_interaction);
         listview_eventlist = (ListView) getActivity().findViewById(R.id.listview_eventlist);
         listview_eventlist.setAdapter(adapter);
         listview_eventlist.setOnItemClickListener(this);
-        super.onResume();
     }
 
     @Override

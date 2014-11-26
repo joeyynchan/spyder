@@ -85,7 +85,7 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.customOnCreate(savedInstanceState, R.layout.activity_main);
+        super.onCreate(savedInstanceState, R.layout.activity_main);
 
         interactionsArray = new ArrayList<HashSet<Interaction>>();
         interactions = new HashSet<Interaction>();
@@ -176,7 +176,7 @@ public class MainActivity extends BaseActivity {
         Fragment fragment = getFragmentManager().findFragmentByTag("CURRENT_FRAGMENT");
         if (!(fragment instanceof AttendeeFragment)) {
             FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.fragment_container, new AttendeeFragment(), "CURRENT_FRAGMENT");
+            fragmentTransaction.replace(R.id.fragment_container, new AttendeeFragment(this), "CURRENT_FRAGMENT");
             getFragmentManager().popBackStack();
             fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();

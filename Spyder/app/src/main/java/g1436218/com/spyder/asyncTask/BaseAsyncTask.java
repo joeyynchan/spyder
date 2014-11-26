@@ -133,7 +133,6 @@ public abstract class BaseAsyncTask extends AsyncTask<Void, Void, Void> {
     }
 
     protected void addToParams(String name, Object value){
-        //Log.d(TAG, name + " " + value);
         try {
             params.put(name, value);
         } catch (JSONException e) {

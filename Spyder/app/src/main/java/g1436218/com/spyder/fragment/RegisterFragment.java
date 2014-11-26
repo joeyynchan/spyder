@@ -11,23 +11,22 @@ import g1436218.com.spyder.R;
 import g1436218.com.spyder.activity.LoginActivity;
 import g1436218.com.spyder.asyncTask.CreateAccount;
 
-public class RegisterFragment extends Fragment implements View.OnClickListener {
+public class RegisterFragment extends BaseLoginFragment implements View.OnClickListener {
 
     private final String TAG = "RegisterFragment";
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_register, container, false);
-
-        Button register_button_register = (Button) rootView.findViewById(R.id.button_fragment_register_register);
-        register_button_register.setOnClickListener(this);
-
-        return rootView;
+    public RegisterFragment(LoginActivity activity) {
+        super(activity, R.layout.fragment_register);
     }
 
     @Override
     public void onClick(View v) {
         new CreateAccount((LoginActivity)this.getActivity()).execute();
+    }
+
+    @Override
+    protected void initializeView() {
+        Button register_button_register = (Button) activity.findViewById(R.id.button_fragment_register_register);
+        register_button_register.setOnClickListener(this);
     }
 }

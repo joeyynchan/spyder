@@ -11,9 +11,8 @@ import g1436218.com.spyder.R;
 import g1436218.com.spyder.activity.MainActivity;
 import g1436218.com.spyder.object.User;
 
-public class UserFragment extends Fragment {
+public class UserFragment extends BaseMainFragment {
 
-    private MainActivity activity;
     private User user;
 
     TextView textview_fragment_user_name ;
@@ -25,28 +24,21 @@ public class UserFragment extends Fragment {
     TextView textview_fragment_user_external_link;
 
     public UserFragment(MainActivity activity, User user) {
-        this.activity = activity;
+        super(activity, R.layout.fragment_user);
         this.user = user;
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_user, container, false);
-    }
+    protected void initializeView() {
+        textview_fragment_user_name = (TextView) activity.findViewById(R.id.textview_fragment_user_name);
+        textview_fragment_user_gender = (TextView) activity.findViewById(R.id.textview_fragment_user_gender);
+        textview_fragment_user_occupation = (TextView) activity.findViewById(R.id.textview_fragment_user_occupation);
+        textview_fragment_user_company = (TextView) activity.findViewById(R.id.textview_fragment_user_company);
+        textview_fragment_user_email = (TextView) activity.findViewById(R.id.textview_fragment_user_email);
+        textview_fragment_user_phone = (TextView) activity.findViewById(R.id.textview_fragment_user_phone);
+        textview_fragment_user_external_link = (TextView) activity.findViewById(R.id.textview_fragment_user_external_link);
 
-    @Override
-    public void onResume() {
-        textview_fragment_user_name = (TextView) getActivity().findViewById(R.id.textview_fragment_user_name);
         textview_fragment_user_name.setText(user.getName());
-        textview_fragment_user_gender = (TextView) getActivity().findViewById(R.id.textview_fragment_user_gender);
-        textview_fragment_user_occupation = (TextView) getActivity().findViewById(R.id.textview_fragment_user_occupation);
-        textview_fragment_user_company = (TextView) getActivity().findViewById(R.id.textview_fragment_user_company);
-        textview_fragment_user_email = (TextView) getActivity().findViewById(R.id.textview_fragment_user_email);
-        textview_fragment_user_phone = (TextView) getActivity().findViewById(R.id.textview_fragment_user_phone);
-        textview_fragment_user_external_link = (TextView) getActivity().findViewById(R.id.textview_fragment_user_external_link);
-        super.onResume();
     }
-
-
 
 }

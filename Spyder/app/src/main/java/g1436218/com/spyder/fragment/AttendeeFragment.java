@@ -23,26 +23,23 @@ import g1436218.com.spyder.object.Attendee;
 import g1436218.com.spyder.object.Event;
 import g1436218.com.spyder.object.UserMap;
 
-public class AttendeeFragment extends Fragment implements AdapterView.OnItemClickListener {
+public class AttendeeFragment extends BaseMainFragment implements AdapterView.OnItemClickListener {
 
     private ListView listview_attendee;
     private AttendeeAdapter attendeeAdapter;
     private final String TITLE = "Attendee List";
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_attendee, container, false);
+    public AttendeeFragment(MainActivity activity) {
+        super(activity, R.layout.fragment_attendee);
     }
 
     @Override
-    public void onResume() {
+    protected void initializeView() {
         getActivity().setTitle(TITLE);
         attendeeAdapter = new AttendeeAdapter(getActivity(), R.layout.listview_attendees);
         listview_attendee = (ListView) getActivity().findViewById(R.id.listview_attendee);
         listview_attendee.setAdapter(attendeeAdapter);
         listview_attendee.setOnItemClickListener(this);
-
-        super.onResume();
     }
 
     @Override
