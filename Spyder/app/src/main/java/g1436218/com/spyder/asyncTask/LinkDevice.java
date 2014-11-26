@@ -1,7 +1,9 @@
 package g1436218.com.spyder.asyncTask;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -76,6 +78,13 @@ public class LinkDevice extends BaseAsyncTask{
     }
 
     private void gotoMainActivity(){
+        Context context = activity;
+        SharedPreferences sharedPref = context.getSharedPreferences(
+                context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString(context.getString(R.string.username), username);
+        editor.putString(context.getString(R.string.password), password);
+        editor.commit();
         Intent intent = new Intent(activity, MainActivity.class);
         activity.startActivity(intent);
     }
