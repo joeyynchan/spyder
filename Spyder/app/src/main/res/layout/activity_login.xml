@@ -40,7 +40,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:id="@+id/login_text_errmsg"
+            android:id="@+id/login_textview_errmsg"
             android:textColor="@color/errorColor"
             android:layout_gravity="center_horizontal" />
 

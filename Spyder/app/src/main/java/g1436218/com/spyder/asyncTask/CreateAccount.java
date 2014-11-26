@@ -1,6 +1,5 @@
 package g1436218.com.spyder.asyncTask;
 
-import android.app.Activity;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -49,11 +48,11 @@ public class CreateAccount extends BaseAsyncTask {
         Log.d(TAG, statusCode + "");
         if(statusCode == 201) {
             //Registration was successful
-            TextView login_text_errmsg = (TextView) activity.findViewById(R.id.login_text_errmsg);
+            TextView login_text_errmsg = (TextView) activity.findViewById(R.id.login_textview_errmsg);
             login_text_errmsg.setText("Account has been successfully created\n");
             fragment.dismiss();
         }else{
-            TextView login_text_errmsg = (TextView) fragment.getView().findViewById(R.id.login_text_errmsg);
+            TextView login_text_errmsg = (TextView) fragment.getView().findViewById(R.id.login_textview_errmsg);
             //login_text_errmsg.setText("Registration failed\n");
         }
     }

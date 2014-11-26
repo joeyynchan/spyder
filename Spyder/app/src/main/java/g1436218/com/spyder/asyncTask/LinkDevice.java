@@ -6,7 +6,6 @@ import android.util.Log;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import g1436218.com.spyder.R;
@@ -27,7 +26,7 @@ public class LinkDevice extends BaseAsyncTask{
     @Override
     protected Void doInBackground(Void... params) {
         Log.d(TAG, "doInBackground");
-        EditText editText_login_username = (EditText) activity.findViewById(R.id.login_edittext_username);
+               EditText editText_login_username = (EditText) activity.findViewById(R.id.login_edittext_username);
         String username = editText_login_username.getText().toString();
         EditText editText_login_password = (EditText) activity.findViewById(R.id.login_edittext_password);
         String password = editText_login_password.getText().toString();
@@ -79,7 +78,7 @@ public class LinkDevice extends BaseAsyncTask{
     }
 
     private void setErrMsgToNotFound(){
-        TextView login_text_errmsg = (TextView) activity.findViewById(R.id.login_text_errmsg);
+        TextView login_text_errmsg = (TextView) activity.findViewById(R.id.login_textview_errmsg);
 
         switch(this.statusCode) {
             case(200): login_text_errmsg.setText("Login successfully\n");
