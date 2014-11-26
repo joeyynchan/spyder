@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script type="text/javascript" src="lib/jquery.min.js" ></script>
+	<script type="text/javascript" src="lib/d3.min.js" ></script>
+	<script type="text/javascript" src="lib/graph.js" ></script>
+	<script type="text/javascript" src="lib/get_interact_data.js" ></script>
+	<script type="text/javascript" src="lib/get_attendees.js" ></script>
+    <style type="text/css">
+        .link { stroke: #ccc; }
+        .nodetext { pointer-events: none; font: 10px sans-serif; }
+        body { width:100%; height:100%; margin:none; padding:none; }
+        #graph { width:500px;height:500px; border:3px solid black;border-radius:12px; margin:auto; }
+    </style>
+</head>
+<body>
+<div id="graph"></div>
+</body>
+<div id="option">
+    <input name="updateButton" 
+           type="button" 
+           value="Update" 
+           onclick="buildGraph()" />
+</div>
+<input type="text" id="myText" value="2000">
+<script type="text/javascript">
+var attendees;
+var interval;
+var curr_t;
+var event_end;
+var interaction;
+
+graph = new myGraph("#graph");
+
+function buildGraph() {
+	
+	var interactionData = getInteraction();
+    interaction = interactionData.interaction;    
+    attendees = getAttendees();
+    
+	curr_t = new Date(interactionData.start_t);
+	event_end = new Date(interactionData.end_t);
+	
+	for (var i = 0; i < attendees.length; i++) {
+		graph.addNode(attendees[i].name);
+	}
+
+	interval = parseInt(document.getElementById("myText").value);
+	var myVar=setInterval(function () {updateData()}, interval);
+}
+
+function updateData() {
+	curr_t.setTime(curr_t.getTime() + interval);
+	if (curr_t.getTime() <= event_end.getTime()) {
+		for (var i = 0; i < interaction.length; i++) {
+			var interaction_start = new Date (interaction[i].start_t);
+			var interaction_end = new Date(interaction[i].end_t);
+			if ( (interaction_start.getTime() <= curr_t.getTime()) && (interaction_end.getTime() >= curr_t.getTime())) {
+				graph.addLink(interaction[i].user1,interaction[i].user2);
+			}
+			if (interaction_end.getTime() <= curr_t.getTime()) {
+				graph.removeLink(interaction[i].user1,interaction[i].user2);
+			}
+		}
+	}
+}
+</script>
+</html>
