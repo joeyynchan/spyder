@@ -71,7 +71,7 @@ public class MongoDBEventDAO {
 			if(data != null)
 			return UserConverter.getUsers(data);
 		}
-		}
+
 		return new ArrayList<String>();
 	}
 
