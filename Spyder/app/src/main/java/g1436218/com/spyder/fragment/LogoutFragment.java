@@ -18,7 +18,8 @@ import g1436218.com.spyder.asyncTask.UnlinkDevice;
 public class LogoutFragment extends BaseDialogFragment {
 
     private final String TAG = "LogoutFragment";
-
+    protected String username;
+    protected String password;
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         // Use the Builder class for convenient dialog construction
@@ -27,14 +28,23 @@ public class LogoutFragment extends BaseDialogFragment {
         SharedPreferences sharedPref = context.getSharedPreferences(
                 context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
-        String username = sharedPref.getString(context.getString(R.string.username), "getString failed");
-        String password = sharedPref.getString(context.getString(R.string.username), "getString failed");
+        username = sharedPref.getString(context.getString(R.string.username), "getString failed");
+        password = sharedPref.getString(context.getString(R.string.username), "getString failed");
         builder.setTitle("Logout");
         builder.setMessage(username + ", are you sure?")
                 .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         Log.d(TAG, "Yes, please log me out");
-                        new UnlinkDevice((MainActivity)getActivity()).execute();
+                        Context context = getActivity();
+                        SharedPreferences sharedPref = context.getSharedPreferences(
+                                context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+                        username = sharedPref.getString(context.getString(R.string.username), "");
+                        password = sharedPref.getString(context.getString(R.string.password), "");
+                        SharedPreferences.Editor editor = sharedPref.edit();
+                        editor.remove(context.getString(R.string.username));
+                        editor.remove(context.getString(R.string.password));
+                        editor.commit();
+                        new UnlinkDevice((MainActivity)getActivity(), username, password).execute();
                         getActivity().finish();
                     }
                 })

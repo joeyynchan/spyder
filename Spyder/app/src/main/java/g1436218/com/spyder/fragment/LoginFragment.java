@@ -1,6 +1,8 @@
 package g1436218.com.spyder.fragment;
 
 import android.app.Fragment;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,6 +11,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import g1436218.com.spyder.R;
 import g1436218.com.spyder.activity.LoginActivity;
@@ -23,6 +27,7 @@ public class LoginFragment extends BaseLoginFragment implements View.OnClickList
     Button button_attemptLogin;
     EditText edittext_username;
     EditText edittext_password;
+    TextView textview_errmsg;
 
     public LoginFragment(LoginActivity activity) {
         super(activity, R.layout.fragment_login);
@@ -35,6 +40,11 @@ public class LoginFragment extends BaseLoginFragment implements View.OnClickList
 
         edittext_username = (EditText) activity.findViewById(R.id.edittext_fragment_login_username);
         edittext_password = (EditText) activity.findViewById(R.id.edittext_fragment_login_password);
+        textview_errmsg = (TextView) activity.findViewById(R.id.textview_fragment_login_errmsg);
+
+        edittext_username.setText("");
+        edittext_password.setText("");
+        textview_errmsg.setText("");
     }
 
     private void attemptLogin(){
