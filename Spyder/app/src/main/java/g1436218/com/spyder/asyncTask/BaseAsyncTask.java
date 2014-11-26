@@ -51,7 +51,6 @@ public abstract class BaseAsyncTask extends AsyncTask<Void, Void, Void> {
     protected String getStringFromUrl(String url, Responses response) {
 
         try {
-            DefaultHttpClient httpClient = new DefaultHttpClient();
 
             HttpRequestBase httpRequest = new HttpRequestBase() {
                 @Override
@@ -62,48 +61,30 @@ public abstract class BaseAsyncTask extends AsyncTask<Void, Void, Void> {
 
             switch(response){
                 case DELETE:
-                    Log.d(TAG, "HttpDelete");
                     httpRequest = new HttpDelete(url);
                     break;
 
                 case GET:
-                    Log.d(TAG, "HttpGet");
                     httpRequest = new HttpGet(url);
                     break;
 
                 case POST:
-                {
-                    Log.d(TAG, "HttpPost");
                     httpRequest = new HttpPost(url);
                     ((HttpPost)httpRequest).setEntity(new StringEntity(params.toString()));
-                }
                     break;
 
-                case PUT: {
-                    Log.d(TAG, "HttpPut");
+                case PUT:
                     httpRequest = new HttpPut(url);
                     ((HttpPut) httpRequest).setEntity(new StringEntity(params.toString()));
-                }
                     break;
 
             }
 
             httpRequest.setHeader("Content-type", "application/json");
-            HttpResponse httpResponse = httpClient.execute(httpRequest);
-            HttpEntity httpEntity = httpResponse.getEntity();
-            inputStream = httpEntity.getContent();
+            HttpResponse httpResponse =  new DefaultHttpClient().execute(httpRequest);
+            inputStream = httpResponse.getEntity().getContent();
             statusCode = httpResponse.getStatusLine().getStatusCode();
-        } catch (UnsupportedEncodingException e) {
-            Log.e(TAG + "UnsupportedEncodingException", e.getMessage());
-        } catch (ClientProtocolException e) {
-            Log.e(TAG+"ClientProtocalException", e.getMessage());
-        } catch (IOException e) {
-            Log.e(TAG+"IOException", e.toString());
-        } catch (Exception e){
-            Log.e(TAG, e.toString());
-        }
 
-        try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, "iso-8859-1"), 8);
             StringBuilder sb = new StringBuilder();
             String line = null;
