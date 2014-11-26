@@ -26,7 +26,7 @@ public class LinkDevice extends BaseAsyncTask{
     @Override
     protected Void doInBackground(Void... params) {
         Log.d(TAG, "doInBackground");
-               EditText editText_login_username = (EditText) activity.findViewById(R.id.login_edittext_username);
+        EditText editText_login_username = (EditText) activity.findViewById(R.id.login_edittext_username);
         String username = editText_login_username.getText().toString();
         EditText editText_login_password = (EditText) activity.findViewById(R.id.login_edittext_password);
         String password = editText_login_password.getText().toString();
@@ -35,7 +35,7 @@ public class LinkDevice extends BaseAsyncTask{
         addToParams("password", password);
         addToParams("mac_address", getDefaultAdapter().getAddress());
 
-        JSONObject jsonObject = getJSONFromUrl(URL);
+        JSONObject jsonObject = getJSONFromUrl(URL, Responses.POST);
         Log.d(TAG, this.statusCode + "");
 
         return null;

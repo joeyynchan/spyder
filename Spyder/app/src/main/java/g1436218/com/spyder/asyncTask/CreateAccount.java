@@ -36,7 +36,7 @@ public class CreateAccount extends BaseAsyncTask {
 
         addToParams("user_name", username);
         addToParams("password", password);
-        JSONObject jsonObject = getJSONFromUrl(URL);
+        JSONObject jsonObject = getJSONFromUrl(URL, Responses.POST);
 
         return null;
     }
