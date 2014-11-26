@@ -10,6 +10,7 @@ import os
 
 from flask import (
     Flask,
+    json,
     request,
     session,
     render_template,
@@ -132,7 +133,7 @@ def logout():
 def dashboard():
     if not is_currently_login():
         return redirect_to_default(
-            'You need to login in order to see user profile.')
+            'You need to login in order to see dashboard.')
     else:
         # TODO(gunpinyo): fix this
         param_dict = session.pop('next_page_param_dict')
@@ -175,36 +176,45 @@ def user_profile(user_id=None):
         return redirect_to_default(user_dict['error_message'])
 
 
-@app.route('/event/profile/<int:event_id>', methods=['GET'])
-def event_profile(event_id=None):
+@app.route('/event/profile/<event_id>', methods=['GET'])
+def event_profile(event_id):
     if not is_currently_login():
         return redirect_to_default(
             'You need to login in order to see event profile.')
 
-    event_dict = db_api.get_event(event_id)
+    # TODO(gunpinyo): re-enable this
+    # event_dict = db_api.get_event(event_id)
 
-    if event_dict['is_success']:
-        param_dict = {
-            'event_record': event_dict['event_record'],
-            'event_member_table': [
-                {
-                    'user_id': user_id,
-                    'username': db_api.get_name_user(user_id),
-                    'role': role,
-                    'status': status
-                }
-                for status, helper_1
-                in event_dict['event_record']['members'].items()
-                for role, helper_2 in helper_1.items()
-                for user_id in helper_2
-            ]
-        }
-        param_dict.update(session.pop('next_page_param_dict', {}))
+    # if event_dict['is_success']:
+    #     param_dict = {
+    #         'event_record': event_dict['event_record'],
+    #         'event_member_table': [
+    #             {
+    #                 'user_id': user_id,
+    #                 'username': db_api.get_name_user(user_id),
+    #                 'role': role,
+    #                 'status': status
+    #             }
+    #             for status, helper_1
+    #             in event_dict['event_record']['members'].items()
+    #             for role, helper_2 in helper_1.items()
+    #             for user_id in helper_2
+    #         ]
+    #     }
+    #     param_dict.update(session.pop('next_page_param_dict', {}))
 
-        return render_template('event_profile.html.jinja', **param_dict)
+    #     return render_template('event_profile.html.jinja', **param_dict)
 
-    else:
-        return redirect_to_default(event_dict['error_message'])
+    # else:
+    #     return redirect_to_default(event_dict['error_message'])
+
+    return render_template('event_profile.html.jinja', event_id=event_id)
+
+
+@app.route('/xhr/event_interaction/<event_id>', methods=['GET'])
+def xhr_get_event_interaction(event_id):
+    return json.jsonify(db_api.xhr_get_event_interaction(event_id))
+
 
 # @app.route('/ajax/conferences', methods=['GET'])
 # def get_list_conferences():

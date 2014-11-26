@@ -59,6 +59,14 @@ def login(username, hashed_password):
     return response_dict[status_code]
 
 
+def xhr_get_event_interaction(event_id):
+    status_code, content = db_connect(
+        '/event/interaction?event_id=%s' % event_id)
+    if status_code == http.client.OK:
+        return content
+    elif status_code == http.client.NOT_FOUND:
+        return None
+
 # def get_user(username):
 #     status_code, response_dict = db_connect(
 #         '/user/profile?user_id={%s}' % username)
