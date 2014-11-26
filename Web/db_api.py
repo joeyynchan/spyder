@@ -1,334 +1,240 @@
-# TODO(gunpinyo): setup db connection
-
-login_db = {
-    'alice': {
-        'user_id': 0,
-        'hashed_password': 'pwaaaeiei'
-    },
-    'bob': {
-        'user_id': 1,
-        'hashed_password': 'pwbbbeiei'
-    },
-    'charlie': {
-        'user_id': 2,
-        'hashed_password': 'pwccceiei'
-    },
-}
-
-user_db = {
-    0: {
-        'user_id': 0,
-        'username': 'alice',
-        'name': 'Miss Alice Ant',
-        'gender': 'female',
-        'occupation': 'student',
-        'organization': 'Imperial College London',
-        'picture': '...',
-        'email': '...',
-        'phone': '...',
-        'external_link': 'www.example.com/alice',
-        'events': {
-            'accepted': {
-                'organizer': [0],
-                'speaker': [],
-                'attendee': [1, 2]
-            },
-            'requested': {
-                'speaker': [],
-                'attendee': []
-            },
-            'invited': {
-                'speaker': [],
-                'attendee': []
-            }
-        }
-    },
-    1: {
-        'user_id': 1,
-        'username': 'bob',
-        'name': 'Mr Bob Bird',
-        'gender': 'male',
-        'occupation': 'student',
-        'organization': 'Imperial College London',
-        'picture': '...',
-        'email': '...',
-        'phone': '...',
-        'external_link': 'www.example.com/alice',
-        'events': {
-            'accepted': {
-                'organizer': [1, 2],
-                'speaker': [],
-                'attendee': [0]
-            },
-            'requested': {
-                'speaker': [],
-                'attendee': []
-            },
-            'invited': {
-                'speaker': [],
-                'attendee': []
-            }
-        }
-    },
-    2: {
-        'user_id': 2,
-        'username': 'charlie',
-        'name': 'Mr Charlie Cat',
-        'gender': 'male',
-        'occupation': 'student',
-        'organization': 'Imperial College London',
-        'picture': '...',
-        'email': '...',
-        'phone': '...',
-        'external_link': 'www.example.com/alice',
-        'events': {
-            'accepted': {
-                'organizer': [],
-                'speaker': [],
-                'attendee': [0, 2]
-            },
-            'requested': {
-                'speaker': [],
-                'attendee': []
-            },
-            'invited': {
-                'speaker': [],
-                'attendee': []
-            }
-        }
-    },
-}
-
-
-event_db = {
-    0: {
-        'event_id': 0,
-        'name': 'first conference',
-        'start_time': '1900-01-01T10:00:00Z',
-        'end_time': '1900-01-01T10:30:00Z',
-        'location': 'somewhere on earth',
-        'description': 'as I told you, this is the first',
-        'members': {
-            'accepted': {
-                'organizer': [0],
-                'speaker': [],
-                'attendee': [1, 2]
-            },
-            'requested': {
-                'speaker': [],
-                'attendee': []
-            },
-            'invited': {
-                'speaker': [],
-                'attendee': []
-            }
-        }
-    },
-    1: {
-        'event_id': 1,
-        'name': 'ACM Hypertext 2009',
-        'start_time': '1900-02-01T10:00:00Z',
-        'end_time': '1900-02-04T10:00:00Z',
-        'location': 'Viale S. Severo 65, Torino, Italy',
-        'description': 'The ACM Hypertext Conference is the main venue'
-                       'for high quality peer-reviewed research on'
-                       '"linking." The Web, the Semantic Web, the Web 2.0,'
-                       'and Social Networks are all manifestations'
-                       'of the success of the link.',
-        'members': {
-            'accepted': {
-                'organizer': [1],
-                'speaker': [],
-                'attendee': [0]
-            },
-            'requested': {
-                'speaker': [],
-                'attendee': []
-            },
-            'invited': {
-                'speaker': [],
-                'attendee': []
-            }
-        }
-    },
-    2: {
-        'event_id': 2,
-        'name': 'third conference',
-        'start_time': '1200-01-01T10:00:00Z',
-        'end_time': '1200-01-01T10:30:00Z',
-        'location': 'somewhere on earth',
-        'description': 'as I told you, this is the first',
-        'members': {
-            'accepted': {
-                'organizer': [1],
-                'speaker': [],
-                'attendee': [0, 2]
-            },
-            'requested': {
-                'speaker': [],
-                'attendee': []
-            },
-            'invited': {
-                'speaker': [],
-                'attendee': []
-            }
-        }
-    }
-}
+from db_connection import db_connect
+import http
 
 
 def register(
-        username, hashed_password, hashed_confirm_password, name, gender,
-        occupation, organization, picture, email, phone, external_link):
-    if username in login_db.keys():
+        username, hashed_password, hashed_confirm_password):
+    if hashed_password != hashed_confirm_password:
         return {
             'is_success': False,
-            'error_message': 'This username has already taken'
+            'error_message': 'Password and retyped password is not match.'
         }
-    elif hashed_password != hashed_confirm_password:
-        return {
+
+    status_code, _ = db_connect('/register', {
+        'user_name': username,
+        'password': hashed_password,
+    })
+
+    response_dict = {
+        http.client.CREATED: {
+            'is_success': True,
+            'success_message': 'You have successfully registered.'
+        },
+        http.client.CONFLICT: {
             'is_success': False,
-            'error_message': 'This password and password_confirm is not match.'
-        }
-
-    user_id = len(user_db)
-
-    login_db[username] = {
-        'user_id': user_id,
-        'hashed_password': hashed_password
-    }
-
-    user_db[user_id] = {
-        'user_id': user_id,
-        'username': username,
-        'name': name,
-        'gender': gender,
-        'occupation': occupation,
-        'organization': organization,
-        'picture': picture,
-        'email': email,
-        'phone': phone,
-        'external_link': external_link,
-        'events': {
-            'accepted': {
-                'organizer': [],
-                'speaker': [],
-                'attendee': []
-            },
-            'requested': {
-                'speaker': [],
-                'attendee': []
-            },
-            'invited': {
-                'speaker': [],
-                'attendee': []
-            }
+            'error_message': 'This username is already in use by another user.'
         }
     }
 
-    return {
-        'is_success': True,
-        'user_id': user_id
-    }
+    return response_dict[status_code]
 
 
 def login(username, hashed_password):
-    if username not in login_db.keys():
-        return {
-            'is_success': False,
-            'error_message': 'The username is invalid'
-        }
-    elif hashed_password != login_db[username]['hashed_password']:
-        return {
-            'is_success': False,
-            'error_message': 'The password is invalid'
-        }
-    else:
-        return {
+    status_code, _ = db_connect('/login', {
+        'user_name': username,
+        'password': hashed_password,
+        'mac_address': ''  # use for mobile, website parse empty string instead
+    })
+
+    response_dict = {
+        http.client.OK: {
             'is_success': True,
-            'user_id': login_db[username]['user_id']
-        }
-
-
-def create_event(
-        organizer_id, username, name, start_time, end_time,
-        location, description):
-    event_id = len(event_db)
-
-    if organizer_id not in user_db.keys():
-        return {
+            'success_message': 'You have successfully signed in.'
+        },
+        http.client.CREATED: {
+            'is_success': True,
+            'success_message':
+                'You have successfully signed in with new device.'
+        },
+        http.client.NOT_FOUND: {
             'is_success': False,
-            'error_message': 'organizer_id is not valid.'
-        }
-
-    event_db[event_id] = {
-        'event_id': event_id,
-        'username': username,
-        'name': name,
-        'start_time': start_time,
-        'end_time': end_time,
-        'location': location,
-        'description': description,
-        'members': {
-            'accepted': {
-                'organizer': [organizer_id],
-                'speaker': [],
-                'attendee': []
-            },
-            'requested': {
-                'speaker': [],
-                'attendee': []
-            },
-            'invited': {
-                'speaker': [],
-                'attendee': []
-            }
+            'error_message': 'Username or password not found.'
+        },
+        http.client.CONFLICT: {
+            'is_success': False,
+            'error_message': 'You are currently logging in another device'
         }
     }
 
-    return {
-        'is_success': True,
-        'user_id': user_id
-    }
+    return response_dict[status_code]
 
 
-def get_user(user_id):
-    if user_id in user_db.keys():
-        return {
-            'is_success': True,
-            'user_record': user_db[user_id]
-        }
-    else:
-        return {
-            'is_success': False,
-            'error_message': 'This user_id is invalid'
-        }
+# def get_user(username):
+#     status_code, response_dict = db_connect(
+#         '/user/profile?user_id={%s}' % username)
+
+#     response_dict = {
+#         http.client.OK: {
+#             'is_success': True,
+#             'success_message': 'You have successfully signed in.'
+#         },
+#         http.client.CREATED: {
+#             'is_success': True,
+#             'success_message':
+#                 'You have successfully signed in with new device.'
+#         },
+#         http.client.NOT_FOUND: {
+#             'is_success': False,
+#             'error_message': 'Username or password not found.'
+#         },
+#         http.client.CONFLICT: {
+#             'is_success': False,
+#             'error_message': 'You are currently logging in another device'
+#         }
+#     }
+
+#     return response_dict[status_code]
 
 
-def get_name_user(user_id):
-    return (user_db[user_id]['name']
-            if user_id in user_db.keys()
-            else 'unknown')
+# def create_event(
+#         organizer_id, username, name, start_time, end_time,
+#         location, description):
+#     event_id = len(event_db)
+
+#     if organizer_id not in user_db.keys():
+#         return {
+#             'is_success': False,
+#             'error_message': 'organizer_id is not valid.'
+#         }
+
+#     event_db[event_id] = {
+#         'event_id': event_id,
+#         'username': username,
+#         'name': name,
+#         'start_time': start_time,
+#         'end_time': end_time,
+#         'location': location,
+#         'description': description,
+#         'members': {
+#             'accepted': {
+#                 'organizer': [organizer_id],
+#                 'speaker': [],
+#                 'attendee': []
+#             },
+#             'requested': {
+#                 'speaker': [],
+#                 'attendee': []
+#             },
+#             'invited': {
+#                 'speaker': [],
+#                 'attendee': []
+#             }
+#         }
+#     }
+
+#     return {
+#         'is_success': True,
+#         'user_id': user_id
+#     }
 
 
-def get_event(event_id):
-    if event_id in event_db.keys():
-        return {
-            'is_success': True,
-            'event_record': event_db[event_id]
-        }
-    else:
-        return {
-            'is_success': False,
-            'error_message': 'This event_id is invalid'
-        }
+# def get_user(user_id):
+#     if user_id in user_db.keys():
+#         return {
+#             'is_success': True,
+#             'user_record': user_db[user_id]
+#         }
+#     else:
+#         return {
+#             'is_success': False,
+#             'error_message': 'This user_id is invalid'
+#         }
 
 
-def get_name_event(event_id):
-    return (event_db[event_id]['name']
-            if event_id in event_db.keys()
-            else 'unknown')
+# def get_name_user(user_id):
+#     return (user_db[user_id]['name']
+#             if user_id in user_db.keys()
+#             else 'unknown')
 
+
+# def get_event(event_id):
+#     if event_id in event_db.keys():
+#         return {
+#             'is_success': True,
+#             'event_record': event_db[event_id]
+#         }
+#     else:
+#         return {
+#             'is_success': False,
+#             'error_message': 'This event_id is invalid'
+#         }
+
+
+# def get_name_event(event_id):
+#     return (event_db[event_id]['name']
+#             if event_id in event_db.keys()
+#             else 'unknown')
+
+    # register
+    # if IS_DUMMY_DB:
+    #     if username in login_db.keys():
+    #         return {
+    #             'is_success': False,
+    #             'error_message': 'This username has already taken'
+    #         }
+    #     elif hashed_password != hashed_confirm_password:
+    #         return {
+    #             'is_success': False,
+    #             'error_message': 'This password and password_confirm is not match.'
+    #         }
+
+    #     user_id = len(user_db)
+
+    #     login_db[username] = {
+    #         'user_id': user_id,
+    #         'hashed_password': hashed_password
+    #     }
+
+    #     user_db[user_id] = {
+    #         'user_id': user_id,
+    #         'username': username,
+    #         'name': '',
+    #         'gender': '',
+    #         'occupation': '',
+    #         'organization': '',
+    #         'picture': '',
+    #         'email': email,
+    #         'phone': '',
+    #         'external_link': '',
+    #         'events': {
+    #             'accepted': {
+    #                 'organizer': [],
+    #                 'speaker': [],
+    #                 'attendee': []
+    #             },
+    #             'requested': {
+    #                 'speaker': [],
+    #                 'attendee': []
+    #             },
+    #             'invited': {
+    #                 'speaker': [],
+    #                 'attendee': []
+    #             }
+    #         }
+    #     }
+
+    #     return {
+    #         'is_success': True,
+    #         'user_id': user_id
+    #     }
+
+    # login api
+    # if IS_DUMMY_DB:
+    #     if username not in login_db.keys():
+    #         return {
+    #             'is_success': False,
+    #             'error_message': 'The username is invalid'
+    #         }
+    #     elif hashed_password != login_db[username]['hashed_password']:
+    #         return {
+    #             'is_success': False,
+    #             'error_message': 'The password is invalid'
+    #         }
+    #     else:
+    #         return {
+    #             'is_success': True,
+    #             'user_id': login_db[username]['user_id']
+    #         }
 
 # def list_conferences():
 #     """Return dict which are pairs of conference id and conference name """
@@ -374,3 +280,180 @@ def get_name_event(event_id):
 #         # TODO(gunpinyo): to write
 #     }
 #     return switch[user_id]
+
+
+# login_db = {
+#     'alice': {
+#         'user_id': 0,
+#         'hashed_password': 'pwaaaeiei'
+#     },
+#     'bob': {
+#         'user_id': 1,
+#         'hashed_password': 'pwbbbeiei'
+#     },
+#     'charlie': {
+#         'user_id': 2,
+#         'hashed_password': 'pwccceiei'
+#     },
+# }
+
+# user_db = {
+#     0: {
+#         'user_id': 0,
+#         'username': 'alice',
+#         'name': 'Miss Alice Ant',
+#         'gender': 'female',
+#         'occupation': 'student',
+#         'organization': 'Imperial College London',
+#         'picture': '...',
+#         'email': '...',
+#         'phone': '...',
+#         'external_link': 'www.example.com/alice',
+#         'events': {
+#             'accepted': {
+#                 'organizer': [0],
+#                 'speaker': [],
+#                 'attendee': [1, 2]
+#             },
+#             'requested': {
+#                 'speaker': [],
+#                 'attendee': []
+#             },
+#             'invited': {
+#                 'speaker': [],
+#                 'attendee': []
+#             }
+#         }
+#     },
+#     1: {
+#         'user_id': 1,
+#         'username': 'bob',
+#         'name': 'Mr Bob Bird',
+#         'gender': 'male',
+#         'occupation': 'student',
+#         'organization': 'Imperial College London',
+#         'picture': '...',
+#         'email': '...',
+#         'phone': '...',
+#         'external_link': 'www.example.com/alice',
+#         'events': {
+#             'accepted': {
+#                 'organizer': [1, 2],
+#                 'speaker': [],
+#                 'attendee': [0]
+#             },
+#             'requested': {
+#                 'speaker': [],
+#                 'attendee': []
+#             },
+#             'invited': {
+#                 'speaker': [],
+#                 'attendee': []
+#             }
+#         }
+#     },
+#     2: {
+#         'user_id': 2,
+#         'username': 'charlie',
+#         'name': 'Mr Charlie Cat',
+#         'gender': 'male',
+#         'occupation': 'student',
+#         'organization': 'Imperial College London',
+#         'picture': '...',
+#         'email': '...',
+#         'phone': '...',
+#         'external_link': 'www.example.com/alice',
+#         'events': {
+#             'accepted': {
+#                 'organizer': [],
+#                 'speaker': [],
+#                 'attendee': [0, 2]
+#             },
+#             'requested': {
+#                 'speaker': [],
+#                 'attendee': []
+#             },
+#             'invited': {
+#                 'speaker': [],
+#                 'attendee': []
+#             }
+#         }
+#     },
+# }
+
+
+# event_db = {
+#     0: {
+#         'event_id': 0,
+#         'name': 'first conference',
+#         'start_time': '1900-01-01T10:00:00Z',
+#         'end_time': '1900-01-01T10:30:00Z',
+#         'location': 'somewhere on earth',
+#         'description': 'as I told you, this is the first',
+#         'members': {
+#             'accepted': {
+#                 'organizer': [0],
+#                 'speaker': [],
+#                 'attendee': [1, 2]
+#             },
+#             'requested': {
+#                 'speaker': [],
+#                 'attendee': []
+#             },
+#             'invited': {
+#                 'speaker': [],
+#                 'attendee': []
+#             }
+#         }
+#     },
+#     1: {
+#         'event_id': 1,
+#         'name': 'ACM Hypertext 2009',
+#         'start_time': '1900-02-01T10:00:00Z',
+#         'end_time': '1900-02-04T10:00:00Z',
+#         'location': 'Viale S. Severo 65, Torino, Italy',
+#         'description': 'The ACM Hypertext Conference is the main venue'
+#                        'for high quality peer-reviewed research on'
+#                        '"linking." The Web, the Semantic Web, the Web 2.0,'
+#                        'and Social Networks are all manifestations'
+#                        'of the success of the link.',
+#         'members': {
+#             'accepted': {
+#                 'organizer': [1],
+#                 'speaker': [],
+#                 'attendee': [0]
+#             },
+#             'requested': {
+#                 'speaker': [],
+#                 'attendee': []
+#             },
+#             'invited': {
+#                 'speaker': [],
+#                 'attendee': []
+#             }
+#         }
+#     },
+#     2: {
+#         'event_id': 2,
+#         'name': 'third conference',
+#         'start_time': '1200-01-01T10:00:00Z',
+#         'end_time': '1200-01-01T10:30:00Z',
+#         'location': 'somewhere on earth',
+#         'description': 'as I told you, this is the first',
+#         'members': {
+#             'accepted': {
+#                 'organizer': [1],
+#                 'speaker': [],
+#                 'attendee': [0, 2]
+#             },
+#             'requested': {
+#                 'speaker': [],
+#                 'attendee': []
+#             },
+#             'invited': {
+#                 'speaker': [],
+#                 'attendee': []
+#             }
+#         }
+#     }
+# }

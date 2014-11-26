@@ -1,5 +1,9 @@
 {% extends 'privileged_base.html.jinja' %}
 
+{% block title %}
+  <title>user profile of {{user_record['username']}}</title>
+{% endblock %}
+
 {% block privileged_base_content %}
   <div class="panel panel-default">
     <div class="panel-heading">
@@ -25,13 +29,13 @@
     </div>
     <table class="table table-hover">
       <tr>
-        <th>#</th>
+        <th>Event ID</th>
         <th>Event name</th>
         <th>Role</th>
         <th>Status</th>
       </tr>
       {% for event_record in user_event_table %}
-        <tr>
+        <tr class="clickable-row" href="/event/profile/{{ event_record['event_id'] }}">
           <td>{{ event_record['event_id'] }}</td>
           <td>{{ event_record['event_name'] }}</td>
           <td>{{ event_record['role'] }}</td>

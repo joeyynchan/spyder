@@ -53,5 +53,11 @@
 
     {% block base_content %}
     {% endblock %}
+
+    <script>
+      $(".clickable-row").click(function() {
+            window.document.location = $(this).attr("href");
+      });
+    </script>
   </body>
 </html>

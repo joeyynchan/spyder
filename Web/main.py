@@ -22,12 +22,8 @@ import db_api
 app = Flask(__name__)
 
 
-@app.route('/', methods=['GET'])
-def index():
-    if 'current_user_id' in session:
-        return redirect(url_for('dashboard'))
-    else:
-        return redirect(url_for('welcome_page'))
+def is_currently_login():
+    return 'current_user_username' in session
 
 
 @app.route('/static/<path:filepath>', methods=['GET'])
@@ -35,10 +31,28 @@ def serve_static(filepath):
     return app.send_static_file(filepath)
 
 
+def redirect_to_default(error_message=None):
+    if error_message is not None:
+        session['next_page_param_dict'] = {
+            'error_message': error_message
+        }
+
+    if is_currently_login():
+        return redirect(url_for('dashboard'))
+    else:
+        return redirect(url_for('welcome_page'))
+
+
+@app.route('/', methods=['GET'])
+def index():
+    return redirect_to_default()
+
+
 @app.route('/welcome', methods=['GET'])
 def welcome_page():
-    # TODO(gunpinyo): change to assertion to redirection
-    assert ('current_user_id' not in session)
+    if is_currently_login():
+        return redirect_to_default(
+            'You need to logout in order to go to welcome page.')
 
     param_dict = session.pop('next_page_param_dict', {})
     return render_template('welcome.html.jinja', **param_dict)
@@ -46,8 +60,9 @@ def welcome_page():
 
 @app.route('/register', methods=['GET'])
 def register_page():
-    # TODO(gunpinyo): change to assertion to redirection
-    assert ('current_user_id' not in session)
+    if is_currently_login():
+        return redirect_to_default(
+            'You need to logout in order to go to register page.')
 
     param_dict = session.pop('next_page_param_dict', {})
     return render_template('register.html.jinja', **param_dict)
@@ -55,42 +70,32 @@ def register_page():
 
 @app.route('/register', methods=['POST'])
 def register():
-    # TODO(gunpinyo): change to assertion to redirection
-    assert ('current_user_id' not in session)
+    if is_currently_login():
+        return redirect_to_default(
+            'You need to logout in order to register.')
 
     param_dict = {
         'username': request.form['username'],
         'hashed_password': request.form['password'],
         'hashed_confirm_password': request.form['confirm_password'],
-        'name': request.form['name'],
-        'gender': request.form['gender'],
-        'occupation': request.form['occupation'],
-        'organization': request.form['organization'],
-        'picture': request.form['picture'],
-        'email': request.form['email'],
-        'phone': request.form['phone'],
-        'external_link': request.form['external_link']
     }
 
     register_dict = db_api.register(**param_dict)
 
     if(register_dict['is_success']):
-        session['current_user_id'] = register_dict['user_id']
-        session['next_page_param_dict'] = {
-            'success_message': 'You have successfully registered.'
-        }
+        session['current_user_username'] = param_dict['username']
+        session['next_page_param_dict'] = register_dict
         return redirect(url_for('dashboard'))
     else:
-        session['next_page_param_dict'] = {
-            'error_message': register_dict['error_message']
-        }
+        session['next_page_param_dict'] = register_dict
         return redirect(url_for('register_page'))
 
 
 @app.route('/login', methods=['POST'])
 def login():
-    # TODO(gunpinyo): change to assertion to redirection
-    assert ('current_user_id' not in session)
+    if is_currently_login():
+        return redirect_to_default(
+            'You need to logout in order to login.')
 
     param_dict = {
         'username': request.form['username'],
@@ -100,22 +105,19 @@ def login():
     login_dict = db_api.login(**param_dict)
 
     if(login_dict['is_success']):
-        session['current_user_id'] = login_dict['user_id']
-        session['next_page_param_dict'] = {
-            'success_message': 'You have successfully signed in.'
-        }
+        session['current_user_username'] = param_dict['username']
+        session['next_page_param_dict'] = login_dict
         return redirect(url_for('dashboard'))
     else:
-        session['next_page_param_dict'] = {
-            'error_message': login_dict['error_message']
-        }
+        session['next_page_param_dict'] = login_dict
         return redirect(url_for('welcome_page'))
 
 
 @app.route('/logout', methods=['POST'])
 def logout():
-    # TODO(gunpinyo): change to assertion to redirection
-    assert ('current_user_id' in session)
+    if not is_currently_login():
+        return redirect_to_default(
+            'You need to login in order to logout.')
 
     # TODO(gunpiyo): research how to disable undo cache after logout
     session.clear()
@@ -128,45 +130,81 @@ def logout():
 
 @app.route('/dashboard', methods=['GET'])
 def dashboard():
-    # TODO(gunpinyo): (low-priority) implement a proper dashboard
-    return redirect(url_for('user_profile'))
+    if not is_currently_login():
+        return redirect_to_default(
+            'You need to login in order to see user profile.')
+    else:
+        # TODO(gunpinyo): fix this
+        param_dict = session.pop('next_page_param_dict')
+        return render_template('privileged_base.html.jinja', **param_dict)
+        # return redirect(url_for('user_profile'))
 
 
 @app.route('/user/profile', methods=['GET'])
 @app.route('/user/profile/<int:user_id>', methods=['GET'])
 def user_profile(user_id=None):
-    # TODO(gunpinyo): change to assertion to redirection
-    assert ('current_user_id' in session)
+    if not is_currently_login():
+        return redirect_to_default(
+            'You need to login in order to see user profile.')
 
     if user_id is None:
-        user_id = session['current_user_id']
+        user_id = session['current_user_username']
 
     user_dict = db_api.get_user(user_id)
 
-    # if not user_dict['is_success']:
-    #     session['next_page_param_dict'] = {
-    #         'error_message': user_dict['error_message']
-    #     }
+    if user_dict['is_success']:
+        param_dict = {
+            'user_record': user_dict['user_record'],
+            'user_event_table': [
+                {
+                    'event_id': event_id,
+                    'event_name': db_api.get_name_event(event_id),
+                    'role': role,
+                    'status': status
+                }
+                for status, helper_1 in user_dict['user_record']['events'].items()
+                for role, helper_2 in helper_1.items()
+                for event_id in helper_2
+            ]
+        }
+        param_dict.update(session.pop('next_page_param_dict', {}))
 
-    param_dict = {
-        'user_id': user_id,
-        'user_record': user_dict['user_record'],
-        'user_event_table': [
-            {
-                'event_id': event_id,
-                'event_name': db_api.get_name_event(event_id),
-                'role': role,
-                'status': status
-            }
-            for status, helper_1 in user_dict['user_record']['events'].items()
-            for role, helper_2 in helper_1.items()
-            for event_id in helper_2
-        ]
-    }
-    param_dict.update(session.pop('next_page_param_dict', {}))
+        return render_template('user_profile.html.jinja', **param_dict)
 
-    return render_template('user_profile.html.jinja', **param_dict)
+    else:
+        return redirect_to_default(user_dict['error_message'])
 
+
+@app.route('/event/profile/<int:event_id>', methods=['GET'])
+def event_profile(event_id=None):
+    if not is_currently_login():
+        return redirect_to_default(
+            'You need to login in order to see event profile.')
+
+    event_dict = db_api.get_event(event_id)
+
+    if event_dict['is_success']:
+        param_dict = {
+            'event_record': event_dict['event_record'],
+            'event_member_table': [
+                {
+                    'user_id': user_id,
+                    'username': db_api.get_name_user(user_id),
+                    'role': role,
+                    'status': status
+                }
+                for status, helper_1
+                in event_dict['event_record']['members'].items()
+                for role, helper_2 in helper_1.items()
+                for user_id in helper_2
+            ]
+        }
+        param_dict.update(session.pop('next_page_param_dict', {}))
+
+        return render_template('event_profile.html.jinja', **param_dict)
+
+    else:
+        return redirect_to_default(event_dict['error_message'])
 
 # @app.route('/ajax/conferences', methods=['GET'])
 # def get_list_conferences():
