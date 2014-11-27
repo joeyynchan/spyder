@@ -9,18 +9,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
 
 import g1436218.com.spyder.R;
-import g1436218.com.spyder.adapter.AttendeeAdapter;
 import g1436218.com.spyder.asyncTask.DisplayMacAddress;
 import g1436218.com.spyder.asyncTask.FetchAttendee;
 import g1436218.com.spyder.asyncTask.SubmitBluetoothData;
@@ -50,6 +46,7 @@ public class MainActivity extends BaseActivity {
     private Button button_attendee;
     private Button button_interaction;
     private Button button_event_list;
+    private Button button_bluetoothService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,11 +63,6 @@ public class MainActivity extends BaseActivity {
         intentFilter.addAction(BluetoothDiscovery.SEND_DATA);
         registerReceiver(receiver, intentFilter);
 
-        /* Set Device always discoverable */
-        Intent discoverableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
-        discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 0);
-        startActivity(discoverableIntent);
-
         new DisplayMacAddress(this).execute();   /*Display Device Information */
     }
 
@@ -78,8 +70,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onStart() {
         /* Start BluetoothDiscovery Service */
-        bluetoothDiscoveryIntent = new Intent(getBaseContext(), BluetoothDiscovery.class);
-        startService(bluetoothDiscoveryIntent);
+        //startBluetoothDiscoveryService();
 
         new FetchAttendee(this).execute();
         super.onStart();
@@ -88,7 +79,7 @@ public class MainActivity extends BaseActivity {
     /* Turns off BluetoothDiscovery when switching from MainAcitivity to other activities */
     @Override
     protected void onDestroy() {
-        stopService(bluetoothDiscoveryIntent);      /* Stop BluetoothDiscovery Service */
+        //stopBluetoothDiscoveryService();
         unregisterReceiver(receiver);                  /* Unregister Receiver */
         super.onStop();
     }
@@ -103,6 +94,10 @@ public class MainActivity extends BaseActivity {
         button_attendee.setOnClickListener(this);
         button_interaction.setOnClickListener(this);
         button_event_list.setOnClickListener(this);
+
+        /* Temp */
+        button_bluetoothService = (Button) findViewById(R.id.button_activity_main_bluetoothService);
+        button_bluetoothService.setOnClickListener(this);
     }
 
     @Override
@@ -140,6 +135,7 @@ public class MainActivity extends BaseActivity {
             case R.id.button_attendee: showAttendees(); break;
             case R.id.button_interaction: showInteractions(); break;
             case R.id.button_event_list: showEventList(); break;
+            case R.id.button_activity_main_bluetoothService: bluetoothService(); break;
             default: break;
         }
     }
@@ -267,6 +263,34 @@ public class MainActivity extends BaseActivity {
 
     public ArrayList<Attendee> getAttendees() {
         return attendees;
+    }
+
+    /* Bluetooth Discovery Service */
+
+    private void startBluetoothDiscoveryService() {
+
+        /* Set Device always discoverable */
+        Intent discoverableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
+        discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 0);
+        startActivity(discoverableIntent);
+
+        bluetoothDiscoveryIntent = new Intent(getBaseContext(), BluetoothDiscovery.class);
+        startService(bluetoothDiscoveryIntent);
+    }
+
+    private void stopBluetoothDiscoveryService() {
+        BluetoothAdapter.getDefaultAdapter().disable();
+        stopService(bluetoothDiscoveryIntent);      /* Stop BluetoothDiscovery Service */
+    }
+
+    private void bluetoothService() {
+        if (button_bluetoothService.getText().toString().equals("Start Service")) {
+            startBluetoothDiscoveryService();
+            button_bluetoothService.setText("Stop Service");
+        } else {
+            stopBluetoothDiscoveryService();
+            button_bluetoothService.setText("Start Service");
+        }
     }
 
 }

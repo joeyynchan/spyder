@@ -49,7 +49,7 @@ public class BluetoothDiscovery extends Service {
                 }
 
             } else if (BluetoothAdapter.ACTION_DISCOVERY_STARTED.equals(action)) {
-                //Log.i ("BluetoothDiscovery", "START_DISCOVERY");
+                Log.i ("BluetoothDiscovery", "START_DISCOVERY");
 
             } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
                 //Log.i ("BluetoothDiscovery", "FINISH_DISCOVERY");

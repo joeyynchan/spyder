@@ -20,6 +20,15 @@
             android:id="@+id/textview_device_information"
             android:singleLine="false" />
 
+        <Button
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:text="Start Service"
+            android:id="@+id/button_activity_main_bluetoothService"
+            android:textColor="#ffffffff"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true" />
+
     </RelativeLayout>
 
 
