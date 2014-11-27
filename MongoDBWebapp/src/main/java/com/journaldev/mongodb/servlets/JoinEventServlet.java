@@ -28,6 +28,7 @@ public class JoinEventServlet extends HttpServlet {
 		}
 
 		try {
+			System.out.println(json);
 			JSONObject jsonObj = new JSONObject(json);
 			String user_id = (String) jsonObj.get("user_id");
 			String status = (String) jsonObj.get("status");
