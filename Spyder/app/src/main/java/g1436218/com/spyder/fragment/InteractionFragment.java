@@ -11,17 +11,20 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import g1436218.com.spyder.R;
 import g1436218.com.spyder.activity.MainActivity;
 import g1436218.com.spyder.adapter.InteractionAdapter;
+import g1436218.com.spyder.asyncTask.FetchUserProfile;
 import g1436218.com.spyder.asyncTask.SubmitBluetoothData;
+import g1436218.com.spyder.object.Attendee;
 import g1436218.com.spyder.object.Interaction;
 import g1436218.com.spyder.service.BluetoothDiscovery;
 
-public class InteractionFragment extends BaseMainFragment {
+public class InteractionFragment extends BaseMainFragment implements AdapterView.OnItemClickListener {
 
     private final String TITLE = "Ongoing Interactions";
 
@@ -48,6 +51,7 @@ public class InteractionFragment extends BaseMainFragment {
         this.adapter = new InteractionAdapter(getActivity(), R.layout.listview_interaction);
         ListView listview_interactions = (ListView) getActivity().findViewById(R.id.listview_interaction_list);
         listview_interactions.setAdapter(adapter);
+        listview_interactions.setOnItemClickListener(this);
         adapter.addAllToAdapter(activity.getInteractions());
     }
 
@@ -55,6 +59,12 @@ public class InteractionFragment extends BaseMainFragment {
     public void onPause() {
         getActivity().unregisterReceiver(receiver);
         super.onPause();
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Interaction item = (Interaction) parent.getItemAtPosition(position);
+        new FetchUserProfile(activity, item.getUsername()).execute();
     }
 
     private class UIUpdateReceiver extends BroadcastReceiver {

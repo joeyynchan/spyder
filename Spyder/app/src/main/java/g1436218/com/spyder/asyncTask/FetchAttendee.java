@@ -42,7 +42,6 @@ public class FetchAttendee extends BaseMainAsyncTask {
 
     @Override
     protected Void doInBackground(Void... params) {
-        //result = getStringFromUrl(URL, Responses.POST);
 
         /* Dummy response since the API is not ready; */
         //result = "{\"user_mappings\":[{\"mac_address\":\"38:2D:D1:1B:09:2A\",\"user_name\":\"Joey\"},{\"mac_address\":\"F0:E7:7E:52:57:3E\",\"user_name\":\"Joey2\"},{\"mac_address\":\"54:27:1E:AB:B7:5A\",\"user_name\":\"Cherie-PC\"},{\"mac_address\":\"98:6D:2E:BD:E9:87\",\"user_name\":\"Cherie\"},{\"mac_address\":\"48:74:6E:75:64:75\",\"user_name\":\"Joey3\"}]}";

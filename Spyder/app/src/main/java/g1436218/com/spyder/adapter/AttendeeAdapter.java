@@ -23,7 +23,6 @@ import g1436218.com.spyder.object.UserMap;
 public class AttendeeAdapter extends ArrayAdapter<Attendee> {
 
     private Context context;
-    private ArrayList<Attendee> items;
 
     public AttendeeAdapter(Context context, int resourceId) {
         super(context, resourceId);

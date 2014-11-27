@@ -24,6 +24,7 @@ public class BluetoothDiscovery extends Service {
     public static final String RESET_LIST = "RESET_LIST";
     public static final String SEND_DATA = "SEND_DATA";
     public static final String UPDATE_ADAPTER = "UPDATE_ADAPTER";
+    public static final String SET_DISCOVERABLE = "SET_DISCOVERABLE";
 
     private final String TAG = "BluetoothDiscovery";
 

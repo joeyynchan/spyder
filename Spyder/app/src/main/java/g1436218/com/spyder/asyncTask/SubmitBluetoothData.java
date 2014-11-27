@@ -1,5 +1,7 @@
 package g1436218.com.spyder.asyncTask;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -10,25 +12,34 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 
+import g1436218.com.spyder.R;
 import g1436218.com.spyder.activity.MainActivity;
 import g1436218.com.spyder.config.GlobalConfiguration;
 import g1436218.com.spyder.object.Interaction;
+import g1436218.com.spyder.object.InteractionPackage;
+import g1436218.com.spyder.object.Interactions;
 
 public class SubmitBluetoothData extends BaseMainAsyncTask{
 
     private static String TAG = "SubmitBluetoothData";
     private static String URL = GlobalConfiguration.DEFAULT_URL + "submit_data";
-    private ArrayList<HashSet<Interaction>> interactionsArray;
+    private InteractionPackage interactionPackage;
 
-    public SubmitBluetoothData(MainActivity activity, ArrayList<HashSet<Interaction>> interactionsArray) {
+    public SubmitBluetoothData(MainActivity activity, InteractionPackage interactionPackage) {
         super(activity);
-        this.interactionsArray = interactionsArray;
+        this.interactionPackage = interactionPackage;
     }
 
 
     @Override
     protected Void doInBackground(Void... params) {
-        addToParams("user_name", GlobalConfiguration.USER_NAME);
+
+        Context context = activity;
+        SharedPreferences sharedPref = context.getSharedPreferences(
+                context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        String username = sharedPref.getString(context.getString(R.string.username), "");
+
+        addToParams("user_name", username);
         addToParams("event_id", GlobalConfiguration.EVENT_ID);
         addToParams("time_interval", Integer.toString(GlobalConfiguration.BLUETOOTH_TIME_INTERVAL));
         addToParams("data", convertListToJSONArray());
@@ -41,10 +52,10 @@ public class SubmitBluetoothData extends BaseMainAsyncTask{
     }
 
     private JSONArray convertListToJSONArray() {
-        Iterator<HashSet<Interaction>> iterator = interactionsArray.iterator();
+        Iterator<Interactions> iterator = interactionPackage.iterator();
         JSONArray array = new JSONArray();
         while(iterator.hasNext()) {
-            HashSet<Interaction> interactions = iterator.next();
+            Interactions interactions = iterator.next();
             JSONArray subArray = convertSetToJSONArray(interactions);
             array.put(subArray);
         }
