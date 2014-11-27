@@ -28,17 +28,6 @@ public class AttendeeAdapter extends ArrayAdapter<Attendee> {
     public AttendeeAdapter(Context context, int resourceId) {
         super(context, resourceId);
         this.context = context;
-        updateItem();
-    }
-
-    private void updateItem() {
-        Iterator iterator = UserMap.getInstance().keySet().iterator();
-        while (iterator.hasNext()) {
-            String key = (String) iterator.next();
-            String value = UserMap.getInstance().get(key);
-            add(new Attendee(key, value));
-        }
-        notifyDataSetChanged();
     }
 
     public View getView(int position, View convertView, ViewGroup parent){
@@ -51,7 +40,7 @@ public class AttendeeAdapter extends ArrayAdapter<Attendee> {
         TextView username = (TextView) v.findViewById(R.id.textview_listview_attendees_username);
 
         Attendee item = getItem(position);
-        username.setText(item.getUsername());
+        username.setText(item.getUsername() + " (" +item.getMacAddress() + ")");
 
         return v;
     }
