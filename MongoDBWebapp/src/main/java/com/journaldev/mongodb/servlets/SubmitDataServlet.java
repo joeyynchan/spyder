@@ -33,8 +33,6 @@ public class SubmitDataServlet extends HttpServlet {
 			HttpServletResponse response) throws IOException {
 
 		boolean success = false;
-		String user_name = request.getParameter("user_name");
-		String event_id = request.getParameter("event_id");
 
 		BufferedReader br = new BufferedReader(new InputStreamReader(
 				request.getInputStream()));
@@ -42,39 +40,44 @@ public class SubmitDataServlet extends HttpServlet {
 		if (br != null) {
 			json = br.readLine();
 		}
+		try {
+			JSONObject jsonObj = new JSONObject(json);
+			System.out.println(json);
+			String user_name = (String) jsonObj.get("user_name");
+			String event_id = (String) jsonObj.get("event_id");
 
-		MongoClient mongo = (MongoClient) request.getServletContext()
-				.getAttribute("MONGO_CLIENT");
-		MongoDBUsersDAO userDAO = new MongoDBUsersDAO(mongo);
+			MongoClient mongo = (MongoClient) request.getServletContext()
+					.getAttribute("MONGO_CLIENT");
+			MongoDBUsersDAO userDAO = new MongoDBUsersDAO(mongo);
 
-		boolean user_attended = false;
-		MongoDBEventDAO eventDAO = new MongoDBEventDAO(mongo);
-		List<String> user_name_list = eventDAO.getAllUsersIDEvent(event_id);
-		List<User> user_list = userDAO.getAllUsers(user_name_list);
+			boolean user_attended = false;
+			MongoDBEventDAO eventDAO = new MongoDBEventDAO(mongo);
+			List<String> user_name_list = eventDAO.getAllUsersIDEvent(event_id);
+			List<User> user_list = userDAO.getAllUsers(user_name_list);
 
-		for (User user : user_list) {
-			if (user.getUserName().equals(user_name)) {
-				user_attended = true;
-				break;
+			for (User user : user_list) {
+				if (user.getUserName().equals(user_name)) {
+					user_attended = true;
+					break;
+				}
 			}
-		}
 
-		if (userDAO.getUserByName(user_name) != null && user_attended) {
-			try {
-				System.out.println(json);
-				JSONObject jsonObj = new JSONObject(json);
+			if (userDAO.getUserByName(user_name) != null && user_attended) {
+
+				System.out.println("USER HAS ATTENDED");
 				JSONArray data = (JSONArray) jsonObj.get("data");
 				Integer time_interval = Integer.parseInt((String) jsonObj
 						.get("time_interval"));
 
 				List<List<Pair<String, Integer>>> strengths = new ArrayList<List<Pair<String, Integer>>>();
 				for (int i = 0; i < data.length(); i++) {
-					List<Pair<String,Integer>> inner_strengths = new ArrayList<Pair<String,Integer>>();
-					JSONArray inner_data = (JSONArray)data.get(i);
-					for(int j=0; j<inner_data.length();j++){
-						inner_strengths.add(new Pair<String, Integer>(inner_data.getJSONObject(
-								j).getString("user_name"), inner_data.getJSONObject(j)
-								.getInt("strength")));
+					List<Pair<String, Integer>> inner_strengths = new ArrayList<Pair<String, Integer>>();
+					JSONArray inner_data = (JSONArray) data.get(i);
+					for (int j = 0; j < inner_data.length(); j++) {
+						inner_strengths.add(new Pair<String, Integer>(
+								inner_data.getJSONObject(j).getString(
+										"user_name"), inner_data.getJSONObject(
+										j).getInt("strength")));
 					}
 					strengths.add(inner_strengths);
 				}
@@ -85,13 +88,13 @@ public class SubmitDataServlet extends HttpServlet {
 				dataDAO.createData(interaction_data);
 				success = true;
 
-			} catch (JSONException exp) {
-				System.out.println("INVALID JSON OBJECT !!");
-				exp.printStackTrace();
+			} else {
+				success = false;
 			}
 
-		} else {
-			success = false;
+		} catch (JSONException exp) {
+			System.out.println("INVALID JSON OBJECT !!");
+			exp.printStackTrace();
 		}
 
 		response.setContentType("application/json");
@@ -110,5 +113,4 @@ public class SubmitDataServlet extends HttpServlet {
 		printout.flush();
 
 	}
-
 }

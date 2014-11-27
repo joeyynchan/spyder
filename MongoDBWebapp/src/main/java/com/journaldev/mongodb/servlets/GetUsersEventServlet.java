@@ -40,6 +40,7 @@ public class GetUsersEventServlet extends HttpServlet {
 		List<String> user_name_list = eventDAO.getAllUsersIDEvent(event_id);
 		System.out.println(user_name_list);
 		List<User> user_list = mobileDAO.getAllUsers(user_name_list);
+		System.out.println(user_list);
 
 		response.setContentType("application/json");
 		response.setHeader("Cache-Control", "nocache");
@@ -51,7 +52,8 @@ public class GetUsersEventServlet extends HttpServlet {
 		for (User mob_user : user_list) {
 			JSONObject jo = new JSONObject();
 			try {
-				jo.put("mac_address", mob_user.getMacAddress());
+				String mac_address = mob_user.getMacAddress() == null ? "" : mob_user.getMacAddress();
+				jo.put("mac_address", mac_address);
 				jo.put("user_name", mob_user.getUserName());
 			} catch (JSONException e) {
 			}

@@ -18,13 +18,15 @@ import com.journaldev.mongodb.dao.MongoDBUsersDAO;
 import com.journaldev.mongodb.model.User;
 import com.mongodb.MongoClient;
 
-@WebServlet("/login")
-public class LoginServlet extends HttpServlet {
+/**
+ * Servlet implementation class DeAllocateUserServlet
+ */
+@WebServlet("/UnlinkUser")
+public class UnlinkUserServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+       
 
-	protected void doPost(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
-
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		boolean operation = false;
 		BufferedReader br = new BufferedReader(new InputStreamReader(
 				request.getInputStream()));
@@ -41,13 +43,12 @@ public class LoginServlet extends HttpServlet {
 			JSONObject jsonObj = new JSONObject(json);
 			String user_name = (String) jsonObj.get("user_name");
 			String password = (String) jsonObj.get("password");
-			String mac_address = (String) jsonObj.get("mac_address");
 
 			MongoClient mongo = (MongoClient) request.getServletContext()
 					.getAttribute("MONGO_CLIENT");
 			MongoDBUsersDAO muDAO = new MongoDBUsersDAO(mongo);
 			User login_user = muDAO.getUserByQuery(user_name, password);
-			System.out.println("Login User: " + login_user);
+			System.out.println(login_user);
 
 
             if (login_user == null || !login_user.getPassword().endsWith(password)) {
@@ -56,18 +57,14 @@ public class LoginServlet extends HttpServlet {
             }
 
 			if (login_user != null && login_user.getMacAddress() == null) {
-                login_user.setMacAddress(mac_address);
-                muDAO.updateUser(login_user);
                 operation = true;
-                response.sendError(HttpServletResponse.SC_CREATED);
-            } else if (login_user != null && login_user.getPassword().endsWith(password)
-                    && !login_user.getMacAddress().equals(mac_address)) {
-                response.sendError(HttpServletResponse.SC_CONFLICT);
-                return;
+                response.sendError(HttpServletResponse.SC_OK);
 			} else if (login_user != null
-					&& login_user.getMacAddress().equals(mac_address)
 					&& login_user.getPassword().endsWith(password)) {
+				login_user.setMacAddress(null);
+				muDAO.updateUser(login_user);
 				operation = true;
+				response.sendError(HttpServletResponse.SC_OK);
 			}
 
 			PrintWriter printout = response.getWriter();
