@@ -1,6 +1,6 @@
 from db_connection import db_connect
 import http
-
+import json
 
 def register(
         username, hashed_password, hashed_confirm_password):
@@ -59,12 +59,40 @@ def login(username, hashed_password):
     return response_dict[status_code]
 
 
-def xhr_get_event_interaction(event_id):
-    status_code, content = db_connect(
+ad = ('{"attendees":[{"name":"A","userid":"1",'
+      '"mac_address":"5463f8d4e4b0952cfce4d426"},'
+      '{"name":"B","userid":"2","mac_address":"5463f8d4e4b0952cfce4d426"},'
+      '{"name":"C","userid":"3","mac_address":"5463f8d4e4b0952cfce4d426"},'
+      '{"name":"D","userid":"4","mac_address":"5463f8d4e4b0952cfce4d426"},'
+      '{"name":"E","userid":"5","mac_address":"5463f8d4e4b0952cfce4d426"}]}')
+
+ir = ('{"interaction":[{"start_t":"3 Jun 2008 11:05:30","end_t":"3 Jun 2008'
+      ' 11:05:32","duration":"00:00:02","user1":"A","user2":"B"},'
+      '{"start_t":"3 Jun 2008 11:05:35","end_t":"3 Jun 2008 11:05:36",'
+      '"duration":"00:00:02","user1":"A","user2":"B"},' 
+      '{"start_t":"3 Jun 2008 11:05:31","end_t":"3 Jun 2008 11:05:34",'
+      '"duration":"00:00:03","user1":"C","user2":"D"}],'
+      '"start_t":"3 Jun 2008 11:05:28","end_t":"3 Jun 2008 11:05:37"}')
+
+
+def fake_xhr_get_event_visualisation_data(event_id):
+    return {
+        'interaction': json.loads(ir),
+        'attendees': json.loads(ad)['attendees']
+    }
+
+
+def xhr_get_event_visualisation_data(event_id):
+    interaction_code, interaction_content = db_connect(
         '/event/interaction?event_id=%s' % event_id)
-    if status_code == http.client.OK:
-        return content
-    elif status_code == http.client.NOT_FOUND:
+    attendees_code, attendees_content = db_connect(
+        '/eventUsers?event_id=%s' % event_id)
+    if interaction_code == http.client.OK and attendees_code == http.client.OK:
+        return {
+            'interaction': interaction_content,
+            'attendees': attendees_content
+        }
+    else:
         return None
 
 # def get_user(username):

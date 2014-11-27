@@ -31,9 +31,6 @@ def db_connect(url, param_dict=None):
 
 
 if __name__ == '__main__':
-    response = db_connect('/login', {
-        "user_name": "gake",
-        "password": "AsaSA19",
-        "mac_address": ""
-    })
+    response = db_connect(
+        '/event/interaction?event_id=54751551e4b08c8af4a64db3')
     print(response)

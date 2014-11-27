@@ -29,6 +29,7 @@ def is_currently_login():
 
 @app.route('/static/<path:filepath>', methods=['GET'])
 def serve_static(filepath):
+    print(filepath)
     return app.send_static_file(filepath)
 
 
@@ -136,8 +137,10 @@ def dashboard():
             'You need to login in order to see dashboard.')
     else:
         # TODO(gunpinyo): fix this
-        param_dict = session.pop('next_page_param_dict')
-        return render_template('privileged_base.html.jinja', **param_dict)
+        # param_dict = session.pop('next_page_param_dict', {})
+        return redirect(
+            url_for('event_profile', event_id='54751551e4b08c8af4a64db3'))
+        # return render_template('privileged_base.html.jinja', **param_dict)
         # return redirect(url_for('user_profile'))
 
 
@@ -208,12 +211,26 @@ def event_profile(event_id):
     # else:
     #     return redirect_to_default(event_dict['error_message'])
 
-    return render_template('event_profile.html.jinja', event_id=event_id)
+    param_dict = {
+        'event_id': event_id,
+        'real_for_demo': db_api.xhr_get_event_visualisation_data(event_id)
+    }
+    # TODO(gunpinyo): change a fake to real one
+    param_dict.update(db_api.fake_xhr_get_event_visualisation_data(event_id))
+    param_dict.update(session.pop('next_page_param_dict', {}))
+
+    return render_template('event_profile.html.jinja', **param_dict)
 
 
-@app.route('/xhr/event_interaction/<event_id>', methods=['GET'])
-def xhr_get_event_interaction(event_id):
-    return json.jsonify(db_api.xhr_get_event_interaction(event_id))
+@app.route('/xhr/event_visualisation_data/<event_id>', methods=['GET'])
+def xhr_get_event_visualisation_data(event_id):
+    return json.jsonify(db_api.xhr_get_event_visualisation_data(event_id))
+
+
+@app.route('/fake_xhr/event_visualisation_data/<event_id>', methods=['GET'])
+def fake_xhr_get_event_visualisation_data(event_id):
+    return json.jsonify(db_api.fake_xhr_get_event_visualisation_data(event_id))
+
 
 
 # @app.route('/ajax/conferences', methods=['GET'])
