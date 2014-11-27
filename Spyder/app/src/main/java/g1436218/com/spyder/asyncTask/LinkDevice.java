@@ -1,6 +1,7 @@
 package g1436218.com.spyder.asyncTask;
 
 import android.app.Activity;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -15,6 +16,8 @@ import g1436218.com.spyder.activity.LoginActivity;
 import g1436218.com.spyder.activity.MainActivity;
 import g1436218.com.spyder.config.GlobalConfiguration;
 import g1436218.com.spyder.fragment.LoginFragment;
+import g1436218.com.spyder.fragment.LogoutFragment;
+import g1436218.com.spyder.fragment.UnlinkFragment;
 
 import static android.bluetooth.BluetoothAdapter.getDefaultAdapter;
 
@@ -68,6 +71,7 @@ public class LinkDevice extends BaseLoginAsyncTask{
 
             case (409):
                 setErrMsgToNotFound();
+                showUnlink();
                 break;
 
             default:
@@ -117,6 +121,18 @@ public class LinkDevice extends BaseLoginAsyncTask{
     public void setStatusCode(int statusCode){
         this.statusCode = statusCode;
     }
-}
 
+    private void showUnlink() {
+                /* insert (username, password) into sharedPreference */
+        Context context = activity;
+        SharedPreferences sharedPref = context.getSharedPreferences(
+                context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString(context.getString(R.string.username), username);
+        editor.putString(context.getString(R.string.password), password);
+        editor.commit();
+        FragmentManager fragmentManager = activity.getFragmentManager();
+        new UnlinkFragment().show(fragmentManager, "Unlink");
+    }
+}
 

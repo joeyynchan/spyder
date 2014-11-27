@@ -10,7 +10,7 @@ import g1436218.com.spyder.config.GlobalConfiguration;
 /**
  * Created by Cherie on 11/25/2014.
  */
-public class UnlinkDevice extends BaseMainAsyncTask {
+public class UnlinkDevice extends BaseAsyncTask {
 
     private static String TAG = "UnlinkDevice";
     private static String URL = GlobalConfiguration.DEFAULT_URL + "UnlinkUser";
@@ -18,8 +18,8 @@ public class UnlinkDevice extends BaseMainAsyncTask {
     private String username;
     private String password;
 
-    public UnlinkDevice(MainActivity activity, String username, String password) {
-        super(activity);
+    public UnlinkDevice(Activity activity, String username, String password) {
+        super();
         this.username = username;
         this.password = password;
     }
