@@ -133,6 +133,9 @@ public class LinkDevice extends BaseLoginAsyncTask{
         editor.commit();
         FragmentManager fragmentManager = activity.getFragmentManager();
         new UnlinkFragment().show(fragmentManager, "Unlink");
+        TextView textview_errmsg = (TextView) activity.findViewById(R.id.textview_fragment_login_errmsg);
+
+        textview_errmsg.setText("");
     }
 }
 

@@ -35,6 +35,7 @@ public class LoginFragment extends BaseLoginFragment implements View.OnClickList
 
     @Override
     protected void initializeView() {
+        Log.d(TAG, "onResume - initialiseView");
         button_attemptLogin = (Button) activity.findViewById(R.id.button_fraagment_login_attemptLogin);
         button_attemptLogin.setOnClickListener(this);
 
