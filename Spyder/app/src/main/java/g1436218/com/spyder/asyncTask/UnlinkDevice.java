@@ -27,12 +27,11 @@ public class UnlinkDevice extends BaseMainAsyncTask {
     @Override
     protected Void doInBackground(Void... params) {
         Log.d(TAG, "doInBackground" + username + password);
-        //JSONObject jsonObject = getJSONFromUrl(URL + "?username=" + username + "&password=" + password, Responses.DELETE);
         addToParams("user_name", username);
         addToParams("password", password);
-//
+
         JSONObject jsonObject = getJSONFromUrl(URL, Responses.POST);
-//        Log.d(TAG, this.statusCode + "");
+        Log.d(TAG, this.statusCode + "");
 
         return null;
     }
