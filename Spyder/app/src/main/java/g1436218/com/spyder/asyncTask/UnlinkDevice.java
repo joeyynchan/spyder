@@ -14,7 +14,7 @@ import g1436218.com.spyder.config.GlobalConfiguration;
 public class UnlinkDevice extends BaseMainAsyncTask {
 
     private static String TAG = "UnlinkDevice";
-    private static String URL = GlobalConfiguration.DEFAULT_URL + "login";
+    private static String URL = GlobalConfiguration.DEFAULT_URL + "UnlinkUser";
 
     private String username;
     private String password;
@@ -29,6 +29,11 @@ public class UnlinkDevice extends BaseMainAsyncTask {
     protected Void doInBackground(Void... params) {
         Log.d(TAG, "doInBackground" + username + password);
         //JSONObject jsonObject = getJSONFromUrl(URL + "?username=" + username + "&password=" + password, Responses.DELETE);
+//        addToParams("user_name", username);
+//        addToParams("password", password);
+//
+//        JSONObject jsonObject = getJSONFromUrl(URL, Responses.POST);
+//        Log.d(TAG, this.statusCode + "");
 
         return null;
     }
