@@ -4,6 +4,7 @@ package g1436218.com.spyder.asyncTask;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
+import android.widget.Button;
 
 import org.json.JSONObject;
 
@@ -17,10 +18,12 @@ public class JoinEvent extends BaseMainAsyncTask {
     private static String URL = GlobalConfiguration.DEFAULT_URL + "event/join?event_id=";
 
     String eventId;
+    Button button_joinEvent;
 
     public JoinEvent (MainActivity activity, String eventId) {
         super(activity);
         this.eventId = eventId;
+        button_joinEvent = (Button) activity.findViewById(R.id.button_fragment_event_joinEvent);
     }
 
     @Override
@@ -41,7 +44,10 @@ public class JoinEvent extends BaseMainAsyncTask {
     @Override
     public void onPostExecute(Void v) {
         switch(statusCode) {
-            case 200: break;
+            case 200:
+                button_joinEvent.setClickable(false);
+                button_joinEvent.setText("Attending Event");
+                break;
             default: break;
         }
         Log.i(TAG, statusCode + "");

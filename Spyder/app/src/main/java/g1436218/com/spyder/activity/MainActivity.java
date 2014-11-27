@@ -66,10 +66,12 @@ public class MainActivity extends BaseActivity {
         intentFilter.addAction(BluetoothDiscovery.SEND_DATA);
         registerReceiver(receiver, intentFilter);
 
-        /*Display Device Information */
-        new DisplayMacAddress(this).execute();
-        new FetchAttendee(this).execute();
+        /* Set Device always discoverable */
+        Intent discoverableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
+        discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 0);
+        startActivity(discoverableIntent);
 
+        new DisplayMacAddress(this).execute();   /*Display Device Information */
     }
 
     /* BluetoothDiscovery Service should be turned on when MainActivity is at the front */
@@ -79,9 +81,7 @@ public class MainActivity extends BaseActivity {
         bluetoothDiscoveryIntent = new Intent(getBaseContext(), BluetoothDiscovery.class);
         startService(bluetoothDiscoveryIntent);
 
-        Intent discoverableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
-        discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 0);
-        startActivity(discoverableIntent);
+        new FetchAttendee(this).execute();
         super.onStart();
     }
 

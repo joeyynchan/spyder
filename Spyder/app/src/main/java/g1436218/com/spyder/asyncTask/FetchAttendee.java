@@ -31,7 +31,7 @@ import g1436218.com.spyder.object.UserMap;
 public class FetchAttendee extends BaseMainAsyncTask {
 
     private final String TAG = "FetchAttendeeList";
-    private final String URL = GlobalConfiguration.DEFAULT_URL + "eventUsers?event_id=54751551e4b08c8af4a64db3";
+    private final String URL = GlobalConfiguration.DEFAULT_URL + "eventUsers?event_id=" + GlobalConfiguration.EVENT_ID;
 
     private UserMap userMap;
 
@@ -44,9 +44,9 @@ public class FetchAttendee extends BaseMainAsyncTask {
     protected Void doInBackground(Void... params) {
 
         /* Dummy response since the API is not ready; */
-        result = "{\"user_mappings\":[{\"mac_address\":\"38:2D:D1:1B:09:2A\",\"user_name\":\"GalaxyTab4\"},{\"mac_address\":\"F0:E7:7E:52:57:3E\",\"user_name\":\"GT-N7000\"},{\"mac_address\":\"48:74:6E:75:64:75\",\"user_name\":\"iPhone\"}]}";
-        resultJObj = toJSONObject(result);
-        //resultJObj = getJSONFromUrl(URL, Responses.GET);
+        //result = "{\"user_mappings\":[{\"mac_address\":\"38:2D:D1:1B:09:2A\",\"user_name\":\"GalaxyTab4\"},{\"mac_address\":\"F0:E7:7E:52:57:3E\",\"user_name\":\"GT-N7000\"},{\"mac_address\":\"48:74:6E:75:64:75\",\"user_name\":\"iPhone\"}]}";
+        //resultJObj = toJSONObject(result);
+        resultJObj = getJSONFromUrl(URL, Responses.GET);
 
         activity.clearAttendees();
         userMap.clear();
