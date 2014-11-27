@@ -8,4 +8,6 @@ public class GlobalConfiguration {
 
     public static final String EVENT_ID = "54774622e4b07e3647b874f1";
 
+    public static final String PROJECT_NUMBER = "139712018020";
+
 }

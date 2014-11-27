@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import g1436218.com.spyder.R;
 import g1436218.com.spyder.asyncTask.DisplayMacAddress;
 import g1436218.com.spyder.asyncTask.FetchAttendee;
+import g1436218.com.spyder.asyncTask.GetRegisterId;
 import g1436218.com.spyder.asyncTask.SubmitBluetoothData;
 import g1436218.com.spyder.fragment.AttendeeFragment;
 import g1436218.com.spyder.fragment.EventListFragment;
@@ -72,6 +73,7 @@ public class MainActivity extends BaseActivity {
         /* Start BluetoothDiscovery Service */
         //startBluetoothDiscoveryService();
 
+        new GetRegisterId(this).execute();
         new FetchAttendee(this).execute();
         super.onStart();
     }
