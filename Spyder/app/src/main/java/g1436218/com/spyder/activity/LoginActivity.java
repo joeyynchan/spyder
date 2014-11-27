@@ -31,7 +31,6 @@ public class LoginActivity extends BaseActivity {
         Context context = this;
         SharedPreferences sharedPref = context.getSharedPreferences(
                 context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
         String username = sharedPref.getString(context.getString(R.string.username), "");
         String password = sharedPref.getString(context.getString(R.string.password), "");
 

@@ -37,6 +37,7 @@ public class AttendeeFragment extends BaseMainFragment implements AdapterView.On
     protected void initializeView() {
         getActivity().setTitle(TITLE);
         attendeeAdapter = new AttendeeAdapter(getActivity(), R.layout.listview_attendees);
+        attendeeAdapter.addAll(activity.getAttendees());
         listview_attendee = (ListView) getActivity().findViewById(R.id.listview_attendee);
         listview_attendee.setAdapter(attendeeAdapter);
         listview_attendee.setOnItemClickListener(this);

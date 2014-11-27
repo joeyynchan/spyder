@@ -20,13 +20,13 @@ import java.util.Iterator;
 
 import g1436218.com.spyder.R;
 import g1436218.com.spyder.asyncTask.DisplayMacAddress;
-import g1436218.com.spyder.asyncTask.FetchAttendeeList;
+import g1436218.com.spyder.asyncTask.FetchAttendee;
 import g1436218.com.spyder.asyncTask.SubmitBluetoothData;
 import g1436218.com.spyder.fragment.AttendeeFragment;
 import g1436218.com.spyder.fragment.EventListFragment;
 import g1436218.com.spyder.fragment.InteractionFragment;
 import g1436218.com.spyder.fragment.LogoutFragment;
-import g1436218.com.spyder.fragment.RegisterFragment;
+import g1436218.com.spyder.object.Attendee;
 import g1436218.com.spyder.object.Interaction;
 import g1436218.com.spyder.object.UserMap;
 import g1436218.com.spyder.service.BluetoothDiscovery;
@@ -40,6 +40,7 @@ public class MainActivity extends BaseActivity {
     private Intent bluetoothDiscoveryIntent;
     private ArrayList<HashSet<Interaction>> interactionsArray;
     private HashSet<Interaction> interactions;
+    private ArrayList<Attendee> attendees;
     private UIUpdateReceiver receiver;
     private UserMap userMap;
 
@@ -83,12 +84,25 @@ public class MainActivity extends BaseActivity {
         return true;
     }
 
+    public void addAttendee(Attendee attendee) {
+        attendees.add(attendee);
+    }
+
+    public void clearAttendees() {
+        attendees.clear();
+    }
+
+    public ArrayList<Attendee> getAttendees() {
+        return attendees;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState, R.layout.activity_main);
 
         interactionsArray = new ArrayList<HashSet<Interaction>>();
         interactions = new HashSet<Interaction>();
+        attendees = new ArrayList<Attendee>();
 
         /* Register UIUpdateReceiver */
         receiver = new UIUpdateReceiver(this);
@@ -100,7 +114,7 @@ public class MainActivity extends BaseActivity {
 
         /*Display Device Information */
         new DisplayMacAddress(this).execute();
-        new FetchAttendeeList(this).execute();
+        new FetchAttendee(this).execute();
 
     }
 
