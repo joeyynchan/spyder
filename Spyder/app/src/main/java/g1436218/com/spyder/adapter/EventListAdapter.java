@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import g1436218.com.spyder.R;
+import g1436218.com.spyder.config.GlobalConfiguration;
 import g1436218.com.spyder.object.Attendee;
 import g1436218.com.spyder.object.Event;
 
@@ -40,9 +41,7 @@ public class EventListAdapter extends ArrayAdapter<Event> {
     }
 
     private void startDemo() {
-        add(new Event("Event 1", null, null, null, null, "308", null));
-        add(new Event("Event 2", null, null, null, null, "311", null));
-        add(new Event("Event 3", null, null, null, null, "217B", null));
+        add(new Event("Event 1", GlobalConfiguration.EVENT_ID, null, null, null, "308", null));
     }
 
 

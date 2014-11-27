@@ -27,12 +27,6 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState, R.layout.activity_login);
-        getActionBar().hide();
-
-        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.login_container, new LoginFragment(this), "CURRENT_FRAGMENT");
-        fragmentTransaction.commit();
 
         Context context = this;
         SharedPreferences sharedPref = context.getSharedPreferences(
@@ -45,6 +39,13 @@ public class LoginActivity extends BaseActivity {
         if(!username.equals("")){
             new LinkDevice(this, username, password).execute();
         }
+
+        super.onCreate(savedInstanceState, R.layout.activity_login);
+        getActionBar().hide();
+
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.login_container, new LoginFragment(this), "CURRENT_FRAGMENT");
+        fragmentTransaction.commit();
     }
 
     @Override
