@@ -2,7 +2,6 @@ package g1436218.com.spyder.asyncTask;
 
 import android.app.Activity;
 import android.util.Log;
-
 import org.json.JSONObject;
 
 import g1436218.com.spyder.activity.MainActivity;
