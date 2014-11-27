@@ -20,7 +20,7 @@
         <form id="login-panel" class="form-inline" role="form" action="/login" method="post">
           <div class="form-group">
             <label class="sr-only" for="login-username">Username</label>
-            <input type="text" name="username" class="form-control" id="login-username" placeholder="Enter username" required>
+            <input type="text" name="username" class="form-control" id="login-username" placeholder="Enter username" value={{login_username if login_username else '""'}} required>
           </div>
           <div class="form-group">
             <label class="sr-only" for="login-password">Password</label>
@@ -48,7 +48,8 @@
 
     function hashPassword(password) {
       // TODO(gunpiyo): improve hashing function
-      return 'pw' + password + 'eiei';
+      // return 'pw' + password + 'eiei';
+      return password;
     }
   </script>
 {% endblock %}

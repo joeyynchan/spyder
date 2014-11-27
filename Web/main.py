@@ -89,7 +89,10 @@ def register():
         session['next_page_param_dict'] = register_dict
         return redirect(url_for('dashboard'))
     else:
-        session['next_page_param_dict'] = register_dict
+        session['next_page_param_dict'] = {
+            'register_username': param_dict['username']
+        }
+        session['next_page_param_dict'].update(register_dict)
         return redirect(url_for('register_page'))
 
 
@@ -111,7 +114,10 @@ def login():
         session['next_page_param_dict'] = login_dict
         return redirect(url_for('dashboard'))
     else:
-        session['next_page_param_dict'] = login_dict
+        session['next_page_param_dict'] = {
+            'login_username': param_dict['username']
+        }
+        session['next_page_param_dict'].update(login_dict)
         return redirect(url_for('welcome_page'))
 
 
