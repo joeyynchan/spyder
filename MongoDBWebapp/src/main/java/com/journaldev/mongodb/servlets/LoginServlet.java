@@ -61,11 +61,11 @@ public class LoginServlet extends HttpServlet {
                 operation = true;
                 response.sendError(HttpServletResponse.SC_CREATED);
             } else if (login_user != null && login_user.getPassword().endsWith(password)
-                    && !login_user.getMacAddress().equals(mac_address)) {
+                    && (!login_user.getMacAddress().equals(mac_address) || !mac_address.equals(""))) {
                 response.sendError(HttpServletResponse.SC_CONFLICT);
                 return;
 			} else if (login_user != null
-					&& login_user.getMacAddress().equals(mac_address)
+					&& (login_user.getMacAddress().equals(mac_address) || mac_address.equals(""))
 					&& login_user.getPassword().endsWith(password)) {
 				operation = true;
 			}
