@@ -3,6 +3,7 @@ package g1436218.com.spyder.asyncTask;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import org.json.JSONObject;
 
@@ -13,7 +14,7 @@ import g1436218.com.spyder.config.GlobalConfiguration;
 public class JoinEvent extends BaseMainAsyncTask {
 
     private static String TAG = "JoinEvent";
-    private static String URL = GlobalConfiguration.DEFAULT_URL + "event/join";
+    private static String URL = GlobalConfiguration.DEFAULT_URL + "event/join?event_id=";
 
     String eventId;
 
@@ -30,11 +31,10 @@ public class JoinEvent extends BaseMainAsyncTask {
                 context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         String username = sharedPref.getString(context.getString(R.string.username), "");
 
-        addToParams("event_id", eventId);
         addToParams("user_name", username);
-        addToParams("status", "Attendee");
+        addToParams("status", "Attending");
 
-        JSONObject jsonObject = getJSONFromUrl(URL, Responses.POST);
+        JSONObject jsonObject = getJSONFromUrl(URL+GlobalConfiguration.EVENT_ID, Responses.POST);
         return null;
     }
 
@@ -44,5 +44,6 @@ public class JoinEvent extends BaseMainAsyncTask {
             case 200: break;
             default: break;
         }
+        Log.i(TAG, statusCode + "");
     }
 }

@@ -3,6 +3,7 @@ package g1436218.com.spyder.activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -19,6 +20,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 
 import g1436218.com.spyder.R;
+import g1436218.com.spyder.adapter.AttendeeAdapter;
 import g1436218.com.spyder.asyncTask.DisplayMacAddress;
 import g1436218.com.spyder.asyncTask.FetchAttendee;
 import g1436218.com.spyder.asyncTask.SubmitBluetoothData;
@@ -28,6 +30,8 @@ import g1436218.com.spyder.fragment.InteractionFragment;
 import g1436218.com.spyder.fragment.LogoutFragment;
 import g1436218.com.spyder.object.Attendee;
 import g1436218.com.spyder.object.Interaction;
+import g1436218.com.spyder.object.InteractionPackage;
+import g1436218.com.spyder.object.Interactions;
 import g1436218.com.spyder.object.UserMap;
 import g1436218.com.spyder.service.BluetoothDiscovery;
 
@@ -38,8 +42,7 @@ public class MainActivity extends BaseActivity {
     private final String TAG = "MainActivity";
 
     private Intent bluetoothDiscoveryIntent;
-    private ArrayList<HashSet<Interaction>> interactionsArray;
-    private HashSet<Interaction> interactions;
+    private InteractionPackage interactionPackage;
     private ArrayList<Attendee> attendees;
     private UIUpdateReceiver receiver;
     private UserMap userMap;
@@ -48,60 +51,11 @@ public class MainActivity extends BaseActivity {
     private Button button_interaction;
     private Button button_event_list;
 
-
-    public HashSet<Interaction> getInteractions() {
-        return interactions;
-    }
-
-    public ArrayList<HashSet<Interaction>> getInteractionsArray() {
-        return interactionsArray;
-    }
-
-    public void addToInteractions(Interaction interaction) {
-        interactions.add(interaction);
-    }
-
-    public void addInteractionsToArray() {
-        interactionsArray.add(interactions);
-        interactions = new HashSet<Interaction>();
-    }
-
-    public void clearArray() {
-        interactionsArray.clear();
-    }
-
-    public boolean isArrayEmpty() {
-        if (!interactionsArray.isEmpty()) {
-            Iterator<HashSet<Interaction>> iterator = interactionsArray.iterator();
-            while(iterator.hasNext()) {
-                HashSet<Interaction> interactions = iterator.next();
-                if (!interactions.isEmpty()) {
-                    return false;
-                }
-            }
-            return true;
-        }
-        return true;
-    }
-
-    public void addAttendee(Attendee attendee) {
-        attendees.add(attendee);
-    }
-
-    public void clearAttendees() {
-        attendees.clear();
-    }
-
-    public ArrayList<Attendee> getAttendees() {
-        return attendees;
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState, R.layout.activity_main);
 
-        interactionsArray = new ArrayList<HashSet<Interaction>>();
-        interactions = new HashSet<Interaction>();
+        interactionPackage = new InteractionPackage();
         attendees = new ArrayList<Attendee>();
 
         /* Register UIUpdateReceiver */
@@ -110,6 +64,7 @@ public class MainActivity extends BaseActivity {
         intentFilter.addAction(BluetoothDiscovery.DEVICE_DETECTED);
         intentFilter.addAction(BluetoothDiscovery.RESET_LIST);
         intentFilter.addAction(BluetoothDiscovery.SEND_DATA);
+        intentFilter.addAction(BluetoothDiscovery.SET_DISCOVERABLE);
         registerReceiver(receiver, intentFilter);
 
         /*Display Device Information */
@@ -124,6 +79,10 @@ public class MainActivity extends BaseActivity {
         /* Start BluetoothDiscovery Service */
         bluetoothDiscoveryIntent = new Intent(getBaseContext(), BluetoothDiscovery.class);
         startService(bluetoothDiscoveryIntent);
+
+        Intent discoverableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
+        discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 0);
+        startActivity(discoverableIntent);
         super.onStart();
     }
 
@@ -187,6 +146,7 @@ public class MainActivity extends BaseActivity {
     }
 
     private void showAttendees() {
+        new FetchAttendee(this).execute();
         Fragment fragment = getFragmentManager().findFragmentByTag("CURRENT_FRAGMENT");
         if (!(fragment instanceof AttendeeFragment)) {
             FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
@@ -220,6 +180,7 @@ public class MainActivity extends BaseActivity {
     }
 
 
+
     private class UIUpdateReceiver extends BroadcastReceiver {
 
         MainActivity activity;
@@ -236,16 +197,59 @@ public class MainActivity extends BaseActivity {
                 int strength = intent.getIntExtra("STRENGTH", 0);
                 activity.addToInteractions(new Interaction(username, strength));
             } else if (BluetoothDiscovery.RESET_LIST.equals(action)) {
-                Log.i(TAG, interactions.toString());
-                activity.addInteractionsToArray();
+                Log.i(TAG, interactionPackage.getInteractions().toString());
+                activity.addInteractionsToPackage();
             } else if (BluetoothDiscovery.SEND_DATA.equals(action)) {
-                if (!isArrayEmpty()) {
-                    new SubmitBluetoothData(activity, activity.getInteractionsArray()).execute();
+                if (!isPackageEmpty()) {
+                    new SubmitBluetoothData(activity, activity.getInteractionPackage()).execute();
                 } else {
                     clearArray();
                 }
             }
         }
+    }
+
+
+
+    /* Manipulate InteractionPackage */
+
+    public Interactions getInteractions() {
+        return interactionPackage.getInteractions();
+    }
+
+    public InteractionPackage getInteractionPackage() {
+        return interactionPackage;
+    }
+
+    public void addToInteractions(Interaction interaction) {
+        interactionPackage.addInteraction(interaction);
+    }
+
+    public void addInteractionsToPackage() {
+        interactionPackage.addInteractionsToPackage();
+        interactionPackage.createInteractions();
+    }
+
+    public void clearArray() {
+        interactionPackage.clear();
+    }
+
+    public boolean isPackageEmpty() {
+        return interactionPackage.isPackageEmpty();
+    }
+
+    /* Manipulate Attendess */
+
+    public void addAttendee(Attendee attendee) {
+        attendees.add(attendee);
+    }
+
+    public void clearAttendees() {
+        attendees.clear();
+    }
+
+    public ArrayList<Attendee> getAttendees() {
+        return attendees;
     }
 
 }
