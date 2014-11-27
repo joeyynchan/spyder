@@ -24,7 +24,6 @@ public class BluetoothDiscovery extends Service {
     public static final String RESET_LIST = "RESET_LIST";
     public static final String SEND_DATA = "SEND_DATA";
     public static final String UPDATE_ADAPTER = "UPDATE_ADAPTER";
-    public static final String SET_DISCOVERABLE = "SET_DISCOVERABLE";
 
     private final String TAG = "BluetoothDiscovery";
 
@@ -50,12 +49,11 @@ public class BluetoothDiscovery extends Service {
                 }
 
             } else if (BluetoothAdapter.ACTION_DISCOVERY_STARTED.equals(action)) {
-                Log.i ("BluetoothDiscovery", "START_DISCOVERY");
+                //Log.i ("BluetoothDiscovery", "START_DISCOVERY");
 
             } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
-                broadcastUpdateAdapter();
+                //Log.i ("BluetoothDiscovery", "FINISH_DISCOVERY");
                 broadcastResetList();
-
             }
         }
 
@@ -77,12 +75,6 @@ public class BluetoothDiscovery extends Service {
             }
         }
 
-        private void broadcastUpdateAdapter() {
-            Intent intent = new Intent();
-            intent.setAction(UPDATE_ADAPTER);
-            sendBroadcast(intent);
-        }
-
         private void broadcastSendData() {
             Intent intent = new Intent();
             intent.setAction(SEND_DATA);
@@ -94,7 +86,9 @@ public class BluetoothDiscovery extends Service {
 
         @Override
         public void run() {
-            BTAdapter.cancelDiscovery();
+            if (BTAdapter.isDiscovering()) {
+                BTAdapter.cancelDiscovery();
+            }
             BTAdapter.startDiscovery();
             handler.postDelayed(this, GlobalConfiguration.BLUETOOTH_TIME_INTERVAL * 1000);
         }

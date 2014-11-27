@@ -81,7 +81,9 @@ public class InteractionFragment extends BaseMainFragment implements AdapterView
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             if (BluetoothDiscovery.UPDATE_ADAPTER.equals(action)) {
-                adapter.addAllToAdapter(activity.getInteractions());
+                //Log.i("UPDATE_ADAPTER", activity.getClone().toString());
+                //Log.i("interactionsAfterClear", activity.getInteractions().toString());
+                adapter.addAllToAdapter(activity.getClone());
             }
         }
     }

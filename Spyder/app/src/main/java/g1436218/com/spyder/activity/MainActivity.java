@@ -64,7 +64,6 @@ public class MainActivity extends BaseActivity {
         intentFilter.addAction(BluetoothDiscovery.DEVICE_DETECTED);
         intentFilter.addAction(BluetoothDiscovery.RESET_LIST);
         intentFilter.addAction(BluetoothDiscovery.SEND_DATA);
-        intentFilter.addAction(BluetoothDiscovery.SET_DISCOVERABLE);
         registerReceiver(receiver, intentFilter);
 
         /*Display Device Information */
@@ -197,7 +196,13 @@ public class MainActivity extends BaseActivity {
                 int strength = intent.getIntExtra("STRENGTH", 0);
                 activity.addToInteractions(new Interaction(username, strength));
             } else if (BluetoothDiscovery.RESET_LIST.equals(action)) {
-                Log.i(TAG, interactionPackage.getInteractions().toString());
+                /* RESET LIST is performed when a discovery session finishes.
+                 * 1) Add Interactions to package
+                 * 2) Clone interactions for InteractionFragment
+                 * 3) Clear interactions
+                 * 4) Tell InteractionFragment to update using clone
+                 */
+                //Log.i("interactions", interactionPackage.getInteractions().toString());
                 activity.addInteractionsToPackage();
             } else if (BluetoothDiscovery.SEND_DATA.equals(action)) {
                 if (!isPackageEmpty()) {
@@ -217,6 +222,10 @@ public class MainActivity extends BaseActivity {
         return interactionPackage.getInteractions();
     }
 
+    public Interactions getClone() {
+        return interactionPackage.getClone();
+    }
+
     public InteractionPackage getInteractionPackage() {
         return interactionPackage;
     }
@@ -227,7 +236,9 @@ public class MainActivity extends BaseActivity {
 
     public void addInteractionsToPackage() {
         interactionPackage.addInteractionsToPackage();
+        interactionPackage.copyInteractionsToClone();
         interactionPackage.createInteractions();
+        broadcastUpdateAdapter();
     }
 
     public void clearArray() {
@@ -236,6 +247,12 @@ public class MainActivity extends BaseActivity {
 
     public boolean isPackageEmpty() {
         return interactionPackage.isPackageEmpty();
+    }
+
+    private void broadcastUpdateAdapter() {
+        Intent intent = new Intent();
+        intent.setAction(BluetoothDiscovery.UPDATE_ADAPTER);
+        sendBroadcast(intent);
     }
 
     /* Manipulate Attendess */

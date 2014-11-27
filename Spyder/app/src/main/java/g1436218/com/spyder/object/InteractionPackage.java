@@ -9,13 +9,23 @@ import java.util.Iterator;
 public class InteractionPackage extends ArrayList<Interactions> {
 
     private Interactions interactions;
+    private Interactions clone;
 
     public InteractionPackage() {
         this.interactions = new Interactions();
+        this.clone = new Interactions();
     }
 
     public Interactions getInteractions() {
         return interactions;
+    }
+
+    public Interactions getClone() {
+        return clone;
+    }
+
+    public void copyInteractionsToClone() {
+        clone = (Interactions) interactions.clone();
     }
 
     public void createInteractions() {
