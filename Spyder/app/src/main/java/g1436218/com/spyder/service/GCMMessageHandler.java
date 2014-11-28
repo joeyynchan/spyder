@@ -12,12 +12,20 @@ import android.widget.Toast;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
+import g1436218.com.spyder.activity.LoginActivity;
+import g1436218.com.spyder.activity.MainActivity;
 import g1436218.com.spyder.receiver.GCMBroadcastReceiver;
 
 public class GCMMessageHandler extends IntentService {
 
+    private final String LAUNCH_APPLICATION = "LAUNCH_APPLICATION";
+
+    public static final String START_DISCOVERY = "START_DISCOVERY";
+    public static final String STOP_DISCOVERY = "STOP_DISCOVERY";
+
     String title, message;
     private Handler handler;
+
     public GCMMessageHandler() {
         super("GCMMessageHandler");
     }
@@ -43,13 +51,17 @@ public class GCMMessageHandler extends IntentService {
         GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(this);
         String messageType = gcm.getMessageType(intent);
 
-        title = extras.getString("title");
-        message = extras.getString("message");
+        String action = extras.getString("action");
 
-        vibrate(1000);
+        if (LAUNCH_APPLICATION.equals(action)) {
+            launchApplication();
+        } else if (START_DISCOVERY.equals(action)) {
+            startDiscovery();
+        } else if (STOP_DISCOVERY.equals(action)) {
+            stopDiscovery();
+        }
 
-        Log.i("GCM", "Received : (" + messageType + ") \n" +
-                "Title: " + title + "\nMessage = " + message);
+        Log.i("GCM", "Received : (" + messageType + ") \n" + "Action: " + action);
 
         GCMBroadcastReceiver.completeWakefulIntent(intent);
 
@@ -58,6 +70,28 @@ public class GCMMessageHandler extends IntentService {
     public void vibrate(int duration) {
         Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         v.vibrate(duration);
+    }
+
+    private void launchApplication() {
+        Intent intent = new Intent(this, LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setAction(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_LAUNCHER);
+        startActivity(intent);
+    }
+
+    private void startDiscovery() {
+        launchApplication();
+        Intent intent = new Intent();
+        intent.setAction(START_DISCOVERY);
+        sendBroadcast(intent);
+    }
+
+    private void stopDiscovery() {
+        launchApplication();
+        Intent intent = new Intent();
+        intent.setAction(STOP_DISCOVERY);
+        sendBroadcast(intent);
     }
 
 }

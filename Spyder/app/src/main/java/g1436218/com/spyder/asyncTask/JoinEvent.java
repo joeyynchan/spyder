@@ -44,12 +44,15 @@ public class JoinEvent extends BaseMainAsyncTask {
     @Override
     public void onPostExecute(Void v) {
         switch(statusCode) {
-            case 200:
-                button_joinEvent.setClickable(false);
-                button_joinEvent.setText("Attending Event");
-                break;
+            case 200: joinedEvent(); break;
+            case 403: joinedEvent(); break;
             default: break;
         }
         Log.i(TAG, statusCode + "");
+    }
+
+    private void joinedEvent() {
+        button_joinEvent.setClickable(false);
+        button_joinEvent.setText("Attending Event");
     }
 }

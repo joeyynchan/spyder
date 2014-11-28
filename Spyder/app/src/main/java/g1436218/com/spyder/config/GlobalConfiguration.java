@@ -6,7 +6,7 @@ public class GlobalConfiguration {
     public static final String DEFAULT_URL = "http://146.169.46.38:8080/MongoDBWebapp/";
     public static final int NUMBER_OF_MINI_BATCHES = 4;
 
-    public static final String EVENT_ID = "54774622e4b07e3647b874f1";
+    public static final String EVENT_ID = "54775c5de4b0598ae9308641";
 
     public static final String PROJECT_NUMBER = "139712018020";
 

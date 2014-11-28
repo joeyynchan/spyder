@@ -31,6 +31,7 @@ import g1436218.com.spyder.object.InteractionPackage;
 import g1436218.com.spyder.object.Interactions;
 import g1436218.com.spyder.object.UserMap;
 import g1436218.com.spyder.service.BluetoothDiscovery;
+import g1436218.com.spyder.service.GCMMessageHandler;
 
 
 public class MainActivity extends BaseActivity {
@@ -62,6 +63,8 @@ public class MainActivity extends BaseActivity {
         intentFilter.addAction(BluetoothDiscovery.DEVICE_DETECTED);
         intentFilter.addAction(BluetoothDiscovery.RESET_LIST);
         intentFilter.addAction(BluetoothDiscovery.SEND_DATA);
+        intentFilter.addAction(GCMMessageHandler.START_DISCOVERY);
+        intentFilter.addAction(GCMMessageHandler.STOP_DISCOVERY);
         registerReceiver(receiver, intentFilter);
 
         new DisplayMacAddress(this).execute();   /*Display Device Information */
@@ -194,12 +197,6 @@ public class MainActivity extends BaseActivity {
                 int strength = intent.getIntExtra("STRENGTH", 0);
                 activity.addToInteractions(new Interaction(username, strength));
             } else if (BluetoothDiscovery.RESET_LIST.equals(action)) {
-                /* RESET LIST is performed when a discovery session finishes.
-                 * 1) Add Interactions to package
-                 * 2) Clone interactions for InteractionFragment
-                 * 3) Clear interactions
-                 * 4) Tell InteractionFragment to update using clone
-                 */
                 //Log.i("interactions", interactionPackage.getInteractions().toString());
                 activity.addInteractionsToPackage();
             } else if (BluetoothDiscovery.SEND_DATA.equals(action)) {
@@ -208,6 +205,10 @@ public class MainActivity extends BaseActivity {
                 } else {
                     clearArray();
                 }
+            } else if (GCMMessageHandler.START_DISCOVERY.equals(action)) {
+                startBluetoothDiscoveryService();
+            } else if (GCMMessageHandler.STOP_DISCOVERY.equals(action)) {
+                stopBluetoothDiscoveryService();
             }
         }
     }
@@ -232,6 +233,12 @@ public class MainActivity extends BaseActivity {
         interactionPackage.addInteraction(interaction);
     }
 
+    /* RESET LIST is performed when a discovery session finishes.
+     * 1) Add Interactions to package
+     * 2) Clone interactions for InteractionFragment
+     * 3) Clear interactions
+     * 4) Tell InteractionFragment to update using clone
+    */
     public void addInteractionsToPackage() {
         interactionPackage.addInteractionsToPackage();
         interactionPackage.copyInteractionsToClone();
