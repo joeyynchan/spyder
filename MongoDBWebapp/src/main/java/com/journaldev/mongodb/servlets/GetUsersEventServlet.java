@@ -2,7 +2,7 @@ package com.journaldev.mongodb.servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
+import java.util.Set;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -37,9 +37,9 @@ public class GetUsersEventServlet extends HttpServlet {
 		MongoDBEventDAO eventDAO = new MongoDBEventDAO(mongo);
 		MongoDBUsersDAO mobileDAO = new MongoDBUsersDAO(mongo);
 
-		List<String> user_name_list = eventDAO.getAllUsersIDEvent(event_id);
+		Set<String> user_name_list = eventDAO.getAllUsersIDEvent(event_id);
 		System.out.println(user_name_list);
-		List<User> user_list = mobileDAO.getAllUsers(user_name_list);
+		Set<User> user_list = mobileDAO.getAllUsers(user_name_list);
 		System.out.println(user_list);
 
 		response.setContentType("application/json");

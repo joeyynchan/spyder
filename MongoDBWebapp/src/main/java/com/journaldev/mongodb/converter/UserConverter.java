@@ -1,7 +1,8 @@
 package com.journaldev.mongodb.converter;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.bson.types.ObjectId;
 
@@ -35,14 +36,9 @@ public class UserConverter {
 
 	}
 
-	public static List<String> getUsers(DBObject doc) {
-		String userData = (String)doc.get("attendees");
-		System.out.println(userData);
-		String[] users = userData.split(",");
-		List<String> result = new ArrayList<String>();
-		for(int i=0;i<users.length;i++){
-			result.add(users[i]);
-		}
+	public static Set<String> getUsers(DBObject doc) {
+		Set<String> result = new HashSet<String>();
+		result.addAll((List<String>)doc.get("attendees"));
 		return result;
 	}
 	

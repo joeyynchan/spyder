@@ -2,7 +2,10 @@ package com.journaldev.mongodb.servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -32,7 +35,13 @@ public class AddEventServlet extends HttpServlet {
 		String description = request.getParameter("description");
 		String speaker_id = request.getParameter("speaker_id");
 		String organiser_id = request.getParameter("organiser_id");
-		String attendees = request.getParameter("attendees");
+		String attendeesParam = request.getParameter("attendees");
+		if (attendeesParam == null) {
+			attendeesParam = "";
+		}
+		attendeesParam.replace("[", "").replace("]", "");
+		Set<String> attendees = new HashSet<String>();
+		attendees.addAll(Arrays.asList(attendeesParam.split(",")));
 
 		Event e = new Event(start_time, end_time, address, name, description,
 				speaker_id, organiser_id, attendees);
@@ -48,7 +57,7 @@ public class AddEventServlet extends HttpServlet {
 		PrintWriter printout = response.getWriter();
 
 		for (Event event : allEvents) {
-			if (event.getName().equals(name)) {
+			if (event.getName() == null || event.getName().equals(name)) {
 
 				response.sendError(HttpServletResponse.SC_CONFLICT);
 				JSONObject JObject = new JSONObject();

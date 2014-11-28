@@ -1,5 +1,9 @@
 package com.journaldev.mongodb.converter;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import org.bson.types.ObjectId;
 
 import com.journaldev.mongodb.model.Event;
@@ -29,11 +33,13 @@ public class EventConverter {
 	// convert DBObject Object to Person
 	// take special note of converting ObjectId to String
 	public static Event toEvent(DBObject doc) {
+		Set<String> attendees = new HashSet<String>();
+				attendees.addAll((List<String>) doc.get("attendees"));
 		return new Event((String) doc.get("start_time"),
 				(String) doc.get("end_time"), (String) doc.get("address"),
 				(String) doc.get("name"), (String) doc.get("description"),
 				(String) doc.get("speaker_id"),
-				(String) doc.get("organiser_id"), (String) doc.get("attendees"));
+				(String) doc.get("organiser_id"), attendees);
 
 	}
 

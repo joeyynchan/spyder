@@ -1,5 +1,7 @@
 package com.journaldev.mongodb.model;
 
+import java.util.Set;
+
 public class Event {
 
 	private String id;
@@ -10,11 +12,11 @@ public class Event {
 	private String description;
 	private String speaker_id;
 	private String organiser_id;
-	private String attendees;
+	private Set<String> attendees;
 
 	public Event(String start_time, String end_time, String address,
 			String name,String description, String speaker_id, String organiser_id,
-			String attendees) {
+			Set<String> attendees) {
 		
 		this.start_time = start_time;
 		this.end_time = end_time;
@@ -88,11 +90,11 @@ public class Event {
 		this.organiser_id = organiser_id;
 	}
 
-	public String getAttendees() {
+	public Set<String> getAttendees() {
 		return attendees;
 	}
 
-	public void setAttendees(String attendees) {
+	public void setAttendees(Set<String> attendees) {
 		this.attendees = attendees;
 	}
 }

@@ -1,7 +1,9 @@
 package com.journaldev.mongodb.dao;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.bson.types.ObjectId;
 
@@ -34,6 +36,7 @@ public class MongoDBEventDAO {
 	}
 
 	public void updateEvent(Event e) {
+		System.out.println("ID:" + e.getId());
 		DBObject query = BasicDBObjectBuilder.start()
 				.append("_id", new ObjectId(e.getId())).get();
 		this.col.update(query, EventConverter.toDBObject(e));
@@ -57,13 +60,26 @@ public class MongoDBEventDAO {
 	}
 
 	public Event readEvent(Event e) {
-		DBObject query = BasicDBObjectBuilder.start()
+		if (e.getId() == null) {
+			return null;
+		}
+		System.out.println(e.getId());
+		DBObject query;
+		try {
+			query = BasicDBObjectBuilder.start()
 				.append("_id", new ObjectId(e.getId())).get();
+		} catch (IllegalArgumentException exception) {
+			return null;
+		}
 		DBObject data = this.col.findOne(query);
-		return EventConverter.toEvent(data);
+		if (data != null) {
+			return EventConverter.toEvent(data);
+		} else {
+			return null;
+		}
 	}
 
-	public List<String> getAllUsersIDEvent(String event_id) {
+	public Set<String> getAllUsersIDEvent(String event_id) {
 		if (event_id.length() == 24) {
 			DBObject query = BasicDBObjectBuilder.start()
 					.append("_id", new ObjectId(event_id)).get();
@@ -72,7 +88,7 @@ public class MongoDBEventDAO {
 			return UserConverter.getUsers(data);
 		}
 
-		return new ArrayList<String>();
+		return new HashSet<String>();
 	}
 
 

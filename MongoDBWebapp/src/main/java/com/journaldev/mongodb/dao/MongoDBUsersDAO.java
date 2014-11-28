@@ -1,7 +1,9 @@
 package com.journaldev.mongodb.dao;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.bson.types.ObjectId;
 
@@ -67,13 +69,15 @@ public class MongoDBUsersDAO {
 		return UserConverter.toUser(data);
 	}
 
-	public List<User> getAllUsers(List<String> user_id_list) {
-		List<User> result = new ArrayList<User>();
+	public Set<User> getAllUsers(Set<String> user_id_list) {
+		Set<User> result = new HashSet<User>();
 		for (String id : user_id_list) {
 			DBObject query = BasicDBObjectBuilder.start()
 					.append("user_name",id).get();
 			DBObject data = this.col.findOne(query);
-			result.add(UserConverter.toUser(data));
+			if (data != null) {
+				result.add(UserConverter.toUser(data));
+			}
 		}
 		return result;
 	}
