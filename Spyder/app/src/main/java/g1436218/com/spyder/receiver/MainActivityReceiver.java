@@ -5,12 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 
 import g1436218.com.spyder.activity.MainActivity;
-import g1436218.com.spyder.asyncTask.FetchAttendee;
+import g1436218.com.spyder.asyncTask.FetchAttendees;
 import g1436218.com.spyder.asyncTask.SubmitBluetoothData;
 import g1436218.com.spyder.object.Action;
 import g1436218.com.spyder.object.Interaction;
-import g1436218.com.spyder.service.BluetoothDiscovery;
-import g1436218.com.spyder.service.GCMMessageHandler;
 
 public class MainActivityReceiver extends BroadcastReceiver {
 
@@ -41,7 +39,7 @@ public class MainActivityReceiver extends BroadcastReceiver {
         } else if (Action.STOP_DISCOVERY.equals(action)) {
             activity.stopBluetoothDiscoveryService();
         } else if (Action.FETCH_ATTENDEES.equals(action)) {
-            new FetchAttendee(activity).execute();
+            new FetchAttendees(activity).execute();
         }
     }
 }

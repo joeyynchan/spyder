@@ -16,6 +16,7 @@ import java.util.ArrayList;
 
 import g1436218.com.spyder.R;
 import g1436218.com.spyder.asyncTask.DisplayMacAddress;
+import g1436218.com.spyder.asyncTask.FetchAttendees;
 import g1436218.com.spyder.asyncTask.GetRegisterId;
 import g1436218.com.spyder.fragment.AttendeeFragment;
 import g1436218.com.spyder.fragment.EventListFragment;
@@ -68,17 +69,12 @@ public class MainActivity extends BaseActivity {
         new DisplayMacAddress(this).execute();   /*Display Device Information */
     }
 
-    /* BluetoothDiscovery Service should be turned on when MainActivity is at the front */
     @Override
     protected void onStart() {
-        /* Start BluetoothDiscovery Service */
-        //startBluetoothDiscoveryService();
-
         new GetRegisterId(this).execute();
         super.onStart();
     }
 
-    /* Turns off BluetoothDiscovery when switching from MainAcitivity to other activities */
     @Override
     protected void onDestroy() {
         //stopBluetoothDiscoveryService();
@@ -143,6 +139,7 @@ public class MainActivity extends BaseActivity {
     }
 
     private void showAttendees() {
+        new FetchAttendees(this).execute();
         Fragment fragment = getFragmentManager().findFragmentByTag("CURRENT_FRAGMENT");
         if (!(fragment instanceof AttendeeFragment)) {
             FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
@@ -174,12 +171,6 @@ public class MainActivity extends BaseActivity {
             fragmentTransaction.commit();
         }
     }
-
-
-
-
-
-
 
     /* Manipulate InteractionPackage */
 

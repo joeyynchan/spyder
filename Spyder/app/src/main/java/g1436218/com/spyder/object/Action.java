@@ -1,6 +1,5 @@
 package g1436218.com.spyder.object;
 
-
 public class Action {
 
     public static final String UPDATE_ATTENDEE_FRAGMENT_ADAPTER = "UPDATE_ATTENDEE_FRAGMENT_ADAPTER";

@@ -1,8 +1,5 @@
 package g1436218.com.spyder.fragment;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
 import android.content.IntentFilter;
 import android.view.View;
 import android.widget.AdapterView;
@@ -11,15 +8,10 @@ import android.widget.ListView;
 import g1436218.com.spyder.R;
 import g1436218.com.spyder.activity.MainActivity;
 import g1436218.com.spyder.adapter.AttendeeAdapter;
-import g1436218.com.spyder.asyncTask.FetchAttendee;
 import g1436218.com.spyder.asyncTask.FetchUserProfile;
-import g1436218.com.spyder.asyncTask.SubmitBluetoothData;
 import g1436218.com.spyder.object.Action;
 import g1436218.com.spyder.object.Attendee;
-import g1436218.com.spyder.object.Interaction;
 import g1436218.com.spyder.receiver.AttendeeFragmentReceiver;
-import g1436218.com.spyder.service.BluetoothDiscovery;
-import g1436218.com.spyder.service.GCMMessageHandler;
 
 public class AttendeeFragment extends BaseMainFragmentWithReceiver implements AdapterView.OnItemClickListener {
 

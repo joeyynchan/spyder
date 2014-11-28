@@ -30,14 +30,14 @@ import g1436218.com.spyder.object.Action;
 import g1436218.com.spyder.object.Attendee;
 import g1436218.com.spyder.object.UserMap;
 
-public class FetchAttendee extends BaseMainAsyncTask {
+public class FetchAttendees extends BaseMainAsyncTask {
 
     private final String TAG = "FetchAttendeeList";
     private final String URL = GlobalConfiguration.DEFAULT_URL + "eventUsers?event_id=" + GlobalConfiguration.EVENT_ID;
 
     private UserMap userMap;
 
-    public FetchAttendee(MainActivity activity) {
+    public FetchAttendees(MainActivity activity) {
         super(activity);
         this.userMap = UserMap.getInstance();
     }

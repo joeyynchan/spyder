@@ -14,6 +14,7 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import g1436218.com.spyder.activity.LoginActivity;
 import g1436218.com.spyder.activity.MainActivity;
+import g1436218.com.spyder.config.GlobalConfiguration;
 import g1436218.com.spyder.object.Action;
 import g1436218.com.spyder.receiver.GCMBroadcastReceiver;
 
@@ -81,6 +82,7 @@ public class GCMMessageHandler extends IntentService {
 
     private void startDiscovery() {
         launchApplication();
+        vibrate(GlobalConfiguration.VIBRATE_DURATION);
         Intent intent = new Intent();
         intent.setAction(Action.START_DISCOVERY);
         sendBroadcast(intent);
