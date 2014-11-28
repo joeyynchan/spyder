@@ -16,14 +16,14 @@ import g1436218.com.spyder.asyncTask.FetchUserProfile;
 import g1436218.com.spyder.asyncTask.SubmitBluetoothData;
 import g1436218.com.spyder.object.Attendee;
 import g1436218.com.spyder.object.Interaction;
+import g1436218.com.spyder.receiver.AttendeeFragmentReceiver;
 import g1436218.com.spyder.service.BluetoothDiscovery;
 import g1436218.com.spyder.service.GCMMessageHandler;
 
-public class AttendeeFragment extends BaseMainFragment implements AdapterView.OnItemClickListener {
+public class AttendeeFragment extends BaseMainFragmentWithReceiver implements AdapterView.OnItemClickListener {
 
     private ListView listview_attendee;
     private AttendeeAdapter adapter;
-    private UIUpdateReceiver receiver;
     private final String TITLE = "Attendee List";
 
     public AttendeeFragment(MainActivity activity) {
@@ -40,19 +40,11 @@ public class AttendeeFragment extends BaseMainFragment implements AdapterView.On
         listview_attendee.setOnItemClickListener(this);
     }
 
-    @Override
-    public void onResume() {
-        receiver = new UIUpdateReceiver(activity);
+    public void registerReceiver() {
+        receiver = new AttendeeFragmentReceiver(this);
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(MainActivity.UPDATE_ATTENDEE_FRAGMENT_ADAPTER);
         activity.registerReceiver(receiver, intentFilter);
-        super.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        activity.unregisterReceiver(receiver);                  /* Unregister Receiver */
-        super.onPause();
     }
 
     @Override
@@ -61,22 +53,12 @@ public class AttendeeFragment extends BaseMainFragment implements AdapterView.On
         new FetchUserProfile(activity, item.getUsername()).execute();
     }
 
-    private class UIUpdateReceiver extends BroadcastReceiver {
+    public void clearAdapter() {
+        adapter.clear();
+    }
 
-        MainActivity activity;
-
-        public UIUpdateReceiver(MainActivity activity) {
-            this.activity = activity;
-        }
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            if (MainActivity.UPDATE_ATTENDEE_FRAGMENT_ADAPTER.equals(action)) {
-                adapter.clear();
-                adapter.addAll(activity.getAttendees());
-            }
-        }
+    public void addAllToAdapter() {
+        adapter.addAll(activity.getAttendees());
     }
 
 }

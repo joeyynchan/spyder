@@ -11,4 +11,8 @@ public abstract class BaseMainFragment extends BaseFragment {
         this.activity = activity;
     }
 
+    public MainActivity getMainActivity() {
+        return activity;
+    }
+
 }

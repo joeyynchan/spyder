@@ -22,14 +22,14 @@ import g1436218.com.spyder.asyncTask.FetchUserProfile;
 import g1436218.com.spyder.asyncTask.SubmitBluetoothData;
 import g1436218.com.spyder.object.Attendee;
 import g1436218.com.spyder.object.Interaction;
+import g1436218.com.spyder.receiver.InteractionFragmentReceiver;
 import g1436218.com.spyder.service.BluetoothDiscovery;
 
-public class InteractionFragment extends BaseMainFragment implements AdapterView.OnItemClickListener {
+public class InteractionFragment extends BaseMainFragmentWithReceiver implements AdapterView.OnItemClickListener {
 
     private final String TITLE = "Ongoing Interactions";
 
     private InteractionAdapter adapter;
-    private UIUpdateReceiver receiver;
     private IntentFilter intentFilter;
 
     public InteractionFragment(MainActivity activity) {
@@ -38,15 +38,7 @@ public class InteractionFragment extends BaseMainFragment implements AdapterView
 
     @Override
     protected void initializeView() {
-
         getActivity().setTitle(TITLE);
-
-        /* Initialize BroadcastReceiver */
-        intentFilter = new IntentFilter();
-        intentFilter.addAction(BluetoothDiscovery.UPDATE_ADAPTER);
-        this.receiver = new UIUpdateReceiver(this);
-        activity.registerReceiver(receiver, intentFilter);
-
         /* Initialize Listview */
         this.adapter = new InteractionAdapter(getActivity(), R.layout.listview_interaction);
         ListView listview_interactions = (ListView) getActivity().findViewById(R.id.listview_interaction_list);
@@ -56,9 +48,11 @@ public class InteractionFragment extends BaseMainFragment implements AdapterView
     }
 
     @Override
-    public void onPause() {
-        getActivity().unregisterReceiver(receiver);
-        super.onPause();
+    protected void registerReceiver() {
+        receiver = new InteractionFragmentReceiver(this);
+        intentFilter = new IntentFilter();
+        intentFilter.addAction(BluetoothDiscovery.UPDATE_ADAPTER);
+        activity.registerReceiver(receiver, intentFilter);
     }
 
     @Override
@@ -67,25 +61,8 @@ public class InteractionFragment extends BaseMainFragment implements AdapterView
         new FetchUserProfile(activity, item.getUsername()).execute();
     }
 
-    private class UIUpdateReceiver extends BroadcastReceiver {
-
-        InteractionFragment fragment;
-        MainActivity activity;
-
-        public UIUpdateReceiver(InteractionFragment fragment) {
-            this.fragment = fragment;
-            this.activity = (MainActivity) fragment.getActivity();
-        }
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            if (BluetoothDiscovery.UPDATE_ADAPTER.equals(action)) {
-                //Log.i("UPDATE_ADAPTER", activity.getClone().toString());
-                //Log.i("interactionsAfterClear", activity.getInteractions().toString());
-                adapter.addAllToAdapter(activity.getClone());
-            }
-        }
+    public void addAllToAdapter() {
+        adapter.addAllToAdapter(activity.getClone());
     }
 
 }
