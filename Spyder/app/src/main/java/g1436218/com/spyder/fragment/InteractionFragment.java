@@ -20,6 +20,7 @@ import g1436218.com.spyder.activity.MainActivity;
 import g1436218.com.spyder.adapter.InteractionAdapter;
 import g1436218.com.spyder.asyncTask.FetchUserProfile;
 import g1436218.com.spyder.asyncTask.SubmitBluetoothData;
+import g1436218.com.spyder.object.Action;
 import g1436218.com.spyder.object.Attendee;
 import g1436218.com.spyder.object.Interaction;
 import g1436218.com.spyder.receiver.InteractionFragmentReceiver;
@@ -51,7 +52,7 @@ public class InteractionFragment extends BaseMainFragmentWithReceiver implements
     protected void registerReceiver() {
         receiver = new InteractionFragmentReceiver(this);
         intentFilter = new IntentFilter();
-        intentFilter.addAction(BluetoothDiscovery.UPDATE_ADAPTER);
+        intentFilter.addAction(Action.UPDATE_INTERACTION_FRAGMENT_ADAPTER);
         activity.registerReceiver(receiver, intentFilter);
     }
 

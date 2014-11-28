@@ -14,15 +14,11 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import g1436218.com.spyder.activity.LoginActivity;
 import g1436218.com.spyder.activity.MainActivity;
+import g1436218.com.spyder.object.Action;
 import g1436218.com.spyder.receiver.GCMBroadcastReceiver;
 
 public class GCMMessageHandler extends IntentService {
 
-    private final String LAUNCH_APPLICATION = "LAUNCH_APPLICATION";
-
-    public static final String START_DISCOVERY = "START_DISCOVERY";
-    public static final String STOP_DISCOVERY = "STOP_DISCOVERY";
-    public static final String FETCH_ATTENDEES = "FETCH_ATTENDEES";
 
     String title, message;
     private Handler handler;
@@ -54,13 +50,13 @@ public class GCMMessageHandler extends IntentService {
 
         String action = extras.getString("action");
 
-        if (LAUNCH_APPLICATION.equals(action)) {
+        if (Action.LAUNCH_APPLICATION.equals(action)) {
             launchApplication();
-        } else if (START_DISCOVERY.equals(action)) {
+        } else if (Action.START_DISCOVERY.equals(action)) {
             startDiscovery();
-        } else if (STOP_DISCOVERY.equals(action)) {
+        } else if (Action.STOP_DISCOVERY.equals(action)) {
             stopDiscovery();
-        } else if (FETCH_ATTENDEES.equals(action)) {
+        } else if (Action.FETCH_ATTENDEES.equals(action)) {
             fetchAttendees();
         }
 
@@ -86,21 +82,21 @@ public class GCMMessageHandler extends IntentService {
     private void startDiscovery() {
         launchApplication();
         Intent intent = new Intent();
-        intent.setAction(START_DISCOVERY);
+        intent.setAction(Action.START_DISCOVERY);
         sendBroadcast(intent);
     }
 
     private void stopDiscovery() {
         launchApplication();
         Intent intent = new Intent();
-        intent.setAction(STOP_DISCOVERY);
+        intent.setAction(Action.STOP_DISCOVERY);
         sendBroadcast(intent);
     }
 
     private void fetchAttendees() {
         launchApplication();
         Intent intent = new Intent();
-        intent.setAction(FETCH_ATTENDEES);
+        intent.setAction(Action.FETCH_ATTENDEES);
         sendBroadcast(intent);
     }
 

@@ -21,6 +21,7 @@ import g1436218.com.spyder.fragment.AttendeeFragment;
 import g1436218.com.spyder.fragment.EventListFragment;
 import g1436218.com.spyder.fragment.InteractionFragment;
 import g1436218.com.spyder.fragment.LogoutFragment;
+import g1436218.com.spyder.object.Action;
 import g1436218.com.spyder.object.Attendee;
 import g1436218.com.spyder.object.Interaction;
 import g1436218.com.spyder.object.InteractionPackage;
@@ -33,11 +34,7 @@ import g1436218.com.spyder.service.GCMMessageHandler;
 
 public class MainActivity extends BaseActivity {
 
-
     private final String TAG = "MainActivity";
-
-
-    public static final String UPDATE_ATTENDEE_FRAGMENT_ADAPTER = "UPDATE_ATTENDEE_FRAGMENT_ADAPTER";
 
     private Intent bluetoothDiscoveryIntent;
     private InteractionPackage interactionPackage;
@@ -60,12 +57,12 @@ public class MainActivity extends BaseActivity {
         /* Register UIUpdateReceiver */
         receiver = new MainActivityReceiver(this);
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(BluetoothDiscovery.DEVICE_DETECTED);
-        intentFilter.addAction(BluetoothDiscovery.RESET_LIST);
-        intentFilter.addAction(BluetoothDiscovery.SEND_DATA);
-        intentFilter.addAction(GCMMessageHandler.START_DISCOVERY);
-        intentFilter.addAction(GCMMessageHandler.STOP_DISCOVERY);
-        intentFilter.addAction(GCMMessageHandler.FETCH_ATTENDEES);
+        intentFilter.addAction(Action.DEVICE_DETECTED);
+        intentFilter.addAction(Action.RESET_LIST);
+        intentFilter.addAction(Action.SEND_DATA);
+        intentFilter.addAction(Action.START_DISCOVERY);
+        intentFilter.addAction(Action.STOP_DISCOVERY);
+        intentFilter.addAction(Action.FETCH_ATTENDEES);
         registerReceiver(receiver, intentFilter);
 
         new DisplayMacAddress(this).execute();   /*Display Device Information */
@@ -225,7 +222,7 @@ public class MainActivity extends BaseActivity {
 
     private void broadcastUpdateAdapter() {
         Intent intent = new Intent();
-        intent.setAction(BluetoothDiscovery.UPDATE_ADAPTER);
+        intent.setAction(Action.UPDATE_INTERACTION_FRAGMENT_ADAPTER);
         sendBroadcast(intent);
     }
 

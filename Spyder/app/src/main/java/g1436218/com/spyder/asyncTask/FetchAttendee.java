@@ -26,6 +26,7 @@ import java.io.UnsupportedEncodingException;
 import g1436218.com.spyder.R;
 import g1436218.com.spyder.activity.MainActivity;
 import g1436218.com.spyder.config.GlobalConfiguration;
+import g1436218.com.spyder.object.Action;
 import g1436218.com.spyder.object.Attendee;
 import g1436218.com.spyder.object.UserMap;
 
@@ -74,7 +75,7 @@ public class FetchAttendee extends BaseMainAsyncTask {
     @Override
     public void onPostExecute(Void v) {
         Intent intent = new Intent();
-        intent.setAction(MainActivity.UPDATE_ATTENDEE_FRAGMENT_ADAPTER);
+        intent.setAction(Action.UPDATE_ATTENDEE_FRAGMENT_ADAPTER);
         activity.sendBroadcast(intent);
         Log.i(TAG, userMap.toString());
     }

@@ -15,15 +15,12 @@ import java.util.HashSet;
 
 import g1436218.com.spyder.asyncTask.SubmitBluetoothData;
 import g1436218.com.spyder.config.GlobalConfiguration;
+import g1436218.com.spyder.object.Action;
 import g1436218.com.spyder.object.Interaction;
 import g1436218.com.spyder.object.UserMap;
 
 public class BluetoothDiscovery extends Service {
 
-    public static final String DEVICE_DETECTED = "DEVICE_DETECTED";
-    public static final String RESET_LIST = "RESET_LIST";
-    public static final String SEND_DATA = "SEND_DATA";
-    public static final String UPDATE_ADAPTER = "UPDATE_ADAPTER";
 
     private final String TAG = "BluetoothDiscovery";
 
@@ -59,7 +56,7 @@ public class BluetoothDiscovery extends Service {
 
         private void broadcastDeviceDetected(String username, int strength) {
             Intent intent = new Intent();
-            intent.setAction(DEVICE_DETECTED);
+            intent.setAction(Action.DEVICE_DETECTED);
             intent.putExtra("USERNAME", username);
             intent.putExtra("STRENGTH", strength);
             sendBroadcast(intent);
@@ -67,7 +64,7 @@ public class BluetoothDiscovery extends Service {
 
         private void broadcastResetList() {
             Intent intent = new Intent();
-            intent.setAction(RESET_LIST);
+            intent.setAction(Action.RESET_LIST);
             sendBroadcast(intent);
             if (count++ % GlobalConfiguration.NUMBER_OF_MINI_BATCHES == 0) {
                 count = 1;
@@ -77,7 +74,7 @@ public class BluetoothDiscovery extends Service {
 
         private void broadcastSendData() {
             Intent intent = new Intent();
-            intent.setAction(SEND_DATA);
+            intent.setAction(Action.SEND_DATA);
             sendBroadcast(intent);
         }
     };

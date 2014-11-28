@@ -14,6 +14,7 @@ import g1436218.com.spyder.adapter.AttendeeAdapter;
 import g1436218.com.spyder.asyncTask.FetchAttendee;
 import g1436218.com.spyder.asyncTask.FetchUserProfile;
 import g1436218.com.spyder.asyncTask.SubmitBluetoothData;
+import g1436218.com.spyder.object.Action;
 import g1436218.com.spyder.object.Attendee;
 import g1436218.com.spyder.object.Interaction;
 import g1436218.com.spyder.receiver.AttendeeFragmentReceiver;
@@ -43,7 +44,7 @@ public class AttendeeFragment extends BaseMainFragmentWithReceiver implements Ad
     public void registerReceiver() {
         receiver = new AttendeeFragmentReceiver(this);
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(MainActivity.UPDATE_ATTENDEE_FRAGMENT_ADAPTER);
+        intentFilter.addAction(Action.UPDATE_ATTENDEE_FRAGMENT_ADAPTER);
         activity.registerReceiver(receiver, intentFilter);
     }
 
