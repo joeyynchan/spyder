@@ -22,6 +22,7 @@ public class GCMMessageHandler extends IntentService {
 
     public static final String START_DISCOVERY = "START_DISCOVERY";
     public static final String STOP_DISCOVERY = "STOP_DISCOVERY";
+    public static final String FETCH_ATTENDEES = "FETCH_ATTENDEES";
 
     String title, message;
     private Handler handler;
@@ -59,6 +60,8 @@ public class GCMMessageHandler extends IntentService {
             startDiscovery();
         } else if (STOP_DISCOVERY.equals(action)) {
             stopDiscovery();
+        } else if (FETCH_ATTENDEES.equals(action)) {
+            fetchAttendees();
         }
 
         Log.i("GCM", "Received : (" + messageType + ") \n" + "Action: " + action);
@@ -91,6 +94,13 @@ public class GCMMessageHandler extends IntentService {
         launchApplication();
         Intent intent = new Intent();
         intent.setAction(STOP_DISCOVERY);
+        sendBroadcast(intent);
+    }
+
+    private void fetchAttendees() {
+        launchApplication();
+        Intent intent = new Intent();
+        intent.setAction(FETCH_ATTENDEES);
         sendBroadcast(intent);
     }
 

@@ -2,6 +2,7 @@ package g1436218.com.spyder.asyncTask;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.TextView;
@@ -72,6 +73,9 @@ public class FetchAttendee extends BaseMainAsyncTask {
 
     @Override
     public void onPostExecute(Void v) {
+        Intent intent = new Intent();
+        intent.setAction(MainActivity.UPDATE_ATTENDEE_FRAGMENT_ADAPTER);
+        activity.sendBroadcast(intent);
         Log.i(TAG, userMap.toString());
     }
 

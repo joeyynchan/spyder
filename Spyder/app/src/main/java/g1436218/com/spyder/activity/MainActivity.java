@@ -39,6 +39,8 @@ public class MainActivity extends BaseActivity {
 
     private final String TAG = "MainActivity";
 
+    public static final String UPDATE_ATTENDEE_FRAGMENT_ADAPTER = "UPDATE_ATTENDEE_FRAGMENT_ADAPTER";
+
     private Intent bluetoothDiscoveryIntent;
     private InteractionPackage interactionPackage;
     private ArrayList<Attendee> attendees;
@@ -65,6 +67,7 @@ public class MainActivity extends BaseActivity {
         intentFilter.addAction(BluetoothDiscovery.SEND_DATA);
         intentFilter.addAction(GCMMessageHandler.START_DISCOVERY);
         intentFilter.addAction(GCMMessageHandler.STOP_DISCOVERY);
+        intentFilter.addAction(GCMMessageHandler.FETCH_ATTENDEES);
         registerReceiver(receiver, intentFilter);
 
         new DisplayMacAddress(this).execute();   /*Display Device Information */
@@ -77,7 +80,6 @@ public class MainActivity extends BaseActivity {
         //startBluetoothDiscoveryService();
 
         new GetRegisterId(this).execute();
-        new FetchAttendee(this).execute();
         super.onStart();
     }
 
@@ -146,7 +148,6 @@ public class MainActivity extends BaseActivity {
     }
 
     private void showAttendees() {
-        new FetchAttendee(this).execute();
         Fragment fragment = getFragmentManager().findFragmentByTag("CURRENT_FRAGMENT");
         if (!(fragment instanceof AttendeeFragment)) {
             FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
@@ -209,6 +210,8 @@ public class MainActivity extends BaseActivity {
                 startBluetoothDiscoveryService();
             } else if (GCMMessageHandler.STOP_DISCOVERY.equals(action)) {
                 stopBluetoothDiscoveryService();
+            } else if (GCMMessageHandler.FETCH_ATTENDEES.equals(action)) {
+                new FetchAttendee(activity).execute();
             }
         }
     }
