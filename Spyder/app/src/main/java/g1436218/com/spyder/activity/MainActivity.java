@@ -3,14 +3,19 @@ package g1436218.com.spyder.activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.app.NotificationManager;
 import android.bluetooth.BluetoothAdapter;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Vibrator;
+import android.support.v4.app.NotificationCompat;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -47,6 +52,8 @@ public class MainActivity extends BaseActivity {
     private Button button_interaction;
     private Button button_event_list;
     private Button button_bluetoothService;
+
+    private int nid = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -258,5 +265,13 @@ public class MainActivity extends BaseActivity {
             button_bluetoothService.setText("Start Service");
         }
     }
+
+
+    /* GCM */
+
+    public void showNotification(String title, String message) {
+
+    }
+
 
 }

@@ -52,6 +52,7 @@ public class FetchAttendees extends BaseMainAsyncTask {
 
         activity.clearAttendees();
         userMap.clear();
+        userMap.put("48:74:6E:75:64:75", "iPhone");
 
         if (resultJObj != null) {
             try {

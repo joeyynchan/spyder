@@ -4,53 +4,52 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import g1436218.com.spyder.R;
-import g1436218.com.spyder.config.GlobalConfiguration;
-import g1436218.com.spyder.object.Attendee;
-import g1436218.com.spyder.object.Event;
 
+abstract public class SectionAdapter<T> extends BaseAdapter {
 
-public class EventListAdapter extends BaseAdapter {
+    String TAG = getClass().getSimpleName();
 
-    private Context context;
-    private int resource;
-
-    private Map<String, EventAdapter> sections = new HashMap<String, EventAdapter>();
+    private Map<String, ArrayAdapter<T>> sections = new HashMap<String, ArrayAdapter<T>>();
     private static int TYPE_SECTION_HEADER = 0;
     private static int TYPE_SECTION_CONTENT = 1;
 
-    public EventListAdapter(Context context, int resource) {
+    private Context context;
+    private int contentResource;
+    private int headerResource;
+
+    public SectionAdapter(Context context, int contentResource) {
         super();
         this.context = context;
-        this.resource = resource;
-        addSection("Hosting Events");
-        addSection("Attending Events");
-        addItem("Attending Events", new Event("Testing Event", GlobalConfiguration.EVENT_ID, null, null, null, "308", null));
-        addSection("Other Events");
+        this.contentResource = contentResource;
+        this.headerResource = headerResource;
+        sections.clear();
     }
 
-    public EventAdapter getSection(String caption) {
+    public ArrayAdapter<T> getSection(String caption) {
         return sections.get(caption);
     }
 
     public void addSection(String caption) {
-        EventAdapter adapter = new EventAdapter(context, resource);
+        ArrayAdapter<T> adapter = new ArrayAdapter<T>(context, contentResource);
         sections.put(caption, adapter);
     }
 
-    public void addItem(String caption, Event item){
-        EventAdapter adapter = sections.get(caption);
+    public void addItem(String caption, T item){
+        ArrayAdapter<T> adapter = sections.get(caption);
         if (adapter != null) {
             adapter.add(item);
-            adapter.notifyDataSetChanged();
         }
         notifyDataSetChanged();
     }
@@ -60,12 +59,11 @@ public class EventListAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
-    @Override
     public Object getItem(int position) {
         Iterator<String> iterator = sections.keySet().iterator();
         while (iterator.hasNext()) {
             String caption = iterator.next();
-            EventAdapter adapter = sections.get(caption);
+            ArrayAdapter<T> adapter = sections.get(caption);
             if (position == 0) {
                 return caption;
             }
@@ -80,16 +78,15 @@ public class EventListAdapter extends BaseAdapter {
         return null;
     }
 
-    @Override
     public int getCount() {
         int total = 0;
         Iterator<String> iterator = sections.keySet().iterator();
         while (iterator.hasNext()) {
             String caption = iterator.next();
-            EventAdapter adapter = sections.get(caption);
+            ArrayAdapter<T> adapter = sections.get(caption);
             total += adapter.getCount() + 1;
         }
-        return total;
+        return (total);
     }
 
     public int getViewTypeCount() {
@@ -100,7 +97,7 @@ public class EventListAdapter extends BaseAdapter {
         Iterator<String> iterator = sections.keySet().iterator();
         while (iterator.hasNext()) {
             String caption = iterator.next();
-            EventAdapter adapter = sections.get(caption);
+            ArrayAdapter<T> adapter = sections.get(caption);
             if (position == 0) {
                 return TYPE_SECTION_HEADER;
             }
@@ -123,17 +120,12 @@ public class EventListAdapter extends BaseAdapter {
         return (getItemViewType(position) != TYPE_SECTION_HEADER);
     }
 
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
     public View getView(int position, View convertView, ViewGroup parent) {
 
         Iterator<String> iterator = sections.keySet().iterator();
         while (iterator.hasNext()) {
             String caption = iterator.next();
-            EventAdapter adapter = sections.get(caption);
+            ArrayAdapter<T> adapter = sections.get(caption);
             if (position == 0) {
                 return (getHeaderView(caption, convertView, parent));
             }
@@ -149,46 +141,13 @@ public class EventListAdapter extends BaseAdapter {
         return (null);
     }
 
-    public View getHeaderView(String caption, View convertView, ViewGroup parent){
-        View v = convertView;
-        if (v == null) {
-            LayoutInflater vi = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            v = vi.inflate(R.layout.header_event, null);
-        }
-
-        TextView text = (TextView) v.findViewById(R.id.textview_header_event);
-        text.setText(caption);
-
-        return v;
-    }
-
-    private class EventAdapter extends ArrayAdapter<Event> {
-
-        private Context context;
-
-        public EventAdapter(Context context, int resource) {
-            super(context, resource);
-            this.context = context;
-        }
-
-        public View getView(int position, View convertView, ViewGroup parent){
-            View v = convertView;
-            if (v == null) {
-                LayoutInflater vi = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                v = vi.inflate(R.layout.listview_event, null);
-            }
-
-            TextView name = (TextView) v.findViewById(R.id.textview_listview_event_name);
-            TextView location = (TextView) v.findViewById(R.id.textview_listview_event_location);
-
-            Event item = getItem(position);
-            name.setText(item.getName());
-            location.setText(item.getLocation());
-
-            return v;
-        }
+    protected abstract View getHeaderView(String caption, View convertView, ViewGroup parent); {
 
     }
 
+
+    public long getItemId(int position) {
+        return (position);
+    }
 
 }

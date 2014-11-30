@@ -1,6 +1,7 @@
 package g1436218.com.spyder.service;
 
 import android.app.IntentService;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
+import g1436218.com.spyder.R;
 import g1436218.com.spyder.activity.LoginActivity;
 import g1436218.com.spyder.activity.MainActivity;
 import g1436218.com.spyder.config.GlobalConfiguration;
@@ -20,8 +22,6 @@ import g1436218.com.spyder.receiver.GCMBroadcastReceiver;
 
 public class GCMMessageHandler extends IntentService {
 
-
-    String title, message;
     private Handler handler;
 
     public GCMMessageHandler() {
@@ -31,7 +31,6 @@ public class GCMMessageHandler extends IntentService {
     @Override
     public void onCreate() {
         super.onCreate();
-        title = message = "";
         handler = new Handler();
     }
 
@@ -44,11 +43,10 @@ public class GCMMessageHandler extends IntentService {
      */
     @Override
     protected void onHandleIntent(Intent intent) {
-        Bundle extras = intent.getExtras();
 
         GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(this);
         String messageType = gcm.getMessageType(intent);
-
+        Bundle extras = intent.getExtras();
         String action = extras.getString("action");
 
         if (Action.LAUNCH_APPLICATION.equals(action)) {
@@ -59,12 +57,51 @@ public class GCMMessageHandler extends IntentService {
             stopDiscovery();
         } else if (Action.FETCH_ATTENDEES.equals(action)) {
             fetchAttendees();
+        } else if (Action.VIBRATE.equals(action)) {
+            vibrate(extras.getInt("duration", 2000));
+        } else if (Action.LONG_TOAST.equals(action)) {
+            longToast(extras.getString("message", null));
+        } else if (Action.SHORT_TOAST.equals(action)) {
+            shortToast(extras.getString("message", null));
+        } else if (Action.NOTIFICATION.equals(action)) {
+            String title = extras.getString("title");
+            String message = extras.getString("message");
+            showNotification(title, message);
         }
 
-        Log.i("GCM", "Received : (" + messageType + ") \n" + "Action: " + action);
+        Log.i("GCM", "\n" + "Action: " + action + "\nData: " + extras.toString());
 
         GCMBroadcastReceiver.completeWakefulIntent(intent);
 
+    }
+
+    public void showNotification(String title, String message) {
+        NotificationCompat.Builder mBuilder =
+            new NotificationCompat.Builder(this)
+                    .setSmallIcon(R.drawable.trollface)
+                    .setContentTitle(title)
+                    .setContentText(message);
+
+        NotificationManager mNotificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        mNotificationManager.notify(GlobalConfiguration.nid++, mBuilder.build());
+    }
+
+    public void longToast(final String message) {
+        handler.post(new Runnable() {
+            public void run() {
+                Toast.makeText(getApplicationContext(), message , Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    public void shortToast(final String message) {
+        handler.post(new Runnable() {
+            public void run() {
+                Toast.makeText(getApplicationContext(), message , Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     public void vibrate(int duration) {
