@@ -3,24 +3,24 @@ package g1436218.com.spyder.activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.app.NotificationManager;
 import android.bluetooth.BluetoothAdapter;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.Vibrator;
-import android.support.v4.app.NotificationCompat;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
 import g1436218.com.spyder.R;
 import g1436218.com.spyder.asyncTask.DisplayMacAddress;
+import g1436218.com.spyder.asyncTask.DisplayProfile;
 import g1436218.com.spyder.asyncTask.FetchAttendees;
 import g1436218.com.spyder.asyncTask.GetRegisterId;
 import g1436218.com.spyder.fragment.AttendeeFragment;
@@ -35,7 +35,6 @@ import g1436218.com.spyder.object.Interactions;
 import g1436218.com.spyder.object.UserMap;
 import g1436218.com.spyder.receiver.MainActivityReceiver;
 import g1436218.com.spyder.service.BluetoothDiscovery;
-import g1436218.com.spyder.service.GCMMessageHandler;
 
 
 public class MainActivity extends BaseActivity {
@@ -48,10 +47,21 @@ public class MainActivity extends BaseActivity {
     private MainActivityReceiver receiver;
     private UserMap userMap;
 
-    private Button button_attendee;
-    private Button button_interaction;
-    private Button button_event_list;
+    private LinearLayout button_attendee_list;
+    private LinearLayout button_interactions;
+    private LinearLayout button_event_list;
+
+    private ImageView imageview_attendee_list;
+    private ImageView imageview_interactions;
+    private ImageView imageview_event_list;
+
+    private TextView textview_attendee_list;
+    private TextView textview_interatcions;
+    private TextView textview_event_list;
+
+
     private Button button_bluetoothService;
+    private ImageButton imagebutton_profile;
 
     private int nid = 0;
 
@@ -73,7 +83,7 @@ public class MainActivity extends BaseActivity {
         intentFilter.addAction(Action.FETCH_ATTENDEES);
         registerReceiver(receiver, intentFilter);
 
-        new DisplayMacAddress(this).execute();   /*Display Device Information */
+        //new DisplayMacAddress(this).execute();   /*Display Device Information */
     }
 
     @Override
@@ -92,13 +102,24 @@ public class MainActivity extends BaseActivity {
     @Override
     public void initializeView() {
 
-        button_attendee = (Button) findViewById(R.id.button_attendee);
-        button_interaction = (Button) findViewById(R.id.button_interaction);
-        button_event_list = (Button) findViewById(R.id.button_event_list);
+        button_attendee_list = (LinearLayout) findViewById(R.id.button_attendee_list);
+        button_interactions = (LinearLayout) findViewById(R.id.button_interactions);
+        button_event_list = (LinearLayout) findViewById(R.id.button_event_list);
 
-        button_attendee.setOnClickListener(this);
-        button_interaction.setOnClickListener(this);
+        imageview_attendee_list = (ImageView) findViewById(R.id.button_attendee_list_icon);
+        imageview_interactions = (ImageView) findViewById(R.id.button_interactions_icon);
+        imageview_event_list = (ImageView) findViewById(R.id.button_event_list_icon);
+
+        textview_attendee_list = (TextView) findViewById(R.id.button_attendee_list_text);
+        textview_interatcions = (TextView) findViewById(R.id.button_interactions_text);
+        textview_event_list = (TextView) findViewById(R.id.button_event_list_text);
+
+        imagebutton_profile = (ImageButton) findViewById(R.id.imagebutton_activity_main_profile);
+
+        button_attendee_list.setOnClickListener(this);
+        button_interactions.setOnClickListener(this);
         button_event_list.setOnClickListener(this);
+        imagebutton_profile.setOnClickListener(this);
 
         /* Temp */
         button_bluetoothService = (Button) findViewById(R.id.button_activity_main_bluetoothService);
@@ -131,16 +152,18 @@ public class MainActivity extends BaseActivity {
         if (getFragmentManager().getBackStackEntryCount() != 0) {
             getFragmentManager().popBackStack();
             setTitle("Spyder");
+            resetButtonState();
         }
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.button_attendee: showAttendees(); break;
-            case R.id.button_interaction: showInteractions(); break;
+            case R.id.button_attendee_list: showAttendees(); break;
+            case R.id.button_interactions: showInteractions(); break;
             case R.id.button_event_list: showEventList(); break;
             case R.id.button_activity_main_bluetoothService: bluetoothService(); break;
+            case R.id.imagebutton_activity_main_profile: new DisplayProfile(this).execute(); break;
             default: break;
         }
     }
@@ -155,17 +178,9 @@ public class MainActivity extends BaseActivity {
             fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
         }
-    }
-
-    private void showInteractions() {
-        Fragment fragment = getFragmentManager().findFragmentByTag("CURRENT_FRAGMENT");
-        if (!(fragment instanceof InteractionFragment)) {
-            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.fragment_container, new InteractionFragment(this), "CURRENT_FRAGMENT");
-            getFragmentManager().popBackStack();
-            fragmentTransaction.addToBackStack(null);
-            fragmentTransaction.commit();
-        }
+        resetButtonState();
+        imageview_attendee_list.setImageResource(R.drawable.main_activity_attendee_list_pressed);
+        textview_attendee_list.setTextColor(getResources().getColor(R.color.main_activity_button_text_pressed));
     }
 
     private void showEventList() {
@@ -177,6 +192,33 @@ public class MainActivity extends BaseActivity {
             fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
         }
+        resetButtonState();
+        imageview_event_list.setImageResource(R.drawable.main_activity_event_list_pressed);
+        textview_event_list.setTextColor(getResources().getColor(R.color.main_activity_button_text_pressed));
+    }
+
+    private void showInteractions() {
+        Fragment fragment = getFragmentManager().findFragmentByTag("CURRENT_FRAGMENT");
+        if (!(fragment instanceof InteractionFragment)) {
+            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.fragment_container, new InteractionFragment(this), "CURRENT_FRAGMENT");
+            getFragmentManager().popBackStack();
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
+        }
+        resetButtonState();
+        imageview_interactions.setImageResource(R.drawable.main_activity_interactions_icon_pressed);
+        textview_interatcions.setTextColor(getResources().getColor(R.color.main_activity_button_text_pressed));
+    }
+
+    private void resetButtonState() {
+        imageview_attendee_list.setImageResource(R.drawable.main_activity_attendee_list_normal);
+        imageview_event_list.setImageResource(R.drawable.main_activity_event_list_normal);
+        imageview_interactions.setImageResource(R.drawable.main_activity_interactions_icon_normal);
+
+        textview_attendee_list.setTextColor(getResources().getColor(R.color.main_activity_button_text));
+        textview_event_list.setTextColor(getResources().getColor(R.color.main_activity_button_text));
+        textview_interatcions.setTextColor(getResources().getColor(R.color.main_activity_button_text));
     }
 
     /* Manipulate InteractionPackage */
@@ -265,13 +307,5 @@ public class MainActivity extends BaseActivity {
             button_bluetoothService.setText("Start Service");
         }
     }
-
-
-    /* GCM */
-
-    public void showNotification(String title, String message) {
-
-    }
-
 
 }

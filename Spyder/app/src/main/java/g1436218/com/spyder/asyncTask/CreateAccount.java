@@ -11,9 +11,7 @@ import g1436218.com.spyder.activity.LoginActivity;
 import g1436218.com.spyder.config.GlobalConfiguration;
 import g1436218.com.spyder.fragment.RegisterFragment;
 
-/**
- * Created by Cherie on 11/9/2014.
- */
+
 public class CreateAccount extends BaseLoginAsyncTask {
 
     private RegisterFragment fragment;

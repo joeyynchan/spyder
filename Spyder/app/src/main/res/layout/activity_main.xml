@@ -16,17 +16,25 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="10dp"
             android:layout_marginLeft="10dp"
-            android:background="#ffffffff"
+            android:textColor="#ffffffff"
             android:id="@+id/textview_device_information"
             android:singleLine="false" />
 
-        <Button
+        <ImageButton
             android:layout_width="200dp"
             android:layout_height="200dp"
+            android:background="@drawable/imagebutton_activity_main_user"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/imagebutton_activity_main_profile"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="100dp"
             android:text="Start Service"
             android:id="@+id/button_activity_main_bluetoothService"
             android:textColor="#ffffffff"
-            android:layout_centerVertical="true"
+            android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true" />
 
     </RelativeLayout>
@@ -36,40 +44,91 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="fill_parent"
-        android:layout_height="60dp"
-        android:background="#ff102030"
+        android:layout_height="130px"
         android:id="@+id/bottom_bar"
+        android:background="@drawable/button_activity_main"
         android:layout_alignParentBottom="true">
 
-        <Button
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Interactions"
-            android:textColor="#ffffffff"
             android:layout_weight="1"
             android:clickable="true"
-            android:id="@+id/button_interaction"
-            android:background="@drawable/button_activity_main" />
+            android:id="@+id/button_interactions"
+            android:background="@drawable/button_activity_main">
 
-        <Button
+            <ImageView
+                android:layout_width="60px"
+                android:layout_height="60px"
+                android:layout_marginTop="30px"
+                android:layout_gravity="center"
+                android:id="@+id/button_interactions_icon"
+                android:src="@drawable/main_activity_interactions_icon_normal"/>
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:gravity="center"
+                android:text="Interactions"
+                android:textColor="@android:color/white"
+                android:id="@+id/button_interactions_text"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Attendee List"
-            android:textColor="#ffffffff"
             android:layout_weight="1"
             android:clickable="true"
-            android:id="@+id/button_attendee"
-            android:background="@drawable/button_activity_main" />
+            android:id="@+id/button_attendee_list"
+            android:background="@drawable/button_activity_main">
 
-        <Button
+            <ImageView
+                android:layout_width="60px"
+                android:layout_height="60px"
+                android:layout_marginTop="30px"
+                android:layout_gravity="center"
+                android:id="@+id/button_attendee_list_icon"
+                android:src="@drawable/main_activity_attendee_list_normal"/>
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:gravity="center"
+                android:text="Interactions"
+                android:textColor="@android:color/white"
+                android:id="@+id/button_attendee_list_text"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Event List"
-            android:textColor="#ffffffff"
             android:layout_weight="1"
             android:clickable="true"
             android:id="@+id/button_event_list"
-            android:background="@drawable/button_activity_main" />
+            android:background="@drawable/button_activity_main">
+
+            <ImageView
+                android:layout_width="60px"
+                android:layout_height="60px"
+                android:layout_marginTop="30px"
+                android:layout_gravity="center"
+                android:id="@+id/button_event_list_icon"
+                android:src="@drawable/main_activity_event_list_normal"/>
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:gravity="center"
+                android:text="Interactions"
+                android:textColor="@android:color/white"
+                android:id="@+id/button_event_list_text"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 

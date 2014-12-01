@@ -31,10 +31,10 @@ public class EventListAdapter extends BaseAdapter {
         super();
         this.context = context;
         this.resource = resource;
-        addSection("Hosting Events");
+        addSection("Other Events");
         addSection("Attending Events");
         addItem("Attending Events", new Event("Testing Event", GlobalConfiguration.EVENT_ID, null, null, null, "308", null));
-        addSection("Other Events");
+        addSection("Hosting Events");
     }
 
     public EventAdapter getSection(String caption) {
