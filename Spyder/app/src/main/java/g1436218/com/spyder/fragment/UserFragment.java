@@ -9,10 +9,13 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+<<<<<<< HEAD
 =======
 import android.os.Bundle;
 import android.view.LayoutInflater;
 >>>>>>> Successfully fetch profile data from api and display in user fragment, empty string is set if profile does not exist
+=======
+>>>>>>> Successfully add an edit icon on the action bar in user fragment
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -23,6 +26,7 @@ import g1436218.com.spyder.object.User;
 
 public class UserFragment extends BaseMainFragment {
 
+<<<<<<< HEAD
 <<<<<<< HEAD
     private static String TAG = "UserFragment";
     private User user;
@@ -35,6 +39,9 @@ public class UserFragment extends BaseMainFragment {
     private TextView textview_fragment_user_email;
     private TextView textview_fragment_user_external_link;
 =======
+=======
+    private static String TAG = "UserFragment";
+>>>>>>> Successfully add an edit icon on the action bar in user fragment
     private User user;
 
     TextView textview_fragment_user_name ;
@@ -49,6 +56,19 @@ public class UserFragment extends BaseMainFragment {
     public UserFragment(MainActivity activity, User user) {
         super(activity, R.layout.fragment_user);
         this.user = user;
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
+        return inflater.inflate(resourceId, container, false);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
+        Log.d(TAG, "onCreateOptionsMenu");
+        inflater.inflate(R.menu.menu_profile, menu);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
