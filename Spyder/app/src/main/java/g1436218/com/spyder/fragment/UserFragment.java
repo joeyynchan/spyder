@@ -1,6 +1,7 @@
 package g1436218.com.spyder.fragment;
 
 import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -58,6 +59,12 @@ public class UserFragment extends BaseMainFragment {
 
     private void showEditProfile() {
         Log.d(TAG, "showEditProfile");
+        Fragment fragment = getFragmentManager().findFragmentByTag("CURRENT_FRAGMENT");
+        if (!(fragment instanceof EventListFragment)) {
+            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.fragment_container, new EditProfileFragment((MainActivity)getActivity(), user), "CURRENT_FRAGMENT");
+            fragmentTransaction.commit();
+        }
     }
 
     @Override
