@@ -38,6 +38,16 @@ public class FetchEvents extends BaseMainAsyncTask {
 
     @Override
     protected Void doInBackgroundOffline(Void... params) {
+
+        broadcastAddItem("Attending" , "0001", "Attending 1");
+        broadcastAddItem("Attending" , "0002", "Attending 2");
+        broadcastAddItem("Attending" , "0003", "Attending 3");
+        broadcastAddItem("Hosting"   , "0004", "Hosting 1");
+        broadcastAddItem("Hosting"   , "0005", "Hosting 2");
+        broadcastAddItem("Hosting"   , "0006", "Hosting 3");
+        broadcastAddItem("Nothing"   , "0007", "Nothing 1");
+        broadcastAddItem("Nothing"   , "0008", "Nothing 2");
+
         return null;
     }
 
@@ -65,7 +75,6 @@ public class FetchEvents extends BaseMainAsyncTask {
                     event_id = item.getString("event_id");
                     event_name = item.getString("event_name");
                     broadcastAddItem(status, event_id, event_name);
-                    //fragment.addItem(status, new Event(event_name, event_id, null, null, null, "N/A", null));
                 }
             } catch (JSONException e) {
                 e.getMessage();
