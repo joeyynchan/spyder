@@ -23,7 +23,6 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import g1436218.com.spyder.R;
-import g1436218.com.spyder.asyncTask.DisplayMacAddress;
 import g1436218.com.spyder.asyncTask.DisplayProfile;
 import g1436218.com.spyder.asyncTask.FetchAttendees;
 import g1436218.com.spyder.asyncTask.GetRegisterId;
@@ -63,10 +62,6 @@ public class MainActivity extends BaseActivity {
     private TextView textview_interatcions;
     private TextView textview_event_list;
 
-
-    private Button button_bluetoothService;
-    private ImageButton imagebutton_profile;
-
     private int nid = 0;
 
     @Override
@@ -90,7 +85,6 @@ public class MainActivity extends BaseActivity {
         intentFilter.addAction(Action.GET_GCM);
         registerReceiver(receiver, intentFilter);
 
-        //new DisplayMacAddress(this).execute();   /*Display Device Information */
     }
 
     @Override
@@ -101,7 +95,6 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void onDestroy() {
-        //stopBluetoothDiscoveryService();
         unregisterReceiver(receiver);                  /* Unregister Receiver */
         super.onStop();
     }
@@ -121,16 +114,11 @@ public class MainActivity extends BaseActivity {
         textview_interatcions = (TextView) findViewById(R.id.button_interactions_text);
         textview_event_list = (TextView) findViewById(R.id.button_event_list_text);
 
-        imagebutton_profile = (ImageButton) findViewById(R.id.imagebutton_activity_main_profile);
 
         button_attendee_list.setOnClickListener(this);
         button_interactions.setOnClickListener(this);
         button_event_list.setOnClickListener(this);
-        imagebutton_profile.setOnClickListener(this);
 
-        /* Temp */
-        button_bluetoothService = (Button) findViewById(R.id.button_activity_main_bluetoothService);
-        button_bluetoothService.setOnClickListener(this);
     }
 
     @Override
@@ -159,7 +147,6 @@ public class MainActivity extends BaseActivity {
         if (getFragmentManager().getBackStackEntryCount() != 0) {
             getFragmentManager().popBackStack();
             setTitle("Spyder");
-            resetButtonState();
         }
     }
 
@@ -169,7 +156,6 @@ public class MainActivity extends BaseActivity {
             case R.id.button_attendee_list: showAttendees(); break;
             case R.id.button_interactions: showInteractions(); break;
             case R.id.button_event_list: showEventList(); break;
-            case R.id.button_activity_main_bluetoothService: bluetoothService(); break;
             case R.id.imagebutton_activity_main_profile: new DisplayProfile(this).execute(); break;
             default: break;
         }
@@ -181,8 +167,6 @@ public class MainActivity extends BaseActivity {
         if (!(fragment instanceof AttendeeFragment)) {
             FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.fragment_container, new AttendeeFragment(this), "CURRENT_FRAGMENT");
-            getFragmentManager().popBackStack();
-            fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
         }
         resetButtonState();
@@ -195,8 +179,6 @@ public class MainActivity extends BaseActivity {
         if (!(fragment instanceof EventListFragment)) {
             FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.fragment_container, new EventListFragment(this), "CURRENT_FRAGMENT");
-            getFragmentManager().popBackStack();
-            fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
         }
         resetButtonState();
@@ -209,8 +191,6 @@ public class MainActivity extends BaseActivity {
         if (!(fragment instanceof InteractionFragment)) {
             FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.fragment_container, new InteractionFragment(this), "CURRENT_FRAGMENT");
-            getFragmentManager().popBackStack();
-            fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
         }
         resetButtonState();
@@ -308,16 +288,6 @@ public class MainActivity extends BaseActivity {
 
     public void turnOffBluetooth() {
         BluetoothAdapter.getDefaultAdapter().disable();
-    }
-
-    public void bluetoothService() {
-        if (button_bluetoothService.getText().toString().equals("Start Service")) {
-            startBluetoothDiscoveryService();
-            button_bluetoothService.setText("Stop Service");
-        } else {
-            stopBluetoothDiscoveryService();
-            button_bluetoothService.setText("Start Service");
-        }
     }
 
     public void addGCMToClipBoard(String regid) {
