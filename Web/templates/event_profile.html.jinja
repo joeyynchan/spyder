@@ -105,12 +105,13 @@
     
     var interactionData = interactionObject;
       interaction = interactionData.interaction;
+	attendees = attendees.user_mapppings;
       
     curr_t = new Date(interactionData.start_t);
     event_end = new Date(interactionData.end_t);
     
     for (var i = 0; i < attendees.length; i++) {
-      graph.addNode(attendees[i].name);
+      graph.addNode(attendees[i].user_name);
     }
 
     interval = parseInt(document.getElementById("myText").value);
