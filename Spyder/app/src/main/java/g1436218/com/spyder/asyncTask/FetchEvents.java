@@ -43,11 +43,6 @@ public class FetchEvents extends BaseMainAsyncTask {
 
     @Override
     protected Void doInBackgroundOnline(Void... params) {
-        return null;
-    }
-
-    @Override
-    protected Void doInBackground(Void... params) {
 
         Context context = activity;
         SharedPreferences sharedPref = context.getSharedPreferences(
@@ -77,8 +72,8 @@ public class FetchEvents extends BaseMainAsyncTask {
             }
         }
 
-
         return null;
+
     }
 
     private void broadcastAddItem(String status, String event_id, String event_name) {

@@ -63,7 +63,7 @@ public class LinkDevice extends BaseLoginAsyncTask{
         intent.putExtra("GCMID", regid);
         activity.sendBroadcast(intent);
 
-        if (username != GlobalConfiguration.OFFLINE_MODE) {
+        if (!username.equals(GlobalConfiguration.OFFLINE_MODE)) {
             JSONObject jsonObject = getJSONFromUrl(URL, Responses.POST);
         } else {
             statusCode = 999;
@@ -117,7 +117,7 @@ public class LinkDevice extends BaseLoginAsyncTask{
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString(context.getString(R.string.username), username);
         editor.putString(context.getString(R.string.password), password);
-        editor.putBoolean(GlobalConfiguration.OFFLINE_MODE, username == GlobalConfiguration.OFFLINE_MODE);
+        editor.putBoolean(GlobalConfiguration.OFFLINE_MODE, username.equals(GlobalConfiguration.OFFLINE_MODE));
 
         editor.commit();
         /* start mainActivity */

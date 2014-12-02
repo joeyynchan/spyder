@@ -2,6 +2,7 @@ package g1436218.com.spyder.asyncTask;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import g1436218.com.spyder.R;
 import g1436218.com.spyder.activity.MainActivity;
@@ -25,6 +26,7 @@ public abstract class BaseMainAsyncTask extends BaseAsyncTask {
         SharedPreferences sharedPref = activity.getSharedPreferences(
                 context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         Boolean isOffline = sharedPref.getBoolean(GlobalConfiguration.OFFLINE_MODE, true);
+        Log.i("OFFLINE_MODE", isOffline ? "true" : "false");
         if (isOffline) {
             return doInBackgroundOffline();
         }
