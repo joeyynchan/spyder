@@ -1,6 +1,7 @@
 package g1436218.com.spyder.fragment;
 
 import android.app.Fragment;
+<<<<<<< HEAD
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,6 +9,10 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+=======
+import android.os.Bundle;
+import android.view.LayoutInflater;
+>>>>>>> Successfully fetch profile data from api and display in user fragment, empty string is set if profile does not exist
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -18,6 +23,7 @@ import g1436218.com.spyder.object.User;
 
 public class UserFragment extends BaseMainFragment {
 
+<<<<<<< HEAD
     private static String TAG = "UserFragment";
     private User user;
 
@@ -28,6 +34,17 @@ public class UserFragment extends BaseMainFragment {
     private TextView textview_fragment_user_phone;
     private TextView textview_fragment_user_email;
     private TextView textview_fragment_user_external_link;
+=======
+    private User user;
+
+    TextView textview_fragment_user_name ;
+    TextView textview_fragment_user_gender ;
+    TextView textview_fragment_user_occupation;
+    TextView textview_fragment_user_company;
+    TextView textview_fragment_user_phone;
+    TextView textview_fragment_user_email;
+    TextView textview_fragment_user_external_link;
+>>>>>>> Successfully fetch profile data from api and display in user fragment, empty string is set if profile does not exist
 
     public UserFragment(MainActivity activity, User user) {
         super(activity, R.layout.fragment_user);
