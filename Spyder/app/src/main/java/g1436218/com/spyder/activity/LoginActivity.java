@@ -44,10 +44,7 @@ public class LoginActivity extends BaseActivity {
         String username = sharedPref.getString(context.getString(R.string.username), "");
         String password = sharedPref.getString(context.getString(R.string.password), "");
 
-        receiver = new LoginActivityReceiver(this);
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(Action.GET_GCM);
-        registerReceiver(receiver, intentFilter);
+
 
 
         Log.d(TAG, username + ":" + password);
@@ -58,6 +55,15 @@ public class LoginActivity extends BaseActivity {
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.login_container, new LoginFragment(this), "CURRENT_FRAGMENT");
         fragmentTransaction.commit();
+    }
+
+    @Override
+    public void onResume() {
+        receiver = new LoginActivityReceiver(this);
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(Action.GET_GCM);
+        registerReceiver(receiver, intentFilter);
+        super.onResume();
     }
 
     @Override
