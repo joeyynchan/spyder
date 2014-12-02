@@ -13,7 +13,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import g1436218.com.spyder.R;
 import g1436218.com.spyder.activity.MainActivity;
@@ -60,6 +59,7 @@ public class ProfileFragment extends BaseMainFragment {
         if(user.getUsername().equals(currUsername)){
             inflater.inflate(R.menu.menu_profile, menu);
         }
+        inflater.inflate(R.menu.menu_profile, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
