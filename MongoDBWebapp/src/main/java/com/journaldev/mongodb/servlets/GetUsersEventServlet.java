@@ -15,7 +15,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.journaldev.mongodb.dao.MongoDBEventDAO;
+import com.journaldev.mongodb.dao.MongoDBProfileDAO;
 import com.journaldev.mongodb.dao.MongoDBUsersDAO;
+import com.journaldev.mongodb.model.Profile;
 import com.journaldev.mongodb.model.User;
 import com.mongodb.MongoClient;
 
@@ -36,7 +38,8 @@ public class GetUsersEventServlet extends HttpServlet {
 				.getAttribute("MONGO_CLIENT");
 		MongoDBEventDAO eventDAO = new MongoDBEventDAO(mongo);
 		MongoDBUsersDAO mobileDAO = new MongoDBUsersDAO(mongo);
-
+		MongoDBProfileDAO profileDAO = new MongoDBProfileDAO(mongo);
+		
 		Set<String> user_name_list = eventDAO.getAllUsersIDEvent(event_id);
 		System.out.println(user_name_list);
 		Set<User> user_list = mobileDAO.getAllUsers(user_name_list);
@@ -50,11 +53,17 @@ public class GetUsersEventServlet extends HttpServlet {
 
 		JSONArray ja = new JSONArray();
 		for (User mob_user : user_list) {
+			Profile userProfile = profileDAO.readProfileByName(mob_user.getUserName());
 			JSONObject jo = new JSONObject();
 			try {
 				String mac_address = mob_user.getMacAddress() == null ? "" : mob_user.getMacAddress();
 				jo.put("mac_address", mac_address);
 				jo.put("user_name", mob_user.getUserName());
+				if (userProfile != null && userProfile.getName() != null) {
+					jo.put("name", userProfile.getName());
+				} else {
+					jo.put("name", mob_user.getUserName());
+				}
 			} catch (JSONException e) {
 			}
 			ja.put(jo);

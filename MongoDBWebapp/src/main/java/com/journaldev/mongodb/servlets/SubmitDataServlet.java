@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -19,8 +21,10 @@ import org.json.JSONObject;
 
 import com.journaldev.mongodb.dao.MongoDBDataDAO;
 import com.journaldev.mongodb.dao.MongoDBEventDAO;
+import com.journaldev.mongodb.dao.MongoDBInteractionDAO;
 import com.journaldev.mongodb.dao.MongoDBUsersDAO;
 import com.journaldev.mongodb.model.Data;
+import com.journaldev.mongodb.model.Interaction;
 import com.journaldev.mongodb.model.User;
 import com.journaldev.mongodb.utils.Pair;
 import com.mongodb.MongoClient;
@@ -30,6 +34,7 @@ public class SubmitDataServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 
+	@SuppressWarnings("deprecation")
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
 
@@ -88,6 +93,30 @@ public class SubmitDataServlet extends HttpServlet {
 				MongoDBDataDAO dataDAO = new MongoDBDataDAO(mongo);
 				dataDAO.createData(interaction_data);
 				success = true;
+				
+				MongoDBInteractionDAO interactionDAO = new MongoDBInteractionDAO(mongo);
+				Calendar c = Calendar.getInstance();
+				c.setTime((new Date()));
+				for (int i = 0; i < strengths.size(); i++) {
+					List<Pair<String, Integer>> senseData = strengths.get(i);
+					String time = c.getTime().toString();
+					c.add(Calendar.SECOND, time_interval);
+					String endTime = c.getTime().toString();
+					for (Pair<String, Integer> dataPair : senseData) {
+						if (dataPair.getB() > -60) {
+							Interaction latestInteraction = interactionDAO.findLatestInteraction(event_id, user_name, dataPair.getA());
+							if (latestInteraction != null && c.getTime().getTime() - new Date(latestInteraction.getEnd_time()).getTime() < 100000) {
+								System.out.println("Updated " + user_name + " and " + dataPair.getA());
+								latestInteraction.setEnd_time(endTime);
+								interactionDAO.updateInteraction(latestInteraction);
+							} else {
+								System.out.println("Added " + user_name + " and " + dataPair.getA());
+								latestInteraction = new Interaction(event_id, user_name, dataPair.getA(), time, endTime);
+								interactionDAO.createInteraction(latestInteraction);
+							}
+						}
+					}
+				}
 
 			} else {
 				success = false;

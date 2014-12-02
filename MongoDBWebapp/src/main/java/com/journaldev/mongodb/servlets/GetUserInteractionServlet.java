@@ -14,7 +14,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.journaldev.mongodb.dao.MongoDBDataDAO;
-import com.journaldev.mongodb.dao.MongoDBEventDAO;
 import com.journaldev.mongodb.dao.MongoDBUsersDAO;
 import com.mongodb.MongoClient;
 
@@ -43,7 +42,6 @@ public class GetUserInteractionServlet extends HttpServlet {
         }
 
 		List<String> user_interactions = dataDAO.getAllData(user_name);
-		StringBuilder sb = new StringBuilder();
 
 		response.setContentType("application/json");
 		response.setHeader("Cache-Control", "nocache");

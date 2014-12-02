@@ -8,6 +8,7 @@ public class Profile {
     private String id;
     private String user_name;
     private String name;
+    private String job;
     private String company;
     private String photo;
     private String email;
@@ -16,11 +17,12 @@ public class Profile {
     private String gender;
     private List<String> connections;
 
-    public Profile(String user_name, String name, String company,
+    public Profile(String user_name, String name, String job, String company,
                    String photo, String email, String phone,
                    String external_link, String gender, List<String> connections) {
         this.user_name = user_name;
         this.name = name;
+        this.job = job;
         this.company = company;
         this.photo = photo;
         this.email = email;
@@ -44,6 +46,14 @@ public class Profile {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getJob(){
+        return job;
+    }
+
+    public void setJob(String job){
+        this.job = job;
     }
 
     public String getCompany() {
@@ -110,8 +120,4 @@ public class Profile {
         this.id = id;
     }
 
-	public Collection getJob() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

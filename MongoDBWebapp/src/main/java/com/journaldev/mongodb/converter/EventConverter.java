@@ -35,12 +35,13 @@ public class EventConverter {
 	public static Event toEvent(DBObject doc) {
 		Set<String> attendees = new HashSet<String>();
 				attendees.addAll((List<String>) doc.get("attendees"));
-		return new Event((String) doc.get("start_time"),
+		Event event = new Event((String) doc.get("start_time"),
 				(String) doc.get("end_time"), (String) doc.get("address"),
 				(String) doc.get("name"), (String) doc.get("description"),
 				(String) doc.get("speaker_id"),
 				(String) doc.get("organiser_id"), attendees);
-
+		event.setId(((ObjectId) doc.get("_id")).toString());
+		return event;
 	}
 
 }

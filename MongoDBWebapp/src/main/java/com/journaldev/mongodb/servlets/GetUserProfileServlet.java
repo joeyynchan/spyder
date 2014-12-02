@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -24,10 +23,15 @@ import com.mongodb.MongoClient;
 @WebServlet("/user/profile")
 public class GetUserProfileServlet extends HttpServlet {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
 
-		String user_id = request.getParameter("user_id");
+		String user_id = request.getParameter("user_name");
 
 		response.setContentType("application/json");
 		response.setHeader("Cache-Control", "nocache");
@@ -38,6 +42,7 @@ public class GetUserProfileServlet extends HttpServlet {
         MongoDBProfileDAO profileDAO = new MongoDBProfileDAO(mongo);
         MongoDBUsersDAO userDAO = new MongoDBUsersDAO(mongo);
 
+        System.out.println("get: " + user_id + ": " + userDAO.getUserByName(user_id));
         if (userDAO.getUserByName(user_id) == null) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
             return;
@@ -69,10 +74,10 @@ public class GetUserProfileServlet extends HttpServlet {
 		printout.flush();
 	}
 
-    protected void doPut(HttpServletRequest request,
+    protected void doPost(HttpServletRequest request,
                          HttpServletResponse response) throws IOException {
 
-        String user_id = request.getParameter("user_id");
+        String user_id = request.getParameter("user_name");
 
         BufferedReader br = new BufferedReader(new InputStreamReader(
                 request.getInputStream()));
@@ -103,6 +108,7 @@ public class GetUserProfileServlet extends HttpServlet {
             MongoDBProfileDAO profileDAO = new MongoDBProfileDAO(mongo);
             MongoDBUsersDAO userDAO = new MongoDBUsersDAO(mongo);
 
+            System.out.println("get: " + user_id + ": " + userDAO.getUserByName(user_id));
             if (userDAO.getUserByName(user_id) == null) {
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);
                 return;
@@ -111,13 +117,15 @@ public class GetUserProfileServlet extends HttpServlet {
             Profile profile = profileDAO.readProfileByName(user_id);
             if (profile == null) {
                 Profile newProfile = new Profile(user_id, name, job, company, photo,
-                        email, phone, external_link, connections);
+                        email, phone, external_link, gender, connections);
                 profileDAO.createProfile(newProfile);
                 response.sendError(HttpServletResponse.SC_CREATED);
             } else {
                 Profile newProfile = new Profile(user_id, name, job, company, photo,
-                        email, phone, external_link, connections);
+                        email, phone, external_link, gender, connections);
                 newProfile.setId(profile.getId());
+                System.out.println(profile.getId());
+                System.out.println(newProfile.getId());
                 profileDAO.updateProfile(newProfile);
                 return;
             }

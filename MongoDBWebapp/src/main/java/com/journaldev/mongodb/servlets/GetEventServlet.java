@@ -30,7 +30,7 @@ public class GetEventServlet extends HttpServlet {
 			HttpServletResponse response) throws IOException {
 
 		String user_name = request.getParameter("user_name");
-		System.out.println(user_name);
+		System.out.println("getUserEvent:" + user_name);
 		response.setContentType("application/json");
 		response.setHeader("Cache-Control", "nocache");
 		response.setCharacterEncoding("utf-8");
@@ -48,7 +48,8 @@ public class GetEventServlet extends HttpServlet {
        List<Event> userEvents = new ArrayList<Event>();
         List<Event> events = eventDAO.readAllEvent();
         for (Event e : events) {
-        	if (e.getAttendees().contains(user_name) || e.getOrganiser_id().equals(user_name)) {
+        	if (e.getAttendees().contains(user_name) || 
+        			(e.getOrganiser_id() != null && e.getOrganiser_id().equals(user_name))) {
         		userEvents.add(e);
         	}
         }

@@ -3,7 +3,6 @@ package com.journaldev.mongodb.servlets;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -22,6 +21,11 @@ import com.mongodb.MongoClient;
 
 @WebServlet("/event/join")
 public class JoinEventServlet extends HttpServlet {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
@@ -45,7 +49,6 @@ public class JoinEventServlet extends HttpServlet {
 			JSONObject jsonObj = new JSONObject(json);
 			System.out.println(jsonObj.toString());
 			String user_id = (String) jsonObj.get("user_name");
-			String status = (String) jsonObj.get("status");
 			MongoClient mongo = (MongoClient) request.getServletContext()
 					.getAttribute("MONGO_CLIENT");
 			MongoDBEventDAO eventDAO = new MongoDBEventDAO(mongo);

@@ -29,9 +29,15 @@ public class LoginServlet extends HttpServlet {
 		BufferedReader br = new BufferedReader(new InputStreamReader(
 				request.getInputStream()));
 		String json = "";
+		StringBuilder jsonBuilder = new StringBuilder();
 		if (br != null) {
-			json = br.readLine();
+			String nextLine = br.readLine();
+			while (nextLine != null) {
+				jsonBuilder.append(nextLine);
+				nextLine = br.readLine();
+			}
 		}
+		json = jsonBuilder.toString();
 
         response.setContentType("application/json");
         response.setHeader("Cache-Control", "nocache");
