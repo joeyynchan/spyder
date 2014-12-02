@@ -57,13 +57,15 @@ public class FetchAttendees extends BaseMainAsyncTask {
         if (resultJObj != null) {
             try {
                 JSONArray array = resultJObj.getJSONArray("user_mappings");
-                String macAddress, username;
+                String macAddress, username, name;
                 for (int i = 0; i < array.length(); i++) {
                     JSONObject item = array.getJSONObject(i);
+                    Log.i("Object", item.toString());
                     macAddress = item.getString("mac_address");
                     username = item.getString("user_name");
-                    activity.addAttendee(new Attendee(macAddress, username));
-                    userMap.put(macAddress, username);
+                    name = item.getString("name");
+                    activity.addAttendee(new Attendee(macAddress, username, name));
+                    userMap.put(macAddress, name);
                 }
             } catch (JSONException e) {
                 e.getMessage();

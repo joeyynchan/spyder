@@ -39,7 +39,7 @@ public class AttendeeAdapter extends ArrayAdapter<Attendee> {
         TextView username = (TextView) v.findViewById(R.id.textview_listview_attendees_username);
 
         Attendee item = getItem(position);
-        username.setText(item.getUsername() + " (" +item.getMacAddress() + ")");
+        username.setText(item.getName());
 
         return v;
     }

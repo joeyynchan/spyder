@@ -17,6 +17,7 @@ import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -111,6 +112,16 @@ public abstract class BaseAsyncTask extends AsyncTask<Void, Void, Void> {
         } catch (JSONException e) {
         }
         return jObj;
+    }
+
+    protected JSONArray toJSONArray(String result) {
+        JSONArray jArray = null;
+        try {
+            jArray = new JSONArray(result);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jArray;
     }
 
     protected void addToParams(String name, Object value){
