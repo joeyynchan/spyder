@@ -25,7 +25,6 @@ import java.util.ArrayList;
 import g1436218.com.spyder.R;
 import g1436218.com.spyder.asyncTask.DisplayProfile;
 import g1436218.com.spyder.asyncTask.FetchAttendees;
-import g1436218.com.spyder.asyncTask.GetRegisterId;
 import g1436218.com.spyder.fragment.AttendeeFragment;
 import g1436218.com.spyder.fragment.EventListFragment;
 import g1436218.com.spyder.fragment.InteractionFragment;
@@ -304,9 +303,4 @@ public class MainActivity extends BaseActivity {
         BluetoothAdapter.getDefaultAdapter().disable();
     }
 
-    public void addGCMToClipBoard(String regid) {
-        ClipData clip = ClipData.newPlainText("gcm", regid);
-        ClipboardManager clipBoard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-        clipBoard.setPrimaryClip(clip);
-    }
 }

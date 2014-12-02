@@ -2,8 +2,12 @@ package g1436218.com.spyder.activity;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.BroadcastReceiver;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,6 +20,8 @@ import g1436218.com.spyder.R;
 import g1436218.com.spyder.asyncTask.LinkDevice;
 import g1436218.com.spyder.fragment.LoginFragment;
 import g1436218.com.spyder.fragment.RegisterFragment;
+import g1436218.com.spyder.object.Action;
+import g1436218.com.spyder.receiver.LoginActivityReceiver;
 
 public class LoginActivity extends BaseActivity {
 
@@ -23,6 +29,8 @@ public class LoginActivity extends BaseActivity {
 
     private Button button_signUp;
     private Button button_login;
+
+    private LoginActivityReceiver receiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +44,12 @@ public class LoginActivity extends BaseActivity {
         String username = sharedPref.getString(context.getString(R.string.username), "");
         String password = sharedPref.getString(context.getString(R.string.password), "");
 
+        receiver = new LoginActivityReceiver(this);
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(Action.GET_GCM);
+        registerReceiver(receiver, intentFilter);
+
+
         Log.d(TAG, username + ":" + password);
         if(!username.equals("")){
             new LinkDevice(this, username, password).execute();
@@ -44,6 +58,12 @@ public class LoginActivity extends BaseActivity {
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.login_container, new LoginFragment(this), "CURRENT_FRAGMENT");
         fragmentTransaction.commit();
+    }
+
+    @Override
+    public void onPause() {
+        unregisterReceiver(receiver);
+        super.onPause();
     }
 
     @Override
@@ -92,6 +112,12 @@ public class LoginActivity extends BaseActivity {
         }
         button_signUp.setBackground(getResources().getDrawable(R.drawable.login_activity_button_normal));
         button_login.setBackground(getResources().getDrawable(R.drawable.login_activity_button_focused));
+    }
+
+    public void addGCMToClipBoard(String regid) {
+        ClipData clip = ClipData.newPlainText("gcm", regid);
+        ClipboardManager clipBoard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+        clipBoard.setPrimaryClip(clip);
     }
 
 }

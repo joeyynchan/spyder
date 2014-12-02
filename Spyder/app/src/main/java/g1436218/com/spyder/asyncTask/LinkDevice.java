@@ -9,7 +9,11 @@ import android.util.Log;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.android.gms.gcm.GoogleCloudMessaging;
+
 import org.json.JSONObject;
+
+import java.io.IOException;
 
 import g1436218.com.spyder.R;
 import g1436218.com.spyder.activity.LoginActivity;
@@ -18,6 +22,7 @@ import g1436218.com.spyder.config.GlobalConfiguration;
 import g1436218.com.spyder.fragment.LoginFragment;
 import g1436218.com.spyder.fragment.LogoutFragment;
 import g1436218.com.spyder.fragment.UnlinkFragment;
+import g1436218.com.spyder.object.Action;
 
 import static android.bluetooth.BluetoothAdapter.getDefaultAdapter;
 
@@ -37,9 +42,26 @@ public class LinkDevice extends BaseLoginAsyncTask{
 
     @Override
     protected Void doInBackground(Void... params) {
+
+        GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(activity);
+        String regid = "";
+        try {
+            regid = gcm.register(GlobalConfiguration.PROJECT_NUMBER);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         addToParams("user_name", username);
         addToParams("password", password);
         addToParams("mac_address", getDefaultAdapter().getAddress());
+        addToParams("gcm_id", regid);
+
+        Log.i("GCM", "Device registered, registration ID=" + regid);
+
+        Intent intent = new Intent();
+        intent.setAction(Action.GET_GCM);
+        intent.putExtra("GCMID", regid);
+        activity.sendBroadcast(intent);
 
         JSONObject jsonObject = getJSONFromUrl(URL, Responses.POST);
         Log.d(TAG, username + ":" + password);

@@ -44,9 +44,6 @@ public class MainActivityReceiver extends BroadcastReceiver {
             activity.turnOnBluetooth();
         } else if (Action.STOP_BLUETOOTH.equals(action)) {
             activity.turnOffBluetooth();
-        } else if (Action.GET_GCM.equals(action)) {
-            String regid = intent.getExtras().getString("GCMID");
-            activity.addGCMToClipBoard(regid);
         }
     }
 }
