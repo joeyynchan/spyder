@@ -84,7 +84,7 @@ def register():
 
     register_dict = db_api.register(**param_dict)
 
-    if(register_dict['is_success']):
+    if register_dict['is_success']:
         session['current_user_username'] = param_dict['username']
         session['next_page_param_dict'] = register_dict
         return redirect(url_for('dashboard'))
@@ -145,7 +145,7 @@ def dashboard():
         # TODO(gunpinyo): fix this
         # param_dict = session.pop('next_page_param_dict', {})
         return redirect(
-            url_for('event_profile', event_id='54751551e4b08c8af4a64db3'))
+            url_for('event_profile', event_id='54775c5de4b0598ae9308641'))
         # return render_template('privileged_base.html.jinja', **param_dict)
         # return redirect(url_for('user_profile'))
 
@@ -185,6 +185,45 @@ def user_profile(user_id=None):
         return redirect_to_default(user_dict['error_message'])
 
 
+@app.route('/addEvent', methods=['GET'])
+def add_event_page():
+    if not is_currently_login():
+        return redirect_to_default(
+            'You need to login in order to add event.')
+
+    param_dict = session.pop('next_page_param_dict', {})
+    return render_template('add_event.html.jinja', **param_dict)
+
+
+@app.route('/addEvent', methods=['POST'])
+def add_event():
+    if not is_currently_login():
+        return redirect_to_default(
+            'You need to login in order to add event.')
+
+    param_dict = {
+        'start_time': request.form['start_time'],
+        'end_time': request.form['end_time'],
+        'address': request.form['address'],
+        'name': request.form['name'],
+        'description': request.form['description'],
+        'speaker_id': request.form['speaker_id'],
+        'organiser_id': session['current_user_username'],
+        'attendees': (request.form['attendees'].split(' ')
+                      if request.form['attendees'] != [] else [])
+    }
+
+    add_event_dict = db_api.add_event(**param_dict)
+
+    if add_event_dict['is_success']:
+        session['next_page_param_dict'] = add_event_dict
+        return redirect(url_for('dashboard'))
+    else:
+        session['next_page_param_dict'] = param_dict
+        session['next_page_param_dict'].update(add_event_dict)
+        return redirect(url_for('add_event_page'))
+
+
 @app.route('/event/profile/<event_id>', methods=['GET'])
 def event_profile(event_id):
     if not is_currently_login():
@@ -218,11 +257,9 @@ def event_profile(event_id):
     #     return redirect_to_default(event_dict['error_message'])
 
     param_dict = {
-        'event_id': event_id,
-        'real_for_demo': db_api.xhr_get_event_visualisation_data(event_id)
+        'event_id': event_id
     }
-    # TODO(gunpinyo): change a fake to real one
-    param_dict.update(db_api.fake_xhr_get_event_visualisation_data(event_id))
+    param_dict.update(db_api.xhr_get_event_visualisation_data(event_id))
     param_dict.update(session.pop('next_page_param_dict', {}))
 
     return render_template('event_profile.html.jinja', **param_dict)

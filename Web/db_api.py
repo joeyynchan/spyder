@@ -2,6 +2,7 @@ from db_connection import db_connect
 import http
 import json
 
+
 def register(
         username, hashed_password, hashed_confirm_password):
     if hashed_password != hashed_confirm_password:
@@ -59,27 +60,55 @@ def login(username, hashed_password):
     return response_dict[status_code]
 
 
-ad = ('{"attendees":[{"name":"A","userid":"1",'
-      '"mac_address":"5463f8d4e4b0952cfce4d426"},'
-      '{"name":"B","userid":"2","mac_address":"5463f8d4e4b0952cfce4d426"},'
-      '{"name":"C","userid":"3","mac_address":"5463f8d4e4b0952cfce4d426"},'
-      '{"name":"D","userid":"4","mac_address":"5463f8d4e4b0952cfce4d426"},'
-      '{"name":"E","userid":"5","mac_address":"5463f8d4e4b0952cfce4d426"}]}')
+def add_event(start_time, end_time, address, name,
+              description, speaker_id, organiser_id, attendees):
+    status_code, content = db_connect('/addEvent', {
+        'start_time': start_time,
+        'end_time': end_time,
+        'address': address,
+        'name': name,
+        'description': description,
+        'speaker_id': speaker_id,
+        'organiser_id': organiser_id,
+        'attendees': [{'user_name': attendee} for attendee in attendees]
+    })
 
-ir = ('{"interaction":[{"start_t":"3 Jun 2008 11:05:30","end_t":"3 Jun 2008'
-      ' 11:05:32","duration":"00:00:02","user1":"A","user2":"B"},'
-      '{"start_t":"3 Jun 2008 11:05:35","end_t":"3 Jun 2008 11:05:36",'
-      '"duration":"00:00:02","user1":"A","user2":"B"},' 
-      '{"start_t":"3 Jun 2008 11:05:31","end_t":"3 Jun 2008 11:05:34",'
-      '"duration":"00:00:03","user1":"C","user2":"D"}],'
-      '"start_t":"3 Jun 2008 11:05:28","end_t":"3 Jun 2008 11:05:37"}')
-
-
-def fake_xhr_get_event_visualisation_data(event_id):
-    return {
-        'interaction': json.loads(ir),
-        'attendees': json.loads(ad)['attendees']
+    response_dict = {
+        http.client.CREATED: {
+            'is_success': True,
+            'success_message': 'Your event has been added successfully.'
+        },
+        http.client.CONFLICT: {
+            'is_success': False,
+            'error_message':
+                'Somebody has already used this event name.'
+        }
     }
+
+    return response_dict[status_code]
+
+
+# ad = ('{"attendees":[{"name":"A","userid":"1",'
+#       '"mac_address":"5463f8d4e4b0952cfce4d426"},'
+#       '{"name":"B","userid":"2","mac_address":"5463f8d4e4b0952cfce4d426"},'
+#       '{"name":"C","userid":"3","mac_address":"5463f8d4e4b0952cfce4d426"},'
+#       '{"name":"D","userid":"4","mac_address":"5463f8d4e4b0952cfce4d426"},'
+#       '{"name":"E","userid":"5","mac_address":"5463f8d4e4b0952cfce4d426"}]}')
+
+# ir = ('{"interaction":[{"start_t":"3 Jun 2008 11:05:30","end_t":"3 Jun 2008'
+#       ' 11:05:32","duration":"00:00:02","user1":"A","user2":"B"},'
+#       '{"start_t":"3 Jun 2008 11:05:35","end_t":"3 Jun 2008 11:05:36",'
+#       '"duration":"00:00:02","user1":"A","user2":"B"},'
+#       '{"start_t":"3 Jun 2008 11:05:31","end_t":"3 Jun 2008 11:05:34",'
+#       '"duration":"00:00:03","user1":"C","user2":"D"}],'
+#       '"start_t":"3 Jun 2008 11:05:28","end_t":"3 Jun 2008 11:05:37"}')
+
+
+# def fake_xhr_get_event_visualisation_data(event_id):
+#     return {
+#         'interaction': json.loads(ir),
+#         'attendees': json.loads(ad)['attendees']
+#     }
 
 
 def xhr_get_event_visualisation_data(event_id):
