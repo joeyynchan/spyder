@@ -19,5 +19,6 @@ public class Action {
     public static final String NOTIFICATION = "NOTIFICATION";
     public static final String EVENT_ADAPTER_ADD_ITEM = "EVENT_ADAPTER_ADD_ITEM";
     public static final String EVENT_ADAPTER_CLEAR = "EVENT_ADAPTER_CLEAR";
+    public static final String GET_GCM = "GET_GCM" ;
 
 }

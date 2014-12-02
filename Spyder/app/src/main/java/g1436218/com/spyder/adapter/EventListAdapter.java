@@ -183,11 +183,9 @@ public class EventListAdapter extends BaseAdapter {
             }
 
             TextView name = (TextView) v.findViewById(R.id.textview_listview_event_name);
-            TextView location = (TextView) v.findViewById(R.id.textview_listview_event_location);
 
             Event item = getItem(position);
             name.setText(item.getName());
-            location.setText(item.getLocation());
 
             return v;
         }

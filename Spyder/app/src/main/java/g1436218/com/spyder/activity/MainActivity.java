@@ -4,6 +4,9 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.bluetooth.BluetoothAdapter;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
@@ -84,6 +87,7 @@ public class MainActivity extends BaseActivity {
         intentFilter.addAction(Action.START_BLUETOOTH);
         intentFilter.addAction(Action.STOP_BLUETOOTH);
         intentFilter.addAction(Action.FETCH_ATTENDEES);
+        intentFilter.addAction(Action.GET_GCM);
         registerReceiver(receiver, intentFilter);
 
         //new DisplayMacAddress(this).execute();   /*Display Device Information */
@@ -316,4 +320,9 @@ public class MainActivity extends BaseActivity {
         }
     }
 
+    public void addGCMToClipBoard(String regid) {
+        ClipData clip = ClipData.newPlainText("gcm", regid);
+        ClipboardManager clipBoard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+        clipBoard.setPrimaryClip(clip);
+    }
 }

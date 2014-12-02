@@ -1,13 +1,20 @@
 package g1436218.com.spyder.asyncTask;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import java.io.IOException;
 
+import g1436218.com.spyder.R;
 import g1436218.com.spyder.activity.MainActivity;
 import g1436218.com.spyder.config.GlobalConfiguration;
+import g1436218.com.spyder.object.Action;
 
 public class GetRegisterId extends BaseMainAsyncTask {
 
@@ -25,6 +32,12 @@ public class GetRegisterId extends BaseMainAsyncTask {
             e.printStackTrace();
         }
         Log.i("GCM", "Device registered, registration ID=" + regid);
+
+        Intent intent = new Intent();
+        intent.setAction(Action.GET_GCM);
+        intent.putExtra("GCMID", regid);
+        activity.sendBroadcast(intent);
+
         return null;
     }
 
