@@ -15,7 +15,7 @@ import g1436218.com.spyder.object.User;
 public class FetchUserProfile extends BaseMainAsyncTask {
 
 
-    private static String URL = GlobalConfiguration.DEFAULT_URL + "user/profile?user_id=";
+    private String URL = GlobalConfiguration.DEFAULT_URL + "user/profile?user_name=";
     private static String TAG = "FetchUserProfile";
 
     private String username;
@@ -47,13 +47,15 @@ public class FetchUserProfile extends BaseMainAsyncTask {
 
     @Override
     protected Void doInBackgroundOnline(Void... params) {
+        Log.d(TAG, URL);
         JSONObject jsonObject = getJSONFromUrl(URL, Responses.GET);
-
-        if(statusCode == 204){
-            //notFound
-        }else if(statusCode == 200){
+        Log.d(TAG, statusCode + "");
+        if(statusCode == 200){
             Log.d(TAG, jsonObject.toString());
             insertDataToUser(jsonObject);
+        }else{
+            //notFound
+            defaultDataToUser();
         }
         return null;
     }
@@ -67,6 +69,7 @@ public class FetchUserProfile extends BaseMainAsyncTask {
         fragmentTransaction.commit();
     }
 
+    /* get profile detail from JSONObject to Profile fragment */
     private void insertDataToUser(JSONObject jsonObject){
         try {
             user.setCompany(jsonObject.getString("company"));

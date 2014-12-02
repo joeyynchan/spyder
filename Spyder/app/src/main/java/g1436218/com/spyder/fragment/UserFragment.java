@@ -2,7 +2,11 @@ package g1436218.com.spyder.fragment;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -13,6 +17,7 @@ import g1436218.com.spyder.object.User;
 
 public class UserFragment extends BaseMainFragment {
 
+    private static String TAG = "UserFragment";
     private User user;
 
     TextView textview_fragment_user_name ;
@@ -26,6 +31,19 @@ public class UserFragment extends BaseMainFragment {
     public UserFragment(MainActivity activity, User user) {
         super(activity, R.layout.fragment_user);
         this.user = user;
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
+        return inflater.inflate(resourceId, container, false);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
+        Log.d(TAG, "onCreateOptionsMenu");
+        inflater.inflate(R.menu.menu_profile, menu);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override

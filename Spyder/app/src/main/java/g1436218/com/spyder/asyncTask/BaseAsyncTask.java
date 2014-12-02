@@ -25,6 +25,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -50,7 +51,6 @@ public abstract class BaseAsyncTask extends AsyncTask<Void, Void, Void> {
     }
 
     protected String getStringFromUrl(String url, Responses response) {
-
         try {
 
             HttpRequestBase httpRequest = new HttpRequestBase() {
@@ -80,22 +80,27 @@ public abstract class BaseAsyncTask extends AsyncTask<Void, Void, Void> {
                     break;
 
             }
-
             httpRequest.setHeader("Content-type", "application/json");
             HttpResponse httpResponse =  new DefaultHttpClient().execute(httpRequest);
-            inputStream = httpResponse.getEntity().getContent();
+            if(httpResponse.getEntity() != null) {
+                inputStream = httpResponse.getEntity().getContent();
+                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, "iso-8859-1"), 8);
+                StringBuilder sb = new StringBuilder();
+                String line = null;
+                while ((line = reader.readLine()) != null) {
+                    sb.append(line + "\n");
+                }
+                inputStream.close();
+                result = sb.toString();
+            }else{
+                result = "";
+            }
+
             statusCode = httpResponse.getStatusLine().getStatusCode();
 
-            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, "iso-8859-1"), 8);
-            StringBuilder sb = new StringBuilder();
-            String line = null;
-            while ((line = reader.readLine()) != null) {
-                sb.append(line + "\n");
-            }
-            inputStream.close();
-            result = sb.toString();
+
         } catch (Exception e) {
-            Log.e(TAG, e.getMessage());
+            Log.e(TAG, e.toString());
         }
         return result;
     }
