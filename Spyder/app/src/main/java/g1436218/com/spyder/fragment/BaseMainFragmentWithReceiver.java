@@ -14,7 +14,7 @@ public abstract class BaseMainFragmentWithReceiver extends BaseMainFragment {
 
     @Override
     public void onResume() {
-        registerReceiver();
+        registerReceiver(); 
         super.onResume();
     }
 

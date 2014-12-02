@@ -47,6 +47,20 @@ public class UserFragment extends BaseMainFragment {
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_edit:
+                showEditProfile();
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void showEditProfile() {
+        Log.d(TAG, "showEditProfile");
+    }
+
+    @Override
     protected void initializeView() {
         textview_fragment_user_name = (TextView) activity.findViewById(R.id.textview_fragment_user_name);
         textview_fragment_user_gender = (TextView) activity.findViewById(R.id.textview_fragment_user_gender);
