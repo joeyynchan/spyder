@@ -37,13 +37,13 @@ public class FetchAttendees extends BaseMainAsyncTask {
 
     private UserMap userMap;
 
-    public FetchAttendees(MainActivity activity) {
-        super(activity);
-        this.userMap = UserMap.getInstance();
+    @Override
+    protected Void doInBackgroundOffline(Void... params) {
+        return null;
     }
 
     @Override
-    protected Void doInBackground(Void... params) {
+    protected Void doInBackgroundOnline(Void... params) {
 
         /* Dummy response since the API is not ready; */
         //result = "{\"user_mappings\":[{\"mac_address\":\"38:2D:D1:1B:09:2A\",\"user_name\":\"GalaxyTab4\"},{\"mac_address\":\"F0:E7:7E:52:57:3E\",\"user_name\":\"GT-N7000\"},{\"mac_address\":\"48:74:6E:75:64:75\",\"user_name\":\"iPhone\"}]}";
@@ -73,6 +73,11 @@ public class FetchAttendees extends BaseMainAsyncTask {
         }
 
         return null;
+    }
+
+    public FetchAttendees(MainActivity activity) {
+        super(activity);
+        this.userMap = UserMap.getInstance();
     }
 
     @Override

@@ -27,6 +27,16 @@ public class UpdateProfile extends BaseMainAsyncTask {
     }
 
     @Override
+    protected Void doInBackgroundOffline(Void... params) {
+        return null;
+    }
+
+    @Override
+    protected Void doInBackgroundOnline(Void... params) {
+        return null;
+    }
+
+    @Override
     protected Void doInBackground(Void... params) {
 
         addToParams("name", user.getName());

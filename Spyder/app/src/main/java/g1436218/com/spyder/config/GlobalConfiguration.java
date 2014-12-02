@@ -9,6 +9,8 @@ public class GlobalConfiguration {
     public static final String PROJECT_NUMBER = "139712018020";
     public static final int VIBRATE_DURATION = 1000;
 
+    public static final String OFFLINE_MODE = "offline";
+
     public static int nid = 0;
 
 }

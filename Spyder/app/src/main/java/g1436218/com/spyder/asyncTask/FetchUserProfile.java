@@ -30,8 +30,12 @@ public class FetchUserProfile extends BaseMainAsyncTask {
     }
 
     @Override
-    protected Void doInBackground(Void... params) {
+    protected Void doInBackgroundOffline(Void... params) {
+        return null;
+    }
 
+    @Override
+    protected Void doInBackgroundOnline(Void... params) {
         return null;
     }
 
