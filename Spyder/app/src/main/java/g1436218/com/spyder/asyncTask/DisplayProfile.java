@@ -26,7 +26,6 @@ public class DisplayProfile extends BaseMainAsyncTask {
         ProfileFragment profileFragment = new ProfileFragment(activity, user);
         FragmentTransaction fragmentTransaction = activity.getFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.fragment_container, profileFragment, "CURRENT_FRAGMENT");
-        fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
 }

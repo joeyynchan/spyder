@@ -28,7 +28,7 @@ import g1436218.com.spyder.service.BluetoothDiscovery;
 
 public class InteractionFragment extends BaseMainFragmentWithReceiver implements AdapterView.OnItemClickListener {
 
-    private final String TITLE = "Ongoing Interactions";
+    private final String TITLE = "Interactions";
 
     private InteractionAdapter adapter;
     private IntentFilter intentFilter;

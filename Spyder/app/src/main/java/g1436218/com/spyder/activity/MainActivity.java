@@ -51,16 +51,19 @@ public class MainActivity extends BaseActivity {
     private UserMap userMap;
 
     private LinearLayout button_attendee_list;
-    private LinearLayout button_interactions;
     private LinearLayout button_event_list;
+    private LinearLayout button_interactions;
+    private LinearLayout button_profile;
 
     private ImageView imageview_attendee_list;
-    private ImageView imageview_interactions;
     private ImageView imageview_event_list;
+    private ImageView imageview_interactions;
+    private ImageView imageview_profile;
 
     private TextView textview_attendee_list;
-    private TextView textview_interatcions;
     private TextView textview_event_list;
+    private TextView textview_interatcions;
+    private TextView textview_profile;
 
     private int nid = 0;
 
@@ -89,8 +92,8 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void onStart() {
-        new GetRegisterId(this).execute();
         super.onStart();
+        showInteractions();
     }
 
     @Override
@@ -105,19 +108,22 @@ public class MainActivity extends BaseActivity {
         button_attendee_list = (LinearLayout) findViewById(R.id.button_attendee_list);
         button_interactions = (LinearLayout) findViewById(R.id.button_interactions);
         button_event_list = (LinearLayout) findViewById(R.id.button_event_list);
+        button_profile = (LinearLayout) findViewById(R.id.button_profile);
 
         imageview_attendee_list = (ImageView) findViewById(R.id.button_attendee_list_icon);
         imageview_interactions = (ImageView) findViewById(R.id.button_interactions_icon);
         imageview_event_list = (ImageView) findViewById(R.id.button_event_list_icon);
+        imageview_profile = (ImageView) findViewById(R.id.button_profile_icon);
 
         textview_attendee_list = (TextView) findViewById(R.id.button_attendee_list_text);
         textview_interatcions = (TextView) findViewById(R.id.button_interactions_text);
         textview_event_list = (TextView) findViewById(R.id.button_event_list_text);
-
+        textview_profile = (TextView) findViewById(R.id.button_event_profile_text);
 
         button_attendee_list.setOnClickListener(this);
-        button_interactions.setOnClickListener(this);
         button_event_list.setOnClickListener(this);
+        button_interactions.setOnClickListener(this);
+        button_profile.setOnClickListener(this);
 
     }
 
@@ -146,7 +152,6 @@ public class MainActivity extends BaseActivity {
     public void onBackPressed() {
         if (getFragmentManager().getBackStackEntryCount() != 0) {
             getFragmentManager().popBackStack();
-            setTitle("Spyder");
         }
     }
 
@@ -156,7 +161,7 @@ public class MainActivity extends BaseActivity {
             case R.id.button_attendee_list: showAttendees(); break;
             case R.id.button_interactions: showInteractions(); break;
             case R.id.button_event_list: showEventList(); break;
-            case R.id.imagebutton_activity_main_profile: new DisplayProfile(this).execute(); break;
+            case R.id.button_profile: showProfile(); break;
             default: break;
         }
     }
@@ -198,14 +203,23 @@ public class MainActivity extends BaseActivity {
         textview_interatcions.setTextColor(getResources().getColor(R.color.main_activity_button_text_pressed));
     }
 
+    private void showProfile() {
+        new DisplayProfile(this).execute();
+        resetButtonState();
+        imageview_profile.setImageResource(R.drawable.main_activity_interactions_icon_pressed);
+        textview_profile.setTextColor(getResources().getColor(R.color.main_activity_button_text_pressed));
+    }
+
     private void resetButtonState() {
         imageview_attendee_list.setImageResource(R.drawable.main_activity_attendee_list_normal);
         imageview_event_list.setImageResource(R.drawable.main_activity_event_list_normal);
         imageview_interactions.setImageResource(R.drawable.main_activity_interactions_icon_normal);
+        imageview_profile.setImageResource(R.drawable.main_activity_profile_normal);
 
         textview_attendee_list.setTextColor(getResources().getColor(R.color.textedit_background));
         textview_event_list.setTextColor(getResources().getColor(R.color.textedit_background));
         textview_interatcions.setTextColor(getResources().getColor(R.color.textedit_background));
+        textview_profile.setTextColor(getResources().getColor(R.color.textedit_background));
     }
 
     /* Manipulate InteractionPackage */
