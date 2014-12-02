@@ -35,39 +35,6 @@ public class UserFragment extends BaseMainFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        setHasOptionsMenu(true);
-        return inflater.inflate(resourceId, container, false);
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
-        Log.d(TAG, "onCreateOptionsMenu");
-        inflater.inflate(R.menu.menu_profile, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_edit:
-                showEditProfile();
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-    private void showEditProfile() {
-        Log.d(TAG, "showEditProfile");
-        Fragment fragment = getFragmentManager().findFragmentByTag("CURRENT_FRAGMENT");
-        if (!(fragment instanceof EventListFragment)) {
-            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.fragment_container, new EditProfileFragment((MainActivity)getActivity(), user), "CURRENT_FRAGMENT");
-            fragmentTransaction.commit();
-        }
-    }
-
-    @Override
     protected void initializeView() {
         textview_fragment_user_name = (TextView) activity.findViewById(R.id.textview_fragment_user_name);
         textview_fragment_user_gender = (TextView) activity.findViewById(R.id.textview_fragment_user_gender);
