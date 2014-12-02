@@ -8,7 +8,7 @@
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center_horizontal|top"
-        android:background="@drawable/background_activity_main"
+        android:background="@color/backgroundColor"
         android:layout_above="@+id/bottom_bar">
 
         <TextView
@@ -23,7 +23,7 @@
         <ImageButton
             android:layout_width="200dp"
             android:layout_height="200dp"
-            android:background="@drawable/imagebutton_activity_main_user"
+            android:background="@drawable/main_activity_user"
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"
             android:id="@+id/imagebutton_activity_main_profile"/>
@@ -46,7 +46,7 @@
         android:layout_width="fill_parent"
         android:layout_height="130px"
         android:id="@+id/bottom_bar"
-        android:background="@drawable/button_activity_main"
+        android:background="@drawable/main_activity_button_xml"
         android:layout_alignParentBottom="true">
 
         <LinearLayout
@@ -56,7 +56,7 @@
             android:layout_weight="1"
             android:clickable="true"
             android:id="@+id/button_interactions"
-            android:background="@drawable/button_activity_main">
+            android:background="@drawable/main_activity_button_xml">
 
             <ImageView
                 android:layout_width="60px"
@@ -83,7 +83,7 @@
             android:layout_weight="1"
             android:clickable="true"
             android:id="@+id/button_attendee_list"
-            android:background="@drawable/button_activity_main">
+            android:background="@drawable/main_activity_button_xml">
 
             <ImageView
                 android:layout_width="60px"
@@ -97,7 +97,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:gravity="center"
-                android:text="Interactions"
+                android:text="Attendee List"
                 android:textColor="@android:color/white"
                 android:id="@+id/button_attendee_list_text"/>
 
@@ -110,7 +110,7 @@
             android:layout_weight="1"
             android:clickable="true"
             android:id="@+id/button_event_list"
-            android:background="@drawable/button_activity_main">
+            android:background="@drawable/main_activity_button_xml">
 
             <ImageView
                 android:layout_width="60px"
@@ -124,7 +124,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:gravity="center"
-                android:text="Interactions"
+                android:text="Event List"
                 android:textColor="@android:color/white"
                 android:id="@+id/button_event_list_text"/>
 

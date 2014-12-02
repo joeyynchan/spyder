@@ -7,6 +7,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -80,6 +81,8 @@ public class MainActivity extends BaseActivity {
         intentFilter.addAction(Action.SEND_DATA);
         intentFilter.addAction(Action.START_DISCOVERY);
         intentFilter.addAction(Action.STOP_DISCOVERY);
+        intentFilter.addAction(Action.START_BLUETOOTH);
+        intentFilter.addAction(Action.STOP_BLUETOOTH);
         intentFilter.addAction(Action.FETCH_ATTENDEES);
         registerReceiver(receiver, intentFilter);
 
@@ -216,9 +219,9 @@ public class MainActivity extends BaseActivity {
         imageview_event_list.setImageResource(R.drawable.main_activity_event_list_normal);
         imageview_interactions.setImageResource(R.drawable.main_activity_interactions_icon_normal);
 
-        textview_attendee_list.setTextColor(getResources().getColor(R.color.main_activity_button_text));
-        textview_event_list.setTextColor(getResources().getColor(R.color.main_activity_button_text));
-        textview_interatcions.setTextColor(getResources().getColor(R.color.main_activity_button_text));
+        textview_attendee_list.setTextColor(getResources().getColor(R.color.textedit_background));
+        textview_event_list.setTextColor(getResources().getColor(R.color.textedit_background));
+        textview_interatcions.setTextColor(getResources().getColor(R.color.textedit_background));
     }
 
     /* Manipulate InteractionPackage */
@@ -283,19 +286,24 @@ public class MainActivity extends BaseActivity {
     /* Bluetooth Discovery Service */
 
     public void startBluetoothDiscoveryService() {
-
-        /* Set Device always discoverable */
-        Intent discoverableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
-        discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 0);
-        startActivity(discoverableIntent);
-
+        turnOnBluetooth();
         bluetoothDiscoveryIntent = new Intent(getBaseContext(), BluetoothDiscovery.class);
         startService(bluetoothDiscoveryIntent);
     }
 
     public void stopBluetoothDiscoveryService() {
-        BluetoothAdapter.getDefaultAdapter().disable();
         stopService(bluetoothDiscoveryIntent);      /* Stop BluetoothDiscovery Service */
+    }
+
+    public void turnOnBluetooth() {
+            /* Set Device always discoverable */
+            Intent discoverableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
+            discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 0);
+            startActivity(discoverableIntent);
+    }
+
+    public void turnOffBluetooth() {
+        BluetoothAdapter.getDefaultAdapter().disable();
     }
 
     public void bluetoothService() {

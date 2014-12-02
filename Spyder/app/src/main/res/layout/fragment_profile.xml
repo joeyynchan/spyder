@@ -11,7 +11,7 @@
         android:layout_height="200dp"
         android:layout_marginTop="20dp"
         android:id="@+id/imageview_fragment_profile_image"
-        android:background="@drawable/imageview_activity_main_user_normal"
+        android:background="@drawable/main_activity_user_normal_xml"
         android:layout_gravity="center_horizontal" />
 
     <LinearLayout

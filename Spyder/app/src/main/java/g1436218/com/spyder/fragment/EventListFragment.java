@@ -29,6 +29,12 @@ public class EventListFragment extends BaseMainFragment implements AdapterView.O
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        //new FetchEvents(activity).execute();
+    }
+
+    @Override
     protected void initializeView() {
         getActivity().setTitle(TITLE);
         this.adapter = new EventListAdapter(activity, R.layout.listview_interaction);

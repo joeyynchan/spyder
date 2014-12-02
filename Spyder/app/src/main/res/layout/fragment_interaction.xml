@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="g1436218.com.spyder.activity.LoginActivity$PlaceholderFragment"
-    android:background="@drawable/background_activity_main">
+    android:background="@color/backgroundColor">
 
     <ListView
         android:layout_width="wrap_content"

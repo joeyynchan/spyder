@@ -3,7 +3,6 @@ package g1436218.com.spyder.activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Context;
-import android.content.Intent;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -80,8 +79,8 @@ public class LoginActivity extends BaseActivity {
             fragmentTransaction.replace(R.id.login_container, new RegisterFragment(this), "CURRENT_FRAGMENT");
             fragmentTransaction.commit();
         }
-        button_signUp.setBackground(getResources().getDrawable(R.drawable.button_activity_login_focused));
-        button_login.setBackground(getResources().getDrawable(R.drawable.button_activity_login_normal));
+        button_signUp.setBackground(getResources().getDrawable(R.drawable.login_activity_button_focused));
+        button_login.setBackground(getResources().getDrawable(R.drawable.login_activity_button_normal));
     }
 
     public void displayLoginFragment() {
@@ -91,8 +90,8 @@ public class LoginActivity extends BaseActivity {
             fragmentTransaction.replace(R.id.login_container, new LoginFragment(this), "CURRENT_FRAGMENT");
             fragmentTransaction.commit();
         }
-        button_signUp.setBackground(getResources().getDrawable(R.drawable.button_activity_login_normal));
-        button_login.setBackground(getResources().getDrawable(R.drawable.button_activity_login_focused));
+        button_signUp.setBackground(getResources().getDrawable(R.drawable.login_activity_button_normal));
+        button_login.setBackground(getResources().getDrawable(R.drawable.login_activity_button_focused));
     }
 
 }

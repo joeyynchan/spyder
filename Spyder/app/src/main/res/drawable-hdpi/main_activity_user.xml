@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@drawable/imageview_activity_main_user_pressed"
+    <item android:drawable="@drawable/main_activity_user_pressed_xml"
         android:state_pressed="true" />
-    <item android:drawable="@drawable/imageview_activity_main_user_normal" />
+    <item android:drawable="@drawable/main_activity_user_normal_xml" />
 </selector>

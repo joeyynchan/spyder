@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_activity_login"
+    android:background="@drawable/login_activity_background"
     tools:context="g1436218.com.spyder.activity.LoginActivity"
     tools:ignore="MergeRootFrame"
     android:orientation="horizontal">
@@ -38,7 +38,7 @@
                 android:layout_marginRight="1dp"
                 android:text="@string/signup"
                 android:id="@+id/button_activity_login_signUp"
-                android:background="@drawable/button_activity_login_normal"
+                android:background="@drawable/login_activity_button_normal"
                 android:textColor="#ffffffff" />
 
             <Button
@@ -48,7 +48,7 @@
                 android:layout_marginLeft="1dp"
                 android:text="@string/login"
                 android:id="@+id/button_activity_login_login"
-                android:background="@drawable/button_activity_login_focused"
+                android:background="@drawable/login_activity_button_focused"
                 android:textColor="#ffffffff" />
 
         </LinearLayout>

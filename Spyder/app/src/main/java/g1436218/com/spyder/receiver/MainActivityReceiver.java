@@ -40,6 +40,10 @@ public class MainActivityReceiver extends BroadcastReceiver {
             activity.stopBluetoothDiscoveryService();
         } else if (Action.FETCH_ATTENDEES.equals(action)) {
             new FetchAttendees(activity).execute();
+        } else if (Action.START_BLUETOOTH.equals(action)) {
+            activity.turnOnBluetooth();
+        } else if (Action.STOP_BLUETOOTH.equals(action)) {
+            activity.turnOffBluetooth();
         }
     }
 }

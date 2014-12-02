@@ -45,7 +45,7 @@ public class InteractionFragment extends BaseMainFragmentWithReceiver implements
         ListView listview_interactions = (ListView) getActivity().findViewById(R.id.listview_interaction_list);
         listview_interactions.setAdapter(adapter);
         listview_interactions.setOnItemClickListener(this);
-        adapter.addAllToAdapter(activity.getInteractions());
+        adapter.addAllToAdapter(activity.getClone());
     }
 
     @Override

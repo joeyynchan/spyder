@@ -12,9 +12,6 @@ import g1436218.com.spyder.R;
 import g1436218.com.spyder.activity.MainActivity;
 import g1436218.com.spyder.asyncTask.UnlinkDevice;
 
-/**
- * Created by Cherie on 11/26/2014.
- */
 public class LogoutFragment extends BaseDialogFragment {
 
     private final String TAG = "LogoutFragment";

@@ -6,5 +6,5 @@
     android:text="Caption"
     android:textColor="@android:color/white"
     android:textSize="18sp"
-    android:background="@drawable/fragment_eventlist_section"
+    android:background="@drawable/header_event_background"
     android:id="@+id/textview_header_event"/>
