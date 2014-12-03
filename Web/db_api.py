@@ -1,6 +1,5 @@
 from db_connection import db_connect
 import http
-import json
 
 
 def register(
@@ -62,6 +61,7 @@ def login(username, hashed_password):
 
 def add_event(start_time, end_time, address, name,
               description, speaker_id, organiser_id, attendees):
+    attendee_list = attendees.split(' ') if attendees != '' else []
     status_code, content = db_connect('/addEvent', {
         'start_time': start_time,
         'end_time': end_time,
@@ -70,13 +70,14 @@ def add_event(start_time, end_time, address, name,
         'description': description,
         'speaker_id': speaker_id,
         'organiser_id': organiser_id,
-        'attendees': [{'user_name': attendee} for attendee in attendees]
+        'attendees': [{'user_name': attendee} for attendee in attendee_list]
     })
 
     response_dict = {
         http.client.CREATED: {
             'is_success': True,
-            'success_message': 'Your event has been added successfully.'
+            'success_message': content['Message'],
+            'event_id': content['event_id']
         },
         http.client.CONFLICT: {
             'is_success': False,
@@ -124,31 +125,31 @@ def xhr_get_event_visualisation_data(event_id):
     else:
         return None
 
-# def get_user(username):
-#     status_code, response_dict = db_connect(
-#         '/user/profile?user_id={%s}' % username)
 
-#     response_dict = {
-#         http.client.OK: {
-#             'is_success': True,
-#             'success_message': 'You have successfully signed in.'
-#         },
-#         http.client.CREATED: {
-#             'is_success': True,
-#             'success_message':
-#                 'You have successfully signed in with new device.'
-#         },
-#         http.client.NOT_FOUND: {
-#             'is_success': False,
-#             'error_message': 'Username or password not found.'
-#         },
-#         http.client.CONFLICT: {
-#             'is_success': False,
-#             'error_message': 'You are currently logging in another device'
-#         }
-#     }
+def get_user(username):
+    events_code, events_content = db_connect(
+        '/getEvents?user_name=%s' % username)
+    profile_code, profile_content = db_connect(
+        '/user/profile?user_name=%s' % username)
 
-#     return response_dict[status_code]
+    if (events_code == http.client.NOT_FOUND
+            or profile_code == http.client.NOT_FOUND):
+        return {
+            'is_success': False,
+            'error_message': 'This user does not exist (redirect to dashboard)'
+        }
+    elif events_code == http.client.OK:
+        if profile_code == http.client.NO_CONTENT:
+            return {
+                'is_success': True,
+                'events': events_content
+            }
+        elif profile_code == http.client.OK:
+            return {
+                'is_success': True,
+                'profile': profile_content,
+                'events': events_content
+            }
 
 
 # def create_event(

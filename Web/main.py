@@ -27,6 +27,16 @@ def is_currently_login():
     return 'current_user_username' in session
 
 
+def render(filepath, args=None):
+    if args is None:
+        args = {}
+    if is_currently_login():
+        args['current_user_username'] = session['current_user_username']
+    args.update(session.pop('next_page_param_dict', {}))
+
+    return render_template(filepath, **args)
+
+
 @app.route('/static/<path:filepath>', methods=['GET'])
 def serve_static(filepath):
     print(filepath)
@@ -56,8 +66,7 @@ def welcome_page():
         return redirect_to_default(
             'You need to logout in order to go to welcome page.')
 
-    param_dict = session.pop('next_page_param_dict', {})
-    return render_template('welcome.html.jinja', **param_dict)
+    return render('welcome.html.jinja')
 
 
 @app.route('/register', methods=['GET'])
@@ -66,8 +75,7 @@ def register_page():
         return redirect_to_default(
             'You need to logout in order to go to register page.')
 
-    param_dict = session.pop('next_page_param_dict', {})
-    return render_template('register.html.jinja', **param_dict)
+    return render('register.html.jinja')
 
 
 @app.route('/register', methods=['POST'])
@@ -142,46 +150,28 @@ def dashboard():
         return redirect_to_default(
             'You need to login in order to see dashboard.')
     else:
-        # TODO(gunpinyo): fix this
-        # param_dict = session.pop('next_page_param_dict', {})
-        return redirect(
-            url_for('event_profile', event_id='54775c5de4b0598ae9308641'))
-        # return render_template('privileged_base.html.jinja', **param_dict)
-        # return redirect(url_for('user_profile'))
+        return redirect(url_for('user_profile'))
 
 
 @app.route('/user/profile', methods=['GET'])
-@app.route('/user/profile/<int:user_id>', methods=['GET'])
-def user_profile(user_id=None):
+@app.route('/user/profile/<username>', methods=['GET'])
+def user_profile(username=None):
     if not is_currently_login():
         return redirect_to_default(
             'You need to login in order to see user profile.')
 
-    if user_id is None:
-        user_id = session['current_user_username']
+    if username is None:
+        username = session['current_user_username']
 
-    user_dict = db_api.get_user(user_id)
+    user_dict = db_api.get_user(username)
 
     if user_dict['is_success']:
-        param_dict = {
-            'user_record': user_dict['user_record'],
-            'user_event_table': [
-                {
-                    'event_id': event_id,
-                    'event_name': db_api.get_name_event(event_id),
-                    'role': role,
-                    'status': status
-                }
-                for status, helper_1 in user_dict['user_record']['events'].items()
-                for role, helper_2 in helper_1.items()
-                for event_id in helper_2
-            ]
-        }
-        param_dict.update(session.pop('next_page_param_dict', {}))
-
-        return render_template('user_profile.html.jinja', **param_dict)
-
+        param_dict = user_dict.copy()
+        param_dict['username'] = username
+        return render('user_profile.html.jinja', param_dict)
     else:
+        session.setdefault('next_page_param_dict', {})
+        session['next_page_param_dict'].update(user_dict)
         return redirect_to_default(user_dict['error_message'])
 
 
@@ -191,8 +181,7 @@ def add_event_page():
         return redirect_to_default(
             'You need to login in order to add event.')
 
-    param_dict = session.pop('next_page_param_dict', {})
-    return render_template('add_event.html.jinja', **param_dict)
+    return render('add_event.html.jinja')
 
 
 @app.route('/addEvent', methods=['POST'])
@@ -209,17 +198,17 @@ def add_event():
         'description': request.form['description'],
         'speaker_id': request.form['speaker_id'],
         'organiser_id': session['current_user_username'],
-        'attendees': (request.form['attendees'].split(' ')
-                      if request.form['attendees'] != [] else [])
+        'attendees': request.form['attendees']
     }
 
     add_event_dict = db_api.add_event(**param_dict)
 
     if add_event_dict['is_success']:
         session['next_page_param_dict'] = add_event_dict
-        return redirect(url_for('dashboard'))
+        return redirect(url_for(
+            'event_profile', event_id=add_event_dict['event_id']))
     else:
-        session['next_page_param_dict'] = param_dict
+        session['next_page_param_dict'] = param_dict.copy()
         session['next_page_param_dict'].update(add_event_dict)
         return redirect(url_for('add_event_page'))
 
@@ -249,9 +238,8 @@ def event_profile(event_id):
     #             for user_id in helper_2
     #         ]
     #     }
-    #     param_dict.update(session.pop('next_page_param_dict', {}))
 
-    #     return render_template('event_profile.html.jinja', **param_dict)
+    #     return render('event_profile.html.jinja', param_dict)
 
     # else:
     #     return redirect_to_default(event_dict['error_message'])
@@ -260,9 +248,8 @@ def event_profile(event_id):
         'event_id': event_id
     }
     param_dict.update(db_api.xhr_get_event_visualisation_data(event_id))
-    param_dict.update(session.pop('next_page_param_dict', {}))
 
-    return render_template('event_profile.html.jinja', **param_dict)
+    return render('event_profile.html.jinja', param_dict)
 
 
 @app.route('/xhr/event_visualisation_data/<event_id>', methods=['GET'])

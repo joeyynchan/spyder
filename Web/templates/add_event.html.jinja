@@ -9,19 +9,19 @@
     <div class="form-group">
       <label for="add-event-start-time" class="col-sm-3 control-label">Start Time</label>
       <div class="col-sm-7">
-        <input type="text" class="form-control" name="start_time" id="add-event-start-time" value={{start_time if star_time else '""'}} placeholder="e.g. Mon May 04 09:51:52 CDT 2009" required>
+        <input type="text" class="form-control" name="start_time" id="add-event-start-time" value="{{start_time if start_time else ''}}" placeholder="e.g. Mon May 04 09:51:52 CDT 2009" required>
       </div>
     </div>
     <div class="form-group">
       <label for="add-event-end-time" class="col-sm-3 control-label">End Time</label>
       <div class="col-sm-7">
-        <input type="text" class="form-control" name="end_time" id="add-event-end-time" value={{end_time if end_time else '""'}} placeholder="e.g. Mon May 05 18:51:52 CDT 2009" required>
+        <input type="text" class="form-control" name="end_time" id="add-event-end-time" value="{{end_time if end_time else ''}}" placeholder="e.g. Mon May 05 18:51:52 CDT 2009" required>
       </div>
     </div>
     <div class="form-group">
       <label for="add-event-address" class="col-sm-3 control-label">Address</label>
       <div class="col-sm-7">
-        <input type="text" class="form-control" name="address" id="add-event-address" value={{address if address else '""'}} placeholder="Enter address here">
+        <input type="text" class="form-control" name="address" id="add-event-address" value="{{address if address else ''}}" placeholder="Enter address here">
       </div>
     </div>
     <div class="form-group">
@@ -33,19 +33,19 @@
     <div class="form-group">
       <label for="add-event-description" class="col-sm-3 control-label">Description</label>
       <div class="col-sm-7">
-        <input type="text" class="form-control" name="description" id="add-event-description" value={{description if description else '""'}} placeholder="Enter description here">
+        <input type="text" class="form-control" name="description" id="add-event-description" value="{{description if description else ''}}" placeholder="Enter description here">
       </div>
     </div>
     <div class="form-group">
       <label for="add-event-speaker-username" class="col-sm-3 control-label">Speaker username</label>
       <div class="col-sm-7">
-        <input type="text" class="form-control" name="speaker_id" id="add-event-speaker-username" value={{speaker_username if speaker_username else '""'}} placeholder="Enter speaker username here">
+        <input type="text" class="form-control" name="speaker_id" id="add-event-speaker-username" value="{{speaker_id if speaker_id else ''}}" placeholder="Enter speaker username here">
       </div>
     </div>
     <div class="form-group">
       <label for="add-event-attendees-list" class="col-sm-3 control-label">Attendees List</label>
       <div class="col-sm-7">
-        <input type="text" class="form-control" name="attendees" id="add-event-attendees-list" value={{attendees_list if attendees_list else '""'}} placeholder="Enter attendees usernames (separated by spacebar)">
+        <input type="text" class="form-control" name="attendees" id="add-event-attendees-list" value="{{attendees if attendees else ''}}" placeholder="Enter attendees usernames (separated by spacebar)">
       </div>
     </div>
     <div class="form-group">

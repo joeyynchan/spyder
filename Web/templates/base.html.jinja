@@ -45,6 +45,12 @@
       </div>
     {% endif %}
 
+    {% if info_message %}
+      <div class="alert alert-info" role="alert">
+        {{ info_message }}
+      </div>
+    {% endif %}
+
     {% if error_message %}
       <div class="alert alert-danger" role="alert">
         {{ error_message }}

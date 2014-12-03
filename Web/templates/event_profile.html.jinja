@@ -5,16 +5,6 @@
 {% endblock %}
 
 {% block privileged_base_content %}
-  <div class="panel panel-danger">
-    <div class="panel-heading">
-      <h3 class="panel-title">Interaction (Real one, for demo)</h3>
-    </div>
-    <div class="panel-body">
-        <dt>interaction</dt>   <dd>{{interaction}}</dd>
-        <dt>attendees</dt>     <dd>{{attendees}}</dd>
-      </dl>
-    </div>
-  </div>
   <div class="panel panel-default">
     <div class="panel-heading">
       <h3 class="panel-title">Attendees</h3>
@@ -27,9 +17,9 @@
           <th>name</th>
         </tr>
         {% for record in attendees['user_mappings'] %}
-          <tr>
+          <tr class="clickable-row" href="/user/profile/{{ record['user_name'] }}">
             <td>{{record['mac_address']}}</td>
-            <td>{{record['user_name']}}</td>
+            <td><a href="/user/profile/{{ record['user_name'] }}">{{record['user_name']}}</a></td>
             <td>{{record['name']}}</td>
           </tr>
         {% endfor %}
@@ -42,8 +32,8 @@
     </div>
     <div class="panel-body">
       <dl class="dl-horizontal">
-        <dt>start_time</dt>   <dd>{{interaction['start_time']}}</dd>
-        <dt>end_time</dt>     <dd>{{interaction['end_time']}}</dd>
+        <dt>start_time</dt>   <dd>{{interaction['event_start_time']}}</dd>
+        <dt>end_time</dt>     <dd>{{interaction['event_end_time']}}</dd>
       </dl>
       <table class="table table-hover">
         <tr>
@@ -55,8 +45,8 @@
         </tr>
         {% for record in interaction['interaction'] %}
           <tr>
-            <td>{{record['user1']}}</td>
-            <td>{{record['user2']}}</td>
+            <td><a href="/user/profile/{{record['user1']}}">{{record['user1']}}</a></td>
+            <td><a href="/user/profile/{{record['user2']}}">{{record['user2']}}</a></td>
             <td>{{record['event_id']}}</td>
             <td>{{record['start_time']}}</td>
             <td>{{record['end_time']}}</td>
@@ -78,6 +68,16 @@
                  onclick="updateInteraction()" />
       </div>
       <input type="text" id="myText" value="2000">
+    </div>
+  </div>
+  <div class="panel panel-danger">
+    <div class="panel-heading">
+      <h3 class="panel-title">Raw interaction (for demo)</h3>
+    </div>
+    <div class="panel-body">
+        <dt>interaction</dt>   <dd>{{interaction}}</dd>
+        <dt>attendees</dt>     <dd>{{attendees}}</dd>
+      </dl>
     </div>
   </div>
   <!-- Khoa script part -->
@@ -102,14 +102,12 @@
   graph = new myGraph("#graph");
 
   function buildGraph(interactionObject, attendees) {
-    
     var interactionData = interactionObject;
       interaction = interactionData.interaction;
-	attendees = attendees.user_mapppings;
+      attendees = attendees.user_mappings;
       
-    curr_t = new Date(interactionData.start_t);
-    event_end = new Date(interactionData.end_t);
-    
+    curr_t = new Date(interactionData.event_start_time);
+    event_end = new Date(interactionData.event_end_time);
     for (var i = 0; i < attendees.length; i++) {
       graph.addNode(attendees[i].user_name);
     }
@@ -122,8 +120,8 @@
     curr_t.setTime(curr_t.getTime() + interval);
     if (curr_t.getTime() <= event_end.getTime()) {
       for (var i = 0; i < interaction.length; i++) {
-        var interaction_start = new Date (interaction[i].start_t);
-        var interaction_end = new Date(interaction[i].end_t);
+        var interaction_start = new Date (interaction[i].start_time);
+        var interaction_end = new Date(interaction[i].end_time);
         if ( (interaction_start.getTime() <= curr_t.getTime()) && (interaction_end.getTime() >= curr_t.getTime())) {
           graph.addLink(interaction[i].user1,interaction[i].user2);
         }
@@ -147,7 +145,6 @@
 
     function updateInteraction() {
       $.ajax({
-        // TODO(gunpinyo): change a fake to real one
         url: '/xhr/event_visualisation_data/{{event_id}}',
         success:function(result){
           buildGraph(result['interaction'], result['attendees']);
@@ -156,41 +153,3 @@
     }
   </script>
 {% endblock %}
-
-
-  <!-- <div class="panel panel-default">
-    <div class="panel-heading">
-      <h3 class="panel-title">General information</h3>
-    </div>
-    <div class="panel-body">
-      <dl class="dl-horizontal">
-        <dt>event_id</dt>     <dd>{{event_record['event_id']}}</dd>
-        <dt>name</dt>         <dd>{{event_record['name']}}</dd>
-        <dt>start_time</dt>   <dd>{{event_record['start_time']}}</dd>
-        <dt>end_time</dt>     <dd>{{event_record['end_time']}}</dd>
-        <dt>location</dt>     <dd>{{event_record['location']}}</dd>
-        <dt>description</dt>  <dd>{{event_record['description']}}</dd>
-      </dl>
-    </div>
-  </div>
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h3 class="panel-title">Members</h3>
-    </div>
-    <table class="table table-hover">
-      <tr>
-        <th>User ID</th>
-        <th>username</th>
-        <th>Role</th>
-        <th>Status</th>
-      </tr>
-      {% for user_record in event_member_table %}
-        <tr class="clickable-row" href="/user/profile/{{ user_record['user_id'] }}">
-          <td>{{ user_record['user_id'] }}</td>
-          <td>{{ user_record['username'] }}</td>
-          <td>{{ user_record['role'] }}</td>
-          <td>{{ user_record['status'] }}</td>
-        </tr>
-      {% endfor %}
-    </table>
-  </div> -->
