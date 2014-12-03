@@ -40,11 +40,14 @@ public class EventFragment extends BaseMainFragment implements View.OnClickListe
         textview_fragment_event_startTime = (TextView) activity.findViewById(R.id.textview_fragment_event_startTime);
         textview_fragment_event_endTime = (TextView) activity.findViewById(R.id.textview_fragment_event_endTime);
         textview_fragment_event_description = (TextView) activity.findViewById(R.id.textview_fragment_event_description);
+
         button_fragment_event_joinEvent = (Button) activity.findViewById(R.id.button_fragment_event_joinEvent);
         button_fragment_event_joinEvent.setOnClickListener(this);
+        if (event.getStatus().equals("Attending")) {
+            button_fragment_event_joinEvent.setVisibility(View.GONE);
+        }
 
         textview_fragment_event_name.setText(event.getName());
-        textview_fragment_event_location.setText(event.getLocation());
     }
 
     @Override

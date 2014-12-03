@@ -32,7 +32,7 @@ public class EventListFragmentReceiver extends BroadcastReceiver {
             status = extras.getString("status");
             event_id = extras.getString("event_id");
             event_name = extras.getString("event_name");
-            fragment.addItem(status, new Event(event_name, event_id, null, null, null, "N/A", null));
+            fragment.addItem(status, new Event(event_name, event_id, status, null, null, null, null));
         } else if (Action.EVENT_ADAPTER_CLEAR.equals(action)) {
             fragment.clearAdapter();
         }

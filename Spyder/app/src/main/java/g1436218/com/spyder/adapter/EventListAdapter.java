@@ -31,9 +31,6 @@ public class EventListAdapter extends BaseAdapter {
         super();
         this.context = context;
         this.resource = resource;
-        addSection("Nothing");
-        addSection("Attending");
-        addSection("Hosting");
     }
 
     public EventAdapter getSection(String caption) {
@@ -46,6 +43,9 @@ public class EventListAdapter extends BaseAdapter {
     }
 
     public void addItem(String caption, Event item){
+        if (!sections.containsKey(caption)) {
+            addSection(caption);
+        }
         EventAdapter adapter = sections.get(caption);
         if (adapter != null) {
             adapter.add(item);
@@ -55,12 +55,7 @@ public class EventListAdapter extends BaseAdapter {
     }
 
     public void clear() {
-        Iterator<String> iterator = sections.keySet().iterator();
-        while (iterator.hasNext()) {
-            String caption = iterator.next();
-            EventAdapter adapter = sections.get(caption);
-            adapter.clear();
-        }
+        sections.clear();
         notifyDataSetChanged();
     }
 
