@@ -7,11 +7,11 @@ function getAttendees()
 	var data = xmlHttp.responseText;
 	alert(data);
 	*/
-	var data = '{"attendees":[{"name":"A","userid":"1","mac_address":"5463f8d4e4b0952cfce4d426"},' 
-						   + '{"name":"B","userid":"2","mac_address":"5463f8d4e4b0952cfce4d426"},'
-						   + '{"name":"C","userid":"3","mac_address":"5463f8d4e4b0952cfce4d426"},'
-						   + '{"name":"D","userid":"4","mac_address":"5463f8d4e4b0952cfce4d426"},'
-						   + '{"name":"E","userid":"5","mac_address":"5463f8d4e4b0952cfce4d426"}]}';
+	var data = '{"user_mappings":[{"mac_address": "98:0D:2E:BD:E9:B7","name": "cherrie","user_name": "kuo"},' 
+						   + '{"mac_address": "38:2D:D1:1B:09:2A","name": "demo001","user_name": "demo001"},'
+						   + '{"mac_address": "98:0D:2E:BD:E9:B7","name": "Demo Test","user_name": "gun"},'
+						   + '{"mac_address": "","name": "khoa","user_name": "khoa"},'
+						   + '{"mac_address": "98:0D:2E:BD:E9:B7","name": "","user_name": "iPhone"}]}';
 	var json = JSON.parse(data);
-	return json.attendees;
+	return json.user_mappings;
 }
