@@ -258,7 +258,7 @@ public class MainActivity extends BaseActivity {
         SharedPreferences sharedPref = this.getSharedPreferences(
                 this.getString(R.string.preference_file_key), this.MODE_PRIVATE);
         String currUsername = sharedPref.getString(this.getString(R.string.username), "");
-        new FetchUserProfile(this, currUsername).execute();
+        new DisplayProfile(this).execute();
         resetButtonState();
         imageview_profile.setImageResource(R.drawable.main_activity_profile_pressed);
         textview_profile.setTextColor(getResources().getColor(R.color.main_activity_button_text_pressed));

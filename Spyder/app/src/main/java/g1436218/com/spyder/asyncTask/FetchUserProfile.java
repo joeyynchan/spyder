@@ -19,21 +19,20 @@ import g1436218.com.spyder.object.User;
 public class FetchUserProfile extends BaseMainAsyncTask {
 
 
-    private String URL = GlobalConfiguration.DEFAULT_URL + "user/profile?user_name=";
+    protected String URL = GlobalConfiguration.DEFAULT_URL + "user/profile?user_name=";
     private static String TAG = "FetchUserProfile";
 
-    private String username;
-    private User user;
+    protected String username;
+    protected User user;
 
     public FetchUserProfile(MainActivity activity, String username) {
         super(activity);
         this.username = username;
         this.URL += username;
-        Log.d(TAG, username);
     }
 
     @Override
-    public void onPreExecute() {
+    protected void onPreExecute() {
         user = new User(username);
     }
 
@@ -65,18 +64,19 @@ public class FetchUserProfile extends BaseMainAsyncTask {
     }
 
     @Override
-    public void onPostExecute(Void v) {
+    protected void onPostExecute(Void v) {
         Fragment fragment = activity.getFragmentManager().findFragmentByTag("CURRENT_FRAGMENT");
         ProfileFragment eventFragment = new ProfileFragment(activity, user);
         if (!(fragment instanceof ProfileFragment)) {
             FragmentTransaction fragmentTransaction = activity.getFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.fragment_container, eventFragment, "CURRENT_FRAGMENT");
+            fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
         }
     }
 
     /* get profile detail from JSONObject to Profile fragment */
-    private void insertDataToUser(JSONObject jsonObject){
+    protected void insertDataToUser(JSONObject jsonObject){
         try {
             user.setCompany(jsonObject.getString("company"));
             user.setEmail(jsonObject.getString("email"));
@@ -91,7 +91,7 @@ public class FetchUserProfile extends BaseMainAsyncTask {
     }
 
     /* set texts to empty string in case of profile not found */
-    private void defaultDataToUser(){
+    protected void defaultDataToUser(){
         user.setCompany("");
         user.setEmail("");
         user.setExternal_link("");
