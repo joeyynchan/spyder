@@ -26,6 +26,7 @@ public class ProfileFragment extends BaseMainFragment {
 
     @Override
     protected void initializeView() {
+        activity.setTitle("Profile");
         textview_name = (TextView) activity.findViewById(R.id.textview_fragment_profile_name);
         textview_gender = (TextView) activity.findViewById(R.id.textview_fragment_profile_gender);
         textview_occupation = (TextView) activity.findViewById(R.id.textview_fragment_profile_occupation);
