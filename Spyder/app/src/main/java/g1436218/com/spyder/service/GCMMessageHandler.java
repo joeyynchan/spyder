@@ -58,7 +58,8 @@ public class GCMMessageHandler extends IntentService {
         } else if (Action.FETCH_ATTENDEES.equals(action)) {
             fetchAttendees();
         } else if (Action.VIBRATE.equals(action)) {
-            vibrate(extras.getInt("duration", 2000));
+            String duration = extras.getString("duration", "2000");
+            vibrate(Integer.parseInt(duration));
         } else if (Action.LONG_TOAST.equals(action)) {
             longToast(extras.getString("message", null));
         } else if (Action.SHORT_TOAST.equals(action)) {
