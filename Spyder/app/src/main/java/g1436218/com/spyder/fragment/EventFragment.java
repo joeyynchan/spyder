@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import g1436218.com.spyder.R;
 import g1436218.com.spyder.activity.MainActivity;
+import g1436218.com.spyder.asyncTask.FetchAttendees;
 import g1436218.com.spyder.asyncTask.JoinEvent;
 import g1436218.com.spyder.object.Action;
 import g1436218.com.spyder.object.Event;
@@ -70,6 +71,7 @@ public class EventFragment extends BaseMainFragment implements View.OnClickListe
         editor.putString("EVENT_ID", event.getId());
         editor.putString("EVENT_NAME", event.getName());
         editor.commit();
+        new FetchAttendees(activity).execute();
         checkCurrentEvent();
     }
 

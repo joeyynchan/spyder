@@ -91,6 +91,7 @@ public class MainActivity extends BaseActivity {
         registerReceiver(receiver, intentFilter);
 
         showInteractions();
+        new FetchAttendees(this).execute();
     }
 
     @Override
