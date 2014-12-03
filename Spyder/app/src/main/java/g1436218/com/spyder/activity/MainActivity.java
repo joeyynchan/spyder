@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -106,11 +107,14 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
+        Log.d(TAG, "onPrepareOptions");
         menu.findItem(R.id.action_start_bluetooth).setVisible(false);
         menu.findItem(R.id.action_stop_bluetooth).setVisible(false);
         menu.findItem(R.id.action_set_discoverable).setVisible(false);
         menu.findItem(R.id.action_start_discovery).setVisible(false);
         menu.findItem(R.id.action_stop_discovery).setVisible(false);
+        menu.findItem(R.id.action_edit).setVisible(false);
+        menu.findItem(R.id.action_done).setVisible(false);
 
         if (BluetoothAdapter.getDefaultAdapter().getState() == BluetoothAdapter.STATE_OFF) {
             menu.findItem(R.id.action_start_bluetooth).setVisible(true);
@@ -161,8 +165,10 @@ public class MainActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         if (getFragmentManager().getBackStackEntryCount() != 0) {
+            Log.d(TAG, "popBackStack");
             getFragmentManager().popBackStack();
         }
+        invalidateOptionsMenu();
     }
 
     @Override
