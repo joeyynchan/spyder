@@ -21,13 +21,13 @@ public class UserFragment extends BaseMainFragment {
     private static String TAG = "UserFragment";
     private User user;
 
-    TextView textview_fragment_user_name ;
-    TextView textview_fragment_user_gender ;
-    TextView textview_fragment_user_occupation;
-    TextView textview_fragment_user_company;
-    TextView textview_fragment_user_phone;
-    TextView textview_fragment_user_email;
-    TextView textview_fragment_user_external_link;
+    private TextView textview_fragment_user_name ;
+    private TextView textview_fragment_user_gender ;
+    private TextView textview_fragment_user_occupation;
+    private TextView textview_fragment_user_company;
+    private TextView textview_fragment_user_phone;
+    private TextView textview_fragment_user_email;
+    private TextView textview_fragment_user_external_link;
 
     public UserFragment(MainActivity activity, User user) {
         super(activity, R.layout.fragment_user);

@@ -6,6 +6,7 @@ import android.app.FragmentTransaction;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,6 +22,7 @@ import java.util.ArrayList;
 import g1436218.com.spyder.R;
 import g1436218.com.spyder.asyncTask.DisplayProfile;
 import g1436218.com.spyder.asyncTask.FetchAttendees;
+import g1436218.com.spyder.asyncTask.FetchUserProfile;
 import g1436218.com.spyder.fragment.AttendeeFragment;
 import g1436218.com.spyder.fragment.EventListFragment;
 import g1436218.com.spyder.fragment.InteractionFragment;
@@ -245,7 +247,10 @@ public class MainActivity extends BaseActivity {
     }
 
     private void showProfile() {
-        new DisplayProfile(this).execute();
+        SharedPreferences sharedPref = this.getSharedPreferences(
+                this.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        String currUsername = sharedPref.getString(this.getString(R.string.username), "");
+        new FetchUserProfile(this, currUsername).execute();
         resetButtonState();
         imageview_profile.setImageResource(R.drawable.main_activity_profile_pressed);
         textview_profile.setTextColor(getResources().getColor(R.color.main_activity_button_text_pressed));

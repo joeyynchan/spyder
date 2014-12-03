@@ -3,6 +3,8 @@ package g1436218.com.spyder.fragment;
 import android.widget.TextView;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,6 +13,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import g1436218.com.spyder.R;
 import g1436218.com.spyder.activity.MainActivity;
@@ -20,6 +23,13 @@ public class ProfileFragment extends BaseMainFragment {
 
     private static String TAG = "ProfileFragment";
     private User user;
+    TextView textview_fragment_profile_name ;
+    TextView textview_fragment_profile_gender ;
+    TextView textview_fragment_profile_occupation;
+    TextView textview_fragment_profile_company;
+    TextView textview_fragment_profile_phone;
+    TextView textview_fragment_profile_email;
+    TextView textview_fragment_profile_link;
 
     private TextView textview_id;
     private TextView textview_name;
@@ -44,7 +54,12 @@ public class ProfileFragment extends BaseMainFragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
         Log.d(TAG, "onCreateOptionsMenu");
-        inflater.inflate(R.menu.menu_profile, menu);
+        SharedPreferences sharedPref = activity.getSharedPreferences(
+                activity.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        String currUsername = sharedPref.getString(activity.getString(R.string.username), "");
+        if(user.getUsername().equals(currUsername)){
+            inflater.inflate(R.menu.menu_profile, menu);
+        }
         super.onCreateOptionsMenu(menu, inflater);
     }
 
