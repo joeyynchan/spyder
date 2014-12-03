@@ -5,6 +5,8 @@
 {% endblock %}
 
 {% block privileged_base_content %}
+  <link rel="stylesheet" href="/static/lib/anytime.5.0.5.min.css" />
+  <script src="/static/lib/anytime.5.0.5.min.js"></script>
   <form id="add-event-panel" class="form-horizontal" role="form" action="/addEvent" method="POST">
     <div class="form-group">
       <label for="add-event-start-time" class="col-sm-3 control-label">Start Time</label>
