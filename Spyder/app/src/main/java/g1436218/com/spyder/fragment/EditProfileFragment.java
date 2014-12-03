@@ -1,12 +1,9 @@
 package g1436218.com.spyder.fragment;
 
-<<<<<<< HEAD
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.TextView;
 
-=======
->>>>>>> Created EditProfile fragments
 import g1436218.com.spyder.R;
 import g1436218.com.spyder.activity.MainActivity;
 import g1436218.com.spyder.object.User;
@@ -16,7 +13,6 @@ import g1436218.com.spyder.object.User;
  */
 public class EditProfileFragment extends BaseMainFragment {
 
-<<<<<<< HEAD
     private static String TAG = "EditProfileFragment";
     private User user;
     private EditText textview_fragment_edit_profile_name ;
@@ -26,9 +22,6 @@ public class EditProfileFragment extends BaseMainFragment {
     private EditText textview_fragment_edit_profile_phone;
     private EditText textview_fragment_edit_profile_email;
     private EditText textview_fragment_edit_profile_link;
-=======
-    private User user;
->>>>>>> Created EditProfile fragments
 
     public EditProfileFragment(MainActivity activity, User user) {
         super(activity, R.layout.fragment_edit_profile);
@@ -37,7 +30,6 @@ public class EditProfileFragment extends BaseMainFragment {
 
     @Override
     protected void initializeView() {
-<<<<<<< HEAD
         Log.d(TAG, "initializeView");
 
         textview_fragment_edit_profile_name = (EditText) activity.findViewById(R.id.textview_fragment_edit_profile_name);
@@ -56,8 +48,6 @@ public class EditProfileFragment extends BaseMainFragment {
         textview_fragment_edit_profile_phone.setText(user.getPhone());
         textview_fragment_edit_profile_link.setText(user.getExternal_link());
 
-=======
->>>>>>> Created EditProfile fragments
 
     }
 }
