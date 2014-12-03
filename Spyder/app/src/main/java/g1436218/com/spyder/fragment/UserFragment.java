@@ -47,6 +47,7 @@ public class UserFragment extends BaseMainFragment {
 >>>>>>> Successfully add an edit icon on the action bar in user fragment
     private User user;
 
+<<<<<<< HEAD
     TextView textview_fragment_user_name ;
     TextView textview_fragment_user_gender ;
     TextView textview_fragment_user_occupation;
@@ -55,6 +56,15 @@ public class UserFragment extends BaseMainFragment {
     TextView textview_fragment_user_email;
     TextView textview_fragment_user_external_link;
 >>>>>>> Successfully fetch profile data from api and display in user fragment, empty string is set if profile does not exist
+=======
+    private TextView textview_fragment_user_name ;
+    private TextView textview_fragment_user_gender ;
+    private TextView textview_fragment_user_occupation;
+    private TextView textview_fragment_user_company;
+    private TextView textview_fragment_user_phone;
+    private TextView textview_fragment_user_email;
+    private TextView textview_fragment_user_external_link;
+>>>>>>> Changed to use only ProfileFragment
 
     public UserFragment(MainActivity activity, User user) {
         super(activity, R.layout.fragment_user);

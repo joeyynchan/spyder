@@ -1,6 +1,8 @@
 package g1436218.com.spyder.asyncTask;
 
 import android.app.FragmentTransaction;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import org.json.JSONException;
@@ -62,9 +64,9 @@ public class FetchUserProfile extends BaseMainAsyncTask {
 
     @Override
     public void onPostExecute(Void v) {
-        ProfileFragment profileFragment = new ProfileFragment(activity, user);
+        ProfileFragment eventFragment = new ProfileFragment(activity, user);
         FragmentTransaction fragmentTransaction = activity.getFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container, profileFragment, "CURRENT_FRAGMENT");
+        fragmentTransaction.replace(R.id.fragment_container, eventFragment, "CURRENT_FRAGMENT");
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }

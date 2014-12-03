@@ -22,13 +22,6 @@ public class ProfileFragment extends BaseMainFragment {
 
     private static String TAG = "ProfileFragment";
     private User user;
-    private TextView textview_fragment_profile_name ;
-    private TextView textview_fragment_profile_gender ;
-    private TextView textview_fragment_profile_occupation;
-    private TextView textview_fragment_profile_company;
-    private TextView textview_fragment_profile_phone;
-    private TextView textview_fragment_profile_email;
-    private TextView textview_fragment_profile_link;
 
     private TextView textview_id;
     private TextView textview_name;
@@ -59,7 +52,6 @@ public class ProfileFragment extends BaseMainFragment {
         if(user.getUsername().equals(currUsername)){
             inflater.inflate(R.menu.menu_profile, menu);
         }
-        inflater.inflate(R.menu.menu_profile, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
