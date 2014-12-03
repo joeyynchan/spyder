@@ -217,7 +217,7 @@
 		for (var i = 0; i < interaction.length; i++) {
 			var interaction_start = new Date (interaction[i].start_time);
 			var interaction_end = new Date(interaction[i].end_time);
-			if ((interaction_end.getTime() >= temp_t.getTime())) {
+			if ( (interaction_start.getTime() <= temp_t.getTime()+ interval)  && (interaction_end.getTime() >= temp_t.getTime()) ) {
 				count++;
 			}
 		}
