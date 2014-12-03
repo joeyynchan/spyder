@@ -66,7 +66,7 @@
         <input name="updateButton" 
          type="button" 
          value="Run" 
-         onclick="buildGraph()" />
+         onclick="updateInteraction()" />
       </div>
       <div id="option2">
         <input name="runSampleButton" 
@@ -134,7 +134,7 @@
 
     interval = parseInt(document.getElementById("myText").value);
     setInterval(function () {updateData()}, interval);
-	updateStatistics();
+	// updateStatistics();
   }
   
   function buildSampleGraph() {
@@ -300,17 +300,15 @@
 
   }
  
-  </script>
   <!-- Khoa script end part -->
-  <script>
     // setTimeout(function() {
     //   window.document.location = '/dashboard';
     // }, 10 * 1000);
-    updateInteraction();
-    setInterval(function(){
-      updateInteraction();
-      // alert("Hello")
-    }, 30 * 1000);
+    // updateInteraction();
+    // setInterval(function(){
+    //   updateInteraction();
+    //   // alert("Hello")
+    // }, 30 * 1000);
 
     function updateInteraction() {
       $.ajax({
