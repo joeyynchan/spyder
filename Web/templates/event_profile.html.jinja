@@ -131,10 +131,10 @@
     for (var i = 0; i < attendees.length; i++) {
       graph.addNode(attendees[i].user_name);
     }
-
+    document.getElementById("myText").value = Math.floor((event_end.getTime() - curr_t.getTime()) / 20);
     interval = parseInt(document.getElementById("myText").value);
     setInterval(function () {updateData()}, interval);
-	// updateStatistics();
+	updateStatistics();
   }
   
   function buildSampleGraph() {
@@ -144,12 +144,12 @@
 	curr_t = new Date(0);
 	event_end = new Date(300000);
 	
-	//for (var i = 0; i < attendees.length; i++) {
-	//	graph.addNode(attendees[i].name);
-	//}
+	// for (var i = 0; i < attendees.length; i++) {
+	// 	graph.addNode(attendees[i].name);
+	// }
 	interval = parseInt(document.getElementById("myText").value);
 	setInterval(function () {updateSampleData()}, interval);
-	//updateStatistics();
+	updateStatistics();
   }
 
   function updateData() {
