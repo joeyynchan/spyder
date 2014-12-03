@@ -39,6 +39,11 @@ public class EditProfileFragment extends BaseMainFragment {
         this.user = user;
     }
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
+        return inflater.inflate(resourceId, container, false);
+    }
 
     @Override
     public void onPrepareOptionsMenu(Menu menu){
@@ -95,9 +100,9 @@ public class EditProfileFragment extends BaseMainFragment {
         user.setPhone(textview_fragment_edit_profile_phone.getText().toString());
         user.setExternal_link(textview_fragment_edit_profile_link.getText().toString());
 
-/*        new UpdateProfile((MainActivity)getActivity(), user).execute();
+        new UpdateProfile((MainActivity)getActivity(), user).execute();
         if (getFragmentManager().getBackStackEntryCount() != 0) {
             getFragmentManager().popBackStack();
-        }*/
+        }
     }
 }

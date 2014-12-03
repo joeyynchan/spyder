@@ -71,7 +71,6 @@ public class FetchUserProfile extends BaseMainAsyncTask {
         if (!(fragment instanceof ProfileFragment)) {
             FragmentTransaction fragmentTransaction = activity.getFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.fragment_container, eventFragment, "CURRENT_FRAGMENT");
-            fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
         }
     }

@@ -61,7 +61,7 @@ public class ProfileFragment extends BaseMainFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_edit:
-                //showEditProfile();
+                showEditProfile();
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -70,9 +70,10 @@ public class ProfileFragment extends BaseMainFragment {
     private void showEditProfile() {
         Log.d(TAG, "showEditProfile");
         Fragment fragment = getFragmentManager().findFragmentByTag("CURRENT_FRAGMENT");
-        if (!(fragment instanceof EventListFragment)) {
+        if (!(fragment instanceof EditProfileFragment)) {
             FragmentTransaction fragmentTransaction = activity.getFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.fragment_container, new EditProfileFragment((MainActivity)getActivity(), user), "CURRENT_FRAGMENT");
+            fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
         }
     }
