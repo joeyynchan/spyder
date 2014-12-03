@@ -23,7 +23,7 @@ public class UpdateProfile extends BaseMainAsyncTask {
         String username = sharedPref.getString(context.getString(R.string.username), "");
 
         this.user = user;
-        this.url = GlobalConfiguration.DEFAULT_URL + "user/profile?user_id=" + username;
+        this.url = GlobalConfiguration.DEFAULT_URL + "user/profile?user_name=" + username;
     }
 
     @Override
@@ -33,11 +33,6 @@ public class UpdateProfile extends BaseMainAsyncTask {
 
     @Override
     protected Void doInBackgroundOnline(Void... params) {
-        return null;
-    }
-
-    @Override
-    protected Void doInBackground(Void... params) {
 
         addToParams("name", user.getName());
         addToParams("job", user.getOccupation());
@@ -47,9 +42,10 @@ public class UpdateProfile extends BaseMainAsyncTask {
         addToParams("phone", user.getPhone());
         addToParams("external_link", user.getExternal_link());
         addToParams("gender", user.getGender());
-        addToParams("connectoins", "");
+        addToParams("connections", "");
 
-        getJSONFromUrl(url, Responses.PUT);
+        Log.d("UpdateProfile", this.params.toString());
+        getJSONFromUrl(url, Responses.POST);
         Log.i("UpdateProfile", statusCode + "");
         return null;
     }
