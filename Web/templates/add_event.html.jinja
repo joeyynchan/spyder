@@ -7,17 +7,19 @@
 {% block privileged_base_content %}
   <link rel="stylesheet" href="/static/lib/anytime.5.0.5.min.css" />
   <script src="/static/lib/anytime.5.0.5.min.js"></script>
+  <script src="/static/lib/anytimetz.js"></script>
+
   <form id="add-event-panel" class="form-horizontal" role="form" action="/addEvent" method="POST">
     <div class="form-group">
       <label for="add-event-start-time" class="col-sm-3 control-label">Start Time</label>
       <div class="col-sm-7">
-        <input type="text" class="form-control" name="start_time" id="add-event-start-time" value="{{start_time if start_time else ''}}" placeholder="e.g. Mon May 04 09:51:52 CDT 2009" required>
+        <input type="text" class="form-control" name="start_time" id="add-event-start-time" value="{{start_time if start_time else ''}}" placeholder="Click here to select start time" required>
       </div>
     </div>
     <div class="form-group">
       <label for="add-event-end-time" class="col-sm-3 control-label">End Time</label>
       <div class="col-sm-7">
-        <input type="text" class="form-control" name="end_time" id="add-event-end-time" value="{{end_time if end_time else ''}}" placeholder="e.g. Mon May 05 18:51:52 CDT 2009" required>
+        <input type="text" class="form-control" name="end_time" id="add-event-end-time" value="{{end_time if end_time else ''}}" placeholder="Click here to select end time" required>
       </div>
     </div>
     <div class="form-group">
@@ -57,4 +59,9 @@
       </div>
     </div>
   </form>
+Mon May 04 09:51:52 CDT 2009
+  <script>
+    $("#add-event-start-time").AnyTime_picker({ format: "%a %b %d %T %@ %Z"} );
+    $("#add-event-end-time").AnyTime_picker({ format: "%a %b %d %T %@ %Z"} );
+  </script>
 {% endblock %}
