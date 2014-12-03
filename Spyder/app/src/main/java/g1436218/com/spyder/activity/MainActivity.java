@@ -4,21 +4,17 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.bluetooth.BluetoothAdapter;
-import android.content.ClipData;
-import android.content.ClipboardManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -64,7 +60,9 @@ public class MainActivity extends BaseActivity {
     private TextView textview_interatcions;
     private TextView textview_profile;
 
+    private ImageView imageview_status;
     private int nid = 0;
+    private boolean discovery = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +83,8 @@ public class MainActivity extends BaseActivity {
         intentFilter.addAction(Action.STOP_BLUETOOTH);
         intentFilter.addAction(Action.FETCH_ATTENDEES);
         intentFilter.addAction(Action.GET_GCM);
+        intentFilter.addAction(BluetoothAdapter.ACTION_SCAN_MODE_CHANGED);
+        intentFilter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
         registerReceiver(receiver, intentFilter);
 
     }
@@ -124,6 +124,9 @@ public class MainActivity extends BaseActivity {
         button_interactions.setOnClickListener(this);
         button_profile.setOnClickListener(this);
 
+        imageview_status = (ImageView) findViewById(R.id.main_activity_status);
+        imageview_status.setOnClickListener(this);
+        setStatus(BluetoothAdapter.getDefaultAdapter().getScanMode());
     }
 
     @Override
@@ -133,13 +136,51 @@ public class MainActivity extends BaseActivity {
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        menu.findItem(R.id.action_start_bluetooth).setVisible(false);
+        menu.findItem(R.id.action_stop_bluetooth).setVisible(false);
+        menu.findItem(R.id.action_set_discoverable).setVisible(false);
+        menu.findItem(R.id.action_start_discovery).setVisible(false);
+        menu.findItem(R.id.action_stop_discovery).setVisible(false);
+
+        if (BluetoothAdapter.getDefaultAdapter().getState() == BluetoothAdapter.STATE_OFF) {
+            menu.findItem(R.id.action_start_bluetooth).setVisible(true);
+        } else {
+            menu.findItem(R.id.action_stop_bluetooth).setVisible(true);
+        }
+        if (BluetoothAdapter.getDefaultAdapter().getScanMode() == BluetoothAdapter.SCAN_MODE_CONNECTABLE) {
+            menu.findItem(R.id.action_set_discoverable).setVisible(true);
+        }
+        if (BluetoothAdapter.getDefaultAdapter().getScanMode() == BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE) {
+            if (discovery) {
+                menu.findItem(R.id.action_stop_discovery).setVisible(true);
+            } else {
+                menu.findItem(R.id.action_start_discovery).setVisible(true);
+            }
+        }
+
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_log_out:
-                logout();
-            default:
-                return super.onOptionsItemSelected(item);
+                logout(); break;
+            case R.id.action_start_bluetooth:
+                turnOnBluetooth(); break;
+            case R.id.action_stop_bluetooth:
+                turnOffBluetooth(); break;
+            case R.id.action_set_discoverable:
+                setDiscoverable(); break;
+            case R.id.action_start_discovery:
+                startDiscovery(); break;
+            case R.id.action_stop_discovery:
+                stopDiscovery(); break;
+            default: break;
+
         }
+        return super.onOptionsItemSelected(item);
     }
 
     private void logout() {
@@ -161,6 +202,7 @@ public class MainActivity extends BaseActivity {
             case R.id.button_interactions: showInteractions(); break;
             case R.id.button_event_list: showEventList(); break;
             case R.id.button_profile: showProfile(); break;
+            case R.id.main_activity_status: showStatus(); break;
             default: break;
         }
     }
@@ -205,8 +247,12 @@ public class MainActivity extends BaseActivity {
     private void showProfile() {
         new DisplayProfile(this).execute();
         resetButtonState();
-        imageview_profile.setImageResource(R.drawable.main_activity_interactions_icon_pressed);
+        imageview_profile.setImageResource(R.drawable.main_activity_profile_pressed);
         textview_profile.setTextColor(getResources().getColor(R.color.main_activity_button_text_pressed));
+    }
+
+    private void showStatus() {
+        Toast.makeText(getApplicationContext(), "Status", Toast.LENGTH_LONG).show();
     }
 
     private void resetButtonState() {
@@ -282,25 +328,55 @@ public class MainActivity extends BaseActivity {
 
     /* Bluetooth Discovery Service */
 
-    public void startBluetoothDiscoveryService() {
-        turnOnBluetooth();
-        bluetoothDiscoveryIntent = new Intent(getBaseContext(), BluetoothDiscovery.class);
-        startService(bluetoothDiscoveryIntent);
+    /* Starts discovery only when the device is discoverable and connectable */
+    public void startDiscovery() {
+        if (BluetoothAdapter.getDefaultAdapter().getScanMode() == BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE) {
+            bluetoothDiscoveryIntent = new Intent(getBaseContext(), BluetoothDiscovery.class);
+            startService(bluetoothDiscoveryIntent);
+            setStatus(1);
+            discovery = true;
+        }
     }
 
-    public void stopBluetoothDiscoveryService() {
+    public void stopDiscovery() {
         stopService(bluetoothDiscoveryIntent);      /* Stop BluetoothDiscovery Service */
+        setStatus(BluetoothAdapter.getDefaultAdapter().getScanMode());
+        discovery = false;
     }
 
     public void turnOnBluetooth() {
-            /* Set Device always discoverable */
-            Intent discoverableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
-            discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 0);
-            startActivity(discoverableIntent);
+        BluetoothAdapter.getDefaultAdapter().enable();
     }
 
+    public void setDiscoverable() {
+        Intent discoverableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
+        discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 0);
+        startActivity(discoverableIntent);
+    }
+
+    /* Turn off Bluetooth. Stop discovery if there exists one */
     public void turnOffBluetooth() {
         BluetoothAdapter.getDefaultAdapter().disable();
+        if (discovery) {
+            stopDiscovery();
+        }
+    }
+
+    public void setStatus(int status) {
+        switch (status) {
+            case 1:
+                imageview_status.setImageResource(R.drawable.main_activity_status_discovery_on);
+                break;
+            case BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE:
+                imageview_status.setImageResource(R.drawable.main_activity_status_discoverable);
+                break;
+            case BluetoothAdapter.SCAN_MODE_CONNECTABLE:
+                imageview_status.setImageResource(R.drawable.main_activity_status_discovering);
+                break;
+            default:
+                imageview_status.setImageResource(R.drawable.main_activity_status_normal);
+                break;
+        }
     }
 
 }

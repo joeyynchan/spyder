@@ -1,5 +1,6 @@
 package g1436218.com.spyder.receiver;
 
+import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -35,15 +36,23 @@ public class MainActivityReceiver extends BroadcastReceiver {
                 activity.clearArray();
             }
         } else if (Action.START_DISCOVERY.equals(action)) {
-            activity.startBluetoothDiscoveryService();
+            activity.startDiscovery();
         } else if (Action.STOP_DISCOVERY.equals(action)) {
-            activity.stopBluetoothDiscoveryService();
+            activity.stopDiscovery();
         } else if (Action.FETCH_ATTENDEES.equals(action)) {
             new FetchAttendees(activity).execute();
         } else if (Action.START_BLUETOOTH.equals(action)) {
             activity.turnOnBluetooth();
         } else if (Action.STOP_BLUETOOTH.equals(action)) {
             activity.turnOffBluetooth();
+        } else if (BluetoothAdapter.ACTION_SCAN_MODE_CHANGED.equals(action)) {
+            if (BluetoothAdapter.getDefaultAdapter().getScanMode() == BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE) {
+                activity.setStatus(BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE);
+            } else if (BluetoothAdapter.getDefaultAdapter().getScanMode() == BluetoothAdapter.SCAN_MODE_CONNECTABLE) {
+                activity.setStatus(BluetoothAdapter.SCAN_MODE_CONNECTABLE);
+            } else {
+                activity.setStatus(0);
+            }
         }
     }
 }

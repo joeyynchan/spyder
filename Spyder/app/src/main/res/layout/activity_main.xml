@@ -3,43 +3,32 @@
     android:layout_width="match_parent" android:layout_height="match_parent"
     tools:context=".MainActivity" tools:ignore="MergeRootFrame">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/backgroundColor"
+        android:id="@+id/status_bar"
+        android:layout_alignParentTop="true">
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:id="@+id/main_activity_status"
+            android:src="@drawable/main_activity_status_normal"/>
+
+    </LinearLayout>
+
     <RelativeLayout
         android:id="@+id/fragment_container"
         android:layout_width="fill_parent"
-        android:layout_height="match_parent"
+        android:layout_height="fill_parent"
         android:layout_gravity="center_horizontal|top"
         android:background="@color/backgroundColor"
+        android:layout_below="@+id/status_bar"
         android:layout_above="@+id/bottom_bar">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"
-            android:layout_marginLeft="10dp"
-            android:textColor="#ffffffff"
-            android:id="@+id/textview_device_information"
-            android:singleLine="false" />
-
-        <ImageButton
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:background="@drawable/main_activity_user"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"
-            android:id="@+id/imagebutton_activity_main_profile"/>
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="100dp"
-            android:text="Start Service"
-            android:id="@+id/button_activity_main_bluetoothService"
-            android:textColor="#ffffffff"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true" />
-
     </RelativeLayout>
-
-
 
     <LinearLayout
         android:orientation="horizontal"
