@@ -40,14 +40,14 @@ public class EditProfileFragment extends BaseMainFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        setHasOptionsMenu(true);
+        //setHasOptionsMenu(true);
         return inflater.inflate(resourceId, container, false);
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
         Log.d(TAG, "onCreateOptionsMenu");
-        inflater.inflate(R.menu.menu_edit_profile, menu);
+        //inflater.inflate(R.menu.menu_edit_profile, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -92,9 +92,9 @@ public class EditProfileFragment extends BaseMainFragment {
         user.setPhone(textview_fragment_edit_profile_phone.getText().toString());
         user.setExternal_link(textview_fragment_edit_profile_link.getText().toString());
 
-        new UpdateProfile((MainActivity)getActivity(), user).execute();
+/*        new UpdateProfile((MainActivity)getActivity(), user).execute();
         if (getFragmentManager().getBackStackEntryCount() != 0) {
             getFragmentManager().popBackStack();
-        }
+        }*/
     }
 }

@@ -22,6 +22,7 @@ public class ProfileFragment extends BaseMainFragment {
 
     private static String TAG = "ProfileFragment";
     private User user;
+    private final String TITLE = "Profile";
 
     private TextView textview_id;
     private TextView textview_name;
@@ -59,7 +60,7 @@ public class ProfileFragment extends BaseMainFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_edit:
-                showEditProfile();
+                //showEditProfile();
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -77,6 +78,8 @@ public class ProfileFragment extends BaseMainFragment {
 
     @Override
     protected void initializeView() {
+        getActivity().setTitle(TITLE);
+
         textview_name = (TextView) activity.findViewById(R.id.textview_fragment_profile_name);
         textview_gender = (TextView) activity.findViewById(R.id.textview_fragment_profile_gender);
         textview_occupation = (TextView) activity.findViewById(R.id.textview_fragment_profile_occupation);

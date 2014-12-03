@@ -1,8 +1,10 @@
 package g1436218.com.spyder.asyncTask;
 
+import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.provider.ContactsContract;
 import android.util.Log;
 
 import org.json.JSONException;
@@ -64,11 +66,14 @@ public class FetchUserProfile extends BaseMainAsyncTask {
 
     @Override
     public void onPostExecute(Void v) {
+        Fragment fragment = activity.getFragmentManager().findFragmentByTag("CURRENT_FRAGMENT");
         ProfileFragment eventFragment = new ProfileFragment(activity, user);
-        FragmentTransaction fragmentTransaction = activity.getFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container, eventFragment, "CURRENT_FRAGMENT");
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
+        if (!(fragment instanceof ProfileFragment)) {
+            FragmentTransaction fragmentTransaction = activity.getFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.fragment_container, eventFragment, "CURRENT_FRAGMENT");
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
+        }
     }
 
     /* get profile detail from JSONObject to Profile fragment */
