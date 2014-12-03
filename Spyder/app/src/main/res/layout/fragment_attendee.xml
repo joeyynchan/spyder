@@ -4,6 +4,13 @@
     android:layout_height="match_parent"
     android:background="@color/backgroundColor">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@android:color/white"
+        android:id="@+id/textview_fragment_attendee_eventName" />
+
     <SearchView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -14,4 +21,6 @@
         android:id="@+id/listview_attendee"
         android:layout_width="match_parent"
         android:layout_height="fill_parent" />
+
+
 </LinearLayout>

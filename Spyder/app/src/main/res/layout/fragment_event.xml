@@ -95,15 +95,26 @@
     </LinearLayout>
 
     <Button
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="20dp"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:text="Join Event"
+    android:clickable="true"
+    android:id="@+id/button_fragment_event_joinEvent"
+    android:textColor="#ffffffff" />
+
+    <Button
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:text="Join Event"
+        android:text="Set to Current Event"
         android:clickable="true"
-        android:background="@drawable/main_activity_button_xml"
-        android:id="@+id/button_fragment_event_joinEvent"
+        android:id="@+id/button_fragment_event_setToCurrentEvent"
+        android:visibility="gone"
         android:textColor="#ffffffff" />
 
 </LinearLayout>

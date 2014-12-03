@@ -2,7 +2,9 @@ package g1436218.com.spyder.asyncTask;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.TextView;
@@ -33,7 +35,7 @@ import g1436218.com.spyder.object.UserMap;
 public class FetchAttendees extends BaseMainAsyncTask {
 
     private final String TAG = "FetchAttendeeList";
-    private final String URL = GlobalConfiguration.DEFAULT_URL + "eventUsers?event_id=" + GlobalConfiguration.EVENT_ID;
+    private final String URL = GlobalConfiguration.DEFAULT_URL + "eventUsers?event_id=";
 
     private UserMap userMap;
 
@@ -45,15 +47,22 @@ public class FetchAttendees extends BaseMainAsyncTask {
     @Override
     protected Void doInBackgroundOnline(Void... params) {
 
-        /* Dummy response since the API is not ready; */
-        //result = "{\"user_mappings\":[{\"mac_address\":\"38:2D:D1:1B:09:2A\",\"user_name\":\"GalaxyTab4\"},{\"mac_address\":\"F0:E7:7E:52:57:3E\",\"user_name\":\"GT-N7000\"},{\"mac_address\":\"48:74:6E:75:64:75\",\"user_name\":\"iPhone\"}]}";
-        //resultJObj = toJSONObject(result);
-        resultJObj = getJSONFromUrl(URL, Responses.GET);
+        SharedPreferences sharedPref = activity.getSharedPreferences(
+                activity.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        String event_id = sharedPref.getString("EVENT_ID", "");
 
         activity.clearAttendees();
         userMap.clear();
         userMap.put("48:74:6E:75:64:75", "iPhone");
 
+        if (event_id.equals("")) {
+            return null;
+        }
+
+        /* Dummy response since the API is not ready; */
+        //result = "{\"user_mappings\":[{\"mac_address\":\"38:2D:D1:1B:09:2A\",\"user_name\":\"GalaxyTab4\"},{\"mac_address\":\"F0:E7:7E:52:57:3E\",\"user_name\":\"GT-N7000\"},{\"mac_address\":\"48:74:6E:75:64:75\",\"user_name\":\"iPhone\"}]}";
+        //resultJObj = toJSONObject(result);
+        resultJObj = getJSONFromUrl(URL+event_id, Responses.GET);
         if (resultJObj != null) {
             try {
                 JSONArray array = resultJObj.getJSONArray("user_mappings");

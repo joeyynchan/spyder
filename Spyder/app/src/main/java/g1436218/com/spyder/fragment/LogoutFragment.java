@@ -36,8 +36,7 @@ public class LogoutFragment extends BaseDialogFragment {
                         username = sharedPref.getString(context.getString(R.string.username), "");
                         password = sharedPref.getString(context.getString(R.string.password), "");
                         SharedPreferences.Editor editor = sharedPref.edit();
-                        editor.remove(context.getString(R.string.username));
-                        editor.remove(context.getString(R.string.password));
+                        editor.clear();
                         editor.commit();
                         new UnlinkDevice((MainActivity)getActivity(), username, password).execute();
                         getActivity().finish();

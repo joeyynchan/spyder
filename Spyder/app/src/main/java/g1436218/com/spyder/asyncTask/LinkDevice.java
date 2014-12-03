@@ -118,7 +118,6 @@ public class LinkDevice extends BaseLoginAsyncTask{
         editor.putString(context.getString(R.string.username), username);
         editor.putString(context.getString(R.string.password), password);
         editor.putBoolean(GlobalConfiguration.OFFLINE_MODE, username.equals(GlobalConfiguration.OFFLINE_MODE));
-
         editor.commit();
         /* start mainActivity */
         Intent intent = new Intent(activity, MainActivity.class);
