@@ -89,6 +89,7 @@ public class MainActivity extends BaseActivity {
         intentFilter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
         registerReceiver(receiver, intentFilter);
 
+
     }
 
     @Override
