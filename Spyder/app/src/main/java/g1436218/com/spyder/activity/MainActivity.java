@@ -249,7 +249,7 @@ public class MainActivity extends BaseActivity {
 
     private void showProfile() {
         SharedPreferences sharedPref = this.getSharedPreferences(
-                this.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+                this.getString(R.string.preference_file_key), this.MODE_PRIVATE);
         String currUsername = sharedPref.getString(this.getString(R.string.username), "");
         new FetchUserProfile(this, currUsername).execute();
         resetButtonState();
