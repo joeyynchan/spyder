@@ -89,12 +89,6 @@ public class MainActivity extends BaseActivity {
         intentFilter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
         registerReceiver(receiver, intentFilter);
 
-
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
         showInteractions();
     }
 
@@ -102,34 +96,6 @@ public class MainActivity extends BaseActivity {
     protected void onDestroy() {
         unregisterReceiver(receiver);                  /* Unregister Receiver */
         super.onStop();
-    }
-
-    @Override
-    public void initializeView() {
-
-        button_attendee_list = (LinearLayout) findViewById(R.id.button_attendee_list);
-        button_interactions = (LinearLayout) findViewById(R.id.button_interactions);
-        button_event_list = (LinearLayout) findViewById(R.id.button_event_list);
-        button_profile = (LinearLayout) findViewById(R.id.button_profile);
-
-        imageview_attendee_list = (ImageView) findViewById(R.id.button_attendee_list_icon);
-        imageview_interactions = (ImageView) findViewById(R.id.button_interactions_icon);
-        imageview_event_list = (ImageView) findViewById(R.id.button_event_list_icon);
-        imageview_profile = (ImageView) findViewById(R.id.button_profile_icon);
-
-        textview_attendee_list = (TextView) findViewById(R.id.button_attendee_list_text);
-        textview_interatcions = (TextView) findViewById(R.id.button_interactions_text);
-        textview_event_list = (TextView) findViewById(R.id.button_event_list_text);
-        textview_profile = (TextView) findViewById(R.id.button_event_profile_text);
-
-        button_attendee_list.setOnClickListener(this);
-        button_event_list.setOnClickListener(this);
-        button_interactions.setOnClickListener(this);
-        button_profile.setOnClickListener(this);
-
-        imageview_status = (ImageView) findViewById(R.id.main_activity_status);
-        imageview_status.setOnClickListener(this);
-        setStatus(BluetoothAdapter.getDefaultAdapter().getScanMode());
     }
 
     @Override
@@ -169,26 +135,27 @@ public class MainActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_log_out:
-                logout(); break;
+                logout();
+                break;
             case R.id.action_start_bluetooth:
-                turnOnBluetooth(); break;
+                turnOnBluetooth();
+                break;
             case R.id.action_stop_bluetooth:
-                turnOffBluetooth(); break;
+                turnOffBluetooth();
+                break;
             case R.id.action_set_discoverable:
-                setDiscoverable(); break;
+                setDiscoverable();
+                break;
             case R.id.action_start_discovery:
-                startDiscovery(); break;
+                startDiscovery();
+                break;
             case R.id.action_stop_discovery:
-                stopDiscovery(); break;
-            default: break;
-
+                stopDiscovery();
+                break;
+            default:
+                break;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    private void logout() {
-        FragmentManager fragmentManager = getFragmentManager();
-        new LogoutFragment().show(fragmentManager, "Logout");
     }
 
     @Override
@@ -208,6 +175,39 @@ public class MainActivity extends BaseActivity {
             case R.id.main_activity_status: showStatus(); break;
             default: break;
         }
+    }
+
+    @Override
+    public void initializeView() {
+
+        button_attendee_list = (LinearLayout) findViewById(R.id.button_attendee_list);
+        button_interactions = (LinearLayout) findViewById(R.id.button_interactions);
+        button_event_list = (LinearLayout) findViewById(R.id.button_event_list);
+        button_profile = (LinearLayout) findViewById(R.id.button_profile);
+
+        imageview_attendee_list = (ImageView) findViewById(R.id.button_attendee_list_icon);
+        imageview_interactions = (ImageView) findViewById(R.id.button_interactions_icon);
+        imageview_event_list = (ImageView) findViewById(R.id.button_event_list_icon);
+        imageview_profile = (ImageView) findViewById(R.id.button_profile_icon);
+
+        textview_attendee_list = (TextView) findViewById(R.id.button_attendee_list_text);
+        textview_interatcions = (TextView) findViewById(R.id.button_interactions_text);
+        textview_event_list = (TextView) findViewById(R.id.button_event_list_text);
+        textview_profile = (TextView) findViewById(R.id.button_event_profile_text);
+
+        button_attendee_list.setOnClickListener(this);
+        button_event_list.setOnClickListener(this);
+        button_interactions.setOnClickListener(this);
+        button_profile.setOnClickListener(this);
+
+        imageview_status = (ImageView) findViewById(R.id.main_activity_status);
+        imageview_status.setOnClickListener(this);
+        setStatus(BluetoothAdapter.getDefaultAdapter().getScanMode());
+    }
+
+    private void logout() {
+        FragmentManager fragmentManager = getFragmentManager();
+        new LogoutFragment().show(fragmentManager, "Logout");
     }
 
     private void showAttendees() {
@@ -345,7 +345,7 @@ public class MainActivity extends BaseActivity {
     }
 
     public void stopDiscovery() {
-        stopService(bluetoothDiscoveryIntent);      /* Stop BluetoothDiscovery Service */
+        stopService(bluetoothDiscoveryIntent);
         setStatus(BluetoothAdapter.getDefaultAdapter().getScanMode());
         discovery = false;
     }

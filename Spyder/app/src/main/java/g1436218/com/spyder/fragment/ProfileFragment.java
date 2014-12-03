@@ -78,7 +78,8 @@ public class ProfileFragment extends BaseMainFragment {
 
     @Override
     protected void initializeView() {
-        getActivity().setTitle(TITLE);
+
+        activity.setTitle(TITLE);
 
         textview_name = (TextView) activity.findViewById(R.id.textview_fragment_profile_name);
         textview_gender = (TextView) activity.findViewById(R.id.textview_fragment_profile_gender);
