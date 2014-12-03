@@ -23,13 +23,13 @@ public class ProfileFragment extends BaseMainFragment {
 
     private static String TAG = "ProfileFragment";
     private User user;
-    TextView textview_fragment_profile_name ;
-    TextView textview_fragment_profile_gender ;
-    TextView textview_fragment_profile_occupation;
-    TextView textview_fragment_profile_company;
-    TextView textview_fragment_profile_phone;
-    TextView textview_fragment_profile_email;
-    TextView textview_fragment_profile_link;
+    private TextView textview_fragment_profile_name ;
+    private TextView textview_fragment_profile_gender ;
+    private TextView textview_fragment_profile_occupation;
+    private TextView textview_fragment_profile_company;
+    private TextView textview_fragment_profile_phone;
+    private TextView textview_fragment_profile_email;
+    private TextView textview_fragment_profile_link;
 
     private TextView textview_id;
     private TextView textview_name;
