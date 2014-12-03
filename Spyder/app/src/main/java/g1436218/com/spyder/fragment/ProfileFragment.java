@@ -45,15 +45,16 @@ public class ProfileFragment extends BaseMainFragment {
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
-        Log.d(TAG, "onCreateOptionsMenu");
+    public void onPrepareOptionsMenu(Menu menu){
+
+        Log.d(TAG, "onPrepareOptions");
+        super.onPrepareOptionsMenu(menu);
         SharedPreferences sharedPref = activity.getSharedPreferences(
                 activity.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         String currUsername = sharedPref.getString(activity.getString(R.string.username), "");
         if(user.getUsername().equals(currUsername)){
-            inflater.inflate(R.menu.menu_profile, menu);
+            menu.findItem(R.id.action_edit).setVisible(true);
         }
-        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
@@ -70,7 +71,7 @@ public class ProfileFragment extends BaseMainFragment {
         Log.d(TAG, "showEditProfile");
         Fragment fragment = getFragmentManager().findFragmentByTag("CURRENT_FRAGMENT");
         if (!(fragment instanceof EventListFragment)) {
-            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+            FragmentTransaction fragmentTransaction = activity.getFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.fragment_container, new EditProfileFragment((MainActivity)getActivity(), user), "CURRENT_FRAGMENT");
             fragmentTransaction.commit();
         }
