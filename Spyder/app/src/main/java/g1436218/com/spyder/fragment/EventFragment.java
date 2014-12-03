@@ -58,7 +58,7 @@ public class EventFragment extends BaseMainFragment implements View.OnClickListe
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.button_fragment_event_joinEvent: new JoinEvent(activity, event.getId()).execute(); break;
+            case R.id.button_fragment_event_joinEvent: new JoinEvent(this, event.getId()).execute(); break;
             case R.id.button_fragment_event_setToCurrentEvent: setToCurrentEvent(); break;
             default: break;
         }
