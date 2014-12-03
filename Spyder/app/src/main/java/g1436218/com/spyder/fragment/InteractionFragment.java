@@ -32,6 +32,7 @@ public class InteractionFragment extends BaseMainFragmentWithReceiver implements
 
     private InteractionAdapter adapter;
     private IntentFilter intentFilter;
+    private TextView textview_message;
 
     public InteractionFragment(MainActivity activity) {
         super(activity, R.layout.fragment_interaction);
@@ -40,12 +41,16 @@ public class InteractionFragment extends BaseMainFragmentWithReceiver implements
     @Override
     protected void initializeView() {
         getActivity().setTitle(TITLE);
+
         /* Initialize Listview */
         this.adapter = new InteractionAdapter(getActivity(), R.layout.listview_interaction);
         ListView listview_interactions = (ListView) getActivity().findViewById(R.id.listview_interaction_list);
         listview_interactions.setAdapter(adapter);
         listview_interactions.setOnItemClickListener(this);
         adapter.addAllToAdapter(activity.getClone());
+
+        textview_message = (TextView) activity.findViewById(R.id.textview_fragment_interaction_message);
+        textview_message.setText(adapter.isEmpty() ? "No Interactions Detected" : "");
     }
 
     @Override
@@ -64,6 +69,8 @@ public class InteractionFragment extends BaseMainFragmentWithReceiver implements
 
     public void addAllToAdapter() {
         adapter.addAllToAdapter(activity.getClone());
+        textview_message.setText(adapter.isEmpty() ? "No Interactions Detected" : "");
+
     }
 
 }
