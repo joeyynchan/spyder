@@ -1,11 +1,12 @@
 package g1436218.com.spyder.asyncTask;
 
 import android.app.FragmentTransaction;
+import android.content.Context;
+import android.content.SharedPreferences;
 
 import g1436218.com.spyder.R;
 import g1436218.com.spyder.activity.MainActivity;
 import g1436218.com.spyder.fragment.ProfileFragment;
-import g1436218.com.spyder.fragment.UserFragment;
 import g1436218.com.spyder.object.User;
 
 public class DisplayProfile extends BaseMainAsyncTask {
@@ -18,11 +19,18 @@ public class DisplayProfile extends BaseMainAsyncTask {
 
     @Override
     protected Void doInBackgroundOffline(Void... params) {
+
+        SharedPreferences sharedPref = activity.getSharedPreferences(
+                activity.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        String username = sharedPref.getString(activity.getString(R.string.username), "");
+
+       user = new User(username);
         return null;
     }
 
     @Override
     protected Void doInBackgroundOnline(Void... params) {
+        user = new User("offline");
         return null;
     }
 

@@ -6,6 +6,7 @@ public class User {
 
     private final String EMPTY = "";
 
+    private String username;
     private String name;
     private String gender;
     private String occupation;
@@ -16,8 +17,9 @@ public class User {
     private String photo;
     private ArrayList<String> connections;
 
-    public User(String name) {
-        this.name = name;
+    public User(String username) {
+        this.username = username;
+        this.name = EMPTY;
         this.gender = EMPTY;
         this.occupation = EMPTY;
         this.company = EMPTY;
