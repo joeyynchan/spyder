@@ -48,9 +48,10 @@ public class SubmitBluetoothData extends BaseMainAsyncTask{
         SharedPreferences sharedPref = context.getSharedPreferences(
                 context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         String username = sharedPref.getString(context.getString(R.string.username), "");
+        String event_id = sharedPref.getString("EVENT_ID", "");
 
         addToParams("user_name", username);
-        addToParams("event_id", GlobalConfiguration.EVENT_ID);
+        addToParams("event_id", event_id);
         addToParams("time_interval", Integer.toString(GlobalConfiguration.BLUETOOTH_TIME_INTERVAL));
         addToParams("data", convertListToJSONArray());
 
