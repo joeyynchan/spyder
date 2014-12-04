@@ -25,6 +25,7 @@ import g1436218.com.spyder.asyncTask.DisplayProfile;
 import g1436218.com.spyder.asyncTask.FetchAttendees;
 import g1436218.com.spyder.asyncTask.FetchEvents;
 import g1436218.com.spyder.asyncTask.FetchUserProfile;
+import g1436218.com.spyder.asyncTask.SubmitBluetoothData;
 import g1436218.com.spyder.fragment.AttendeeFragment;
 import g1436218.com.spyder.fragment.EventListFragment;
 import g1436218.com.spyder.fragment.InteractionFragment;

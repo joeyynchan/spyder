@@ -139,6 +139,9 @@ public class GCMMessageHandler extends IntentService {
         Intent intent = new Intent();
         intent.setAction(Action.STOP_DISCOVERY);
         sendBroadcast(intent);
+        intent = new Intent();
+        intent.setAction(Action.SEND_DATA);
+        sendBroadcast(intent);
     }
 
     private void fetchAttendees() {
