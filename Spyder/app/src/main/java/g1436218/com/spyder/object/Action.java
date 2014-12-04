@@ -21,4 +21,5 @@ public class Action {
     public static final String EVENT_ADAPTER_CLEAR = "EVENT_ADAPTER_CLEAR";
     public static final String GET_GCM = "GET_GCM" ;
     public static final String UPDATE_CURRENT_EVENT = "UPDATE_CURRENT_EVENT";
+    public static final String FETCH_EVENTS = "FETCH_EVENTS";
 }

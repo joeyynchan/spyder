@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import g1436218.com.spyder.R;
 import g1436218.com.spyder.asyncTask.DisplayProfile;
 import g1436218.com.spyder.asyncTask.FetchAttendees;
+import g1436218.com.spyder.asyncTask.FetchEvents;
 import g1436218.com.spyder.asyncTask.FetchUserProfile;
 import g1436218.com.spyder.fragment.AttendeeFragment;
 import g1436218.com.spyder.fragment.EventListFragment;
@@ -237,6 +238,9 @@ public class MainActivity extends BaseActivity {
             fragmentTransaction.replace(R.id.fragment_container, new EventListFragment(this), "CURRENT_FRAGMENT");
             fragmentTransaction.commit();
         }
+        Intent intent = new Intent();
+        intent.setAction(Action.FETCH_EVENTS);
+        sendBroadcast(intent);
         resetButtonState();
         imageview_event_list.setImageResource(R.drawable.main_activity_event_list_pressed);
         textview_event_list.setTextColor(getResources().getColor(R.color.main_activity_button_text_pressed));

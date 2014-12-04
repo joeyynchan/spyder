@@ -35,6 +35,8 @@ public class EventListFragmentReceiver extends BroadcastReceiver {
             fragment.addItem(status, new Event(event_name, event_id, status, null, null, null, null));
         } else if (Action.EVENT_ADAPTER_CLEAR.equals(action)) {
             fragment.clearAdapter();
+        } else if (Action.FETCH_EVENTS.equals(action)) {
+            fragment.searchEvent();
         }
     }
 

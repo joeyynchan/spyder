@@ -40,7 +40,6 @@ public class EventListFragment extends BaseMainFragmentWithReceiver implements A
     @Override
     public void onResume() {
         super.onResume();
-        //addItem("Attending", new Event("Testing Event", GlobalConfiguration.EVENT_ID, null, null, null, "308", null));
         new FetchEvents(this, "").execute();
     }
 
@@ -50,6 +49,7 @@ public class EventListFragment extends BaseMainFragmentWithReceiver implements A
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(Action.EVENT_ADAPTER_ADD_ITEM);
         intentFilter.addAction(Action.EVENT_ADAPTER_CLEAR);
+        intentFilter.addAction(Action.FETCH_EVENTS);
         activity.registerReceiver(receiver, intentFilter);
     }
 
@@ -81,6 +81,11 @@ public class EventListFragment extends BaseMainFragmentWithReceiver implements A
 
     public void clearAdapter() {
         adapter.clear();
+    }
+
+    public void searchEvent() {
+        String keyword = searchview_eventlist.getQuery().toString();
+        searchEvent(keyword);
     }
 
     private void searchEvent(String keyword) {
