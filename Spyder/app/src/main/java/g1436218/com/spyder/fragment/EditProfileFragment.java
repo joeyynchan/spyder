@@ -73,13 +73,13 @@ public class EditProfileFragment extends BaseMainFragment {
         Log.d(TAG, "initializeView");
         activity.setTitle(TITLE);
 
-        textview_fragment_edit_profile_name = (EditText) activity.findViewById(R.id.textview_fragment_edit_profile_name);
-        textview_fragment_edit_profile_gender = (EditText) activity.findViewById(R.id.textview_fragment_edit_profile_gender);
-        textview_fragment_edit_profile_occupation = (EditText) activity.findViewById(R.id.textview_fragment_edit_profile_occupation);
-        textview_fragment_edit_profile_company = (EditText) activity.findViewById(R.id.textview_fragment_edit_profile_company);
-        textview_fragment_edit_profile_email = (EditText) activity.findViewById(R.id.textview_fragment_edit_profile_email);
-        textview_fragment_edit_profile_phone = (EditText) activity.findViewById(R.id.textview_fragment_edit_profile_phone);
-        textview_fragment_edit_profile_link = (EditText) activity.findViewById(R.id.textview_fragment_edit_profile_link);
+        textview_fragment_edit_profile_name = (EditText) activity.findViewById(R.id.edittext_fragment_edit_profile_name);
+        textview_fragment_edit_profile_gender = (EditText) activity.findViewById(R.id.edittext_fragment_edit_profile_gender);
+        textview_fragment_edit_profile_occupation = (EditText) activity.findViewById(R.id.edittext_fragment_edit_profile_occupation);
+        textview_fragment_edit_profile_company = (EditText) activity.findViewById(R.id.edittext_fragment_edit_profile_company);
+        textview_fragment_edit_profile_email = (EditText) activity.findViewById(R.id.edittext_fragment_edit_profile_email);
+        textview_fragment_edit_profile_phone = (EditText) activity.findViewById(R.id.edittext_fragment_edit_profile_phone);
+        textview_fragment_edit_profile_link = (EditText) activity.findViewById(R.id.edittext_fragment_edit_profile_link);
 
         textview_fragment_edit_profile_name.setText(user.getName());
         textview_fragment_edit_profile_gender.setText(user.getGender());
