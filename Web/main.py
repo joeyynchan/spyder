@@ -165,9 +165,23 @@ def user_profile(username=None):
 
     user_dict = db_api.get_user(username)
 
+    for event in user_dict['events']:
+        event['can_join_event'] = can_join_event(event['event_id'])
+
+    organised_events = []
+    spoken_events = []
+    for event in db_api.get_all_event_profile():
+        event['can_join_event'] = can_join_event(event['event_id'])
+        if event.get('organiser', '') == username:
+            organised_events.append(event.copy())
+        if event.get('speaker', '') == username:
+            spoken_events.append(event.copy())
+
     if user_dict['is_success']:
         param_dict = user_dict.copy()
         param_dict['username'] = username
+        param_dict['organised_events'] = organised_events
+        param_dict['spoken_events'] = spoken_events
         return render('user_profile.html.jinja', param_dict)
     else:
         session.setdefault('next_page_param_dict', {})

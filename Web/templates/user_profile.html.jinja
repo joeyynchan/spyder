@@ -28,21 +28,81 @@
   </div>
   <div class="panel panel-default">
     <div class="panel-heading">
-      <h3 class="panel-title">Events</h3>
+      <h3 class="panel-title">Organised events</h3>
     </div>
     <table class="table table-hover">
       <tr>
         <th>Event name</th>
         <th>Start time</th>
         <th>End time</th>
-        <th>Event id</th>
+        <th>Join Event?</th>
+      </tr>
+      {% for event_record in organised_events %}
+        <tr class="clickable-row" href="/event/profile/{{ event_record['event_id'] }}">
+          <td><a href="/event/profile/{{ event_record['event_id'] }}">{{ event_record['name'] }}</a></td>
+          <td>{{ event_record['start_time'] }}</td>
+          <td>{{ event_record['end_time'] }}</td>
+          <td>
+            {% if event_record['can_join_event'] %}
+              <form style="margin:0px" action="/event/join/{{event_record['event_id']}}" method="POST">
+                <button type="submit" class="btn btn-default btn-sm">Join Event</button>
+              </form>
+            {% endif %}
+          </td>
+        </tr>
+      {% endfor %}
+    </table>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">Spoken events</h3>
+    </div>
+    <table class="table table-hover">
+      <tr>
+        <th>Event name</th>
+        <th>Start time</th>
+        <th>End time</th>
+        <th>Join Event?</th>
+      </tr>
+      {% for event_record in spoken_events %}
+        <tr class="clickable-row" href="/event/profile/{{ event_record['event_id'] }}">
+          <td><a href="/event/profile/{{ event_record['event_id'] }}">{{ event_record['name'] }}</a></td>
+          <td>{{ event_record['start_time'] }}</td>
+          <td>{{ event_record['end_time'] }}</td>
+          <td>
+            {% if event_record['can_join_event'] %}
+              <form style="margin:0px" action="/event/join/{{event_record['event_id']}}" method="POST">
+                <button type="submit" class="btn btn-default btn-sm">Join Event</button>
+              </form>
+            {% endif %}
+          </td>
+        </tr>
+      {% endfor %}
+    </table>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">Attended events</h3>
+    </div>
+    <table class="table table-hover">
+      <tr>
+        <th>Event name</th>
+        <th>Start time</th>
+        <th>End time</th>
+        <th>Join Event?</th>
       </tr>
       {% for event_record in events %}
         <tr class="clickable-row" href="/event/profile/{{ event_record['event_id'] }}">
           <td><a href="/event/profile/{{ event_record['event_id'] }}">{{ event_record['name'] }}</a></td>
           <td>{{ event_record['start_time'] }}</td>
           <td>{{ event_record['end_time'] }}</td>
-          <td>{{ event_record['event_id'] }}</td>
+          <td>
+            {% if event_record['can_join_event'] %}
+              <form style="margin:0px" action="/event/join/{{event_record['event_id']}}" method="POST">
+                <button type="submit" class="btn btn-default btn-sm">Join Event</button>
+              </form>
+            {% endif %}
+          </td>
         </tr>
       {% endfor %}
     </table>
