@@ -53,6 +53,8 @@ public class MainActivityReceiver extends BroadcastReceiver {
             } else {
                 activity.setStatus(0);
             }
+        } else if (Action.UPDATE_CURRENT_EVENT.equals(action)) {
+
         }
     }
 }

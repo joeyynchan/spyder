@@ -55,6 +55,10 @@ public class GCMMessageHandler extends IntentService {
             startDiscovery();
         } else if (Action.STOP_DISCOVERY.equals(action)) {
             stopDiscovery();
+        } else if (Action.START_BLUETOOTH.equals(action)) {
+            startBluetooth();
+        } else if (Action.STOP_BLUETOOTH.equals(action)) {
+            stopBluetooth();
         } else if (Action.FETCH_ATTENDEES.equals(action)) {
             fetchAttendees();
         } else if (Action.VIBRATE.equals(action)) {
@@ -68,6 +72,10 @@ public class GCMMessageHandler extends IntentService {
             String title = extras.getString("title");
             String message = extras.getString("message");
             showNotification(title, message);
+        } else if (Action.UPDATE_CURRENT_EVENT.equals(action)) {
+            String id = intent.getExtras().getString("event_id", "");
+            String name = intent.getExtras().getString("event_name", "");
+            updateCurrentEvent(id, name);
         }
 
         Log.i("GCM", "\n" + "Action: " + action + "\nData: " + extras.toString());
@@ -137,6 +145,29 @@ public class GCMMessageHandler extends IntentService {
         launchApplication();
         Intent intent = new Intent();
         intent.setAction(Action.FETCH_ATTENDEES);
+        sendBroadcast(intent);
+    }
+
+    private void startBluetooth() {
+        launchApplication();
+        Intent intent = new Intent();
+        intent.setAction(Action.START_BLUETOOTH);
+        sendBroadcast(intent);
+    }
+
+    private void stopBluetooth() {
+        launchApplication();
+        Intent intent = new Intent();
+        intent.setAction(Action.STOP_BLUETOOTH);
+        sendBroadcast(intent);
+    }
+
+    private void updateCurrentEvent(String id, String name) {
+        launchApplication();
+        Intent intent = new Intent();
+        intent.setAction(Action.UPDATE_CURRENT_EVENT);
+        intent.putExtra("EVENT_ID", id);
+        intent.putExtra("EVENT_NAME", name);
         sendBroadcast(intent);
     }
 

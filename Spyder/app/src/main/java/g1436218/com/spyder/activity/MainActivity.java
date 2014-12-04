@@ -87,6 +87,7 @@ public class MainActivity extends BaseActivity {
         intentFilter.addAction(Action.STOP_BLUETOOTH);
         intentFilter.addAction(Action.FETCH_ATTENDEES);
         intentFilter.addAction(Action.GET_GCM);
+        intentFilter.addAction(Action.UPDATE_CURRENT_EVENT);
         intentFilter.addAction(BluetoothAdapter.ACTION_SCAN_MODE_CHANGED);
         intentFilter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
         registerReceiver(receiver, intentFilter);
