@@ -145,9 +145,9 @@
     for (var i = 0; i < attendees.length; i++) {
       graph.addNode(attendees[i].user_name);
     }
-    document.getElementById("myText").value = Math.floor((event_end.getTime() - curr_t.getTime()) / 20);
     interval = parseInt(document.getElementById("myText").value);
     setInterval(function () {updateData()}, interval);
+	document.getElementById("myText").value = Math.floor((event_end.getTime() - curr_t.getTime()) / 20);
 	updateStatistics();
   }
   
@@ -224,13 +224,13 @@
         xAxis, yAxis;
 	
 	temp_t = new Date(interactionData.event_start_time);
-	
+	interval = parseInt(document.getElementById("myText").value);
 	while (temp_t.getTime() <= event_end.getTime()) {
 		var count = 0;
 		for (var i = 0; i < interaction.length; i++) {
 			var interaction_start = new Date (interaction[i].start_time);
 			var interaction_end = new Date(interaction[i].end_time);
-			if ( (interaction_start.getTime() <= temp_t.getTime()) && (interaction_end.getTime() >= temp_t.getTime())) {
+			if ( (interaction_start.getTime() <= temp_t.getTime()+ interval)  && (interaction_end.getTime() >= temp_t.getTime()) ) {
 				count++;
 			}
 		}
