@@ -194,6 +194,19 @@ def get_user(username):
             }
 
 
+def get_event_profile(event_id):
+    records = get_all_event_profile()
+    for record in records:
+        if record.get('event_id', '') == event_id:
+            return record
+    else:
+        return None
+
+
+def get_all_event_profile():
+    return db_connect('/getEvents?user_name=')[1]
+
+
 # def create_event(
 #         organizer_id, username, name, start_time, end_time,
 #         location, description):

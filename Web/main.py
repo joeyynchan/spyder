@@ -251,10 +251,21 @@ def event_profile(event_id):
 
     param_dict = {
         'event_id': event_id,
+        'profile': db_api.get_event_profile(event_id)
     }
     param_dict.update(db_api.xhr_get_event_visualisation_data(event_id))
     param_dict['can_join_event'] = can_join_event(event_id)
     return render('event_profile.html.jinja', param_dict)
+
+
+@app.route('/event/list')
+def event_list():
+    profiles = []
+    for profile in db_api.get_all_event_profile():
+        profile['can_join_event'] = can_join_event(profile['event_id'])
+        profiles.append(profile)
+
+    return render('event_list.html.jinja', {'profiles': profiles})
 
 
 @app.route('/xhr/event_visualisation_data/<event_id>', methods=['GET'])

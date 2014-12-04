@@ -45,20 +45,21 @@ def db_connect(url, param_dict=None, method=None, verbose=True):
 
 
 if __name__ == '__main__':
-    response = db_connect('/addEvent', {
-        "start_time": "Mon May 04 09:51:52 CDT 2009",
-        "end_time": "Mon May 05 18:51:52 CDT 2018",
-        "address": "Imperial College London",
-        "name": "test event...",
-        "description": "I love add event botton so much.",
-        "speaker_id": "demo2",
-        "organiser_id": "demo1",
-        "attendees": [{"user_name": "demo3"}]
-    })
+    # response = db_connect('/addEvent', {
+    #     "start_time": "Mon May 04 09:51:52 CDT 2009",
+    #     "end_time": "Mon May 05 18:51:52 CDT 2018",
+    #     "address": "Imperial College London",
+    #     "name": "test event...",
+    #     "description": "I love add event botton so much.",
+    #     "speaker_id": "demo2",
+    #     "organiser_id": "demo1",
+    #     "attendees": [{"user_name": "demo3"}]
+    # })
     # response = db_api.xhr_get_event_visualisation_data(
     #     '54775c5de4b0598ae9308641')
     # response = db_connect(
     #     '/event/interaction?event_id=%s' % '54775c5de4b0598ae9308641')
     # response = db_connect('/getEvents?user_name=%s' % 'demo1')
     # response = db_connect('/user/profile?user_name=%s' % 'demo2')
+    response = db_connect('''/getEvents?user_name=''')
     print(response)
