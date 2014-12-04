@@ -22,7 +22,8 @@ def register(
         },
         http.client.CONFLICT: {
             'is_success': False,
-            'error_message': 'This username is already in use by another user.'
+            'error_message':
+                'Username "%s" is already in use by another user.' % username
         }
     }
 
@@ -82,7 +83,7 @@ def add_event(start_time, end_time, address, name,
         http.client.CONFLICT: {
             'is_success': False,
             'error_message':
-                'Somebody has already used this event name.'
+                'Somebody has already used "%s" as event name.' % name
         }
     }
 
@@ -126,6 +127,46 @@ def xhr_get_event_visualisation_data(event_id):
         return None
 
 
+def get_event_attendees(event_id):
+    status_code, content = db_connect(
+        '/eventUsers?event_id=%s' % event_id)
+
+    response_dict = {
+        http.client.OK: {
+            'is_success': True,
+            'user_mappings': content['user_mappings']
+        },
+        http.client.CONFLICT: {
+            'is_success': False,
+            'error_message': 'Event "%s" does not exist.' % event_id
+        }
+    }
+
+    return response_dict[status_code]
+
+
+def join_event(event_id, username, status="Attendee"):
+    status_code, content = db_connect(
+        '/event/join?event_id=%s' % event_id, {
+            'user_name': username,
+            'status': status})
+
+    response_dict = {
+        http.client.OK: {
+            'is_success': True,
+            'success_message':
+                'You have successfully joined event %s' % event_id
+        },
+        http.client.CONFLICT: {
+            'is_success': False,
+            'error_message': ('Event "%s" or username %s does not exist.'
+                              % (event_id, username))
+        }
+    }
+
+    return response_dict[status_code]
+
+
 def get_user(username):
     events_code, events_content = db_connect(
         '/getEvents?user_name=%s' % username)
@@ -136,7 +177,8 @@ def get_user(username):
             or profile_code == http.client.NOT_FOUND):
         return {
             'is_success': False,
-            'error_message': 'This user does not exist (redirect to dashboard)'
+            'error_message':
+                '%s does not exist (redirect to dashboard).' % username
         }
     elif events_code == http.client.OK:
         if profile_code == http.client.NO_CONTENT:

@@ -43,7 +43,7 @@ def serve_static(filepath):
     return app.send_static_file(filepath)
 
 
-def redirect_to_default(error_message=None):
+def redirect_to_default(error_message=None, stay_on_current_page=False):
     if error_message is not None:
         session['next_page_param_dict'] = {
             'error_message': error_message
@@ -172,10 +172,10 @@ def user_profile(username=None):
     else:
         session.setdefault('next_page_param_dict', {})
         session['next_page_param_dict'].update(user_dict)
-        return redirect_to_default(user_dict['error_message'])
+        return redirect_to_default(stay_on_current_page=True)
 
 
-@app.route('/addEvent', methods=['GET'])
+@app.route('/event/add', methods=['GET'])
 def add_event_page():
     if not is_currently_login():
         return redirect_to_default(
@@ -184,7 +184,7 @@ def add_event_page():
     return render('add_event.html.jinja')
 
 
-@app.route('/addEvent', methods=['POST'])
+@app.route('/event/add', methods=['POST'])
 def add_event():
     if not is_currently_login():
         return redirect_to_default(
@@ -213,42 +213,47 @@ def add_event():
         return redirect(url_for('add_event_page'))
 
 
+@app.route('/event/join/<event_id>', methods=['POST'])
+def join_event(event_id):
+    if not is_currently_login():
+        return redirect_to_default(
+            'You need to login in order to join event.')
+
+    join_event_dict = db_api.join_event(
+        event_id, session['current_user_username'])
+
+    if join_event_dict['is_success']:
+        session['next_page_param_dict'] = join_event_dict.copy()
+        return redirect(url_for(
+            'event_profile', event_id=event_id))
+    else:
+        session['next_page_param_dict'] = join_event_dict.copy()
+        return redirect_to_default(stay_on_current_page=True)
+
+
+def can_join_event(event_id, username=None):
+    if username is None:
+        username = session['current_user_username']
+    attendees_dict = db_api.get_event_attendees(event_id)
+    if attendees_dict['is_success']:
+        attendees_list = (
+            record['user_name'] for record in attendees_dict['user_mappings'])
+        return username not in attendees_list
+    else:
+        return False
+
+
 @app.route('/event/profile/<event_id>', methods=['GET'])
 def event_profile(event_id):
     if not is_currently_login():
         return redirect_to_default(
             'You need to login in order to see event profile.')
 
-    # TODO(gunpinyo): re-enable this
-    # event_dict = db_api.get_event(event_id)
-
-    # if event_dict['is_success']:
-    #     param_dict = {
-    #         'event_record': event_dict['event_record'],
-    #         'event_member_table': [
-    #             {
-    #                 'user_id': user_id,
-    #                 'username': db_api.get_name_user(user_id),
-    #                 'role': role,
-    #                 'status': status
-    #             }
-    #             for status, helper_1
-    #             in event_dict['event_record']['members'].items()
-    #             for role, helper_2 in helper_1.items()
-    #             for user_id in helper_2
-    #         ]
-    #     }
-
-    #     return render('event_profile.html.jinja', param_dict)
-
-    # else:
-    #     return redirect_to_default(event_dict['error_message'])
-
     param_dict = {
-        'event_id': event_id
+        'event_id': event_id,
     }
     param_dict.update(db_api.xhr_get_event_visualisation_data(event_id))
-
+    param_dict['can_join_event'] = can_join_event(event_id)
     return render('event_profile.html.jinja', param_dict)
 
 
