@@ -59,7 +59,7 @@ public class FetchEvents extends BaseMainAsyncTask {
         addToParams("user_name", username);
         addToParams("event_search_string", keyword);
 
-        result = getStringFromUrl(url, Responses.POST);
+        result = getStringFromUrl(url, Requests.POST);
         Log.i("FECTHEVENT", result);
 
         if (result != null) {

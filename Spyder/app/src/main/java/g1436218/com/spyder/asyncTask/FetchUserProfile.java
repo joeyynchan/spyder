@@ -52,7 +52,7 @@ public class FetchUserProfile extends BaseMainAsyncTask {
     @Override
     protected Void doInBackgroundOnline(Void... params) {
         Log.d(TAG, URL);
-        JSONObject jsonObject = getJSONFromUrl(URL, Responses.GET);
+        JSONObject jsonObject = getJSONFromUrl(URL, Requests.GET);
         Log.d(TAG, statusCode + "");
         if(statusCode == 200){
             Log.d(TAG, jsonObject.toString());

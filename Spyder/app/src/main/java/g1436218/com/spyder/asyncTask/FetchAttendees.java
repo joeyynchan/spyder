@@ -10,7 +10,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-
 import g1436218.com.spyder.R;
 import g1436218.com.spyder.activity.MainActivity;
 import g1436218.com.spyder.config.GlobalConfiguration;
@@ -68,7 +67,7 @@ public class FetchAttendees extends BaseMainAsyncTask {
             return null;
         }
 
-        resultJObj = getJSONFromUrl(URL+event_id, Responses.GET);
+        resultJObj = getJSONFromUrl(URL+event_id, Requests.GET);
         if (resultJObj != null) {
             try {
                 JSONArray array = resultJObj.getJSONArray("user_mappings");

@@ -60,7 +60,7 @@ public class LinkDevice extends BaseLoginAsyncTask{
         activity.sendBroadcast(intent);
 
         if (!username.equals(GlobalConfiguration.OFFLINE_MODE)) {
-            JSONObject jsonObject = getJSONFromUrl(URL, Responses.POST);
+            JSONObject jsonObject = getJSONFromUrl(URL, Requests.POST);
         } else {
             statusCode = 999;
         }

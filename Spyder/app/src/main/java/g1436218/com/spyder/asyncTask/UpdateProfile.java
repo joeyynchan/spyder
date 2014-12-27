@@ -45,7 +45,7 @@ public class UpdateProfile extends BaseMainAsyncTask {
         addToParams("connections", "");
 
         Log.d("UpdateProfile", this.params.toString());
-        getJSONFromUrl(url, Responses.POST);
+        getJSONFromUrl(url, Requests.POST);
         Log.i("UpdateProfile", statusCode + "");
         return null;
     }
