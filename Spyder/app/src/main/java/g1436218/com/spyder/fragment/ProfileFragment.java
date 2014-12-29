@@ -68,7 +68,6 @@ public class ProfileFragment extends BaseMainFragment {
     }
 
     private void showEditProfile() {
-        Log.d(TAG, "showEditProfile");
         Fragment fragment = getFragmentManager().findFragmentByTag("CURRENT_FRAGMENT");
         if (!(fragment instanceof EditProfileFragment)) {
             FragmentTransaction fragmentTransaction = activity.getFragmentManager().beginTransaction();

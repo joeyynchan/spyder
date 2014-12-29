@@ -6,12 +6,10 @@ import android.app.FragmentTransaction;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -23,13 +21,11 @@ import java.util.ArrayList;
 import g1436218.com.spyder.R;
 import g1436218.com.spyder.asyncTask.DisplayProfile;
 import g1436218.com.spyder.asyncTask.FetchAttendees;
-import g1436218.com.spyder.asyncTask.FetchEvents;
-import g1436218.com.spyder.asyncTask.FetchUserProfile;
-import g1436218.com.spyder.asyncTask.SubmitBluetoothData;
 import g1436218.com.spyder.fragment.AttendeeFragment;
 import g1436218.com.spyder.fragment.EventListFragment;
 import g1436218.com.spyder.fragment.InteractionFragment;
 import g1436218.com.spyder.fragment.LogoutFragment;
+import g1436218.com.spyder.fragment.ProfileFragment;
 import g1436218.com.spyder.object.Action;
 import g1436218.com.spyder.object.Attendee;
 import g1436218.com.spyder.object.Interaction;
@@ -43,6 +39,7 @@ import g1436218.com.spyder.service.BluetoothDiscovery;
 public class MainActivity extends BaseActivity {
 
     private final String TAG = "MainActivity";
+    public static final int DISCOVERY_ON = 1;
 
     private Intent bluetoothDiscoveryIntent;
     private InteractionPackage interactionPackage;
@@ -169,7 +166,6 @@ public class MainActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         if (getFragmentManager().getBackStackEntryCount() != 0) {
-            Log.d(TAG, "popBackStack");
             getFragmentManager().popBackStack();
         }
         invalidateOptionsMenu();
@@ -178,12 +174,23 @@ public class MainActivity extends BaseActivity {
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.button_attendee_list: showAttendees(); break;
-            case R.id.button_interactions: showInteractions(); break;
-            case R.id.button_event_list: showEventList(); break;
-            case R.id.button_profile: showProfile(); break;
-            case R.id.main_activity_status: showStatus(); break;
-            default: break;
+            case R.id.button_attendee_list:
+                showAttendees();
+                break;
+            case R.id.button_interactions:
+                showInteractions();
+                break;
+            case R.id.button_event_list:
+                showEventList();
+                break;
+            case R.id.button_profile:
+                showProfile();
+                break;
+            case R.id.main_activity_status:
+                showStatus();
+                break;
+            default:
+                break;
         }
     }
 
@@ -222,50 +229,42 @@ public class MainActivity extends BaseActivity {
 
     private void showAttendees() {
         new FetchAttendees(this).execute();
-        Fragment fragment = getFragmentManager().findFragmentByTag("CURRENT_FRAGMENT");
-        if (!(fragment instanceof AttendeeFragment)) {
-            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.fragment_container, new AttendeeFragment(this), "CURRENT_FRAGMENT");
-            fragmentTransaction.commit();
-        }
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, new AttendeeFragment(this), "CURRENT_FRAGMENT");
+        fragmentTransaction.commit();
         resetButtonState();
+        button_attendee_list.setClickable(false);
         imageview_attendee_list.setImageResource(R.drawable.main_activity_attendee_list_pressed);
         textview_attendee_list.setTextColor(getResources().getColor(R.color.main_activity_button_text_pressed));
     }
 
     private void showEventList() {
-        Fragment fragment = getFragmentManager().findFragmentByTag("CURRENT_FRAGMENT");
-        if (!(fragment instanceof EventListFragment)) {
-            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.fragment_container, new EventListFragment(this), "CURRENT_FRAGMENT");
-            fragmentTransaction.commit();
-        }
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, new EventListFragment(this), "CURRENT_FRAGMENT");
+        fragmentTransaction.commit();
         Intent intent = new Intent();
         intent.setAction(Action.FETCH_EVENTS);
         sendBroadcast(intent);
         resetButtonState();
+        button_event_list.setClickable(false);
         imageview_event_list.setImageResource(R.drawable.main_activity_event_list_pressed);
         textview_event_list.setTextColor(getResources().getColor(R.color.main_activity_button_text_pressed));
     }
 
     private void showInteractions() {
-        Fragment fragment = getFragmentManager().findFragmentByTag("CURRENT_FRAGMENT");
-        if (!(fragment instanceof InteractionFragment)) {
-            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.fragment_container, new InteractionFragment(this), "CURRENT_FRAGMENT");
-            fragmentTransaction.commit();
-        }
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, new InteractionFragment(this), "CURRENT_FRAGMENT");
+        fragmentTransaction.commit();
         resetButtonState();
+        button_interactions.setClickable(false);
         imageview_interactions.setImageResource(R.drawable.main_activity_interactions_icon_pressed);
         textview_interatcions.setTextColor(getResources().getColor(R.color.main_activity_button_text_pressed));
     }
 
     private void showProfile() {
-        SharedPreferences sharedPref = this.getSharedPreferences(
-                this.getString(R.string.preference_file_key), this.MODE_PRIVATE);
-        String currUsername = sharedPref.getString(this.getString(R.string.username), "");
         new DisplayProfile(this).execute();
         resetButtonState();
+        button_profile.setClickable(false);
         imageview_profile.setImageResource(R.drawable.main_activity_profile_pressed);
         textview_profile.setTextColor(getResources().getColor(R.color.main_activity_button_text_pressed));
     }
@@ -284,6 +283,11 @@ public class MainActivity extends BaseActivity {
         textview_event_list.setTextColor(getResources().getColor(R.color.textedit_background));
         textview_interatcions.setTextColor(getResources().getColor(R.color.textedit_background));
         textview_profile.setTextColor(getResources().getColor(R.color.textedit_background));
+
+        button_attendee_list.setClickable(true);
+        button_event_list.setClickable(true);
+        button_interactions.setClickable(true);
+        button_profile.setClickable(true);
     }
 
     /* Manipulate InteractionPackage */
@@ -383,7 +387,7 @@ public class MainActivity extends BaseActivity {
 
     public void setStatus(int status) {
         switch (status) {
-            case 1:
+            case DISCOVERY_ON:
                 imageview_status.setImageResource(R.drawable.main_activity_status_discovery_on);
                 break;
             case BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE:

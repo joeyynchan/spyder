@@ -68,6 +68,9 @@ public class FetchEvents extends BaseMainAsyncTask {
         if (result != null) {
             try {
                 JSONArray array = toJSONArray(result);
+                if (array == null) {
+                    return null;
+                }
                 String status, event_id, event_name;
                 for (int i = 0; i < array.length(); i++) {
                     JSONObject item = array.getJSONObject(i);

@@ -30,7 +30,6 @@ public class SubmitBluetoothData extends BaseMainAsyncTask{
         this.interactionPackage = interactionPackage;
     }
 
-
     @Override
     protected Void doInBackgroundOffline(Void... params) {
         return null;
@@ -38,12 +37,6 @@ public class SubmitBluetoothData extends BaseMainAsyncTask{
 
     @Override
     protected Void doInBackgroundOnline(Void... params) {
-        return null;
-    }
-
-    @Override
-    protected Void doInBackground(Void... params) {
-
         Context context = activity;
         SharedPreferences sharedPref = context.getSharedPreferences(
                 context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
@@ -70,7 +63,6 @@ public class SubmitBluetoothData extends BaseMainAsyncTask{
             JSONArray subArray = convertSetToJSONArray(interactions);
             array.put(subArray);
         }
-
         return array;
     }
 

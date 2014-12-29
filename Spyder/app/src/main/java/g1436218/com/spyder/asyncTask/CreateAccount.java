@@ -42,14 +42,13 @@ public class CreateAccount extends BaseLoginAsyncTask {
 
     @Override
     public void onPostExecute(Void v){
-        Log.d(TAG, "onPostExecute");
         Log.d(TAG, statusCode + "");
-        if(statusCode == 201) {
+        if (statusCode == 201) {
             //Registration was successful
             TextView login_text_errmsg = (TextView) activity.findViewById(R.id.textview_fragment_register_errmsg);
             login_text_errmsg.setText("Account has been successfully created\n");
             activity.displayLoginFragment();
-        }else{
+        } else {
             TextView login_text_errmsg = (TextView) activity.findViewById(R.id.textview_fragment_register_errmsg);
             login_text_errmsg.setText("Registration failed\n");
 

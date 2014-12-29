@@ -14,7 +14,6 @@ import g1436218.com.spyder.object.User;
 
 public class DisplayProfile extends FetchUserProfile {
 
-
     public DisplayProfile(MainActivity activity) {
         super(activity, "");
         SharedPreferences sharedPref = activity.getSharedPreferences(
