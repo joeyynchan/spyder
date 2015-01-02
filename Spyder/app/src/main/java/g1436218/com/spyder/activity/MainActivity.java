@@ -31,6 +31,7 @@ import g1436218.com.spyder.object.Attendee;
 import g1436218.com.spyder.object.Interaction;
 import g1436218.com.spyder.object.InteractionPackage;
 import g1436218.com.spyder.object.Interactions;
+import g1436218.com.spyder.object.UIController;
 import g1436218.com.spyder.object.UserMap;
 import g1436218.com.spyder.receiver.MainActivityReceiver;
 import g1436218.com.spyder.service.BluetoothDiscovery;
@@ -46,21 +47,12 @@ public class MainActivity extends BaseActivity {
     private ArrayList<Attendee> attendees;
     private MainActivityReceiver receiver;
     private UserMap userMap;
+    private UIController uiController;
 
     private LinearLayout button_attendee_list;
     private LinearLayout button_event_list;
     private LinearLayout button_interactions;
     private LinearLayout button_profile;
-
-    private ImageView imageview_attendee_list;
-    private ImageView imageview_event_list;
-    private ImageView imageview_interactions;
-    private ImageView imageview_profile;
-
-    private TextView textview_attendee_list;
-    private TextView textview_event_list;
-    private TextView textview_interatcions;
-    private TextView textview_profile;
 
     private ImageView imageview_status;
     private int nid = 0;
@@ -90,7 +82,8 @@ public class MainActivity extends BaseActivity {
         intentFilter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
         registerReceiver(receiver, intentFilter);
 
-        showInteractions();
+        uiController = new UIController(this);
+        uiController.showInteractions();
         new FetchAttendees(this).execute();
     }
 
@@ -175,16 +168,16 @@ public class MainActivity extends BaseActivity {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.button_attendee_list:
-                showAttendees();
+                uiController.showAttendees();
                 break;
             case R.id.button_interactions:
-                showInteractions();
+                uiController.showInteractions();
                 break;
             case R.id.button_event_list:
-                showEventList();
+                uiController.showEventList();
                 break;
             case R.id.button_profile:
-                showProfile();
+                uiController.showProfile();
                 break;
             case R.id.main_activity_status:
                 showStatus();
@@ -202,16 +195,6 @@ public class MainActivity extends BaseActivity {
         button_event_list = (LinearLayout) findViewById(R.id.button_event_list);
         button_profile = (LinearLayout) findViewById(R.id.button_profile);
 
-        imageview_attendee_list = (ImageView) findViewById(R.id.button_attendee_list_icon);
-        imageview_interactions = (ImageView) findViewById(R.id.button_interactions_icon);
-        imageview_event_list = (ImageView) findViewById(R.id.button_event_list_icon);
-        imageview_profile = (ImageView) findViewById(R.id.button_profile_icon);
-
-        textview_attendee_list = (TextView) findViewById(R.id.button_attendee_list_text);
-        textview_interatcions = (TextView) findViewById(R.id.button_interactions_text);
-        textview_event_list = (TextView) findViewById(R.id.button_event_list_text);
-        textview_profile = (TextView) findViewById(R.id.button_event_profile_text);
-
         button_attendee_list.setOnClickListener(this);
         button_event_list.setOnClickListener(this);
         button_interactions.setOnClickListener(this);
@@ -227,68 +210,11 @@ public class MainActivity extends BaseActivity {
         new LogoutFragment().show(fragmentManager, "Logout");
     }
 
-    private void showAttendees() {
-        new FetchAttendees(this).execute();
-        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container, new AttendeeFragment(this), "CURRENT_FRAGMENT");
-        fragmentTransaction.commit();
-        resetButtonState();
-        button_attendee_list.setClickable(false);
-        imageview_attendee_list.setImageResource(R.drawable.main_activity_attendee_list_pressed);
-        textview_attendee_list.setTextColor(getResources().getColor(R.color.main_activity_button_text_pressed));
-    }
-
-    private void showEventList() {
-        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container, new EventListFragment(this), "CURRENT_FRAGMENT");
-        fragmentTransaction.commit();
-        Intent intent = new Intent();
-        intent.setAction(Action.FETCH_EVENTS);
-        sendBroadcast(intent);
-        resetButtonState();
-        button_event_list.setClickable(false);
-        imageview_event_list.setImageResource(R.drawable.main_activity_event_list_pressed);
-        textview_event_list.setTextColor(getResources().getColor(R.color.main_activity_button_text_pressed));
-    }
-
-    private void showInteractions() {
-        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container, new InteractionFragment(this), "CURRENT_FRAGMENT");
-        fragmentTransaction.commit();
-        resetButtonState();
-        button_interactions.setClickable(false);
-        imageview_interactions.setImageResource(R.drawable.main_activity_interactions_icon_pressed);
-        textview_interatcions.setTextColor(getResources().getColor(R.color.main_activity_button_text_pressed));
-    }
-
-    private void showProfile() {
-        new DisplayProfile(this).execute();
-        resetButtonState();
-        button_profile.setClickable(false);
-        imageview_profile.setImageResource(R.drawable.main_activity_profile_pressed);
-        textview_profile.setTextColor(getResources().getColor(R.color.main_activity_button_text_pressed));
-    }
-
     private void showStatus() {
         Toast.makeText(getApplicationContext(), "Status", Toast.LENGTH_LONG).show();
     }
 
-    private void resetButtonState() {
-        imageview_attendee_list.setImageResource(R.drawable.main_activity_attendee_list_normal);
-        imageview_event_list.setImageResource(R.drawable.main_activity_event_list_normal);
-        imageview_interactions.setImageResource(R.drawable.main_activity_interactions_icon_normal);
-        imageview_profile.setImageResource(R.drawable.main_activity_profile_normal);
 
-        textview_attendee_list.setTextColor(getResources().getColor(R.color.textedit_background));
-        textview_event_list.setTextColor(getResources().getColor(R.color.textedit_background));
-        textview_interatcions.setTextColor(getResources().getColor(R.color.textedit_background));
-        textview_profile.setTextColor(getResources().getColor(R.color.textedit_background));
-
-        button_attendee_list.setClickable(true);
-        button_event_list.setClickable(true);
-        button_interactions.setClickable(true);
-        button_profile.setClickable(true);
-    }
 
     /* Manipulate InteractionPackage */
 
@@ -377,7 +303,6 @@ public class MainActivity extends BaseActivity {
         startActivity(discoverableIntent);
     }
 
-    /* Turn off Bluetooth. Stop discovery if there exists one */
     public void turnOffBluetooth() {
         BluetoothAdapter.getDefaultAdapter().disable();
         if (discovery) {
