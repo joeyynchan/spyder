@@ -23,6 +23,7 @@ import g1436218.com.spyder.asyncTask.SubmitBluetoothData;
 import g1436218.com.spyder.object.Action;
 import g1436218.com.spyder.object.Attendee;
 import g1436218.com.spyder.object.Interaction;
+import g1436218.com.spyder.object.InteractionPackage;
 import g1436218.com.spyder.receiver.InteractionFragmentReceiver;
 import g1436218.com.spyder.service.BluetoothDiscovery;
 
@@ -33,9 +34,11 @@ public class InteractionFragment extends BaseMainFragmentWithReceiver implements
     private InteractionAdapter adapter;
     private IntentFilter intentFilter;
     private TextView textview_message;
+    private InteractionPackage interactionPackage;
 
     public InteractionFragment(MainActivity activity) {
         super(activity, R.layout.fragment_interaction);
+        this.interactionPackage = activity.getInteractionPackage();
     }
 
     @Override
@@ -47,7 +50,7 @@ public class InteractionFragment extends BaseMainFragmentWithReceiver implements
         ListView listview_interactions = (ListView) getActivity().findViewById(R.id.listview_interaction_list);
         listview_interactions.setAdapter(adapter);
         listview_interactions.setOnItemClickListener(this);
-        adapter.addAllToAdapter(activity.getClone());
+        adapter.addAllToAdapter(interactionPackage.getClone());
 
         textview_message = (TextView) activity.findViewById(R.id.textview_fragment_interaction_message);
         textview_message.setText(adapter.isEmpty() ? "No Interactions Detected" : "");
@@ -68,8 +71,8 @@ public class InteractionFragment extends BaseMainFragmentWithReceiver implements
     }
 
     public void addAllToAdapter() {
-        adapter.addAllToAdapter(activity.getClone());
-        textview_message.setText(adapter.isEmpty() ? "No Interactions Detected" : "");
+        adapter.addAllToAdapter(interactionPackage.getClone());
+        textview_message.setText(interactionPackage.isEmpty() ? "No Interactions Detected" : "");
 
     }
 

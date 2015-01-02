@@ -25,9 +25,9 @@ public class SubmitBluetoothData extends BaseMainAsyncTask{
     private static String URL = GlobalConfiguration.DEFAULT_URL + "submit_data";
     private InteractionPackage interactionPackage;
 
-    public SubmitBluetoothData(MainActivity activity, InteractionPackage interactionPackage) {
+    public SubmitBluetoothData(MainActivity activity) {
         super(activity);
-        this.interactionPackage = interactionPackage;
+        this.interactionPackage = activity.getInteractionPackage();
     }
 
     @Override
@@ -85,6 +85,6 @@ public class SubmitBluetoothData extends BaseMainAsyncTask{
 
     @Override
     public void onPostExecute(Void v){
-        activity.clearArray();
+        interactionPackage.clear();
     }
 }

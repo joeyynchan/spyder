@@ -28,6 +28,7 @@ import g1436218.com.spyder.fragment.LogoutFragment;
 import g1436218.com.spyder.fragment.ProfileFragment;
 import g1436218.com.spyder.object.Action;
 import g1436218.com.spyder.object.Attendee;
+import g1436218.com.spyder.object.BluetoothController;
 import g1436218.com.spyder.object.Interaction;
 import g1436218.com.spyder.object.InteractionPackage;
 import g1436218.com.spyder.object.Interactions;
@@ -40,23 +41,18 @@ import g1436218.com.spyder.service.BluetoothDiscovery;
 public class MainActivity extends BaseActivity {
 
     private final String TAG = "MainActivity";
-    public static final int DISCOVERY_ON = 1;
 
-    private Intent bluetoothDiscoveryIntent;
-    private InteractionPackage interactionPackage;
-    private ArrayList<Attendee> attendees;
-    private MainActivityReceiver receiver;
     private UserMap userMap;
+    private ArrayList<Attendee> attendees;
+    private InteractionPackage interactionPackage;
+    private MainActivityReceiver receiver;
     private UIController uiController;
+    private BluetoothController bluetoothController;
 
     private LinearLayout button_attendee_list;
     private LinearLayout button_event_list;
     private LinearLayout button_interactions;
     private LinearLayout button_profile;
-
-    private ImageView imageview_status;
-    private int nid = 0;
-    private boolean discovery = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,13 +80,15 @@ public class MainActivity extends BaseActivity {
 
         uiController = new UIController(this);
         uiController.showInteractions();
+
+        bluetoothController = new BluetoothController(this);
         new FetchAttendees(this).execute();
     }
 
     @Override
     protected void onDestroy() {
         unregisterReceiver(receiver);                  /* Unregister Receiver */
-        super.onStop();
+        super.onDestroy();
     }
 
     @Override
@@ -119,7 +117,7 @@ public class MainActivity extends BaseActivity {
             menu.findItem(R.id.action_set_discoverable).setVisible(true);
         }
         if (BluetoothAdapter.getDefaultAdapter().getScanMode() == BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE) {
-            if (discovery) {
+            if (bluetoothController.isDiscovery()) {
                 menu.findItem(R.id.action_stop_discovery).setVisible(true);
             } else {
                 menu.findItem(R.id.action_start_discovery).setVisible(true);
@@ -133,22 +131,22 @@ public class MainActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_log_out:
-                logout();
+                uiController.logout();
                 break;
             case R.id.action_start_bluetooth:
-                turnOnBluetooth();
+                bluetoothController.turnOnBluetooth();
                 break;
             case R.id.action_stop_bluetooth:
-                turnOffBluetooth();
+                bluetoothController.turnOffBluetooth();
                 break;
             case R.id.action_set_discoverable:
-                setDiscoverable();
+                bluetoothController.setDiscoverable();
                 break;
             case R.id.action_start_discovery:
-                startDiscovery();
+                bluetoothController.startDiscovery();
                 break;
             case R.id.action_stop_discovery:
-                stopDiscovery();
+                bluetoothController.stopDiscovery();
                 break;
             default:
                 break;
@@ -179,9 +177,6 @@ public class MainActivity extends BaseActivity {
             case R.id.button_profile:
                 uiController.showProfile();
                 break;
-            case R.id.main_activity_status:
-                showStatus();
-                break;
             default:
                 break;
         }
@@ -200,131 +195,22 @@ public class MainActivity extends BaseActivity {
         button_interactions.setOnClickListener(this);
         button_profile.setOnClickListener(this);
 
-        imageview_status = (ImageView) findViewById(R.id.main_activity_status);
-        imageview_status.setOnClickListener(this);
-        setStatus(BluetoothAdapter.getDefaultAdapter().getScanMode());
-    }
-
-    private void logout() {
-        FragmentManager fragmentManager = getFragmentManager();
-        new LogoutFragment().show(fragmentManager, "Logout");
-    }
-
-    private void showStatus() {
-        Toast.makeText(getApplicationContext(), "Status", Toast.LENGTH_LONG).show();
-    }
-
-
-
-    /* Manipulate InteractionPackage */
-
-    public Interactions getInteractions() {
-        return interactionPackage.getInteractions();
-    }
-
-    public Interactions getClone() {
-        return interactionPackage.getClone();
     }
 
     public InteractionPackage getInteractionPackage() {
         return interactionPackage;
     }
 
-    public void addToInteractions(Interaction interaction) {
-        interactionPackage.addInteraction(interaction);
+    public BluetoothController getBluetoothController() {
+        return bluetoothController;
     }
 
-    /* RESET LIST is performed when a discovery session finishes.
-     * 1) Add Interactions to package
-     * 2) Clone interactions for InteractionFragment
-     * 3) Clear interactions
-     * 4) Tell InteractionFragment to update using clone
-    */
-    public void addInteractionsToPackage() {
-        interactionPackage.addInteractionsToPackage();
-        interactionPackage.copyInteractionsToClone();
-        interactionPackage.createInteractions();
-        broadcastUpdateAdapter();
-    }
-
-    public void clearArray() {
-        interactionPackage.clear();
-    }
-
-    public boolean isPackageEmpty() {
-        return interactionPackage.isPackageEmpty();
-    }
-
-    private void broadcastUpdateAdapter() {
-        Intent intent = new Intent();
-        intent.setAction(Action.UPDATE_INTERACTION_FRAGMENT_ADAPTER);
-        sendBroadcast(intent);
-    }
-
-    /* Manipulate Attendess */
-
-    public void addAttendee(Attendee attendee) {
-        attendees.add(attendee);
-    }
-
-    public void clearAttendees() {
-        attendees.clear();
+    public UIController getUIController() {
+        return uiController;
     }
 
     public ArrayList<Attendee> getAttendees() {
         return attendees;
-    }
-
-    /* Bluetooth Discovery Service */
-
-    /* Starts discovery only when the device is discoverable and connectable */
-    public void startDiscovery() {
-        if (BluetoothAdapter.getDefaultAdapter().getScanMode() == BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE) {
-            bluetoothDiscoveryIntent = new Intent(getBaseContext(), BluetoothDiscovery.class);
-            startService(bluetoothDiscoveryIntent);
-            setStatus(1);
-            discovery = true;
-        }
-    }
-
-    public void stopDiscovery() {
-        stopService(bluetoothDiscoveryIntent);
-        setStatus(BluetoothAdapter.getDefaultAdapter().getScanMode());
-        discovery = false;
-    }
-
-    public void turnOnBluetooth() {
-        BluetoothAdapter.getDefaultAdapter().enable();
-    }
-
-    public void setDiscoverable() {
-        Intent discoverableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
-        discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 0);
-        startActivity(discoverableIntent);
-    }
-
-    public void turnOffBluetooth() {
-        BluetoothAdapter.getDefaultAdapter().disable();
-        if (discovery) {
-            stopDiscovery();
-        }
-    }
-
-    public void setStatus(int status) {
-        switch (status) {
-            case DISCOVERY_ON:
-                imageview_status.setImageResource(R.drawable.main_activity_status_discovery_on);
-                break;
-            case BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE:
-                imageview_status.setImageResource(R.drawable.main_activity_status_discoverable);
-                break;
-            case BluetoothAdapter.SCAN_MODE_CONNECTABLE:
-                imageview_status.setImageResource(R.drawable.main_activity_status_discovering);
-                break;
-            default:
-                imageview_status.setImageResource(R.drawable.main_activity_status_normal);
-                break;
-        }
     }
 
 }

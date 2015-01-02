@@ -1,6 +1,8 @@
 package g1436218.com.spyder.object;
 
+import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -13,10 +15,12 @@ import g1436218.com.spyder.asyncTask.FetchAttendees;
 import g1436218.com.spyder.fragment.AttendeeFragment;
 import g1436218.com.spyder.fragment.EventListFragment;
 import g1436218.com.spyder.fragment.InteractionFragment;
+import g1436218.com.spyder.fragment.LogoutFragment;
 
 public class UIController {
 
     MainActivity activity;
+    public static final int DISCOVERY_ON = 1;
 
     private LinearLayout button_attendee_list;
     private LinearLayout button_event_list;
@@ -32,6 +36,8 @@ public class UIController {
     private TextView textview_event_list;
     private TextView textview_interatcions;
     private TextView textview_profile;
+
+    private ImageView imageview_status;
 
     public UIController(MainActivity activity) {
 
@@ -51,6 +57,10 @@ public class UIController {
         textview_interatcions = (TextView) activity.findViewById(R.id.button_interactions_text);
         textview_event_list = (TextView) activity.findViewById(R.id.button_event_list_text);
         textview_profile = (TextView) activity.findViewById(R.id.button_event_profile_text);
+
+
+        imageview_status = (ImageView) activity.findViewById(R.id.main_activity_status);
+        setStatus(BluetoothAdapter.getDefaultAdapter().getScanMode());
     }
 
     public void showAttendees() {
@@ -95,6 +105,11 @@ public class UIController {
         textview_profile.setTextColor(activity.getResources().getColor(R.color.main_activity_button_text_pressed));
     }
 
+    public void logout() {
+        FragmentManager fragmentManager = activity.getFragmentManager();
+        new LogoutFragment().show(fragmentManager, "Logout");
+    }
+
     private void resetButtonState() {
         imageview_attendee_list.setImageResource(R.drawable.main_activity_attendee_list_normal);
         imageview_event_list.setImageResource(R.drawable.main_activity_event_list_normal);
@@ -110,6 +125,23 @@ public class UIController {
         button_event_list.setClickable(true);
         button_interactions.setClickable(true);
         button_profile.setClickable(true);
+    }
+
+    public void setStatus(int status) {
+        switch (status) {
+            case DISCOVERY_ON:
+                imageview_status.setImageResource(R.drawable.main_activity_status_discovery_on);
+                break;
+            case BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE:
+                imageview_status.setImageResource(R.drawable.main_activity_status_discoverable);
+                break;
+            case BluetoothAdapter.SCAN_MODE_CONNECTABLE:
+                imageview_status.setImageResource(R.drawable.main_activity_status_discovering);
+                break;
+            default:
+                imageview_status.setImageResource(R.drawable.main_activity_status_normal);
+                break;
+        }
     }
 
 }

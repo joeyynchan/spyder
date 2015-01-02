@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 
 import g1436218.com.spyder.R;
 import g1436218.com.spyder.activity.MainActivity;
@@ -38,6 +39,13 @@ public class FetchAttendees extends BaseMainAsyncTask {
     private final String URL = GlobalConfiguration.DEFAULT_URL + "eventUsers?event_id=";
 
     private UserMap userMap;
+    private ArrayList<Attendee> attendees;
+
+    public FetchAttendees(MainActivity activity) {
+        super(activity);
+        this.userMap = UserMap.getInstance();
+        this.attendees = activity.getAttendees();
+    }
 
     @Override
     protected Void doInBackgroundOffline(Void... params) {
@@ -51,7 +59,7 @@ public class FetchAttendees extends BaseMainAsyncTask {
                 activity.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         String event_id = sharedPref.getString("EVENT_ID", "");
 
-        activity.clearAttendees();
+        attendees.clear();
         userMap.clear();
         userMap.put("48:74:6E:75:64:75", "iPhone");
 
@@ -73,7 +81,7 @@ public class FetchAttendees extends BaseMainAsyncTask {
                     macAddress = item.getString("mac_address");
                     username = item.getString("user_name");
                     name = item.getString("name");
-                    activity.addAttendee(new Attendee(macAddress, username, name));
+                    attendees.add(new Attendee(macAddress, username, name));
                     userMap.put(macAddress, name);
                 }
             } catch (JSONException e) {
@@ -82,11 +90,6 @@ public class FetchAttendees extends BaseMainAsyncTask {
         }
 
         return null;
-    }
-
-    public FetchAttendees(MainActivity activity) {
-        super(activity);
-        this.userMap = UserMap.getInstance();
     }
 
     @Override

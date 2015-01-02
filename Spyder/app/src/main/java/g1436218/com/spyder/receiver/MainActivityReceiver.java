@@ -9,14 +9,23 @@ import g1436218.com.spyder.activity.MainActivity;
 import g1436218.com.spyder.asyncTask.FetchAttendees;
 import g1436218.com.spyder.asyncTask.SubmitBluetoothData;
 import g1436218.com.spyder.object.Action;
+import g1436218.com.spyder.object.BluetoothController;
 import g1436218.com.spyder.object.Interaction;
+import g1436218.com.spyder.object.InteractionPackage;
+import g1436218.com.spyder.object.UIController;
 
 public class MainActivityReceiver extends BroadcastReceiver {
 
     MainActivity activity;
+    InteractionPackage interactionPackage;
+    BluetoothController bluetoothController;
+    UIController uiController;
 
     public MainActivityReceiver(MainActivity activity) {
         this.activity = activity;
+        this.interactionPackage = activity.getInteractionPackage();
+        this.bluetoothController = activity.getBluetoothController();
+        this.uiController = activity.getUIController();
     }
 
     @Override
@@ -25,36 +34,52 @@ public class MainActivityReceiver extends BroadcastReceiver {
         if (Action.DEVICE_DETECTED.equals(action)) {
             String username = intent.getStringExtra("USERNAME");
             int strength = intent.getIntExtra("STRENGTH", 0);
-            activity.addToInteractions(new Interaction(username, strength));
+            interactionPackage.addInteraction(new Interaction(username, strength));
         } else if (Action.RESET_LIST.equals(action)) {
-            //Log.i("interactions", interactionPackage.getInteractions().toString());
-            activity.addInteractionsToPackage();
+
+            /* RESET LIST is performed when a discovery session finishes.
+             * 1) Add Interactions to package
+             * 2) Clone interactions for InteractionFragment
+             * 3) Clear interactions
+             * 4) Tell InteractionFragment to update using clone
+             */
+
+            interactionPackage.addInteractionsToPackage();
+            interactionPackage.copyInteractionsToClone();
+            interactionPackage.createInteractions();
+            broadcastUpdateAdapter();
         } else if (Action.SEND_DATA.equals(action)) {
-            if (!activity.isPackageEmpty()) {
-                new SubmitBluetoothData(activity, activity.getInteractionPackage()).execute();
+            if (!interactionPackage.isPackageEmpty()) {
+                new SubmitBluetoothData(activity).execute();
             } else {
-                activity.clearArray();
+                interactionPackage.clear();
             }
         } else if (Action.START_DISCOVERY.equals(action)) {
-            activity.startDiscovery();
+            bluetoothController.startDiscovery();
         } else if (Action.STOP_DISCOVERY.equals(action)) {
-            activity.stopDiscovery();
+            bluetoothController.stopDiscovery();
         } else if (Action.FETCH_ATTENDEES.equals(action)) {
             new FetchAttendees(activity).execute();
         } else if (Action.START_BLUETOOTH.equals(action)) {
-            activity.turnOnBluetooth();
+            bluetoothController.turnOnBluetooth();
         } else if (Action.STOP_BLUETOOTH.equals(action)) {
-            activity.turnOffBluetooth();
+            bluetoothController.turnOffBluetooth();
         } else if (BluetoothAdapter.ACTION_SCAN_MODE_CHANGED.equals(action)) {
             if (BluetoothAdapter.getDefaultAdapter().getScanMode() == BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE) {
-                activity.setStatus(BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE);
+                uiController.setStatus(BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE);
             } else if (BluetoothAdapter.getDefaultAdapter().getScanMode() == BluetoothAdapter.SCAN_MODE_CONNECTABLE) {
-                activity.setStatus(BluetoothAdapter.SCAN_MODE_CONNECTABLE);
+                uiController.setStatus(BluetoothAdapter.SCAN_MODE_CONNECTABLE);
             } else {
-                activity.setStatus(0);
+                uiController.setStatus(0);
             }
         } else if (Action.UPDATE_CURRENT_EVENT.equals(action)) {
 
         }
+    }
+
+    private void broadcastUpdateAdapter() {
+        Intent intent = new Intent();
+        intent.setAction(Action.UPDATE_INTERACTION_FRAGMENT_ADAPTER);
+        activity.sendBroadcast(intent);
     }
 }
