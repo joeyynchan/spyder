@@ -30,11 +30,14 @@ public class MainActivityReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+
         String action = intent.getAction();
         if (Action.DEVICE_DETECTED.equals(action)) {
+
             String username = intent.getStringExtra("USERNAME");
             int strength = intent.getIntExtra("STRENGTH", 0);
             interactionPackage.addInteraction(new Interaction(username, strength));
+
         } else if (Action.RESET_LIST.equals(action)) {
 
             /* RESET LIST is performed when a discovery session finishes.
@@ -47,24 +50,36 @@ public class MainActivityReceiver extends BroadcastReceiver {
             interactionPackage.addInteractionsToPackage();
             interactionPackage.copyInteractionsToClone();
             interactionPackage.createInteractions();
-            broadcastUpdateAdapter();
+
+            Intent _intent = new Intent();
+            _intent.setAction(Action.UPDATE_INTERACTION_FRAGMENT_ADAPTER);
+            activity.sendBroadcast(_intent);
+
         } else if (Action.SEND_DATA.equals(action)) {
+
             if (!interactionPackage.isPackageEmpty()) {
                 new SubmitBluetoothData(activity).execute();
             } else {
                 interactionPackage.clear();
             }
+
         } else if (Action.START_DISCOVERY.equals(action)) {
             bluetoothController.startDiscovery();
+
         } else if (Action.STOP_DISCOVERY.equals(action)) {
             bluetoothController.stopDiscovery();
+
         } else if (Action.FETCH_ATTENDEES.equals(action)) {
             new FetchAttendees(activity).execute();
+
         } else if (Action.START_BLUETOOTH.equals(action)) {
             bluetoothController.turnOnBluetooth();
+
         } else if (Action.STOP_BLUETOOTH.equals(action)) {
             bluetoothController.turnOffBluetooth();
+
         } else if (BluetoothAdapter.ACTION_SCAN_MODE_CHANGED.equals(action)) {
+
             if (BluetoothAdapter.getDefaultAdapter().getScanMode() == BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE) {
                 uiController.setStatus(BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE);
             } else if (BluetoothAdapter.getDefaultAdapter().getScanMode() == BluetoothAdapter.SCAN_MODE_CONNECTABLE) {
@@ -72,14 +87,8 @@ public class MainActivityReceiver extends BroadcastReceiver {
             } else {
                 uiController.setStatus(0);
             }
-        } else if (Action.UPDATE_CURRENT_EVENT.equals(action)) {
 
         }
     }
 
-    private void broadcastUpdateAdapter() {
-        Intent intent = new Intent();
-        intent.setAction(Action.UPDATE_INTERACTION_FRAGMENT_ADAPTER);
-        activity.sendBroadcast(intent);
-    }
 }

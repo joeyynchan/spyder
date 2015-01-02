@@ -4,6 +4,8 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
+import android.util.Log;
+import android.view.Menu;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -61,6 +63,34 @@ public class UIController {
 
         imageview_status = (ImageView) activity.findViewById(R.id.main_activity_status);
         setStatus(BluetoothAdapter.getDefaultAdapter().getScanMode());
+    }
+
+    public boolean showOptionMenu(Menu menu) {
+        menu.findItem(R.id.action_start_bluetooth).setVisible(false);
+        menu.findItem(R.id.action_stop_bluetooth).setVisible(false);
+        menu.findItem(R.id.action_set_discoverable).setVisible(false);
+        menu.findItem(R.id.action_start_discovery).setVisible(false);
+        menu.findItem(R.id.action_stop_discovery).setVisible(false);
+        menu.findItem(R.id.action_edit).setVisible(false);
+        menu.findItem(R.id.action_done).setVisible(false);
+
+        if (BluetoothAdapter.getDefaultAdapter().getState() == BluetoothAdapter.STATE_OFF) {
+            menu.findItem(R.id.action_start_bluetooth).setVisible(true);
+        } else {
+            menu.findItem(R.id.action_stop_bluetooth).setVisible(true);
+        }
+        if (BluetoothAdapter.getDefaultAdapter().getScanMode() == BluetoothAdapter.SCAN_MODE_CONNECTABLE) {
+            menu.findItem(R.id.action_set_discoverable).setVisible(true);
+        }
+        if (BluetoothAdapter.getDefaultAdapter().getScanMode() == BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE) {
+            BluetoothController bluetoothController = activity.getBluetoothController();
+            if (bluetoothController.isDiscovery()) {
+                menu.findItem(R.id.action_stop_discovery).setVisible(true);
+            } else {
+                menu.findItem(R.id.action_start_discovery).setVisible(true);
+            }
+        }
+        return true;
     }
 
     public void showAttendees() {
