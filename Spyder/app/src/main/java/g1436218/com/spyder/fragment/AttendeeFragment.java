@@ -8,6 +8,9 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.util.Collections;
+import java.util.Comparator;
+
 import g1436218.com.spyder.R;
 import g1436218.com.spyder.activity.MainActivity;
 import g1436218.com.spyder.adapter.AttendeeAdapter;
@@ -33,6 +36,7 @@ public class AttendeeFragment extends BaseMainFragmentWithReceiver implements Ad
         adapter = new AttendeeAdapter(activity, R.layout.listview_attendees);
         listview_attendee = (ListView) getActivity().findViewById(R.id.listview_attendee);
         listview_attendee.setAdapter(adapter);
+        Collections.sort(activity.getAttendees(), new SortAttendeesByUsername());
         adapter.addAll(activity.getAttendees());
         listview_attendee.setOnItemClickListener(this);
 
@@ -67,6 +71,18 @@ public class AttendeeFragment extends BaseMainFragmentWithReceiver implements Ad
 
     public void addAllToAdapter() {
         adapter.addAll(activity.getAttendees());
+    }
+
+    private class SortAttendeesByUsername implements Comparator<Attendee> {
+        @Override
+        public int compare(Attendee lhs, Attendee rhs) {
+            if (lhs.getName().compareTo(rhs.getName()) < 0) {
+                return -1;
+            } else if (lhs.getName().compareTo(rhs.getName()) > 0) {
+                return 1;
+            }
+            return 0;
+        }
     }
 
 }

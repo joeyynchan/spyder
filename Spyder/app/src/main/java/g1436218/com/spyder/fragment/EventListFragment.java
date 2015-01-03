@@ -20,6 +20,7 @@ import g1436218.com.spyder.adapter.EventListAdapter;
 import g1436218.com.spyder.adapter.InteractionAdapter;
 import g1436218.com.spyder.asyncTask.FetchEvents;
 import g1436218.com.spyder.config.GlobalConfiguration;
+import g1436218.com.spyder.intentfilter.EventListFragmentIntentFilter;
 import g1436218.com.spyder.object.Action;
 import g1436218.com.spyder.object.Event;
 import g1436218.com.spyder.receiver.EventListFragmentReceiver;
@@ -46,11 +47,7 @@ public class EventListFragment extends BaseMainFragmentWithReceiver implements A
     @Override
     protected void registerReceiver() {
         receiver = new EventListFragmentReceiver(this);
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(Action.EVENT_ADAPTER_ADD_ITEM);
-        intentFilter.addAction(Action.EVENT_ADAPTER_CLEAR);
-        intentFilter.addAction(Action.FETCH_EVENTS);
-        activity.registerReceiver(receiver, intentFilter);
+        activity.registerReceiver(receiver, new EventListFragmentIntentFilter());
     }
 
     @Override
