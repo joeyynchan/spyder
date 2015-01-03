@@ -3,11 +3,14 @@ package g1436218.com.spyder.fragment;
 import android.content.Context;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
+
+import com.android.internal.util.Predicate;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -36,17 +39,21 @@ public class AttendeeFragment extends BaseMainFragmentWithReceiver implements Ad
     protected void initializeView() {
         getActivity().setTitle(TITLE);
         adapter = new AttendeeAdapter(activity, R.layout.listview_attendees);
+
         listview_attendee = (ListView) getActivity().findViewById(R.id.listview_attendee);
         listview_attendee.setAdapter(adapter);
-        Collections.sort(activity.getAttendees(), new SortAttendeesByUsername());
-        adapter.addAll(activity.getAttendees());
         listview_attendee.setOnItemClickListener(this);
+
+        searchview_attendee = (SearchView) getActivity().findViewById(R.id.searchview_attendee);
+        searchview_attendee.setOnQueryTextListener(this);
+        searchAttendees("");
 
         textview_name = (TextView) activity.findViewById(R.id.textview_fragment_attendee_eventName);
         SharedPreferences sharedPref = activity.getSharedPreferences(
                 activity.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         String event_id = sharedPref.getString("EVENT_ID", "");
         String event_name = sharedPref.getString("EVENT_NAME", "");
+
         if (!event_id.equals("")) {
             textview_name.setText(event_name);
         } else {
@@ -55,7 +62,9 @@ public class AttendeeFragment extends BaseMainFragmentWithReceiver implements Ad
     }
 
     public void registerReceiver() {
-        receiver = new AttendeeFragmentReceiver(this);
+        AttendeeFragmentReceiver _receiver = new AttendeeFragmentReceiver(this);
+        _receiver.setAttendees(adapter);
+        receiver = _receiver;
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(Action.UPDATE_ATTENDEE_FRAGMENT_ADAPTER);
         activity.registerReceiver(receiver, intentFilter);
@@ -67,22 +76,31 @@ public class AttendeeFragment extends BaseMainFragmentWithReceiver implements Ad
         new FetchUserProfile(activity, item.getUsername()).execute();
     }
 
-    public void clearAdapter() {
-        adapter.clear();
-    }
-
-    public void addAllToAdapter() {
-        adapter.addAll(activity.getAttendees());
-    }
-
     @Override
     public boolean onQueryTextSubmit(String query) {
+        searchAttendees(query);
         return false;
     }
 
     @Override
     public boolean onQueryTextChange(String newText) {
+        String query = searchview_attendee.getQuery().toString();
+        searchAttendees(query);
         return false;
+    }
+
+    private void searchAttendees(String keyword) {
+        adapter.clear();
+        Collections.sort(activity.getAttendees(), new SortAttendeesByUsername());
+        if (!keyword.equals("")) {
+            for (Attendee attendee : activity.getAttendees()) {
+                if (attendee.containKeyword(keyword)) {
+                    adapter.add(attendee);
+                }
+            }
+        } else {
+            adapter.addAll(activity.getAttendees());
+        }
     }
 
     private class SortAttendeesByUsername implements Comparator<Attendee> {

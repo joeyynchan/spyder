@@ -26,4 +26,8 @@ public class Attendee {
         return macAddress + " : " + username;
     }
 
+    public boolean containKeyword(String keyword) {
+        return name.toLowerCase().contains(keyword.toLowerCase());
+    }
+
 }

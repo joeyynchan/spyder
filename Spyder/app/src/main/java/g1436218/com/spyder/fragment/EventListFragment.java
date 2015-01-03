@@ -1,6 +1,7 @@
 package g1436218.com.spyder.fragment;
 
 import android.app.FragmentTransaction;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -14,11 +15,12 @@ import g1436218.com.spyder.intentfilter.EventListFragmentIntentFilter;
 import g1436218.com.spyder.object.Event;
 import g1436218.com.spyder.receiver.EventListFragmentReceiver;
 
-public class EventListFragment extends BaseMainFragmentWithReceiver implements AdapterView.OnItemClickListener, SearchView.OnQueryTextListener {
+public class EventListFragment extends BaseMainFragmentWithReceiver implements AdapterView.OnItemClickListener, SearchView.OnQueryTextListener, SwipeRefreshLayout.OnRefreshListener {
 
     private final String TITLE = "Event List";
 
     private ListView listview_eventlist;
+    private SwipeRefreshLayout swipeRefreshLayout;
     private SearchView searchview_eventlist;
     private EventListAdapter adapter;
 
@@ -29,7 +31,7 @@ public class EventListFragment extends BaseMainFragmentWithReceiver implements A
     @Override
     public void onResume() {
         super.onResume();
-        new FetchEvents(this, "").execute();
+        searchEvent();
     }
 
     @Override
@@ -48,6 +50,14 @@ public class EventListFragment extends BaseMainFragmentWithReceiver implements A
 
         searchview_eventlist = (SearchView) activity.findViewById(R.id.searchview_eventlist);
         searchview_eventlist.setOnQueryTextListener(this);
+
+        swipeRefreshLayout = (SwipeRefreshLayout) activity.findViewById(R.id.swiperefreshlayout_eventlist);
+        swipeRefreshLayout.setColorSchemeResources(
+                android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+        swipeRefreshLayout.setOnRefreshListener(this);
     }
 
     @Override
@@ -88,5 +98,11 @@ public class EventListFragment extends BaseMainFragmentWithReceiver implements A
         String keyword = searchview_eventlist.getQuery().toString();
         searchEvent(keyword);
         return false;
+    }
+
+    @Override
+    public void onRefresh() {
+        searchEvent();
+        swipeRefreshLayout.setRefreshing(false);
     }
 }

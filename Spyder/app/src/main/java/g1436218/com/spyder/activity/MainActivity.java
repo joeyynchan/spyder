@@ -28,7 +28,8 @@ public class MainActivity extends BaseActivity {
      *  UIController: it controls all the UI component in MainActivity including OptionMenu.
      *
      *  BluetoothController: It controls the BluetoothAdapter and the discovery status of the
-     *  device.
+     *  device.This controller depends on UIController, therefore it must be declared after
+     *  UIController or set set the UIController manually
      *
      *  Attendees: A list of attendees of the current event(current event can be null);
      *

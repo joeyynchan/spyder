@@ -12,8 +12,17 @@
         android:id="@+id/searchview_eventlist"
         android:background="@color/backgroundColor"/>
 
-    <ListView
+    <android.support.v4.widget.SwipeRefreshLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/listview_eventlist" />
+        android:id="@+id/swiperefreshlayout_eventlist">
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/listview_eventlist" />
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+
 </LinearLayout>
