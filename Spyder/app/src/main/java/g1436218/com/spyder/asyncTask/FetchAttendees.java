@@ -34,6 +34,22 @@ public class FetchAttendees extends BaseMainAsyncTask {
 
     @Override
     protected Void doInBackgroundOffline(Void... params) {
+
+        attendees.clear();
+        userMap.clear();
+        userMap.put("48:74:6E:75:64:75", "iPhone");
+
+        attendees.add(new Attendee("00:00:00:00:00:01", "Demo001", "TestingSortingAlgorithm"));
+        attendees.add(new Attendee("00:00:00:00:00:02", "Demo002", "Joey"));
+        attendees.add(new Attendee("00:00:00:00:00:03", "Demo003", "Cherie"));
+        attendees.add(new Attendee("00:00:00:00:00:04", "Demo004", "Pavan"));
+        attendees.add(new Attendee("00:00:00:00:00:05", "Demo005", "Kuo"));
+        attendees.add(new Attendee("00:00:00:00:00:06", "Demo006", "Khoa"));
+        attendees.add(new Attendee("00:00:00:00:00:07", "Demo007", "MrGun"));
+        attendees.add(new Attendee("00:00:00:00:00:08", "Demo008", "Alice"));
+        attendees.add(new Attendee("00:00:00:00:00:09", "Demo009", "Alicia"));
+        attendees.add(new Attendee("00:00:00:00:00:0A", "Demo010", "Adam"));
+
         return null;
     }
 
@@ -52,9 +68,6 @@ public class FetchAttendees extends BaseMainAsyncTask {
             return null;
         }
 
-        /* Dummy response since the API is not ready; */
-        //result = "{\"user_mappings\":[{\"mac_address\":\"38:2D:D1:1B:09:2A\",\"user_name\":\"GalaxyTab4\"},{\"mac_address\":\"F0:E7:7E:52:57:3E\",\"user_name\":\"GT-N7000\"},{\"mac_address\":\"48:74:6E:75:64:75\",\"user_name\":\"iPhone\"}]}";
-        //resultJObj = toJSONObject(result);
         resultJObj = getJSONFromUrl(URL+event_id, Responses.GET);
         if (resultJObj != null) {
             try {
