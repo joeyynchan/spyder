@@ -9,12 +9,8 @@ import android.os.Bundle;
 import android.util.Log;
 
 import g1436218.com.spyder.R;
-import g1436218.com.spyder.activity.MainActivity;
 import g1436218.com.spyder.asyncTask.UnlinkDevice;
 
-/**
- * Created by Cherie on 11/27/2014.
- */
 public class UnlinkFragment extends BaseDialogFragment {
 
     private final String TAG = "LogoutFragment";

@@ -2,7 +2,6 @@ package g1436218.com.spyder.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.view.MenuItem;
 import android.view.View;
 

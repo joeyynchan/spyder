@@ -5,16 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import org.json.JSONObject;
 
 import g1436218.com.spyder.fragment.EventListFragment;
-import g1436218.com.spyder.fragment.InteractionFragment;
 import g1436218.com.spyder.object.Action;
 import g1436218.com.spyder.object.Event;
 
-/**
- * Created by Joey on 02/12/2014.
- */
 public class EventListFragmentReceiver extends BroadcastReceiver {
 
     EventListFragment fragment;

@@ -1,12 +1,10 @@
 package g1436218.com.spyder.asyncTask;
 
-import android.app.Activity;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
@@ -19,8 +17,6 @@ import g1436218.com.spyder.R;
 import g1436218.com.spyder.activity.LoginActivity;
 import g1436218.com.spyder.activity.MainActivity;
 import g1436218.com.spyder.config.GlobalConfiguration;
-import g1436218.com.spyder.fragment.LoginFragment;
-import g1436218.com.spyder.fragment.LogoutFragment;
 import g1436218.com.spyder.fragment.UnlinkFragment;
 import g1436218.com.spyder.object.Action;
 

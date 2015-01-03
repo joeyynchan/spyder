@@ -8,7 +8,6 @@ import android.support.v4.content.WakefulBroadcastReceiver;
 
 import g1436218.com.spyder.service.GCMMessageHandler;
 
-
 public class GCMBroadcastReceiver extends WakefulBroadcastReceiver {
 
     @Override

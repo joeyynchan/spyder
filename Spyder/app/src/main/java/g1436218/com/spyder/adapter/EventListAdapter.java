@@ -13,8 +13,6 @@ import java.util.Iterator;
 import java.util.Map;
 
 import g1436218.com.spyder.R;
-import g1436218.com.spyder.config.GlobalConfiguration;
-import g1436218.com.spyder.object.Attendee;
 import g1436218.com.spyder.object.Event;
 
 

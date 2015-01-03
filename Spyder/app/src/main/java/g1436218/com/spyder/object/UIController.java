@@ -4,7 +4,6 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
-import android.util.Log;
 import android.view.Menu;
 import android.widget.ImageView;
 import android.widget.LinearLayout;

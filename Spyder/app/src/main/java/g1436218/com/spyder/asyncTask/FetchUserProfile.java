@@ -2,9 +2,6 @@ package g1436218.com.spyder.asyncTask;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.provider.ContactsContract;
 import android.util.Log;
 
 import org.json.JSONException;

@@ -6,9 +6,6 @@ import android.content.Intent;
 import g1436218.com.spyder.activity.MainActivity;
 import g1436218.com.spyder.service.BluetoothDiscovery;
 
-/**
- * Created by Joey on 02/01/2015.
- */
 public class BluetoothController {
 
     MainActivity activity;

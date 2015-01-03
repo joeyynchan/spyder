@@ -1,7 +1,5 @@
 package g1436218.com.spyder.object;
 
-import java.util.Calendar;
-
 public class Event {
 
     private String name;

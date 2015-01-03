@@ -7,9 +7,6 @@ import android.content.Intent;
 import g1436218.com.spyder.activity.LoginActivity;
 import g1436218.com.spyder.object.Action;
 
-/**
- * Created by Joey on 02/12/2014.
- */
 public class LoginActivityReceiver extends BroadcastReceiver {
 
     LoginActivity activity;

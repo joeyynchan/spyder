@@ -1,30 +1,18 @@
 package g1436218.com.spyder.fragment;
 
-import android.app.Fragment;
 import android.app.FragmentTransaction;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SearchView;
 
 import g1436218.com.spyder.R;
 import g1436218.com.spyder.activity.MainActivity;
-import g1436218.com.spyder.adapter.AttendeeAdapter;
 import g1436218.com.spyder.adapter.EventListAdapter;
-import g1436218.com.spyder.adapter.InteractionAdapter;
 import g1436218.com.spyder.asyncTask.FetchEvents;
-import g1436218.com.spyder.config.GlobalConfiguration;
 import g1436218.com.spyder.intentfilter.EventListFragmentIntentFilter;
-import g1436218.com.spyder.object.Action;
 import g1436218.com.spyder.object.Event;
 import g1436218.com.spyder.receiver.EventListFragmentReceiver;
-import g1436218.com.spyder.receiver.InteractionFragmentReceiver;
 
 public class EventListFragment extends BaseMainFragmentWithReceiver implements AdapterView.OnItemClickListener, SearchView.OnQueryTextListener{
 

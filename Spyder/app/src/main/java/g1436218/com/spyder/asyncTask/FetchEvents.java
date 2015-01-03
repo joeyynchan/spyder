@@ -10,12 +10,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import g1436218.com.spyder.R;
-import g1436218.com.spyder.activity.MainActivity;
 import g1436218.com.spyder.config.GlobalConfiguration;
 import g1436218.com.spyder.fragment.EventListFragment;
 import g1436218.com.spyder.object.Action;
-import g1436218.com.spyder.object.Attendee;
-import g1436218.com.spyder.object.Event;
 
 
 public class FetchEvents extends BaseMainAsyncTask {

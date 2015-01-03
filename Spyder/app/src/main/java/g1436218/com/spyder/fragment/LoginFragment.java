@@ -1,23 +1,13 @@
 package g1436218.com.spyder.fragment;
 
-import android.app.Fragment;
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 import g1436218.com.spyder.R;
 import g1436218.com.spyder.activity.LoginActivity;
-import g1436218.com.spyder.activity.MainActivity;
-import g1436218.com.spyder.asyncTask.CreateAccount;
 import g1436218.com.spyder.asyncTask.LinkDevice;
 
 public class LoginFragment extends BaseLoginFragment implements View.OnClickListener {

@@ -4,13 +4,10 @@ import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import g1436218.com.spyder.R;
 import g1436218.com.spyder.activity.MainActivity;
-import g1436218.com.spyder.config.GlobalConfiguration;
 import g1436218.com.spyder.fragment.ProfileFragment;
-import g1436218.com.spyder.object.User;
 
 public class DisplayProfile extends FetchUserProfile {
 

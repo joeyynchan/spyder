@@ -3,9 +3,6 @@ package g1436218.com.spyder.object;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-/**
- * Created by Joey on 27/11/2014.
- */
 public class InteractionPackage extends ArrayList<Interactions> {
 
     private Interactions interactions;

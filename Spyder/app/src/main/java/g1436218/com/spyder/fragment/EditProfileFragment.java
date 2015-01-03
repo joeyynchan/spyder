@@ -6,21 +6,17 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import g1436218.com.spyder.R;
 import g1436218.com.spyder.activity.MainActivity;
 import g1436218.com.spyder.asyncTask.UpdateProfile;
 import g1436218.com.spyder.object.User;
 
-/**
- * Created by Joey on 01/12/2014.
- */
+
 public class EditProfileFragment extends BaseMainFragment {
 
     private static String TAG = "EditProfileFragment";

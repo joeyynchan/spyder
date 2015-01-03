@@ -10,7 +10,6 @@ import android.widget.Button;
 import org.json.JSONObject;
 
 import g1436218.com.spyder.R;
-import g1436218.com.spyder.activity.MainActivity;
 import g1436218.com.spyder.config.GlobalConfiguration;
 import g1436218.com.spyder.fragment.EventFragment;
 

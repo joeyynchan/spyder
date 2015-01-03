@@ -1,16 +1,7 @@
 package g1436218.com.spyder.fragment;
 
-import android.app.Activity;
-import android.app.Fragment;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -19,13 +10,10 @@ import g1436218.com.spyder.R;
 import g1436218.com.spyder.activity.MainActivity;
 import g1436218.com.spyder.adapter.InteractionAdapter;
 import g1436218.com.spyder.asyncTask.FetchUserProfile;
-import g1436218.com.spyder.asyncTask.SubmitBluetoothData;
 import g1436218.com.spyder.object.Action;
-import g1436218.com.spyder.object.Attendee;
 import g1436218.com.spyder.object.Interaction;
 import g1436218.com.spyder.object.InteractionPackage;
 import g1436218.com.spyder.receiver.InteractionFragmentReceiver;
-import g1436218.com.spyder.service.BluetoothDiscovery;
 
 public class InteractionFragment extends BaseMainFragmentWithReceiver implements AdapterView.OnItemClickListener {
 

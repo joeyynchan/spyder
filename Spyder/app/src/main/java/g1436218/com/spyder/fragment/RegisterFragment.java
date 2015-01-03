@@ -1,10 +1,6 @@
 package g1436218.com.spyder.fragment;
 
-import android.os.Bundle;
-import android.app.Fragment;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 
 import g1436218.com.spyder.R;

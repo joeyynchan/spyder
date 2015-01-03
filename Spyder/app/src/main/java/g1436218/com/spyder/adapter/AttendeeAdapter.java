@@ -1,24 +1,14 @@
 package g1436218.com.spyder.adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Map;
-
 import g1436218.com.spyder.R;
 import g1436218.com.spyder.object.Attendee;
-import g1436218.com.spyder.object.UserMap;
-
 
 public class AttendeeAdapter extends ArrayAdapter<Attendee> {
 

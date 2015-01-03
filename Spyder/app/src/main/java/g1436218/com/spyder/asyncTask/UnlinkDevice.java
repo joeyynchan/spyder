@@ -4,12 +4,8 @@ import android.app.Activity;
 import android.util.Log;
 import org.json.JSONObject;
 
-import g1436218.com.spyder.activity.MainActivity;
 import g1436218.com.spyder.config.GlobalConfiguration;
 
-/**
- * Created by Cherie on 11/25/2014.
- */
 public class UnlinkDevice extends BaseAsyncTask {
 
     private static String TAG = "UnlinkDevice";
