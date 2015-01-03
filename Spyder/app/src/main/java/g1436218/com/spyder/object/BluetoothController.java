@@ -16,7 +16,12 @@ public class BluetoothController {
     private Intent bluetoothDiscoveryIntent;
 
     public BluetoothController(MainActivity activity) {
+        this.activity = activity;
         this.uiController = activity.getUIController();
+    }
+
+    public void setUiController(UIController uiController) {
+        this.uiController = uiController;
     }
 
     public void startDiscovery() {

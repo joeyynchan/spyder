@@ -13,13 +13,11 @@ import g1436218.com.spyder.fragment.RegisterFragment;
 
 public class CreateAccount extends BaseLoginAsyncTask {
 
-    private RegisterFragment fragment;
     private final String TAG = "RegisterFragment";
     private final String URL = GlobalConfiguration.DEFAULT_URL + "register";
 
     public CreateAccount(LoginActivity activity) {
         super(activity);
-        this.fragment = fragment;
     }
 
     @Override
@@ -50,7 +48,6 @@ public class CreateAccount extends BaseLoginAsyncTask {
         } else {
             TextView login_text_errmsg = (TextView) activity.findViewById(R.id.textview_fragment_register_errmsg);
             login_text_errmsg.setText("Registration failed\n");
-
         }
     }
 }

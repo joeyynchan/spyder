@@ -14,7 +14,7 @@ import g1436218.com.spyder.intentfilter.EventListFragmentIntentFilter;
 import g1436218.com.spyder.object.Event;
 import g1436218.com.spyder.receiver.EventListFragmentReceiver;
 
-public class EventListFragment extends BaseMainFragmentWithReceiver implements AdapterView.OnItemClickListener, SearchView.OnQueryTextListener{
+public class EventListFragment extends BaseMainFragmentWithReceiver implements AdapterView.OnItemClickListener, SearchView.OnQueryTextListener {
 
     private final String TITLE = "Event List";
 

@@ -22,12 +22,9 @@ public class DisplayProfile extends FetchUserProfile {
 
     @Override
     protected void onPostExecute(Void v) {
-        Fragment fragment = activity.getFragmentManager().findFragmentByTag("CURRENT_FRAGMENT");
         ProfileFragment eventFragment = new ProfileFragment(activity, user);
-        if (!(fragment instanceof ProfileFragment)) {
-            FragmentTransaction fragmentTransaction = activity.getFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.fragment_container, eventFragment, "CURRENT_FRAGMENT");
-            fragmentTransaction.commit();
-        }
+        FragmentTransaction fragmentTransaction = activity.getFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, eventFragment, "CURRENT_FRAGMENT");
+        fragmentTransaction.commit();
     }
 }

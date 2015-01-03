@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import java.util.Collections;
@@ -19,11 +20,12 @@ import g1436218.com.spyder.object.Action;
 import g1436218.com.spyder.object.Attendee;
 import g1436218.com.spyder.receiver.AttendeeFragmentReceiver;
 
-public class AttendeeFragment extends BaseMainFragmentWithReceiver implements AdapterView.OnItemClickListener {
+public class AttendeeFragment extends BaseMainFragmentWithReceiver implements AdapterView.OnItemClickListener, SearchView.OnQueryTextListener {
 
     private ListView listview_attendee;
     private TextView textview_name;
     private AttendeeAdapter adapter;
+    private SearchView searchview_attendee;
     private final String TITLE = "Attendee List";
 
     public AttendeeFragment(MainActivity activity) {
@@ -71,6 +73,16 @@ public class AttendeeFragment extends BaseMainFragmentWithReceiver implements Ad
 
     public void addAllToAdapter() {
         adapter.addAll(activity.getAttendees());
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        return false;
     }
 
     private class SortAttendeesByUsername implements Comparator<Attendee> {

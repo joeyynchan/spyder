@@ -59,14 +59,14 @@ public class MainActivity extends BaseActivity {
         interactionPackage = new InteractionPackage();
         attendees = new ArrayList<Attendee>();
 
-        /* Register UIUpdateReceiver */
-        receiver = new MainActivityReceiver(this);
-        registerReceiver(receiver, new MainActivityIntentFilter());
+        uiController = new UIController(this);
+        uiController.showInteractions();
 
         bluetoothController = new BluetoothController(this);
 
-        uiController = new UIController(this);
-        uiController.showInteractions();
+        /* Register UIUpdateReceiver */
+        receiver = new MainActivityReceiver(this);
+        registerReceiver(receiver, new MainActivityIntentFilter());
 
         new FetchAttendees(this).execute();
     }
