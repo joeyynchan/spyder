@@ -95,7 +95,7 @@ public class FetchAttendees extends BaseMainAsyncTask {
         Intent intent = new Intent();
         intent.setAction(Action.UPDATE_ATTENDEE_FRAGMENT_ADAPTER);
         activity.sendBroadcast(intent);
-        Log.i(TAG, userMap.toString());
+        //Log.i(TAG, userMap.toString());
     }
 
 }

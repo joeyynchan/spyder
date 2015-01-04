@@ -52,11 +52,10 @@ public class EventListFragment extends BaseMainFragmentWithReceiver implements A
         searchview_eventlist.setOnQueryTextListener(this);
 
         swipeRefreshLayout = (SwipeRefreshLayout) activity.findViewById(R.id.swiperefreshlayout_eventlist);
-        swipeRefreshLayout.setColorSchemeResources(
-                android.R.color.holo_blue_bright,
-                android.R.color.holo_green_light,
-                android.R.color.holo_orange_light,
-                android.R.color.holo_red_light);
+        swipeRefreshLayout.setColorSchemeResources(android.R.color.white,
+                                                      android.R.color.white,
+                                                      android.R.color.white,
+                                                      android.R.color.white);
         swipeRefreshLayout.setOnRefreshListener(this);
     }
 

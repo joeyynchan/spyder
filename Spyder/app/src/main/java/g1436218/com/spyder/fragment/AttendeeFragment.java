@@ -3,6 +3,7 @@ package g1436218.com.spyder.fragment;
 import android.content.Context;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -18,17 +19,20 @@ import java.util.Comparator;
 import g1436218.com.spyder.R;
 import g1436218.com.spyder.activity.MainActivity;
 import g1436218.com.spyder.adapter.AttendeeAdapter;
+import g1436218.com.spyder.asyncTask.FetchAttendees;
 import g1436218.com.spyder.asyncTask.FetchUserProfile;
 import g1436218.com.spyder.object.Action;
 import g1436218.com.spyder.object.Attendee;
 import g1436218.com.spyder.receiver.AttendeeFragmentReceiver;
 
-public class AttendeeFragment extends BaseMainFragmentWithReceiver implements AdapterView.OnItemClickListener, SearchView.OnQueryTextListener {
+public class AttendeeFragment extends BaseMainFragmentWithReceiver implements AdapterView.OnItemClickListener, SearchView.OnQueryTextListener, SwipeRefreshLayout.OnRefreshListener {
 
     private ListView listview_attendee;
     private TextView textview_name;
+    private TextView textview_msg;
     private AttendeeAdapter adapter;
     private SearchView searchview_attendee;
+    private SwipeRefreshLayout swipeRefreshLayout;
     private final String TITLE = "Attendee List";
 
     public AttendeeFragment(MainActivity activity) {
@@ -46,9 +50,18 @@ public class AttendeeFragment extends BaseMainFragmentWithReceiver implements Ad
 
         searchview_attendee = (SearchView) getActivity().findViewById(R.id.searchview_attendee);
         searchview_attendee.setOnQueryTextListener(this);
-        searchAttendees("");
+        searchAttendees();
 
         textview_name = (TextView) activity.findViewById(R.id.textview_fragment_attendee_eventName);
+        textview_msg = (TextView) activity.findViewById(R.id.textview_fragment_attendee_eventMsg);
+
+        swipeRefreshLayout = (SwipeRefreshLayout) activity.findViewById(R.id.swiperefreshlayout_attendee);
+        swipeRefreshLayout.setColorSchemeResources(android.R.color.white,
+                                                      android.R.color.white,
+                                                      android.R.color.white,
+                                                      android.R.color.white);
+        swipeRefreshLayout.setOnRefreshListener(this);
+
         SharedPreferences sharedPref = activity.getSharedPreferences(
                 activity.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         String event_id = sharedPref.getString("EVENT_ID", "");
@@ -56,18 +69,27 @@ public class AttendeeFragment extends BaseMainFragmentWithReceiver implements Ad
 
         if (!event_id.equals("")) {
             textview_name.setText(event_name);
+            textview_msg.setVisibility(View.GONE);
         } else {
-            textview_name.setText("No event is happening");
+            textview_msg.setText("There is no ongoing event.");
+            textview_name.setVisibility(View.GONE);
+            listview_attendee.setVisibility(View.GONE);
         }
     }
 
     public void registerReceiver() {
-        AttendeeFragmentReceiver _receiver = new AttendeeFragmentReceiver(this);
-        _receiver.setAttendees(adapter);
-        receiver = _receiver;
+        receiver = new AttendeeFragmentReceiver(this);
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(Action.UPDATE_ATTENDEE_FRAGMENT_ADAPTER);
         activity.registerReceiver(receiver, intentFilter);
+    }
+
+    public void clearAdapter() {
+        adapter.clear();
+    }
+
+    public void addAllToAdapter() {
+        adapter.addAll(activity.getAttendees());
     }
 
     @Override
@@ -78,20 +100,20 @@ public class AttendeeFragment extends BaseMainFragmentWithReceiver implements Ad
 
     @Override
     public boolean onQueryTextSubmit(String query) {
-        searchAttendees(query);
+        searchAttendees();
         return false;
     }
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        String query = searchview_attendee.getQuery().toString();
-        searchAttendees(query);
+        searchAttendees();
         return false;
     }
 
-    private void searchAttendees(String keyword) {
+    public void searchAttendees() {
         adapter.clear();
         Collections.sort(activity.getAttendees(), new SortAttendeesByUsername());
+        String keyword = searchview_attendee.getQuery().toString();
         if (!keyword.equals("")) {
             for (Attendee attendee : activity.getAttendees()) {
                 if (attendee.containKeyword(keyword)) {
@@ -101,6 +123,12 @@ public class AttendeeFragment extends BaseMainFragmentWithReceiver implements Ad
         } else {
             adapter.addAll(activity.getAttendees());
         }
+    }
+
+    @Override
+    public void onRefresh() {
+        new FetchAttendees(activity).execute();
+        swipeRefreshLayout.setRefreshing(false);
     }
 
     private class SortAttendeesByUsername implements Comparator<Attendee> {

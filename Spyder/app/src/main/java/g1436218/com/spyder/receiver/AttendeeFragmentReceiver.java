@@ -27,8 +27,7 @@ public class AttendeeFragmentReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
         if (Action.UPDATE_ATTENDEE_FRAGMENT_ADAPTER.equals(action)) {
-            adapter.clear();
-            adapter.addAll(fragment.getMainActivity().getAttendees());
+            fragment.searchAttendees();
         }
     }
 }
