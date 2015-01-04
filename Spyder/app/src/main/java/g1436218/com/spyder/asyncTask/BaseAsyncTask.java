@@ -1,6 +1,8 @@
 package g1436218.com.spyder.asyncTask;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -8,12 +10,14 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.entity.BufferedHttpEntity;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
@@ -27,6 +31,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -135,5 +141,34 @@ public abstract class BaseAsyncTask extends AsyncTask<Void, Void, Void> {
         } catch (JSONException e) {
             Log.e(TAG, "Failed to put new pair into JSON");
         }
+    }
+
+    //new URL(user.getPhotoURL()
+    protected Bitmap getImageFromURL(URL url){
+        Bitmap bitmap = null;
+        HttpGet httpRequest = null;
+
+        try {
+            httpRequest = new HttpGet(url.toURI());
+
+            HttpClient httpclient = new DefaultHttpClient();
+            HttpResponse response = null;
+            response = (HttpResponse) httpclient.execute(httpRequest);
+
+            HttpEntity entity = response.getEntity();
+            BufferedHttpEntity b_entity = null;
+            b_entity = new BufferedHttpEntity(entity);
+
+            InputStream input = null;
+            input = b_entity.getContent();
+
+            bitmap = BitmapFactory.decodeStream(input);
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return bitmap;
     }
 }
