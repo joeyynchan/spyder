@@ -16,6 +16,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 import g1436218.com.spyder.R;
@@ -101,25 +102,9 @@ public class FetchUserProfile extends BaseMainAsyncTask {
         if(user.getPhotoURL() != null){
             Bitmap bitmap = null;
             try {
-                java.net.URL url = new URL(user.getPhotoURL());
-                //try this url = "http://0.tqn.com/d/webclipart/1/0/5/l/4/floral-icon-5.jpg"
-                HttpGet httpRequest = null;
-
-                httpRequest = new HttpGet(url.toURI());
-
-                HttpClient httpclient = new DefaultHttpClient();
-                HttpResponse response = (HttpResponse) httpclient
-                        .execute(httpRequest);
-
-                HttpEntity entity = response.getEntity();
-                BufferedHttpEntity b_entity = new BufferedHttpEntity(entity);
-                InputStream input = b_entity.getContent();
-
-                bitmap = BitmapFactory.decodeStream(input);
-
-
-            } catch (Exception ex) {
-
+                bitmap = getImageFromURL(new URL(user.getPhotoURL()));
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
             }
             user.setPhoto(bitmap);
         }
