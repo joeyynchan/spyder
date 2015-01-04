@@ -1,5 +1,6 @@
 package g1436218.com.spyder.fragment;
 
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
@@ -9,7 +10,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +32,7 @@ public class ProfileFragment extends BaseMainFragment {
     private TextView textview_phone;
     private TextView textview_email;
     private TextView textview_link;
+    private ImageView imageview_photo;
 
     public ProfileFragment(MainActivity activity, User user) {
         super(activity, R.layout.fragment_profile);
@@ -90,6 +91,7 @@ public class ProfileFragment extends BaseMainFragment {
         textview_phone = (TextView) activity.findViewById(R.id.textview_fragment_profile_phone);
         textview_email = (TextView) activity.findViewById(R.id.textview_fragment_profile_email);
         textview_link = (TextView) activity.findViewById(R.id.textview_fragment_profile_link);
+        imageview_photo = (ImageView) activity.findViewById(R.id.imageview_fragment_profile_image);
 
         textview_name.setText(user.getName());
         textview_gender.setText(user.getGender());
@@ -98,5 +100,11 @@ public class ProfileFragment extends BaseMainFragment {
         textview_phone.setText(user.getPhone());
         textview_email.setText(user.getEmail());
         textview_link.setText(user.getExternal_link());
+        if(user.getPhoto() == null){
+            imageview_photo.setBackground(getResources().getDrawable(R.drawable.main_activity_user_normal_xml));
+        }else {
+            imageview_photo.setImageBitmap(user.getPhoto());
+        }
+
     }
 }

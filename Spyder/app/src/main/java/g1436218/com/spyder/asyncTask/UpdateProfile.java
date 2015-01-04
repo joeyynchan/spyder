@@ -37,7 +37,7 @@ public class UpdateProfile extends BaseMainAsyncTask {
         addToParams("name", user.getName());
         addToParams("job", user.getOccupation());
         addToParams("company", user.getCompany());
-        addToParams("photo", "");
+        addToParams("photo", user.getPhotoURL());
         addToParams("email", user.getEmail());
         addToParams("phone", user.getPhone());
         addToParams("external_link", user.getExternal_link());
