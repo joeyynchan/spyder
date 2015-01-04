@@ -2,10 +2,14 @@ package g1436218.com.spyder.asyncTask;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.graphics.Bitmap;
 import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import g1436218.com.spyder.R;
 import g1436218.com.spyder.activity.MainActivity;
@@ -82,8 +86,19 @@ public class FetchUserProfile extends BaseMainAsyncTask {
             user.setName(jsonObject.getString("name"));
             user.setOccupation(jsonObject.getString("job"));
             user.setPhone(jsonObject.getString("phone"));
+            user.setPhotoURL(jsonObject.getString("photo"));
         } catch (JSONException e) {
             e.printStackTrace();
+        }
+
+        if(user.getPhotoURL() != null){
+            Bitmap bitmap = null;
+            try {
+                bitmap = getImageFromURL(new URL(user.getPhotoURL()));
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+            user.setPhoto(bitmap);
         }
     }
 

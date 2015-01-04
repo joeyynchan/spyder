@@ -1,5 +1,7 @@
 package g1436218.com.spyder.object;
 
+import android.graphics.Bitmap;
+
 import java.util.ArrayList;
 
 public class User {
@@ -14,7 +16,8 @@ public class User {
     private String email;
     private String phone;
     private String external_link;
-    private String photo;
+    private String photoURL;
+    private Bitmap photo;
     private ArrayList<String> connections;
 
     public User(String username) {
@@ -26,7 +29,7 @@ public class User {
         this.email = EMPTY;
         this.phone = EMPTY;
         this.external_link = EMPTY;
-        this.photo = EMPTY;
+        this.photoURL = EMPTY;
         this.connections = new ArrayList<String>();
     }
 
@@ -92,6 +95,22 @@ public class User {
 
     public void setExternal_link(String external_link) {
         this.external_link = external_link;
+    }
+
+    public String getPhotoURL(){
+        return photoURL;
+    }
+
+    public void setPhotoURL(String photoURL){
+        this.photoURL = photoURL;
+    }
+
+    public Bitmap getPhoto(){
+        return photo;
+    }
+
+    public void setPhoto(Bitmap photo){
+        this.photo = photo;
     }
 
     public void addConnection(String username) {
