@@ -2,10 +2,21 @@ package g1436218.com.spyder.asyncTask;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.entity.BufferedHttpEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.InputStream;
+import java.net.URL;
 
 import g1436218.com.spyder.R;
 import g1436218.com.spyder.activity.MainActivity;
@@ -82,8 +93,35 @@ public class FetchUserProfile extends BaseMainAsyncTask {
             user.setName(jsonObject.getString("name"));
             user.setOccupation(jsonObject.getString("job"));
             user.setPhone(jsonObject.getString("phone"));
+            user.setPhotoURL(jsonObject.getString("photo"));
         } catch (JSONException e) {
             e.printStackTrace();
+        }
+
+        if(user.getPhotoURL() != null){
+            Bitmap bitmap = null;
+            try {
+                java.net.URL url = new URL(user.getPhotoURL());
+                //try this url = "http://0.tqn.com/d/webclipart/1/0/5/l/4/floral-icon-5.jpg"
+                HttpGet httpRequest = null;
+
+                httpRequest = new HttpGet(url.toURI());
+
+                HttpClient httpclient = new DefaultHttpClient();
+                HttpResponse response = (HttpResponse) httpclient
+                        .execute(httpRequest);
+
+                HttpEntity entity = response.getEntity();
+                BufferedHttpEntity b_entity = new BufferedHttpEntity(entity);
+                InputStream input = b_entity.getContent();
+
+                bitmap = BitmapFactory.decodeStream(input);
+
+
+            } catch (Exception ex) {
+
+            }
+            user.setPhoto(bitmap);
         }
     }
 
