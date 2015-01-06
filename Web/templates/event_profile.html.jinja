@@ -139,66 +139,74 @@
   var event_end;
   var interaction;
   var interactionData;
+  var exFunction;
   graph = new myGraph("#graph");
-
+  
   function buildGraph(interactionObject, attendees) {
-      interactionData = interactionObject;
-      interaction = interactionData.interaction;
-      attendees = attendees.user_mappings;
-      
-    curr_t = new Date(interactionData.event_start_time);
-    event_end = new Date(interactionData.event_end_time);
-    for (var i = 0; i < attendees.length; i++) {
-      graph.addNode(attendees[i].user_name);
-    }
-    interval = parseInt(document.getElementById("myText").value);
-    setInterval(function () {updateData()}, interval);
+
+	cleanCanvas();
+	clearInterval(exFunction);
+	
+	interactionData = interactionObject;
+    interaction = interactionData.interaction;    
+    attendees = getAttendees();
+	
+	curr_t = new Date(interactionData.event_start_time);
+	event_end = new Date(interactionData.event_end_time);
+	
+	for (var i = 0; i < attendees.length; i++) {
+		graph.addNode(attendees[i].user_name);
+	}
+
 	document.getElementById("myText").value = Math.floor((event_end.getTime() - curr_t.getTime()) / 20);
+	
+	interval = parseInt(document.getElementById("myText").value);
+	exFunction = setInterval(function () {updateData()}, 1500);
 	updateStatistics();
   }
   
   function buildSampleGraph() {
+	cleanCanvas();
+	clearInterval(exFunction);
+	
 	interactionData = getSampleInteraction();
     interaction = interactionData.interaction; 
     
 	curr_t = new Date(0);
-	event_end = new Date(300000);
+	event_end = new Date(10000);
 	
-	// for (var i = 0; i < attendees.length; i++) {
-	// 	graph.addNode(attendees[i].name);
-	// }
+	document.getElementById("myText").value = Math.floor((event_end.getTime() - curr_t.getTime()) / 40);
+	
 	interval = parseInt(document.getElementById("myText").value);
-	setInterval(function () {updateSampleData()}, interval);
+	
+	exFunction = setInterval(function () {updateSampleData()}, 1000);
 	updateStatistics();
   }
 
   function updateData() {
-    var temp = event_end;
 	if (curr_t.getTime() <= event_end.getTime()) {
-        for (var i = 0; i < interaction.length; i++) {
-			var interaction_start = new Date (interaction[i].start_time);
+		for (var i = 0; i < interaction.length; i++) {
+			var interaction_start = new Date(interaction[i].start_time);
 			var interaction_end = new Date(interaction[i].end_time);
-			if ( (interaction_start.getTime() <= curr_t.getTime()) && (interaction_end.getTime() >= curr_t.getTime())) {
+			if ( (interaction_start.getTime() <= curr_t.getTime()+ interval)  && (interaction_end.getTime() >= curr_t.getTime()) ) {
 				graph.addLink(interaction[i].user1,interaction[i].user2);
 			}
 			if (interaction_end.getTime() <= curr_t.getTime()) {
 				graph.removeLink(interaction[i].user1,interaction[i].user2);
 			}
-			if (curr_t.getTime() < interaction_start.getTime() && interaction_start.getTime() < temp.getTime()) {
-				temp = interaction_start;
-			}
 		}
+		curr_t.setTime(curr_t.getTime() + interval);
+	} else {
+		clearInterval(exFunction);
 	}
-	curr_t = temp;
   }
   
   function updateSampleData() {
-	curr_t.setTime(curr_t.getTime() + interval);
 	if (curr_t.getTime() <= event_end.getTime()) {
 		for (var i = 0; i < interaction.length; i++) {
 			var interaction_start = new Date(parseInt(interaction[i].start_time));
 			var interaction_end = new Date(parseInt(interaction[i].end_time));
-			if ( (interaction_start.getTime() <= curr_t.getTime()) && (interaction_end.getTime() >= curr_t.getTime())) {
+			if ( (interaction_start.getTime() <= curr_t.getTime()+ interval)  && (interaction_end.getTime() >= curr_t.getTime()) ) {
 				graph.addNode(interaction[i].user1);
 				graph.addNode(interaction[i].user2);
 				graph.addLink(interaction[i].user1,interaction[i].user2);
@@ -209,12 +217,21 @@
 				//graph.removeNode(interaction[i].user2);
 			}
 		}
+		curr_t.setTime(curr_t.getTime() + interval);
+	} else {
+		clearInterval(exFunction);
 	}
   }
+
   
   function updateSpeed() {
 	interval = parseInt(document.getElementById("myText").value);
-	setInterval(function () {updateData()}, interval);
+	clearInterval(exFunction);
+	cleanCanvas();
+	for (var i = 0; i < attendees.length; i++) {
+		graph.addNode(attendees[i].user_name);
+	}
+	exFunction = setInterval(function () {updateData()}, 1500);
   }
   
   function updateStatistics() {
@@ -228,9 +245,8 @@
         h = 500,
         x, y,
         xAxis, yAxis;
-	
 	temp_t = new Date(interactionData.event_start_time);
-	interval = parseInt(document.getElementById("myText").value);
+	 
 	while (temp_t.getTime() <= event_end.getTime()) {
 		var count = 0;
 		for (var i = 0; i < interaction.length; i++) {
@@ -240,7 +256,7 @@
 				count++;
 			}
 		}
-		var result = {};
+		result = {};
 		result.time = temp_t.toLocaleTimeString(); 
 		result.interaction= count;
 		data.push( result );
@@ -318,6 +334,15 @@
 		.attr("y2", yScale.rangeExtent()[1] + gridChartOffset)
 		.style("stroke", "#000");
 
+  }
+  
+  function cleanCanvas() {
+	if (interaction !=  null) {
+		for (var i = 0; i < interaction.length; i++) {
+			graph.removeNode(interaction[i].user1);
+			graph.removeNode(interaction[i].user2);
+		}
+	}
   }
  
   <!-- Khoa script end part -->
