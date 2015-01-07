@@ -38,9 +38,11 @@ public class AddUserServlet extends HttpServlet {
 			System.out.println(json);
 			String user_name = (String) jsonObj.get("user_name");
 			String password = (String) jsonObj.get("password");
+			String gcm_id = (String) jsonObj.get("gcm_id");
 			User mu = new User();
 			mu.setUserName(user_name);
 			mu.setPassword(password);
+			mu.setGCM(gcm_id);
 			MongoClient mongo = (MongoClient) request.getServletContext()
 					.getAttribute("MONGO_CLIENT");
 			MongoDBUsersDAO muDAO = new MongoDBUsersDAO(mongo);

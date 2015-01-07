@@ -9,9 +9,18 @@ public class User {
 	private String user_name;
 	private String password;
 	private String mac_address;
+	private String gcm_id;
 	
 	public String getPassword(){
 		return password;
+	}
+	
+	public String getGCM(){
+		return gcm_id;
+	}
+	
+	public void setGCM(String gcm_id){
+		this.gcm_id = gcm_id;
 	}
 
 	public String getUserName() {

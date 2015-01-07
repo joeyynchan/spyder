@@ -39,15 +39,16 @@ public class LoginServlet extends HttpServlet {
 		}
 		json = jsonBuilder.toString();
 
-        response.setContentType("application/json");
-        response.setHeader("Cache-Control", "nocache");
-        response.setCharacterEncoding("utf-8");
+		response.setContentType("application/json");
+		response.setHeader("Cache-Control", "nocache");
+		response.setCharacterEncoding("utf-8");
 
 		try {
 			JSONObject jsonObj = new JSONObject(json);
 			String user_name = (String) jsonObj.get("user_name");
 			String password = (String) jsonObj.get("password");
 			String mac_address = (String) jsonObj.get("mac_address");
+			String gcm_id = (String) jsonObj.get("gcm_id");
 
 			MongoClient mongo = (MongoClient) request.getServletContext()
 					.getAttribute("MONGO_CLIENT");
@@ -55,23 +56,30 @@ public class LoginServlet extends HttpServlet {
 			User login_user = muDAO.getUserByQuery(user_name, password);
 			System.out.println("Login User: " + login_user);
 
+			if (login_user == null
+					|| !login_user.getPassword().endsWith(password)) {
+				response.sendError(HttpServletResponse.SC_NOT_FOUND);
+				return;
+			}
 
-            if (login_user == null || !login_user.getPassword().endsWith(password)) {
-                response.sendError(HttpServletResponse.SC_NOT_FOUND);
-                return;
-            }
-
-			if (login_user != null && login_user.getMacAddress() == null) {
-                login_user.setMacAddress(mac_address);
-                muDAO.updateUser(login_user);
-                operation = true;
-                response.sendError(HttpServletResponse.SC_CREATED);
-            } else if (login_user != null && login_user.getPassword().endsWith(password)
-                    && (!login_user.getMacAddress().equals(mac_address) && !mac_address.equals(""))) {
-                response.sendError(HttpServletResponse.SC_CONFLICT);
-                return;
+			if (login_user != null && login_user.getMacAddress() == null
+					&& login_user.getGCM() == null) {
+				login_user.setMacAddress(mac_address);
+				login_user.setGCM(gcm_id);
+				muDAO.updateUser(login_user);
+				operation = true;
+				response.sendError(HttpServletResponse.SC_CREATED);
 			} else if (login_user != null
-					&& (login_user.getMacAddress().equals(mac_address) || mac_address.equals(""))
+					&& login_user.getPassword().endsWith(password)
+					&& ((!login_user.getGCM().equals(gcm_id) && !gcm_id
+							.equals("")) || (!login_user.getMacAddress()
+							.equals(mac_address) && !mac_address.equals("")))) {
+				response.sendError(HttpServletResponse.SC_CONFLICT);
+				return;
+			} else if (login_user != null
+					&& (login_user.getMacAddress().equals(mac_address) || mac_address
+							.equals(""))
+					&& (login_user.getGCM().equals(gcm_id) || gcm_id.equals(""))
 					&& login_user.getPassword().endsWith(password)) {
 				operation = true;
 			}
