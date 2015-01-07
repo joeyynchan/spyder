@@ -77,44 +77,4 @@ public class AddUserServlet extends HttpServlet {
 
 	}
 
-    protected void doDelete(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-
-        BufferedReader br = new BufferedReader(new InputStreamReader(
-                request.getInputStream()));
-        String json = "";
-        if (br != null) {
-            json = br.readLine();
-        }
-
-        try {
-            JSONObject jsonObj = new JSONObject(json);
-            String user_name = (String) jsonObj.get("user_name");
-            String password = (String) jsonObj.get("password");
-            MongoClient mongo = (MongoClient) request.getServletContext()
-                    .getAttribute("MONGO_CLIENT");
-            MongoDBUsersDAO muDAO = new MongoDBUsersDAO(mongo);
-
-            response.setContentType("application/json");
-            response.setHeader("Cache-Control", "nocache");
-            response.setCharacterEncoding("utf-8");
-
-            User user = muDAO.getUserByName(user_name);
-
-            if (user == null || !user.getPassword().equals(password)) {
-                response.sendError(HttpServletResponse.SC_NOT_FOUND);
-                return;
-            }
-
-            muDAO.deleteUser(user);
-
-            response.sendError(HttpServletResponse.SC_NO_CONTENT);
-
-        } catch (JSONException exp) {
-            System.out.println("INVALID JSON OBJECT !!");
-        }
-
-    }
-
-
 }

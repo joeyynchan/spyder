@@ -57,7 +57,7 @@ public class SearchEventServlet extends HttpServlet {
 			MongoDBEventDAO eventDAO = new MongoDBEventDAO(mongo);
 			
 			User user = muDAO.getUserByName(user_name);
-			if (user == null) {
+			if (!user_name.equals("") && user == null) {
 				response.sendError(HttpServletResponse.SC_NOT_FOUND);
 				return;
 			}

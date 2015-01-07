@@ -34,7 +34,8 @@ public class EventConverter {
 	// take special note of converting ObjectId to String
 	public static Event toEvent(DBObject doc) {
 		Set<String> attendees = new HashSet<String>();
-				attendees.addAll((List<String>) doc.get("attendees"));
+		System.out.println("Noobs: " +doc.get("attendees"));
+		attendees.addAll((List<String>) doc.get("attendees"));
 		Event event = new Event((String) doc.get("start_time"),
 				(String) doc.get("end_time"), (String) doc.get("address"),
 				(String) doc.get("name"), (String) doc.get("description"),
