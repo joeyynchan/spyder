@@ -4,10 +4,10 @@ import urllib.error
 import json
 
 import http.client
-import db_api
 http.client.HTTPConnection.debuglevel
 
-DB_URL = 'http://146.169.46.38:8080/MongoDBWebapp'
+DB_URL = 'http://146.169.46.38:55555/MongoDBWebapp/'
+# DB_URL = 'http://146.169.46.38:8080/MongoDBWebapp'
 # DB_URL = 'http://146.169.32.147:55555'
 
 
@@ -61,5 +61,9 @@ if __name__ == '__main__':
     #     '/event/interaction?event_id=%s' % '54775c5de4b0598ae9308641')
     # response = db_connect('/getEvents?user_name=%s' % 'demo1')
     # response = db_connect('/user/profile?user_name=%s' % 'demo2')
-    response = db_connect('''/getEvents?user_name=''')
+    # response = db_connect('''/getEvents?user_name=''')
+    response = db_connect('/searchEvent', {
+        "user_name": "",
+        "event_search_string": ""
+    })
     print(response)
