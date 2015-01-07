@@ -117,10 +117,12 @@ public class AddEventServlet extends HttpServlet {
 
 		}
 
-		response.sendError(HttpServletResponse.SC_CREATED);
+	
 
 		printout.print(JObject);
 		printout.flush();
+		
+		response.sendError(HttpServletResponse.SC_CREATED);
 
 		} catch (JSONException e2) {
 			System.out.println("INVALUED JSON");
