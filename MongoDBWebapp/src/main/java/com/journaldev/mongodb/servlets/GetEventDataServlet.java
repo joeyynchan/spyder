@@ -54,7 +54,7 @@ public class GetEventDataServlet extends HttpServlet {
 		List<Event> events = eventDAO.readAllEvent();
 		Event event = null;
 		System.out.println("event_id: " + event_id);
-		if (!event_id.equals("")) {
+		if (event_id != null && !event_id.equals("")) {
 			for (Event e : events) {
 				if (e.getId().equals(event_id)) {
 					System.out.println("Found event !");
@@ -76,8 +76,8 @@ public class GetEventDataServlet extends HttpServlet {
 				jObject.put("description", event.getDescription());
 				jObject.put("end_time", event.getEnd_time());
 				jObject.put("start_time", event.getStart_time());
-				jObject.put("organiser_id", event.getOrganiser_id());
-				jObject.put("speaker_id", event.getSpeaker_id());
+				jObject.put("organiser", event.getOrganiser_id());
+				jObject.put("speaker", event.getSpeaker_id());
 				jObject.put("name", event.getName());
 				jObject.put("attendees", event.getAttendees());
 

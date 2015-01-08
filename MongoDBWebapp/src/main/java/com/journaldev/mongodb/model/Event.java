@@ -23,7 +23,9 @@ public class Event {
 		this.address = address;
 		this.name = name;
 		this.speaker_id = speaker_id;
-		this.attendees = attendees;		
+		this.attendees = attendees;	
+		this.organiser_id = organiser_id;
+		this.description = description;
 	}
 
 	public String getId() {
