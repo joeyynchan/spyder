@@ -75,7 +75,6 @@ public class FetchAttendees extends BaseMainAsyncTask {
                 String macAddress, username, name;
                 for (int i = 0; i < array.length(); i++) {
                     JSONObject item = array.getJSONObject(i);
-                    Log.i("Object", item.toString());
                     macAddress = item.getString("mac_address");
                     username = item.getString("user_name");
                     name = item.getString("name");
@@ -95,7 +94,6 @@ public class FetchAttendees extends BaseMainAsyncTask {
         Intent intent = new Intent();
         intent.setAction(Action.UPDATE_ATTENDEE_FRAGMENT_ADAPTER);
         activity.sendBroadcast(intent);
-        //Log.i(TAG, userMap.toString());
     }
 
 }

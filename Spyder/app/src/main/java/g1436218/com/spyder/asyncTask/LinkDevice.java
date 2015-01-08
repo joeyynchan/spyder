@@ -52,28 +52,25 @@ public class LinkDevice extends BaseLoginAsyncTask{
         addToParams("mac_address", getDefaultAdapter().getAddress());
         addToParams("gcm_id", regid);
 
-        Log.i("GCM", "Device registered, registration ID=" + regid);
+        Log.i("GCM", "GCM ID=" + regid);
 
         Intent intent = new Intent();
         intent.setAction(Action.GET_GCM);
         intent.putExtra("GCMID", regid);
         activity.sendBroadcast(intent);
 
-        if (!username.equals(GlobalConfiguration.OFFLINE_MODE)) {
-            JSONObject jsonObject = getJSONFromUrl(URL, Responses.POST);
-        } else {
+        if (username.equals(GlobalConfiguration.OFFLINE_MODE)) {
             statusCode = 999;
+        } else {
+            JSONObject jsonObject = getJSONFromUrl(URL, Responses.POST);
         }
-        Log.d(TAG, username + ":" + password);
-        Log.d(TAG, statusCode + "");
-
+        Log.i(TAG, "Login Attempt: " + username + ":" + password + " ---------- Result:" + statusCode);
         return null;
     }
 
     //Start MainActivity if login succeed
     @Override
     public void onPostExecute(Void v) {
-        Log.d(TAG, "onPostExecute");
         switch(this.statusCode) {
             case (200):{
                 setErrMsgToNotFound();

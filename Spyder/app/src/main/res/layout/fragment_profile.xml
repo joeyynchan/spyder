@@ -209,6 +209,7 @@
                     android:layout_marginRight="5dp"
                     android:gravity="right"
                     android:text="Phone"
+                    android:autoLink="phone"
                     android:id="@+id/textview_fragment_profile_phone" />
             </LinearLayout>
 
@@ -237,6 +238,7 @@
                     android:layout_marginRight="5dp"
                     android:gravity="right"
                     android:text="Email"
+                    android:autoLink="email"
                     android:id="@+id/textview_fragment_profile_email" />
             </LinearLayout>
 
@@ -265,6 +267,7 @@
                     android:layout_marginRight="5dp"
                     android:gravity="right"
                     android:text="Link"
+                    android:autoLink="web"
                     android:id="@+id/textview_fragment_profile_link" />
             </LinearLayout>
 

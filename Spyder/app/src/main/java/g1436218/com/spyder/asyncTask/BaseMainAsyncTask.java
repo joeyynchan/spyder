@@ -28,7 +28,6 @@ public abstract class BaseMainAsyncTask extends BaseAsyncTask {
         SharedPreferences sharedPref = activity.getSharedPreferences(
                 context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         Boolean isOffline = sharedPref.getBoolean(GlobalConfiguration.OFFLINE_MODE, true);
-        Log.i("OFFLINE_MODE", isOffline ? "true" : "false");
         if (isOffline) {
             return doInBackgroundOffline();
         }
