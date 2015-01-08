@@ -4,6 +4,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import g1436218.com.spyder.activity.MainActivity;
 import g1436218.com.spyder.asyncTask.FetchAttendees;
@@ -88,6 +89,11 @@ public class MainActivityReceiver extends BroadcastReceiver {
                 uiController.setStatus(0);
             }
 
+        } else if (Action.SHOW_MESSAGE.equals(action)) {
+            String title = intent.getStringExtra("title");
+            String message = intent.getStringExtra("message");
+            String sender = intent.getStringExtra("sender");
+            Log.i("MainActivityGotAMessage", title + " : " + message + " from " + sender);
         }
     }
 

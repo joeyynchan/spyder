@@ -22,4 +22,5 @@ public class Action {
     public static final String GET_GCM = "GET_GCM" ;
     public static final String UPDATE_CURRENT_EVENT = "UPDATE_CURRENT_EVENT";
     public static final String FETCH_EVENTS = "FETCH_EVENTS";
+    public static final String SHOW_MESSAGE = "SHOW_MESSAGE";
 }

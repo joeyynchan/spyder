@@ -76,6 +76,11 @@ public class GCMMessageHandler extends IntentService {
             String id = intent.getExtras().getString("event_id", "");
             String name = intent.getExtras().getString("event_name", "");
             updateCurrentEvent(id, name);
+        } else if (Action.SHOW_MESSAGE.equals(action)) {
+            String title = intent.getExtras().getString("title", "(No Title)");
+            String message = intent.getExtras().getString("message", "");
+            String sender = intent.getExtras().getString("sender", "");
+            showMessage(title, message, sender);
         }
 
         Log.i("GCM", "\n" + "Action: " + action + "\nData: " + extras.toString());
@@ -172,6 +177,17 @@ public class GCMMessageHandler extends IntentService {
         intent.putExtra("EVENT_ID", id);
         intent.putExtra("EVENT_NAME", name);
         sendBroadcast(intent);
+    }
+
+    private void showMessage(String title, String message, String sender) {
+        launchApplication();
+        Intent intent = new Intent();
+        intent.setAction(Action.SHOW_MESSAGE);
+        intent.putExtra("title", title);
+        intent.putExtra("message", message);
+        intent.putExtra("sender", sender);
+        sendBroadcast(intent);
+
     }
 
 }

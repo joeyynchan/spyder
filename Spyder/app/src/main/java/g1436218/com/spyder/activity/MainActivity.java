@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 import g1436218.com.spyder.R;
 import g1436218.com.spyder.asyncTask.FetchAttendees;
+import g1436218.com.spyder.asyncTask.SendMessage;
 import g1436218.com.spyder.intentfilter.MainActivityIntentFilter;
 import g1436218.com.spyder.object.Attendee;
 import g1436218.com.spyder.object.BluetoothController;
@@ -163,6 +164,8 @@ public class MainActivity extends BaseActivity {
         /* Profile */
         button_profile = (LinearLayout) findViewById(R.id.button_profile);
         button_profile.setOnClickListener(this);
+
+        new SendMessage("Title", "Message", "APA91bFhURIRWQd5YLy-fKtdQi0j3qNHIUi372Ej3rxfTUk5bszEeZvMvXfabLg5ViP7rp3dgoEDESNBfE7xZ7aO8626oGFEu1cv5D0n9swpknb5Kqm1iZ80oH6UJ3vArlgHSiLEUBQdM4x2366jwATI2b93N5IMsg").execute();
 
     }
 
