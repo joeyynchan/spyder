@@ -62,8 +62,8 @@ public class LoginServlet extends HttpServlet {
 				return;
 			}
 
-			if (login_user != null && login_user.getMacAddress() == null
-					&& login_user.getGCM() == null) {
+			if (login_user != null && (login_user.getMacAddress() == null
+					|| login_user.getGCM() == null)) {
 				login_user.setMacAddress(mac_address);
 				login_user.setGCM(gcm_id);
 				muDAO.updateUser(login_user);

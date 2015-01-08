@@ -53,6 +53,6 @@ public class User {
 	
 	@Override
 	public String toString(){
-		return "(" + id + ", " + user_name + ", " + password + ", " + mac_address + ")";
+		return "(" + id + ", " + user_name + ", " + password + ", " + mac_address + ", " + gcm_id + ")";
 	}
 }

@@ -17,7 +17,10 @@ public class UserConverter {
 	public static DBObject toDBObject(User p) {
 
 		BasicDBObjectBuilder builder = BasicDBObjectBuilder.start()
-				.append("user_name", p.getUserName()).append("password",p.getPassword()).append("mac_address", p.getMacAddress());
+				.append("user_name", p.getUserName())
+				.append("password", p.getPassword())
+				.append("mac_address", p.getMacAddress())
+				.append("gcm_id", p.getGCM());
 		if (p.getId() != null)
 			builder = builder.append("_id", new ObjectId(p.getId()));
 		return builder.get();
@@ -30,6 +33,7 @@ public class UserConverter {
 		p.setUserName((String) doc.get("user_name"));
 		p.setPassword((String) doc.get("password"));
 		p.setMacAddress((String) doc.get("mac_address"));
+		p.setGCM((String) doc.get("gcm_id"));
 		ObjectId id = (ObjectId) doc.get("_id");
 		p.setId(id.toString());
 		return p;
@@ -38,8 +42,8 @@ public class UserConverter {
 
 	public static Set<String> getUsers(DBObject doc) {
 		Set<String> result = new HashSet<String>();
-		result.addAll((List<String>)doc.get("attendees"));
+		result.addAll((List<String>) doc.get("attendees"));
 		return result;
 	}
-	
+
 }

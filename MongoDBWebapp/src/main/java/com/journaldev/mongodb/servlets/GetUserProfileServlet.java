@@ -65,7 +65,7 @@ public class GetUserProfileServlet extends HttpServlet {
 			JObject.put("external_link", profile.getExternal_link());
 			JObject.put("gender", profile.getGender());
             JObject.put("connections", profile.getConnections().toString());
-
+            JObject.put("gcm_id", userDAO.getUserByName(user_id).getGCM());
 		} catch (JSONException excep) {
 			System.out.println("JSON Exception");
 		}
