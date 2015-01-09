@@ -4,6 +4,7 @@ import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.nfc.Tag;
 import android.util.Base64;
 import android.util.Log;
 import android.widget.TextView;
@@ -53,7 +54,8 @@ public class LinkDevice extends BaseLoginAsyncTask{
         } catch (IOException e) {
             e.printStackTrace();
         }
-        password = computeSHAHash("test");
+        Log.d(TAG, "Before hashing:" + password);
+        password = computeSHAHash(password);
 
         macAddress = getDefaultAdapter().getAddress();
 

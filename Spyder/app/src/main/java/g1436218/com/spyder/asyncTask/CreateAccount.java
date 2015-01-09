@@ -6,6 +6,10 @@ import android.widget.TextView;
 
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 import g1436218.com.spyder.R;
 import g1436218.com.spyder.activity.LoginActivity;
 import g1436218.com.spyder.config.GlobalConfiguration;
@@ -36,6 +40,8 @@ public class CreateAccount extends BaseLoginAsyncTask {
         Log.d(TAG, username + " : " + password);
 
         if (password.equals(password2)) {
+            password = computeSHAHash(password);
+            Log.d(TAG, password);
             addToParams("user_name", username);
             addToParams("password", password);
             JSONObject jsonObject = getJSONFromUrl(URL, Requests.POST);
@@ -78,5 +84,41 @@ public class CreateAccount extends BaseLoginAsyncTask {
             }
         }
         super.onPostExecute(v);
+    }
+
+    public String computeSHAHash(String password)
+    {
+        String SHAHash = "";
+
+        MessageDigest mdSha1 = null;
+        try
+        {
+            mdSha1 = MessageDigest.getInstance("SHA-1");
+        } catch (NoSuchAlgorithmException e1) {
+            Log.e("myapp", "Error initializing SHA1 message digest");
+        }
+        try {
+            mdSha1.update(password.getBytes("ASCII"));
+        } catch (UnsupportedEncodingException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        byte[] data = mdSha1.digest();
+        SHAHash=bytesToHex(data);
+
+        return SHAHash;
+
+    }
+    final protected static char[] hexArray = "0123456789abcdef".toCharArray();
+    public static String bytesToHex( byte[] bytes )
+    {
+        char[] hexChars = new char[ bytes.length * 2 ];
+        for( int j = 0; j < bytes.length; j++ )
+        {
+            int v = bytes[ j ] & 0xFF;
+            hexChars[ j * 2 ] = hexArray[ v >>> 4 ];
+            hexChars[ j * 2 + 1 ] = hexArray[ v & 0x0F ];
+        }
+        return new String( hexChars );
     }
 }
