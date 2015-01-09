@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.security.NoSuchAlgorithmException;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,6 +17,7 @@ import org.json.JSONObject;
 
 import com.journaldev.mongodb.dao.MongoDBUsersDAO;
 import com.journaldev.mongodb.model.User;
+import com.journaldev.mongodb.utils.Encryption;
 import com.mongodb.MongoClient;
 
 @WebServlet("/login")
@@ -53,11 +55,13 @@ public class LoginServlet extends HttpServlet {
 			MongoClient mongo = (MongoClient) request.getServletContext()
 					.getAttribute("MONGO_CLIENT");
 			MongoDBUsersDAO muDAO = new MongoDBUsersDAO(mongo);
-			User login_user = muDAO.getUserByQuery(user_name, password);
+			User login_user = muDAO.getUserByName(user_name);
 			System.out.println("Login User: " + login_user);
+			String encrypted_pass = Encryption.sha1_encypt(password+login_user.get_salt());
+			System.out.println();
 
 			if (login_user == null
-					|| !login_user.getPassword().endsWith(password)) {
+					|| !login_user.getPassword().endsWith(encrypted_pass)) {
 				response.sendError(HttpServletResponse.SC_NOT_FOUND);
 				return;
 			}
@@ -70,7 +74,7 @@ public class LoginServlet extends HttpServlet {
 				operation = true;
 				response.sendError(HttpServletResponse.SC_CREATED);
 			} else if (login_user != null
-					&& login_user.getPassword().endsWith(password)
+					&& login_user.getPassword().endsWith(encrypted_pass)
 					&& ((!login_user.getGCM().equals(gcm_id) && !gcm_id
 							.equals("")) || (!login_user.getMacAddress()
 							.equals(mac_address) && !mac_address.equals("")))) {
@@ -80,7 +84,7 @@ public class LoginServlet extends HttpServlet {
 					&& (login_user.getMacAddress().equals(mac_address) || mac_address
 							.equals(""))
 					&& (login_user.getGCM().equals(gcm_id) || gcm_id.equals(""))
-					&& login_user.getPassword().endsWith(password)) {
+					&& login_user.getPassword().endsWith(encrypted_pass)) {
 				operation = true;
 			}
 
@@ -96,6 +100,9 @@ public class LoginServlet extends HttpServlet {
 			printout.flush();
 		} catch (JSONException main_excp) {
 			System.out.println("INVALID JSON OBJECT !!");
+		} catch (NoSuchAlgorithmException e) {
+			System.out.println("encryption error");
+			e.printStackTrace();
 		}
 	}
 

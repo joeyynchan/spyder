@@ -20,7 +20,7 @@ public class UserConverter {
 				.append("user_name", p.getUserName())
 				.append("password", p.getPassword())
 				.append("mac_address", p.getMacAddress())
-				.append("gcm_id", p.getGCM());
+				.append("gcm_id", p.getGCM()).append("salt",p.get_salt());
 		if (p.getId() != null)
 			builder = builder.append("_id", new ObjectId(p.getId()));
 		return builder.get();
@@ -34,6 +34,7 @@ public class UserConverter {
 		p.setPassword((String) doc.get("password"));
 		p.setMacAddress((String) doc.get("mac_address"));
 		p.setGCM((String) doc.get("gcm_id"));
+		p.set_salt((String) doc.get("salt"));
 		ObjectId id = (ObjectId) doc.get("_id");
 		p.setId(id.toString());
 		return p;
