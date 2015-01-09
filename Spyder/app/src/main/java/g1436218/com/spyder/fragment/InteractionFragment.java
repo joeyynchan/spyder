@@ -2,6 +2,7 @@ package g1436218.com.spyder.fragment;
 
 import android.content.IntentFilter;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -19,6 +20,7 @@ import g1436218.com.spyder.object.Action;
 import g1436218.com.spyder.object.Interaction;
 import g1436218.com.spyder.object.InteractionPackage;
 import g1436218.com.spyder.object.Interactions;
+import g1436218.com.spyder.object.SwipeDetector;
 import g1436218.com.spyder.receiver.InteractionFragmentReceiver;
 
 public class InteractionFragment extends BaseMainFragmentWithReceiver implements AdapterView.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener {
@@ -30,13 +32,15 @@ public class InteractionFragment extends BaseMainFragmentWithReceiver implements
     private TextView textview_message;
     private InteractionPackage interactionPackage;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private SwipeDetector swipeDetector;
 
     public InteractionFragment(MainActivity activity) {
         super(activity, R.layout.fragment_interaction);
+        this.swipeDetector = new SwipeDetector();
         this.interactionPackage = activity.getInteractionPackage();
 
         //Testing
-        /*
+
         this.interactionPackage = new InteractionPackage();
         this.interactionPackage.addInteraction(new Interaction("testing1", -90));
         this.interactionPackage.addInteraction(new Interaction("testing2", -50));
@@ -46,7 +50,7 @@ public class InteractionFragment extends BaseMainFragmentWithReceiver implements
         this.interactionPackage.addInteraction(new Interaction("testing6", -40));
         this.interactionPackage.addInteraction(new Interaction("testing7", -20));
         this.interactionPackage.addInteraction(new Interaction("testing8", -10));
-        this.interactionPackage.copyInteractionsToClone(); */
+        this.interactionPackage.copyInteractionsToClone();
     }
 
     @Override
@@ -66,6 +70,7 @@ public class InteractionFragment extends BaseMainFragmentWithReceiver implements
         this.adapter = new InteractionAdapter(getActivity(), R.layout.listview_interaction);
         ListView listview_interactions = (ListView) getActivity().findViewById(R.id.listview_interaction_list);
         listview_interactions.setAdapter(adapter);
+        listview_interactions.setOnTouchListener(swipeDetector);
         listview_interactions.setOnItemClickListener(this);
         updateAdapter();
 
@@ -81,8 +86,13 @@ public class InteractionFragment extends BaseMainFragmentWithReceiver implements
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Interaction item = (Interaction) parent.getItemAtPosition(position);
-        new FetchUserProfile(activity, item.getUsername()).execute();
+        if (swipeDetector.swipeDetected()) {
+            Interaction item = (Interaction) parent.getItemAtPosition(position);
+            Log.d("Movement Detected", item.getUsername());
+        } else {
+            Interaction item = (Interaction) parent.getItemAtPosition(position);
+            new FetchUserProfile(activity, item.getUsername()).execute();
+        }
     }
 
     /*

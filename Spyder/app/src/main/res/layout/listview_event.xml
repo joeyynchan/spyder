@@ -9,6 +9,7 @@
 
     <TextView
         android:id="@+id/textview_listview_event_name"
+        android:background="@drawable/list_view_button"
         android:layout_above="@+id/textview_listview_event_location"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
