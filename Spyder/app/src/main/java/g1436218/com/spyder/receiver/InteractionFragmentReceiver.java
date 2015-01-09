@@ -21,7 +21,7 @@ public class InteractionFragmentReceiver extends BroadcastReceiver {
         if (Action.UPDATE_INTERACTION_FRAGMENT_ADAPTER.equals(action)) {
             //Log.i("UPDATE_INTERACTION_FRAGMENT_ADAPTER", activity.getClone().toString());
             //Log.i("interactionsAfterClear", activity.getInteractions().toString());
-            fragment.addAllToAdapter();
+            fragment.updateAdapter();
         }
     }
 

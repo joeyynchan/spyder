@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 
@@ -22,13 +23,9 @@ public class InteractionAdapter extends ArrayAdapter<Interaction> {
         this.context = context;
     }
 
-    public void addAllToAdapter(HashSet<Interaction> interactions) {
+    public void addAllToAdapter(ArrayList<Interaction> interactions) {
         clear();
-        Iterator<Interaction> iterator = interactions.iterator();
-        while (iterator.hasNext()) {
-            Interaction interaction = iterator.next();
-            add(interaction);
-        }
+        addAll(interactions);
         notifyDataSetChanged();
     }
 
