@@ -41,7 +41,7 @@ public class EventFragment extends BaseMainFragment implements View.OnClickListe
         textview_description = (TextView) activity.findViewById(R.id.textview_fragment_event_description);
 
         textview_name.setText(event.getName());
-        //textview_host.setText(event.getName());
+        textview_host.setText(event.getName());
         textview_location.setText(event.getLocation());
         textview_startTime.setText(event.getStartTime());
         textview_endTime.setText(event.getEndTime());

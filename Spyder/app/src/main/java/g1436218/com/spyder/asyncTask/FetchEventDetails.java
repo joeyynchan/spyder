@@ -17,7 +17,7 @@ import g1436218.com.spyder.object.Event;
  */
 public class FetchEventDetails extends BaseMainAsyncTask{
 
-    protected String URL = GlobalConfiguration.DEFAULT_URL + "readEvent";
+    protected String URL = GlobalConfiguration.DEFAULT_URL + "event_data?event_id=";
     private static String TAG = "FetchEventDetails";
 
     protected Event event;
@@ -25,6 +25,7 @@ public class FetchEventDetails extends BaseMainAsyncTask{
     public FetchEventDetails(MainActivity activity, Event event) {
         super(activity);
         this.event = event;
+
     }
     @Override
     protected Void doInBackgroundOffline(Void... params) {
@@ -34,7 +35,7 @@ public class FetchEventDetails extends BaseMainAsyncTask{
 
     @Override
     protected Void doInBackgroundOnline(Void... params) {
-
+        URL += event.getId();
         Log.d(TAG, URL);
 
         JSONObject jsonObject = getJSONFromUrl(URL, Requests.GET);
