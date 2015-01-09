@@ -4,6 +4,7 @@ import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.util.Base64;
 import android.util.Log;
 import android.widget.TextView;
 
@@ -12,6 +13,9 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 import g1436218.com.spyder.R;
 import g1436218.com.spyder.activity.LoginActivity;
@@ -49,6 +53,7 @@ public class LinkDevice extends BaseLoginAsyncTask{
         } catch (IOException e) {
             e.printStackTrace();
         }
+        password = computeSHAHash("test");
 
         macAddress = getDefaultAdapter().getAddress();
 
@@ -175,6 +180,57 @@ public class LinkDevice extends BaseLoginAsyncTask{
         TextView textview_errmsg = (TextView) activity.findViewById(R.id.textview_fragment_login_errmsg);
 
         textview_errmsg.setText("");
+    }
+
+    private static String convertToHex(byte[] data) throws java.io.IOException
+    {
+
+
+        StringBuffer sb = new StringBuffer();
+        String hex=null;
+
+        hex= Base64.encodeToString(data, 0, data.length, 0);
+
+        sb.append(hex);
+
+        return sb.toString();
+    }
+
+
+    public String computeSHAHash(String password)
+    {
+        String SHAHash = "";
+
+        MessageDigest mdSha1 = null;
+        try
+        {
+            mdSha1 = MessageDigest.getInstance("SHA-1");
+        } catch (NoSuchAlgorithmException e1) {
+            Log.e("myapp", "Error initializing SHA1 message digest");
+        }
+        try {
+            mdSha1.update(password.getBytes("ASCII"));
+        } catch (UnsupportedEncodingException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        byte[] data = mdSha1.digest();
+        SHAHash=bytesToHex(data);
+
+        return SHAHash;
+
+    }
+    final protected static char[] hexArray = "0123456789abcdef".toCharArray();
+    public static String bytesToHex( byte[] bytes )
+    {
+        char[] hexChars = new char[ bytes.length * 2 ];
+        for( int j = 0; j < bytes.length; j++ )
+        {
+            int v = bytes[ j ] & 0xFF;
+            hexChars[ j * 2 ] = hexArray[ v >>> 4 ];
+            hexChars[ j * 2 + 1 ] = hexArray[ v & 0x0F ];
+        }
+        return new String( hexChars );
     }
 }
 
