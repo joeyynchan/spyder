@@ -45,7 +45,7 @@ public class AddUserServlet extends HttpServlet {
 			mu.setUserName(user_name);
 			mu.setPassword(Encryption.sha1_encypt(password+salt));
 			mu.set_salt(salt);
-			MongoClient mongo = (MongoClient) request.getServletContext()
+			MongoClient mongo = (MongoClient) request.getServletContext() 
 					.getAttribute("MONGO_CLIENT");
 			MongoDBUsersDAO muDAO = new MongoDBUsersDAO(mongo);
 
