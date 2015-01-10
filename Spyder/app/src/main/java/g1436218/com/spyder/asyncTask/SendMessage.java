@@ -1,5 +1,7 @@
 package g1436218.com.spyder.asyncTask;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -19,6 +21,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
+import g1436218.com.spyder.R;
 import g1436218.com.spyder.activity.MainActivity;
 import g1436218.com.spyder.config.GlobalConfiguration;
 
@@ -31,15 +34,13 @@ public class SendMessage extends AsyncTask<Void, Void, Void> {
     JSONObject data;
     ArrayList<String> registration_ids;
 
-    public SendMessage(String title, String message, String gcm_id) {
-        this.title = title;
-        this.message = message;
+    public SendMessage(String title, String message, String sender, String gcm_id) {
         this.data = new JSONObject();
         try {
             this.data.put("action", "SHOW_MESSAGE");
             this.data.put("title", title);
             this.data.put("message", message);
-            this.data.put("sender", "Sender");
+            this.data.put("sender", sender);
         } catch (JSONException e) {
             e.printStackTrace();
         }

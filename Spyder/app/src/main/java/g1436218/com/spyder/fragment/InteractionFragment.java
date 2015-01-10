@@ -1,10 +1,13 @@
 package g1436218.com.spyder.fragment;
 
+import android.app.DialogFragment;
+import android.app.FragmentManager;
 import android.content.IntentFilter;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -23,7 +26,7 @@ import g1436218.com.spyder.object.Interactions;
 import g1436218.com.spyder.object.SwipeDetector;
 import g1436218.com.spyder.receiver.InteractionFragmentReceiver;
 
-public class InteractionFragment extends BaseMainFragmentWithReceiver implements AdapterView.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener {
+public class InteractionFragment extends BaseMainFragmentWithReceiver implements AdapterView.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener, View.OnClickListener {
 
     private final String TITLE = "Interactions";
 
@@ -61,10 +64,7 @@ public class InteractionFragment extends BaseMainFragmentWithReceiver implements
 
         swipeRefreshLayout = (SwipeRefreshLayout) activity.findViewById(R.id.swiperefreshlayout_interaction);
         swipeRefreshLayout.setOnRefreshListener(this);
-        swipeRefreshLayout.setColorSchemeResources(android.R.color.white,
-                android.R.color.white,
-                android.R.color.white,
-                android.R.color.white);
+        swipeRefreshLayout.setDistanceToTriggerSync(200);
 
         /* Initialize Listview */
         this.adapter = new InteractionAdapter(getActivity(), R.layout.listview_interaction);
@@ -86,11 +86,16 @@ public class InteractionFragment extends BaseMainFragmentWithReceiver implements
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Interaction item = (Interaction) parent.getItemAtPosition(position);
         if (swipeDetector.swipeDetected()) {
-            Interaction item = (Interaction) parent.getItemAtPosition(position);
-            Log.d("Movement Detected", item.getUsername());
+            Button sendMessage = (Button) view.findViewById(R.id.button_interaction_sendMessage);
+            sendMessage.setOnClickListener(this);
+            if (swipeDetector.getMovement().equals(SwipeDetector.Movement.RL)) {
+                sendMessage.setVisibility(View.VISIBLE);
+            } else if (swipeDetector.getMovement().equals(SwipeDetector.Movement.LR)) {
+                sendMessage.setVisibility(View.GONE);
+            }
         } else {
-            Interaction item = (Interaction) parent.getItemAtPosition(position);
             new FetchUserProfile(activity, item.getUsername()).execute();
         }
     }
@@ -113,6 +118,18 @@ public class InteractionFragment extends BaseMainFragmentWithReceiver implements
         this.interactionPackage.copyInteractionsToClone();
         updateAdapter();
         swipeRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.button_listview_interaction_sendMessage: {
+
+                FragmentManager fragmentManager = activity.getFragmentManager();
+                MessageFragment messageFragment = new MessageFragment("");
+                messageFragment.show(fragmentManager, "Logout");
+            }
+        }
     }
 
     private class SortByDescendingStrength implements Comparator<Interaction> {

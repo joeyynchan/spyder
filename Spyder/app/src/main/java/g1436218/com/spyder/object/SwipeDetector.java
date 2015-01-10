@@ -1,5 +1,6 @@
 package g1436218.com.spyder.object;
 
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -34,10 +35,14 @@ public class SwipeDetector implements View.OnTouchListener {
             case MotionEvent.ACTION_DOWN: {
                 downX = event.getX();
                 downY = event.getY();
+                //Log.d("ActionDown", "(" + downX + ", " + downY + ")");
                 mSwipeDetected = Movement.None;
                 return false;
             }
             case MotionEvent.ACTION_MOVE: {
+                upX = event.getX();
+                upY = event.getY();
+
                 float deltaX = downX - upX;
                 float deltaY = downY - upY;
 

@@ -1,13 +1,16 @@
 package g1436218.com.spyder.adapter;
 
+import android.app.FragmentManager;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.TextView;
 
 import g1436218.com.spyder.R;
+import g1436218.com.spyder.fragment.MessageFragment;
 import g1436218.com.spyder.object.Attendee;
 
 public class AttendeeAdapter extends ArrayAdapter<Attendee> {
@@ -30,6 +33,7 @@ public class AttendeeAdapter extends ArrayAdapter<Attendee> {
 
         Attendee item = getItem(position);
         username.setText(item.getName());
+
 
         return v;
     }

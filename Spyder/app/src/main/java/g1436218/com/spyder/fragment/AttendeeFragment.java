@@ -56,10 +56,6 @@ public class AttendeeFragment extends BaseMainFragmentWithReceiver implements Ad
         textview_msg = (TextView) activity.findViewById(R.id.textview_fragment_attendee_eventMsg);
 
         swipeRefreshLayout = (SwipeRefreshLayout) activity.findViewById(R.id.swiperefreshlayout_attendee);
-        swipeRefreshLayout.setColorSchemeResources(android.R.color.white,
-                                                      android.R.color.white,
-                                                      android.R.color.white,
-                                                      android.R.color.white);
         swipeRefreshLayout.setOnRefreshListener(this);
 
         SharedPreferences sharedPref = activity.getSharedPreferences(
