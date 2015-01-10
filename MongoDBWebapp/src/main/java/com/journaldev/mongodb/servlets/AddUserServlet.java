@@ -38,8 +38,16 @@ public class AddUserServlet extends HttpServlet {
 		try {
 			JSONObject jsonObj = new JSONObject(json);
 			System.out.println(json);
-			String user_name = (String) jsonObj.get("user_name");
+			String user_name = (String) jsonObj.get("user_name"); 
 			String password = (String) jsonObj.get("password");
+			if(user_name.equals("")){
+				response.sendError(410);
+				return;
+			}
+			if(password.equals("")){
+				response.sendError(411);
+				return;
+			}
 			String salt = Encryption.generate_salt();
 			User mu = new User();
 			mu.setUserName(user_name);

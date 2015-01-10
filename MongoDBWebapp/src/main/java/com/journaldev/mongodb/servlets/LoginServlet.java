@@ -49,25 +49,41 @@ public class LoginServlet extends HttpServlet {
 			JSONObject jsonObj = new JSONObject(json);
 			String user_name = (String) jsonObj.get("user_name");
 			String password = (String) jsonObj.get("password");
+			if(user_name.equals("")){
+				response.sendError(410);
+				return;
+			}
+			if(password.equals("")){
+				response.sendError(411);
+				return;
+			}
+			
 			String mac_address = (String) jsonObj.get("mac_address");
 			String gcm_id = (String) jsonObj.get("gcm_id");
+			
 
 			MongoClient mongo = (MongoClient) request.getServletContext()
 					.getAttribute("MONGO_CLIENT");
 			MongoDBUsersDAO muDAO = new MongoDBUsersDAO(mongo);
 			User login_user = muDAO.getUserByName(user_name);
 			System.out.println("Login User: " + login_user);
-			String encrypted_pass = Encryption.sha1_encypt(password+login_user.get_salt());
+
 			System.out.println();
 
-			if (login_user == null
-					|| !login_user.getPassword().endsWith(encrypted_pass)) {
+			if (login_user == null) {
+				response.sendError(HttpServletResponse.SC_NOT_FOUND);
+				return;
+			}
+			String encrypted_pass = Encryption.sha1_encypt(password
+					+ login_user.get_salt());
+			if (!login_user.getPassword().endsWith(encrypted_pass)) {
 				response.sendError(HttpServletResponse.SC_NOT_FOUND);
 				return;
 			}
 
-			if (login_user != null && (login_user.getMacAddress() == null
-					|| login_user.getGCM() == null)) {
+			if (login_user != null
+					&& (login_user.getMacAddress() == null || login_user
+							.getGCM() == null)) {
 				login_user.setMacAddress(mac_address);
 				login_user.setGCM(gcm_id);
 				muDAO.updateUser(login_user);
