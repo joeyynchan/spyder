@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.security.NoSuchAlgorithmException;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,6 +17,7 @@ import org.json.JSONObject;
 
 import com.journaldev.mongodb.dao.MongoDBUsersDAO;
 import com.journaldev.mongodb.model.User;
+import com.journaldev.mongodb.utils.Encryption;
 import com.mongodb.MongoClient;
 
 @WebServlet("/register")
@@ -36,12 +38,22 @@ public class AddUserServlet extends HttpServlet {
 		try {
 			JSONObject jsonObj = new JSONObject(json);
 			System.out.println(json);
-			String user_name = (String) jsonObj.get("user_name");
+			String user_name = (String) jsonObj.get("user_name"); 
 			String password = (String) jsonObj.get("password");
+			if(user_name.equals("")){
+				response.sendError(410);
+				return;
+			}
+			if(password.equals("")){
+				response.sendError(411);
+				return;
+			}
+			String salt = Encryption.generate_salt();
 			User mu = new User();
 			mu.setUserName(user_name);
-			mu.setPassword(password);
-			MongoClient mongo = (MongoClient) request.getServletContext()
+			mu.setPassword(Encryption.sha1_encypt(password+salt));
+			mu.set_salt(salt);
+			MongoClient mongo = (MongoClient) request.getServletContext() 
 					.getAttribute("MONGO_CLIENT");
 			MongoDBUsersDAO muDAO = new MongoDBUsersDAO(mongo);
 
@@ -73,6 +85,9 @@ public class AddUserServlet extends HttpServlet {
 			
 		} catch (JSONException exp) {
 			System.out.println("INVALID JSON OBJECT !!");
+		} catch (NoSuchAlgorithmException e) {
+			System.out.println("Encryption error");
+			e.printStackTrace();
 		}
 
 	}

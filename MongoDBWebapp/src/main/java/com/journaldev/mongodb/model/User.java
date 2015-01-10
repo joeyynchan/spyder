@@ -10,6 +10,7 @@ public class User {
 	private String password;
 	private String mac_address;
 	private String gcm_id;
+	private String salt;
 	
 	public String getPassword(){
 		return password;
@@ -49,6 +50,14 @@ public class User {
 
 	public void setId(String id) {
 		this.id = id;
+	}
+	
+	public void set_salt(String salt){
+		this.salt = salt;
+	}
+	
+	public String get_salt(){
+		return salt;
 	}
 	
 	@Override
