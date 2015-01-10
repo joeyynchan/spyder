@@ -24,6 +24,7 @@ import g1436218.com.spyder.object.Interaction;
 import g1436218.com.spyder.object.InteractionPackage;
 import g1436218.com.spyder.object.Interactions;
 import g1436218.com.spyder.object.SwipeDetector;
+import g1436218.com.spyder.object.UserMap;
 import g1436218.com.spyder.receiver.InteractionFragmentReceiver;
 
 public class InteractionFragment extends BaseMainFragmentWithReceiver implements AdapterView.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener, View.OnClickListener {
@@ -43,16 +44,16 @@ public class InteractionFragment extends BaseMainFragmentWithReceiver implements
         this.interactionPackage = activity.getInteractionPackage();
 
         //Testing
-
+        UserMap userMap = UserMap.getInstance();
         this.interactionPackage = new InteractionPackage();
-        this.interactionPackage.addInteraction(new Interaction("testing1", -90));
-        this.interactionPackage.addInteraction(new Interaction("testing2", -50));
-        this.interactionPackage.addInteraction(new Interaction("testing3", -70));
-        this.interactionPackage.addInteraction(new Interaction("testing4", -80));
-        this.interactionPackage.addInteraction(new Interaction("testing5", -90));
-        this.interactionPackage.addInteraction(new Interaction("testing6", -40));
-        this.interactionPackage.addInteraction(new Interaction("testing7", -20));
-        this.interactionPackage.addInteraction(new Interaction("testing8", -10));
+        this.interactionPackage.addInteraction(new Interaction(userMap.get("00:00:00:00:00:01"), -90));
+        this.interactionPackage.addInteraction(new Interaction(userMap.get("00:00:00:00:00:02"), -50));
+        this.interactionPackage.addInteraction(new Interaction(userMap.get("00:00:00:00:00:03"), -70));
+        this.interactionPackage.addInteraction(new Interaction(userMap.get("00:00:00:00:00:04"), -80));
+        this.interactionPackage.addInteraction(new Interaction(userMap.get("00:00:00:00:00:05"), -90));
+        this.interactionPackage.addInteraction(new Interaction(userMap.get("00:00:00:00:00:06"), -40));
+        this.interactionPackage.addInteraction(new Interaction(userMap.get("00:00:00:00:00:07"), -20));
+        this.interactionPackage.addInteraction(new Interaction(userMap.get("00:00:00:00:00:08"), -10));
         this.interactionPackage.copyInteractionsToClone();
     }
 
@@ -94,7 +95,7 @@ public class InteractionFragment extends BaseMainFragmentWithReceiver implements
                 //sendMessage.setVisibility(View.VISIBLE);
                 Log.d("Right to Left Movement Detected", "Right To Left");
                 FragmentManager fragmentManager = activity.getFragmentManager();
-                MessageFragment messageFragment = new MessageFragment(item.getUsername(), item.getGcm_id());
+                MessageFragment messageFragment = new MessageFragment(item.getName(), item.getGcm_id());
                 messageFragment.show(getFragmentManager(), "Message");
             } else if (swipeDetector.getMovement().equals(SwipeDetector.Movement.LR)) {
                 //sendMessage.setVisibility(View.GONE);

@@ -37,18 +37,39 @@ public class FetchAttendees extends BaseMainAsyncTask {
 
         attendees.clear();
         userMap.clear();
-        userMap.put("48:74:6E:75:64:75", "iPhone");
+        userMap.put("48:74:6E:75:64:75", new Attendee("", "iPhone", "iPhoneee", "", ""));
 
-        attendees.add(new Attendee("00:00:00:00:00:01", "Demo001", "TestingSortingAlgorithm"));
-        attendees.add(new Attendee("00:00:00:00:00:02", "Demo002", "Joey"));
-        attendees.add(new Attendee("00:00:00:00:00:03", "Demo003", "Cherie"));
-        attendees.add(new Attendee("00:00:00:00:00:04", "Demo004", "Pavan"));
-        attendees.add(new Attendee("00:00:00:00:00:05", "Demo005", "Kuo"));
-        attendees.add(new Attendee("00:00:00:00:00:06", "Demo006", "Khoa"));
-        attendees.add(new Attendee("00:00:00:00:00:07", "Demo007", "MrGun"));
-        attendees.add(new Attendee("00:00:00:00:00:08", "Demo008", "Alice"));
-        attendees.add(new Attendee("00:00:00:00:00:09", "Demo009", "Alicia"));
-        attendees.add(new Attendee("00:00:00:00:00:0A", "Demo010", "Adam"));
+        Attendee attendee;
+        attendee = new Attendee("00:00:00:00:00:01", "Demo001", "TestingSortingAlgorithm", "", "");
+        attendees.add(attendee);
+        userMap.put("00:00:00:00:00:01", attendee);
+        attendee = new Attendee("00:00:00:00:00:02", "Demo002", "Joey", "", "");
+        attendees.add(attendee);
+        userMap.put("00:00:00:00:00:02", attendee);
+        attendee = new Attendee("00:00:00:00:00:03", "Demo003", "Cherie", "", "");
+        attendees.add(attendee);
+        userMap.put("00:00:00:00:00:03", attendee);
+        attendee = new Attendee("00:00:00:00:00:04", "Demo004", "Pavan", "", "");
+        attendees.add(attendee);
+        userMap.put("00:00:00:00:00:04", attendee);
+        attendee = new Attendee("00:00:00:00:00:05", "Demo005", "Kuo", "", "");
+        attendees.add(attendee);
+        userMap.put("00:00:00:00:00:05", attendee);
+        attendee = new Attendee("00:00:00:00:00:06", "Demo006", "Khoa", "", "");
+        attendees.add(attendee);
+        userMap.put("00:00:00:00:00:06", attendee);
+        attendee = new Attendee("00:00:00:00:00:07", "Demo007", "MrGun", "", "");
+        attendees.add(attendee);
+        userMap.put("00:00:00:00:00:07", attendee);
+        attendee = new Attendee("00:00:00:00:00:08", "Demo008", "Alice", "", "");
+        attendees.add(attendee);
+        userMap.put("00:00:00:00:00:08", attendee);
+        attendee = new Attendee("00:00:00:00:00:09", "Demo009", "Alicia", "", "");
+        attendees.add(attendee);
+        userMap.put("00:00:00:00:00:09", attendee);
+        attendee = new Attendee("00:00:00:00:00:0A", "Demo010", "Adam", "", "");
+        attendees.add(attendee);
+        userMap.put("00:00:00:00:00:0A", attendee);
 
         return null;
     }
@@ -62,24 +83,29 @@ public class FetchAttendees extends BaseMainAsyncTask {
 
         attendees.clear();
         userMap.clear();
-        userMap.put("48:74:6E:75:64:75", "iPhone");
+        doInBackgroundOffline();
+        userMap.put("48:74:6E:75:64:75", new Attendee("", "iPhone", "iPhoneee", "", ""));
 
         if (event_id.equals("")) {
             return null;
         }
 
         resultJObj = getJSONFromUrl(URL+event_id, Responses.GET);
+        Log.d("JSON", resultJObj.toString());
         if (resultJObj != null) {
             try {
                 JSONArray array = resultJObj.getJSONArray("user_mappings");
-                String macAddress, username, name;
+                String macAddress, username, name, gcm_id, photo_url;
                 for (int i = 0; i < array.length(); i++) {
                     JSONObject item = array.getJSONObject(i);
                     macAddress = item.getString("mac_address");
                     username = item.getString("user_name");
                     name = item.getString("name");
-                    attendees.add(new Attendee(macAddress, username, name));
-                    userMap.put(macAddress, name);
+                    gcm_id = item.getString("gcm_id");
+                    photo_url = item.getString("photo_url");
+                    Attendee attendee = new Attendee(macAddress, username, name, gcm_id, photo_url);
+                    attendees.add(attendee);
+                    userMap.put(macAddress, attendee);
                 }
             } catch (JSONException e) {
                 e.getMessage();

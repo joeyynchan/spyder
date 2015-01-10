@@ -36,11 +36,11 @@ public class InteractionAdapter extends ArrayAdapter<Interaction> {
             v = vi.inflate(R.layout.listview_interaction, null);
         }
 
-        TextView username = (TextView) v.findViewById(R.id.textview_listview_interaction_username);
+        TextView name = (TextView) v.findViewById(R.id.textview_listview_interaction_username);
         TextView strength = (TextView) v.findViewById(R.id.textview_listview_interaction_strength);
 
         Interaction item = getItem(position);
-        username.setText(item.getUsername());
+        name.setText(item.getName());
         strength.setText(new Integer(item.getStrength()).toString() + "dBm");
 
         return v;

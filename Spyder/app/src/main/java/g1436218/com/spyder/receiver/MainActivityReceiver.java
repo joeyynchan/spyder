@@ -6,14 +6,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import java.util.ArrayList;
+
 import g1436218.com.spyder.activity.MainActivity;
 import g1436218.com.spyder.asyncTask.FetchAttendees;
 import g1436218.com.spyder.asyncTask.SubmitBluetoothData;
 import g1436218.com.spyder.object.Action;
+import g1436218.com.spyder.object.Attendee;
 import g1436218.com.spyder.object.BluetoothController;
 import g1436218.com.spyder.object.Interaction;
 import g1436218.com.spyder.object.InteractionPackage;
 import g1436218.com.spyder.object.UIController;
+import g1436218.com.spyder.object.UserMap;
 
 public class MainActivityReceiver extends BroadcastReceiver {
 
@@ -35,9 +39,10 @@ public class MainActivityReceiver extends BroadcastReceiver {
         String action = intent.getAction();
         if (Action.DEVICE_DETECTED.equals(action)) {
 
-            String username = intent.getStringExtra("USERNAME");
+            String macAddress = intent.getStringExtra("MAC_ADDRESS");
             int strength = intent.getIntExtra("STRENGTH", 0);
-            interactionPackage.addInteraction(new Interaction(username, strength));
+            UserMap usermap = UserMap.getInstance();
+            interactionPackage.addInteraction(new Interaction(usermap.get(macAddress), strength));
 
         } else if (Action.RESET_LIST.equals(action)) {
 

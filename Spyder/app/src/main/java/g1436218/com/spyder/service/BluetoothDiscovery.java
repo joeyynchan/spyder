@@ -41,8 +41,7 @@ public class BluetoothDiscovery extends Service {
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 
                 if (userMap.containsKey(device.getAddress())) {
-                    String username = userMap.get(device.getAddress());
-                    broadcastDeviceDetected(username, strength);
+                    broadcastDeviceDetected(device.getAddress(), strength);
                 }
 
             } else if (BluetoothAdapter.ACTION_DISCOVERY_STARTED.equals(action)) {
@@ -54,10 +53,10 @@ public class BluetoothDiscovery extends Service {
             }
         }
 
-        private void broadcastDeviceDetected(String username, int strength) {
+        private void broadcastDeviceDetected(String macAddress, int strength) {
             Intent intent = new Intent();
             intent.setAction(Action.DEVICE_DETECTED);
-            intent.putExtra("USERNAME", username);
+            intent.putExtra("MAC_ADDRESS", macAddress);
             intent.putExtra("STRENGTH", strength);
             sendBroadcast(intent);
         }

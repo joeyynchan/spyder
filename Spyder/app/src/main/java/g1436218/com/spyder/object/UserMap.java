@@ -3,7 +3,7 @@ package g1436218.com.spyder.object;
 import java.util.HashMap;
 import java.util.Iterator;
 
-public class UserMap extends HashMap<String, String> {
+public class UserMap extends HashMap<String, Attendee> {
 
     private final String TAG = "UserMap";
 
