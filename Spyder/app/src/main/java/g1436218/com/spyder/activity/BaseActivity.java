@@ -21,6 +21,20 @@ import g1436218.com.spyder.config.GlobalConfiguration;
 
 public abstract class BaseActivity extends Activity implements View.OnClickListener {
 
+    private IJobListener listener;
+
+    public static interface IJobListener {
+        void executionDone();
+    }
+
+    public void setListener(IJobListener listener) {
+        this.listener = listener;
+    }
+
+    public IJobListener getListener() {
+        return listener;
+    }
+
     protected void onCreate(Bundle savedInstanceState, int layoutResID) {
         super.onCreate(savedInstanceState);
         setContentView(layoutResID);

@@ -22,31 +22,57 @@ public class CreateAccount extends BaseLoginAsyncTask {
     @Override
     protected Void doInBackground(Void... params) {
 
-        EditText register_edittext_name = (EditText) activity.findViewById(R.id.edittext_fragment_register_name);
+        EditText register_edittext_name = (EditText) activity.findViewById(R.id.edittext_fragment_register_username);
         EditText register_edittext_password1 = (EditText) activity.findViewById(R.id.edittext_fragment_register_password1);
+        EditText register_edittext_password2 = (EditText) activity.findViewById(R.id.edittext_fragment_register_password2);
 
         String username = register_edittext_name.getText().toString();
         String password = register_edittext_password1.getText().toString();
+        String password2 = register_edittext_password2.getText().toString();
         Log.d(TAG, username + " : " + password);
 
-        addToParams("user_name", username);
-        addToParams("password", password);
-        JSONObject jsonObject = getJSONFromUrl(URL, Requests.POST);
+        if (password.equals(password2)) {
+            addToParams("user_name", username);
+            addToParams("password", password);
+            JSONObject jsonObject = getJSONFromUrl(URL, Requests.POST);
+        } else {
+            statusCode = 412;
+        }
 
         Log.i(TAG, "Register Attempt: " + username + ":" + password + " ---------- Result: " + statusCode);
-
         return null;
     }
 
     @Override
     public void onPostExecute(Void v){
         TextView login_text_errmsg = (TextView) activity.findViewById(R.id.textview_fragment_register_errmsg);
-        if (statusCode == 201) {
-            //Registration was successful
-            login_text_errmsg.setText("Account has been successfully created\n");
-            activity.displayLoginFragment();
-        } else {
-            login_text_errmsg.setText("Registration failed\n");
+        switch (statusCode) {
+            case 201: {
+                login_text_errmsg.setText("Account has been successfully created");
+                activity.displayLoginFragment();
+                break;
+            }
+            case 409: {
+                login_text_errmsg.setText("Username is taken");
+                break;
+            }
+            case 410: {
+                login_text_errmsg.setText("Username cannot be empty");
+                break;
+            }
+            case 411: {
+                login_text_errmsg.setText("Password cannot be empty");
+                break;
+            }
+            case 412: {
+                login_text_errmsg.setText("Passwords do not match");
+                break;
+            }
+            default: {
+                login_text_errmsg.setText("Registration failed");
+                break;
+            }
         }
+        super.onPostExecute(v);
     }
 }

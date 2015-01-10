@@ -1,42 +1,71 @@
-package g1436218.com.spyder;
+package g1436218.com.spyder.activity;
 
+import android.app.Fragment;
 import android.app.Instrumentation;
+import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
+import android.test.ActivityUnitTestCase;
 import android.test.TouchUtils;
+import android.test.suitebuilder.annotation.LargeTest;
+import android.test.suitebuilder.annotation.SmallTest;
 import android.util.Log;
 import android.widget.Button;
-import android.widget.EditText;
 
+import g1436218.com.spyder.R;
 import g1436218.com.spyder.activity.LoginActivity;
-import g1436218.com.spyder.activity.MainActivity;
+import g1436218.com.spyder.fragment.LoginFragment;
+import g1436218.com.spyder.fragment.RegisterFragment;
 
-/**
- * Created by Cherie on 11/23/2014.
- */
-public class LoginTest extends ActivityInstrumentationTestCase2<LoginActivity> {
+public class LoginActivityTest extends ActivityInstrumentationTestCase2<LoginActivity> {
+
     private LoginActivity activity;
-    private EditText editText_login_username;
-    private EditText editText_login_password;
-    private Button login_button_login;
+    private Button button_signup;
+    private Button button_login;
+
     private Instrumentation.ActivityMonitor mainActivityMonitor;
     private int TIMEOUT_IN_MS = 100;
     private static String TAG = "LoginTest";
 
-    public LoginTest() {
+    public LoginActivityTest() {
         super(LoginActivity.class);
     }
 
     @Override
     protected void setUp() throws Exception{
-        Log.d(TAG, "setup");
         super.setUp();
-        setActivityInitialTouchMode(false);
-        activity = getActivity();
-        editText_login_username = (EditText) activity.findViewById(R.id.edittext_activity_login_username);
-        editText_login_password = (EditText) activity.findViewById(R.id.edittext_activity_login_password);
-        login_button_login = (Button) activity.findViewById(R.id.button_activity_login_login);
+        activity = (LoginActivity) getActivity();
+        button_login = (Button) activity.findViewById(R.id.button_activity_login_login);
+        button_signup = (Button) activity.findViewById(R.id.button_activity_login_signUp);
     }
 
+    @SmallTest
+    public void testLoginButtonLayout() {
+        String expected = "Log in";
+        String actual = button_login.getText().toString();
+        assertEquals(expected, actual);
+    }
+
+    @SmallTest
+    public void testSignUpButtonLayout() {
+        String expected = "Sign Up";
+        String actual = button_signup.getText().toString();
+        assertEquals(expected, actual);
+    }
+
+    @SmallTest
+    public void testLoginButtonClick() {
+        TouchUtils.clickView(this, button_login);
+        Fragment fragment = activity.getFragmentManager().findFragmentByTag("CURRENT_FRAGMENT");
+        assertTrue(fragment instanceof LoginFragment);
+    }
+
+    @SmallTest
+    public void testSignUpButtonClick() {
+        TouchUtils.clickView(this, button_signup);
+        Fragment fragment = activity.getFragmentManager().findFragmentByTag("CURRENT_FRAGMENT");
+        assertTrue(fragment instanceof RegisterFragment);
+    }
+/*
     public void testLoginToMainActivity() {
         Log.d(TAG, "testLoginToMainActivity");
         // Send string input value
@@ -78,7 +107,7 @@ public class LoginTest extends ActivityInstrumentationTestCase2<LoginActivity> {
         // Remove the ActivityMonitor
         getInstrumentation().removeMonitor(mainActivityMonitor);
 
-    }
+    }*/
 
 
     @Override

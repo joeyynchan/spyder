@@ -15,9 +15,6 @@ import java.net.SocketAddress;
 
 import g1436218.com.spyder.config.GlobalConfiguration;
 
-/**
- * Created by Joey on 07/01/2015.
- */
 public class CheckConnection extends AsyncTask<Void, Void, Void> {
 
     private Activity activity;

@@ -1,7 +1,8 @@
-package g1436218.com.spyder.fragment;
+package g1436218.com.spyder.dialogFragment;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -11,7 +12,7 @@ import android.util.Log;
 import g1436218.com.spyder.R;
 import g1436218.com.spyder.asyncTask.UnlinkDevice;
 
-public class UnlinkFragment extends BaseDialogFragment {
+public class UnlinkFragment extends DialogFragment {
 
     private final String TAG = "LogoutFragment";
     protected String username;

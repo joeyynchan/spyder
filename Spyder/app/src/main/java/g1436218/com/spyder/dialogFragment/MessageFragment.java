@@ -1,4 +1,4 @@
-package g1436218.com.spyder.fragment;
+package g1436218.com.spyder.dialogFragment;
 
 import android.app.DialogFragment;
 import android.content.Context;
@@ -22,7 +22,6 @@ public class MessageFragment extends DialogFragment implements View.OnClickListe
     private Button send;
     private EditText message;
     private EditText title;
-
 
     public MessageFragment(String recipient, String gcm_id) {
         this.gcm_id = gcm_id;

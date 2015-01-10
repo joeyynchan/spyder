@@ -1,4 +1,4 @@
-package g1436218.com.spyder.fragment;
+package g1436218.com.spyder.dialogFragment;
 
 import android.app.AlertDialog;
 import android.app.Dialog;

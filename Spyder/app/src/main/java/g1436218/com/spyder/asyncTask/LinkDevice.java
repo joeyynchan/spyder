@@ -17,7 +17,7 @@ import g1436218.com.spyder.R;
 import g1436218.com.spyder.activity.LoginActivity;
 import g1436218.com.spyder.activity.MainActivity;
 import g1436218.com.spyder.config.GlobalConfiguration;
-import g1436218.com.spyder.fragment.UnlinkFragment;
+import g1436218.com.spyder.dialogFragment.UnlinkFragment;
 import g1436218.com.spyder.object.Action;
 
 import static android.bluetooth.BluetoothAdapter.getDefaultAdapter;

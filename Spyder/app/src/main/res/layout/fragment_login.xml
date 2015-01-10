@@ -44,7 +44,7 @@
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         android:text="Log In"
-        android:id="@+id/button_fraagment_login_attemptLogin"
+        android:id="@+id/button_fragment_login_attemptLogin"
         android:textColor="#ffffffff"
         android:layout_gravity="center_horizontal" />
 

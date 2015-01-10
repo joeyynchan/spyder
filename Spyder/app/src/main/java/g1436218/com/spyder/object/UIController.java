@@ -16,8 +16,8 @@ import g1436218.com.spyder.asyncTask.FetchAttendees;
 import g1436218.com.spyder.fragment.AttendeeFragment;
 import g1436218.com.spyder.fragment.EventListFragment;
 import g1436218.com.spyder.fragment.InteractionFragment;
-import g1436218.com.spyder.fragment.LogoutFragment;
-import g1436218.com.spyder.fragment.ReceiveMessageFragment;
+import g1436218.com.spyder.dialogFragment.LogoutFragment;
+import g1436218.com.spyder.dialogFragment.ReceiveMessageFragment;
 
 public class UIController {
 
