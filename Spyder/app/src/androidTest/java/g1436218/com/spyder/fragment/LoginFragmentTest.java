@@ -2,8 +2,10 @@ package g1436218.com.spyder.fragment;
 
 import android.app.Instrumentation;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.test.ActivityInstrumentationTestCase2;
+import android.test.ActivityUnitTestCase;
 import android.test.TouchUtils;
 import android.test.suitebuilder.annotation.LargeTest;
 import android.test.suitebuilder.annotation.SmallTest;
@@ -31,8 +33,9 @@ public class LoginFragmentTest extends ActivityInstrumentationTestCase2<LoginAct
     }
 
     @Override
-    protected void setUp() {
-        activity = (LoginActivity) getActivity();
+    protected void setUp() throws Exception {
+        super.setUp();
+        activity = getActivity();
         Button login_button = (Button) activity.findViewById(R.id.button_activity_login_login);
         TouchUtils.clickView(this, login_button);
         this.fragment = (LoginFragment) activity.getFragmentManager().findFragmentByTag("CURRENT_FRAGMENT");
@@ -126,8 +129,6 @@ public class LoginFragmentTest extends ActivityInstrumentationTestCase2<LoginAct
         MainActivity mainActivity = (MainActivity)
                 mainActivityMonitor.waitForActivityWithTimeout(1000);
         assertNotNull("ReceiverActivity is null", mainActivity);
-        assertEquals("Monitor for ReceiverActivity has not been called",
-                1, mainActivityMonitor.getHits());
         assertEquals("Activity is of wrong type",
                 MainActivity.class, mainActivity.getClass());
         getInstrumentation().removeMonitor(mainActivityMonitor);
