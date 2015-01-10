@@ -17,6 +17,7 @@ import g1436218.com.spyder.fragment.AttendeeFragment;
 import g1436218.com.spyder.fragment.EventListFragment;
 import g1436218.com.spyder.fragment.InteractionFragment;
 import g1436218.com.spyder.fragment.LogoutFragment;
+import g1436218.com.spyder.fragment.ReceiveMessageFragment;
 
 public class UIController {
 
@@ -137,6 +138,11 @@ public class UIController {
     public void logout() {
         FragmentManager fragmentManager = activity.getFragmentManager();
         new LogoutFragment().show(fragmentManager, "Logout");
+    }
+
+    public void showMessage(String sender, String title, String message) {
+        FragmentManager fragmentManager = activity.getFragmentManager();
+        new ReceiveMessageFragment(sender, title, message).show(fragmentManager, "showMessage");
     }
 
     private void resetButtonState() {

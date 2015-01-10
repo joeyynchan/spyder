@@ -93,7 +93,7 @@ public class MainActivityReceiver extends BroadcastReceiver {
             String title = intent.getStringExtra("title");
             String message = intent.getStringExtra("message");
             String sender = intent.getStringExtra("sender");
-            Log.i("MainActivityGotAMessage", title + " : " + message + " from " + sender);
+            uiController.showMessage(sender, title, message);
         }
     }
 

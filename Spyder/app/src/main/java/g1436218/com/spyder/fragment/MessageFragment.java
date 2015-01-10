@@ -16,6 +16,7 @@ import g1436218.com.spyder.asyncTask.SendMessage;
 public class MessageFragment extends DialogFragment implements View.OnClickListener {
 
     private String gcm_id;
+    private String recipient;
 
     private Button cancel;
     private Button send;
@@ -23,14 +24,15 @@ public class MessageFragment extends DialogFragment implements View.OnClickListe
     private EditText title;
 
 
-    public MessageFragment(String gcm_id) {
+    public MessageFragment(String recipient, String gcm_id) {
         this.gcm_id = gcm_id;
+        this.recipient = recipient;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        getDialog().setTitle("Send Message to");
+        getDialog().setTitle("Send Message to " + recipient);
 
         View rootView = inflater.inflate(R.layout.fragment_message, container, false);
 
@@ -56,11 +58,12 @@ public class MessageFragment extends DialogFragment implements View.OnClickListe
                 Context context = getActivity();
                 SharedPreferences sharedPref = getActivity().getSharedPreferences(
                         context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-                String username = sharedPref.getString(context.getString(R.string.username), "");
+                String sender = sharedPref.getString(context.getString(R.string.username), "");
 
                 String _title = title.getText().toString();
                 String _message = message.getText().toString();
-                new SendMessage(username, _title, _message, gcm_id);
+                new SendMessage(_title, _message, sender, gcm_id).execute();
+                this.dismiss();
             }
         }
     }

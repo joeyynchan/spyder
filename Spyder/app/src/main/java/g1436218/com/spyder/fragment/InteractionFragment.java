@@ -88,12 +88,16 @@ public class InteractionFragment extends BaseMainFragmentWithReceiver implements
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Interaction item = (Interaction) parent.getItemAtPosition(position);
         if (swipeDetector.swipeDetected()) {
-            Button sendMessage = (Button) view.findViewById(R.id.button_interaction_sendMessage);
+            Button sendMessage = (Button) view.findViewById(R.id.button_listview_interaction_sendMessage);
             sendMessage.setOnClickListener(this);
             if (swipeDetector.getMovement().equals(SwipeDetector.Movement.RL)) {
-                sendMessage.setVisibility(View.VISIBLE);
+                //sendMessage.setVisibility(View.VISIBLE);
+                Log.d("Right to Left Movement Detected", "Right To Left");
+                FragmentManager fragmentManager = activity.getFragmentManager();
+                MessageFragment messageFragment = new MessageFragment(item.getUsername(), item.getGcm_id());
+                messageFragment.show(getFragmentManager(), "Message");
             } else if (swipeDetector.getMovement().equals(SwipeDetector.Movement.LR)) {
-                sendMessage.setVisibility(View.GONE);
+                //sendMessage.setVisibility(View.GONE);
             }
         } else {
             new FetchUserProfile(activity, item.getUsername()).execute();
@@ -125,9 +129,6 @@ public class InteractionFragment extends BaseMainFragmentWithReceiver implements
         switch (v.getId()) {
             case R.id.button_listview_interaction_sendMessage: {
 
-                FragmentManager fragmentManager = activity.getFragmentManager();
-                MessageFragment messageFragment = new MessageFragment("");
-                messageFragment.show(fragmentManager, "Logout");
             }
         }
     }
