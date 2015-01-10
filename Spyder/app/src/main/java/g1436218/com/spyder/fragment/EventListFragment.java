@@ -10,6 +10,7 @@ import android.widget.SearchView;
 import g1436218.com.spyder.R;
 import g1436218.com.spyder.activity.MainActivity;
 import g1436218.com.spyder.adapter.EventListAdapter;
+import g1436218.com.spyder.asyncTask.FetchEventDetails;
 import g1436218.com.spyder.asyncTask.FetchEvents;
 import g1436218.com.spyder.intentfilter.EventListFragmentIntentFilter;
 import g1436218.com.spyder.object.Event;
@@ -62,11 +63,7 @@ public class EventListFragment extends BaseMainFragmentWithReceiver implements A
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Event item = (Event) parent.getItemAtPosition(position);
-        EventFragment eventFragment = new EventFragment(activity, item);
-        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container, eventFragment, "CURRENT_FRAGMENT");
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
+        new FetchEventDetails(activity, item).execute();
     }
 
     public void addItem(String caption, Event event) {

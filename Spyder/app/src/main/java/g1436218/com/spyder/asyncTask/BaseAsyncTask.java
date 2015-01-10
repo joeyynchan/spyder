@@ -20,7 +20,6 @@ import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.entity.BufferedHttpEntity;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,12 +33,11 @@ import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Objects;
 
 
 public abstract class BaseAsyncTask extends AsyncTask<Void, Void, Void> {
 
-    public enum Responses{
+    public enum Requests {
         DELETE, GET, POST, PUT;
     }
 
@@ -56,7 +54,7 @@ public abstract class BaseAsyncTask extends AsyncTask<Void, Void, Void> {
         this.result = "Result cannot be fetched";
     }
 
-    protected String getStringFromUrl(String url, Responses response) {
+    protected String getStringFromUrl(String url, Requests request) {
         try {
 
             HttpRequestBase httpRequest = new HttpRequestBase() {
@@ -66,7 +64,7 @@ public abstract class BaseAsyncTask extends AsyncTask<Void, Void, Void> {
                 }
             };
 
-            switch(response){
+            switch(request){
                 case DELETE:
                     httpRequest = new HttpDelete(url);
                     break;
@@ -111,7 +109,7 @@ public abstract class BaseAsyncTask extends AsyncTask<Void, Void, Void> {
         return result;
     }
 
-    protected JSONObject getJSONFromUrl(String url, Responses response) {
+    protected JSONObject getJSONFromUrl(String url, Requests response) {
         String result = getStringFromUrl(url, response);
         return toJSONObject(result);
     }
@@ -163,6 +161,7 @@ public abstract class BaseAsyncTask extends AsyncTask<Void, Void, Void> {
             input = b_entity.getContent();
 
             bitmap = BitmapFactory.decodeStream(input);
+
         } catch (URISyntaxException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -171,4 +170,14 @@ public abstract class BaseAsyncTask extends AsyncTask<Void, Void, Void> {
 
         return bitmap;
     }
+    protected String addUrlParams(ArrayList<NameValuePair> list){
+        NameValuePair elem = list.remove(0);
+        String result = "?" + elem.getName() + "=" + elem.getValue();
+
+        for(NameValuePair item : list){
+            result = "&" + item.getName() + "=" + item.getValue();
+        }
+        return result;
+    }
+
 }

@@ -49,7 +49,7 @@ public class SubmitBluetoothData extends BaseMainAsyncTask{
 
         Log.i(TAG, this.params.toString());
 
-        JSONObject obj = getJSONFromUrl(URL, Responses.POST);
+        JSONObject obj = getJSONFromUrl(URL, Requests.POST);
         Log.i(TAG, obj.toString());
         return null;
     }

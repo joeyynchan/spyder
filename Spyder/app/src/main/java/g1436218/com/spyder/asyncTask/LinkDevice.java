@@ -62,7 +62,7 @@ public class LinkDevice extends BaseLoginAsyncTask{
         if (username.equals(GlobalConfiguration.OFFLINE_MODE)) {
             statusCode = 999;
         } else {
-            JSONObject jsonObject = getJSONFromUrl(URL, Responses.POST);
+            JSONObject jsonObject = getJSONFromUrl(URL, Requests.POST);
         }
         Log.i(TAG, "Login Attempt: " + username + ":" + password + " ---------- Result:" + statusCode);
         return null;

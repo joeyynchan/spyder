@@ -2,6 +2,7 @@ package g1436218.com.spyder.fragment;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -15,7 +16,7 @@ import g1436218.com.spyder.object.Event;
 public class EventFragment extends BaseMainFragment implements View.OnClickListener {
 
     private Event event;
-
+    private static String TAG = "EventFragment";
     TextView textview_name;
     TextView textview_host;
     TextView textview_location;
@@ -32,12 +33,20 @@ public class EventFragment extends BaseMainFragment implements View.OnClickListe
 
     @Override
     protected void initializeView() {
+        Log.d(TAG, "initializeView");
         textview_name = (TextView) activity.findViewById(R.id.textview_fragment_event_name);
         textview_host = (TextView) activity.findViewById(R.id.textview_fragment_event_host);
         textview_location = (TextView) activity.findViewById(R.id.textview_fragment_event_location);
         textview_startTime = (TextView) activity.findViewById(R.id.textview_fragment_event_startTime);
         textview_endTime = (TextView) activity.findViewById(R.id.textview_fragment_event_endTime);
         textview_description = (TextView) activity.findViewById(R.id.textview_fragment_event_description);
+
+        textview_name.setText(event.getName());
+        textview_host.setText(event.getName());
+        textview_location.setText(event.getLocation());
+        textview_startTime.setText(event.getStartTime());
+        textview_endTime.setText(event.getEndTime());
+        textview_description.setText(event.getDescription());
 
         button_setToCurrentEvent = (Button) activity.findViewById(R.id.button_fragment_event_setToCurrentEvent);
         button_setToCurrentEvent.setOnClickListener(this);

@@ -48,7 +48,7 @@ public class JoinEvent extends BaseMainAsyncTask {
         addToParams("user_name", username);
         addToParams("status", "Attending");
 
-        JSONObject jsonObject = getJSONFromUrl(URL+eventId, Responses.POST);
+        JSONObject jsonObject = getJSONFromUrl(URL+eventId, Requests.POST);
         return null;
     }
 
