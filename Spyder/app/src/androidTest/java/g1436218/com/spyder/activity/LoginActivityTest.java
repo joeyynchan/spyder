@@ -33,7 +33,8 @@ public class LoginActivityTest extends ActivityInstrumentationTestCase2<LoginAct
     @Override
     protected void setUp() throws Exception{
         super.setUp();
-        activity = (LoginActivity) getActivity();
+
+        activity =  getActivity();
         button_login = (Button) activity.findViewById(R.id.button_activity_login_login);
         button_signup = (Button) activity.findViewById(R.id.button_activity_login_signUp);
     }

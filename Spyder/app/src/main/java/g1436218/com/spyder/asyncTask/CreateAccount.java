@@ -29,7 +29,6 @@ public class CreateAccount extends BaseLoginAsyncTask {
         String username = register_edittext_name.getText().toString();
         String password = register_edittext_password1.getText().toString();
         String password2 = register_edittext_password2.getText().toString();
-        Log.d(TAG, username + " : " + password);
 
         if (password.equals(password2)) {
             addToParams("user_name", username);

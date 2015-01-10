@@ -60,8 +60,10 @@ public class MainActivity extends BaseActivity {
 
         interactionPackage = new InteractionPackage();
         attendees = new ArrayList<Attendee>();
+        new FetchAttendees(this).execute();
 
         uiController = new UIController(this);
+        uiController.showInteractions();
 
         bluetoothController = new BluetoothController(this);
 
@@ -69,8 +71,7 @@ public class MainActivity extends BaseActivity {
         receiver = new MainActivityReceiver(this);
         registerReceiver(receiver, new MainActivityIntentFilter());
 
-        new FetchAttendees(this).execute();
-        uiController.showInteractions();
+
 
     }
 
