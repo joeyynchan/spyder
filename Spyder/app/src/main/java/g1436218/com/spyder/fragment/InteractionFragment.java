@@ -1,0 +1,67 @@
+package g1436218.com.spyder.fragment;
+
+import android.content.IntentFilter;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
+import android.widget.TextView;
+
+import g1436218.com.spyder.R;
+import g1436218.com.spyder.activity.MainActivity;
+import g1436218.com.spyder.adapter.InteractionAdapter;
+import g1436218.com.spyder.asyncTask.FetchUserProfile;
+import g1436218.com.spyder.object.Action;
+import g1436218.com.spyder.object.Interaction;
+import g1436218.com.spyder.object.InteractionPackage;
+import g1436218.com.spyder.receiver.InteractionFragmentReceiver;
+
+public class InteractionFragment extends BaseMainFragmentWithReceiver implements AdapterView.OnItemClickListener {
+
+    private final String TITLE = "Interactions";
+
+    private InteractionAdapter adapter;
+    private IntentFilter intentFilter;
+    private TextView textview_message;
+    private InteractionPackage interactionPackage;
+
+    public InteractionFragment(MainActivity activity) {
+        super(activity, R.layout.fragment_interaction);
+        this.interactionPackage = activity.getInteractionPackage();
+    }
+
+    @Override
+    protected void initializeView() {
+        getActivity().setTitle(TITLE);
+
+        /* Initialize Listview */
+        this.adapter = new InteractionAdapter(getActivity(), R.layout.listview_interaction);
+        ListView listview_interactions = (ListView) getActivity().findViewById(R.id.listview_interaction_list);
+        listview_interactions.setAdapter(adapter);
+        listview_interactions.setOnItemClickListener(this);
+        adapter.addAllToAdapter(interactionPackage.getClone());
+
+        textview_message = (TextView) activity.findViewById(R.id.textview_fragment_interaction_message);
+        textview_message.setText(adapter.isEmpty() ? "No Interactions Detected" : "");
+    }
+
+    @Override
+    protected void registerReceiver() {
+        receiver = new InteractionFragmentReceiver(this);
+        intentFilter = new IntentFilter();
+        intentFilter.addAction(Action.UPDATE_INTERACTION_FRAGMENT_ADAPTER);
+        activity.registerReceiver(receiver, intentFilter);
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Interaction item = (Interaction) parent.getItemAtPosition(position);
+        new FetchUserProfile(activity, item.getUsername()).execute();
+    }
+
+    public void addAllToAdapter() {
+        adapter.addAllToAdapter(interactionPackage.getClone());
+        textview_message.setText(interactionPackage.isEmpty() ? "No Interactions Detected" : "");
+
+    }
+
+}
