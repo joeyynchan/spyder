@@ -56,6 +56,7 @@ public class AttendeeFragment extends BaseMainFragmentWithReceiver implements Ad
         textview_msg = (TextView) activity.findViewById(R.id.textview_fragment_attendee_eventMsg);
 
         swipeRefreshLayout = (SwipeRefreshLayout) activity.findViewById(R.id.swiperefreshlayout_attendee);
+        swipeRefreshLayout.setDistanceToTriggerSync(200);
         swipeRefreshLayout.setOnRefreshListener(this);
 
         SharedPreferences sharedPref = activity.getSharedPreferences(
@@ -78,14 +79,6 @@ public class AttendeeFragment extends BaseMainFragmentWithReceiver implements Ad
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(Action.UPDATE_ATTENDEE_FRAGMENT_ADAPTER);
         activity.registerReceiver(receiver, intentFilter);
-    }
-
-    public void clearAdapter() {
-        adapter.clear();
-    }
-
-    public void addAllToAdapter() {
-        adapter.addAll(activity.getAttendees());
     }
 
     @Override
