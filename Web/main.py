@@ -17,10 +17,13 @@ from flask import (
     redirect,
     url_for
 )
+from flask.ext.cors import CORS, cross_origin
 
 import db_api
 
 app = Flask(__name__)
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'image/png'
 
 
 def is_currently_login():
@@ -153,8 +156,9 @@ def dashboard():
         return redirect(url_for('user_profile'))
 
 
-@app.route('/user/profile', methods=['GET'])
-@app.route('/user/profile/<username>', methods=['GET'])
+@app.route('/user/profile', methods=['GET', 'OPTIONS'])
+@app.route('/user/profile/<username>', methods=['GET', 'OPTIONS'])
+@cross_origin()
 def user_profile(username=None):
     if not is_currently_login():
         return redirect_to_default(
@@ -165,19 +169,19 @@ def user_profile(username=None):
 
     user_dict = db_api.get_user(username)
 
-    for event in user_dict['events']:
-        event['can_join_event'] = can_join_event(event['event_id'])
-
-    organised_events = []
-    spoken_events = []
-    for event in db_api.get_all_event_profile():
-        event['can_join_event'] = can_join_event(event['event_id'])
-        if event.get('organiser', '') == username:
-            organised_events.append(event.copy())
-        if event.get('speaker', '') == username:
-            spoken_events.append(event.copy())
-
     if user_dict['is_success']:
+        for event in user_dict['events']:
+            event['can_join_event'] = can_join_event(event['event_id'])
+
+        organised_events = []
+        spoken_events = []
+        for event in db_api.get_all_event_profile():
+            event['can_join_event'] = can_join_event(event['event_id'])
+            if event.get('organiser', '') == username:
+                organised_events.append(event.copy())
+            if event.get('speaker', '') == username:
+                spoken_events.append(event.copy())
+
         param_dict = user_dict.copy()
         param_dict['username'] = username
         param_dict['organised_events'] = organised_events
@@ -187,6 +191,45 @@ def user_profile(username=None):
         session.setdefault('next_page_param_dict', {})
         session['next_page_param_dict'].update(user_dict)
         return redirect_to_default(stay_on_current_page=True)
+
+
+@app.route('/user/update-profile', methods=['GET'])
+def update_profile_page():
+    if not is_currently_login():
+        return redirect_to_default(
+            'You need to login in order to update profile.')
+
+    user_profile = db_api.get_user_profile(session['current_user_username'])
+
+    # remember for unused profile friend list
+    session['profile_connections'] = user_profile['connections']
+    # user_profile can get None from db_api but I doesn't matter for render
+    return render('update_profile.html.jinja', user_profile)
+
+
+@app.route('/user/update-profile', methods=['POST'])
+def update_profile():
+    if not is_currently_login():
+        return redirect_to_default(
+            'You need to login in order to update profile.')
+
+    param_dict = {
+        'name': request.form['name'],
+        'job': request.form['job'],
+        'company': request.form['company'],
+        'email': request.form['email'],
+        'phone': request.form['phone'],
+        'external_link': request.form['external_link'],
+        'gender': request.form['gender'],
+        'photo': request.form['photo'],
+        'connections': session['profile_connections']
+    }
+
+    update_profile_dict = db_api.update_profile(
+        session['current_user_username'], **param_dict)
+
+    session['next_page_param_dict'] = update_profile_dict.copy()
+    return redirect_to_default()
 
 
 @app.route('/event/add', methods=['GET'])

@@ -1,110 +1,140 @@
 {% extends 'privileged_base.html.jinja' %}
 
 {% block title %}
-  <title>user profile of {{username}}</title>
+  <title>User Profile of {{username}} - SPYDER - social proximity sensing</title>
 {% endblock %}
 
 {% block privileged_base_content %}
-  <div class="panel panel-info">
-    <div class="panel-heading">
-      <h3 class="panel-title">{{username}} profile</h3>
+  <div role="tabpanel">
+
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs" role="tablist">
+      <li role="presentation" class="active"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">User Profile</a></li>
+      <li role="presentation"><a href="#friends" aria-controls="friends" role="tab" data-toggle="tab">Friends</a></li>
+      <li role="presentation"><a href="#organised-events" aria-controls="organised-events" role="tab" data-toggle="tab">Organised Events</a></li>
+      <li role="presentation"><a href="#spoken-events" aria-controls="spoken-events" role="tab" data-toggle="tab">Spoken Events</a></li>
+      <li role="presentation"><a href="#attended-events" aria-controls="attended-events" role="tab" data-toggle="tab">Attended Events</a></li>
+    </ul>
+
+
+    <!-- Tab panes -->
+    <div class="tab-content">
+
+      <div role="tabpanel" class="tab-pane active" id="profile">
+        {% if profile %}
+          <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-8">
+              <dl class="dl-horizontal">
+                <dt>name</dt>          <dd>{{profile['name']}}</dd>
+                <dt>occupation</dt>    <dd>{{profile['job']}}</dd>
+                <dt>organisation</dt>  <dd>{{profile['company']}}</dd>
+                <dt>email</dt>         <dd>{{profile['email']}}</dd>
+                <dt>phone</dt>         <dd>{{profile['phone']}}</dd>
+                <dt>external_link</dt> <dd>{{profile['external_link']}}</dd>
+                <dt>gender</dt>        <dd>{{profile['gender']}}</dd>
+                <!-- TODO(gunpinyo): add photo and friend panel -->
+              </dl>
+            </div>
+            <p hidden id="profile-picture-src">
+              {{profile['photo']}}
+            </p>
+            <div class="col-md-4">
+              <img id="profile-picture" width=160 height=160/>
+              <script>
+                  var source = $('#profile-picture-src').text();
+                  // change to correct profile picture
+                  var img = document.createElement('img');
+
+                      img.onload = function (e) {
+                          var canvas = document.createElement("canvas");
+                          var ctx = canvas.getContext("2d");
+                          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                          var url = canvas.toDataURL();
+                          var output = document.getElementById("profile-picture");
+                          output.src = url;
+                      };
+
+                      img.crossOrigin = 'anonymous';
+                      img.src = source;
+              </script>
+            </div>
+          </div>
+          </div>
+        {% else %}
+          <p>{{username}} has not created profile yet.</p>
+        {% endif %}
+      </div>
+
+      <div role="tabpanel" class="tab-pane" id="friends">
+        ...
+      </div>
+
+      <div role="tabpanel" class="tab-pane" id="organised-events">
+        <table class="table table-hover">
+          <tr>
+            <th>Event name</th>
+            <th>Start time</th>
+            <th>End time</th>
+            <th>Join Event?</th>
+          </tr>
+          {% for event_record in organised_events %}
+            <tr class="clickable-row" href="/event/profile/{{ event_record['event_id'] }}">
+              <td><a href="/event/profile/{{ event_record['event_id'] }}">{{ event_record['name'] }}</a></td>
+              <td>{{ event_record['start_time'] }}</td>
+              <td>{{ event_record['end_time'] }}</td>
+              <td>
+                {% if event_record['can_join_event'] %}
+                  <form style="margin:0px" action="/event/join/{{event_record['event_id']}}" method="POST">
+                    <button type="submit" class="btn btn-default btn-sm">Join Event</button>
+                  </form>
+                {% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+        </table>
+      </div>
+
+      <div role="tabpanel" class="tab-pane" id="spoken-events">
+        <table class="table table-hover">
+          <tr>
+            <th>Event name</th>
+            <th>Start time</th>
+            <th>End time</th>
+            <th>Join Event?</th>
+          </tr>
+          {% for event_record in spoken_events %}
+            <tr class="clickable-row" href="/event/profile/{{ event_record['event_id'] }}">
+              <td><a href="/event/profile/{{ event_record['event_id'] }}">{{ event_record['name'] }}</a></td>
+              <td>{{ event_record['start_time'] }}</td>
+              <td>{{ event_record['end_time'] }}</td>
+              <td>
+                {% if event_record['can_join_event'] %}
+                  <form style="margin:0px" action="/event/join/{{event_record['event_id']}}" method="POST">
+                    <button type="submit" class="btn btn-default btn-sm">Join Event</button>
+                  </form>
+                {% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+        </table>
+      </div>
+
+      <div role="tabpanel" class="tab-pane" id="attended-events">
+        <table class="table table-hover">
+          <tr>
+            <th>Event name</th>
+            <th>Start time</th>
+            <th>End time</th>
+          </tr>
+          {% for event_record in events %}
+            <tr class="clickable-row" href="/event/profile/{{ event_record['event_id'] }}">
+              <td><a href="/event/profile/{{ event_record['event_id'] }}">{{ event_record['name'] }}</a></td>
+              <td>{{ event_record['start_time'] }}</td>
+              <td>{{ event_record['end_time'] }}</td>
+            </tr>
+          {% endfor %}
+        </table>
+      </div>
     </div>
-    <div class="panel-body">
-      {% if profile %}
-        <dl class="dl-horizontal">
-          <dt>name</dt>          <dd>{{profile['name']}}</dd>
-          <dt>occupation</dt>    <dd>{{profile['job']}}</dd>
-          <dt>organization</dt>  <dd>{{profile['company']}}</dd>
-          <dt>email</dt>         <dd>{{profile['email']}}</dd>
-          <dt>phone</dt>         <dd>{{profile['phone']}}</dd>
-          <dt>external_link</dt> <dd>{{profile['external_link']}}</dd>
-          <dt>gender</dt>        <dd>{{profile['gender']}}</dd>
-          <!-- TODO(gunpinyo): add photo and friend panel -->
-        </dl>
-      {% else %}
-        <p>{{username}} has not created profile yet.</p>
-      {% endif %}
-    </div>
-  </div>
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h3 class="panel-title">Organised events</h3>
-    </div>
-    <table class="table table-hover">
-      <tr>
-        <th>Event name</th>
-        <th>Start time</th>
-        <th>End time</th>
-        <th>Join Event?</th>
-      </tr>
-      {% for event_record in organised_events %}
-        <tr class="clickable-row" href="/event/profile/{{ event_record['event_id'] }}">
-          <td><a href="/event/profile/{{ event_record['event_id'] }}">{{ event_record['name'] }}</a></td>
-          <td>{{ event_record['start_time'] }}</td>
-          <td>{{ event_record['end_time'] }}</td>
-          <td>
-            {% if event_record['can_join_event'] %}
-              <form style="margin:0px" action="/event/join/{{event_record['event_id']}}" method="POST">
-                <button type="submit" class="btn btn-default btn-sm">Join Event</button>
-              </form>
-            {% endif %}
-          </td>
-        </tr>
-      {% endfor %}
-    </table>
-  </div>
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h3 class="panel-title">Spoken events</h3>
-    </div>
-    <table class="table table-hover">
-      <tr>
-        <th>Event name</th>
-        <th>Start time</th>
-        <th>End time</th>
-        <th>Join Event?</th>
-      </tr>
-      {% for event_record in spoken_events %}
-        <tr class="clickable-row" href="/event/profile/{{ event_record['event_id'] }}">
-          <td><a href="/event/profile/{{ event_record['event_id'] }}">{{ event_record['name'] }}</a></td>
-          <td>{{ event_record['start_time'] }}</td>
-          <td>{{ event_record['end_time'] }}</td>
-          <td>
-            {% if event_record['can_join_event'] %}
-              <form style="margin:0px" action="/event/join/{{event_record['event_id']}}" method="POST">
-                <button type="submit" class="btn btn-default btn-sm">Join Event</button>
-              </form>
-            {% endif %}
-          </td>
-        </tr>
-      {% endfor %}
-    </table>
-  </div>
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h3 class="panel-title">Attended events</h3>
-    </div>
-    <table class="table table-hover">
-      <tr>
-        <th>Event name</th>
-        <th>Start time</th>
-        <th>End time</th>
-        <th>Join Event?</th>
-      </tr>
-      {% for event_record in events %}
-        <tr class="clickable-row" href="/event/profile/{{ event_record['event_id'] }}">
-          <td><a href="/event/profile/{{ event_record['event_id'] }}">{{ event_record['name'] }}</a></td>
-          <td>{{ event_record['start_time'] }}</td>
-          <td>{{ event_record['end_time'] }}</td>
-          <td>
-            {% if event_record['can_join_event'] %}
-              <form style="margin:0px" action="/event/join/{{event_record['event_id']}}" method="POST">
-                <button type="submit" class="btn btn-default btn-sm">Join Event</button>
-              </form>
-            {% endif %}
-          </td>
-        </tr>
-      {% endfor %}
-    </table>
-  </div>
 {% endblock %}

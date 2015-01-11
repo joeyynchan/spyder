@@ -40,6 +40,7 @@
     </div>
   {% endblock %}
 
+  <script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/sha1.js"></script>
   <script>
     $('#login-panel').submit(function(event) {
       var hashedPassword = hashPassword($('#login-password').val());
@@ -47,9 +48,7 @@
     });
 
     function hashPassword(password) {
-      // TODO(gunpiyo): improve hashing function
-      // return 'pw' + password + 'eiei';
-      return password;
+      return CryptoJS.SHA1(password);;
     }
   </script>
 {% endblock %}

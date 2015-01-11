@@ -75,7 +75,7 @@ def add_event(start_time, end_time, address, name,
     })
 
     response_dict = {
-        http.client.CREATED: {
+        http.client.OK: {
             'is_success': True,
             'success_message': content['Message'],
             'event_id': content['event_id']
@@ -84,6 +84,25 @@ def add_event(start_time, end_time, address, name,
             'is_success': False,
             'error_message':
                 'Somebody has already used "%s" as event name.' % name
+        }
+    }
+
+    return response_dict[status_code]
+
+
+def update_profile(username, **kwarg):
+    status_code, content = db_connect(
+        '/user/profile?user_name=%s' % username, kwarg)
+
+    response_dict = {
+        http.client.CREATED: {
+            'is_success': True,
+            'success_message': 'Your have successfully updated your profile',
+        },
+        http.client.CONFLICT: {
+            'is_success': False,
+            'error_message':
+                'There is an error in your profile'
         }
     }
 
@@ -167,6 +186,16 @@ def join_event(event_id, username, status="Attendee"):
     return response_dict[status_code]
 
 
+def get_user_profile(username):
+    status_code, content = db_connect(
+        '/user/profile?user_name=%s' % username)
+
+    if status_code == http.client.OK:
+        return content
+    else:
+        return None
+
+
 def get_user(username):
     events_code, events_content = db_connect(
         '/getEvents?user_name=%s' % username)
@@ -195,13 +224,28 @@ def get_user(username):
 
 
 def get_event_profile(event_id):
-    records = get_all_event_profile()
-    for record in records:
-        if record.get('event_id', '') == event_id:
-            return record
+    status_code, event_profile = db_connect(
+        '/event_data?event_id=%s' % event_id)
+
+    if status_code == http.client.OK:
+        event_profile['event_id'] = event_profile['id']
+        return event_profile
     else:
         return None
 
 
 def get_all_event_profile():
-    return db_connect('/getEvents?user_name=')[1]
+    status_code, event_list = db_connect('/searchEvent', {
+        'user_name': '',
+        'event_search_string': ''
+    })
+
+    if status_code == http.client.OK:
+        event_profile_list = []
+        for event in event_list:
+            event_profile = get_event_profile(event['event_id'])
+            if event_profile:
+                event_profile_list.append(event_profile)
+        return event_profile_list
+    else:
+        return None

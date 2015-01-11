@@ -1,7 +1,7 @@
 {% extends 'privileged_base.html.jinja' %}
 
 {% block title %}
-  <title>event profile of {{event_id}}</title>
+  <title>Event Profile of {{event_id}} - SPYDER - social proximity sensing</title>
 {% endblock %}
 
 {% block privileged_base_content %}
@@ -10,115 +10,105 @@
       <button type="submit" class="btn btn-primary">Join Event</button>
     </form>
   {% endif %}
-  <div class="panel panel-info">
-    <div class="panel-heading">
-      <h3 class="panel-title">Event profile</h3>
-    </div>
-    <div class="panel-body">
-      <dl class="dl-horizontal">
-        <dt>Event name</dt>   <dd>{{profile['name']}}</dd>
-        <dt>Start time</dt>   <dd>{{profile['start_time']}}</dd>
-        <dt>End time</dt>     <dd>{{profile['end_time']}}</dd>
-        <dt>Organiser</dt>    <dd><a href="/user/profile/{{profile['organiser']}}">{{profile['organiser']}}</a></dd>
-        <dt>Speaker</dt>      <dd><a href="/user/profile/{{profile['speaker']}}">{{profile['speaker']}}</a></dd>
-      </dl>
-    </div>
-  </div>
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h3 class="panel-title">Attendees</h3>
-    </div>
-    <div class="panel-body">
-      <table class="table table-hover">
-        <tr>
-          <th>mac_address</th>
-          <th>user_name</th>
-          <th>name</th>
-        </tr>
-        {% for record in attendees['user_mappings'] %}
-          <tr class="clickable-row" href="/user/profile/{{ record['user_name'] }}">
-            <td>{{record['mac_address']}}</td>
-            <td><a href="/user/profile/{{ record['user_name'] }}">{{record['user_name']}}</a></td>
-            <td>{{record['name']}}</td>
-          </tr>
-        {% endfor %}
-      </table>
-    </div>
-  </div>
-  <div class="panel panel-primary">
-    <div class="panel-heading">
-      <h3 class="panel-title">Interaction</h3>
-    </div>
-    <div class="panel-body">
-      <dl class="dl-horizontal">
-        <dt>start_time</dt>   <dd>{{interaction['event_start_time']}}</dd>
-        <dt>end_time</dt>     <dd>{{interaction['event_end_time']}}</dd>
-      </dl>
-      <table class="table table-hover">
-        <tr>
-          <th>user1</th>
-          <th>user2</th>
-          <th>event_id</th>
-          <th>start_time</th>
-          <th>end_time</th>
-        </tr>
-        {% for record in interaction['interaction'] %}
+
+  <div role="tabpanel">
+
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs" role="tablist">
+      <li role="presentation" class="active"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Event Profile</a></li>
+      <li role="presentation"><a href="#attendee-list" aria-controls="attendee-list" role="tab" data-toggle="tab">Attendees</a></li>
+      <li role="presentation"><a href="#interaction" aria-controls="interaction" role="tab" data-toggle="tab">Interaction</a></li>
+      <li role="presentation"><a href="#visualisation" aria-controls="visualisation" role="tab" data-toggle="tab">Visualisation</a></li>
+    </ul>
+
+    <!-- Tab panes -->
+    <div class="tab-content">
+
+      <div role="tabpanel" class="tab-pane active" id="profile">
+        <dl class="dl-horizontal">
+          <dt>Event name</dt>   <dd>{{profile['name']}}</dd>
+          <dt>Start time</dt>   <dd>{{profile['start_time']}}</dd>
+          <dt>End time</dt>     <dd>{{profile['end_time']}}</dd>
+          <dt>Organiser</dt>    <dd><a href="/user/profile/{{profile['organiser']}}">{{profile['organiser']}}</a></dd>
+          <dt>Speaker</dt>      <dd><a href="/user/profile/{{profile['speaker']}}">{{profile['speaker']}}</a></dd>
+        </dl>
+      </div>
+
+      <div role="tabpanel" class="tab-pane" id="attendee-list">
+        <table class="table table-hover">
           <tr>
-            <td><a href="/user/profile/{{record['user1']}}">{{record['user1']}}</a></td>
-            <td><a href="/user/profile/{{record['user2']}}">{{record['user2']}}</a></td>
-            <td>{{record['event_id']}}</td>
-            <td>{{record['start_time']}}</td>
-            <td>{{record['end_time']}}</td>
+            <th>mac_address</th>
+            <th>user_name</th>
+            <th>name</th>
           </tr>
-        {% endfor %}
-      </table>
-    </div>
-  </div>
-  <div class="panel panel-primary">
-    <div class="panel-heading">
-      <h3 class="panel-title">Visualization</h3>
-    </div>
-    <div class="panel-body">
-      <div id="graph"></div>
-      <input type="text" id="myText" value="2000">
-      <div id="option">
-        <input name="updateButton" 
-         type="button" 
-         value="Run" 
-         onclick="updateInteraction()" />
+          {% for record in attendees['user_mappings'] %}
+            <tr class="clickable-row" href="/user/profile/{{ record['user_name'] }}">
+              <td>{{record['mac_address']}}</td>
+              <td><a href="/user/profile/{{ record['user_name'] }}">{{record['user_name']}}</a></td>
+              <td>{{record['name']}}</td>
+            </tr>
+          {% endfor %}
+        </table>
       </div>
-      <div id="option2">
-        <input name="runSampleButton" 
-         type="button" 
-         value="Run sample" 
-         onclick="buildSampleGraph()" />
+
+      <div role="tabpanel" class="tab-pane" id="interaction">
+        <dl class="dl-horizontal">
+          <dt>start_time</dt>   <dd>{{interaction['event_start_time']}}</dd>
+          <dt>end_time</dt>     <dd>{{interaction['event_end_time']}}</dd>
+        </dl>
+        <table class="table table-hover">
+          <tr>
+            <th>user1</th>
+            <th>user2</th>
+            <th>event_id</th>
+            <th>start_time</th>
+            <th>end_time</th>
+          </tr>
+          {% for record in interaction['interaction'] %}
+            <tr>
+              <td><a href="/user/profile/{{record['user1']}}">{{record['user1']}}</a></td>
+              <td><a href="/user/profile/{{record['user2']}}">{{record['user2']}}</a></td>
+              <td>{{record['event_id']}}</td>
+              <td>{{record['start_time']}}</td>
+              <td>{{record['end_time']}}</td>
+            </tr>
+          {% endfor %}
+        </table>
       </div>
-      <div id="option3">
-        <input name="updateButton" 
-         type="button" 
-         value="UpdateSpeed" 
-         onclick="updateSpeed()" />
+
+      <div role="tabpanel" class="tab-pane" id="visualisation">
+            <div id="graph"></div>
+            <input type="text" id="myText" value="2000">
+            <div id="option">
+              <input name="updateButton" 
+               type="button" 
+               value="Run" 
+               onclick="updateInteraction()" />
+            </div>
+            <div id="option2">
+              <input name="runSampleButton" 
+               type="button" 
+               value="Run sample" 
+               onclick="buildSampleGraph()" />
+            </div>
+            <div id="option3">
+              <input name="updateButton" 
+               type="button" 
+               value="UpdateSpeed" 
+               onclick="updateSpeed()" />
+            </div>
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+            <h3 class="panel-title">Chart</h3>
+          </div>
+        <div class="panel-body">
+          <div id="chart"></div>
+        </div>
+        </div>
       </div>
+
     </div>
-  </div>
-  <div class="panel panel-primary">
-    <div class="panel-heading">
-      <h3 class="panel-title">Chart</h3>
-    </div>
-	<div class="panel-body">
-	  <div id="chart"></div>
-	</div>
-  </div>
-  <div class="panel panel-danger">
-    <div class="panel-heading">
-      <h3 class="panel-title">Raw interaction (for demo)</h3>
-    </div>
-    <div class="panel-body">
-        <dt>interaction</dt>   <dd>{{interaction}}</dd>
-        <dt>attendees</dt>     <dd>{{attendees}}</dd>
-      </dl>
-    </div>
-  </div>
+
   <!-- Khoa script part -->
   <script type="text/javascript" src="/static/lib/d3.min.js" ></script>
   <script type="text/javascript" src="/static/lib/graph.js" ></script>

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <meta Access-Control-Allow-Origin="*">
     <meta charset="utf-8">
     <meta name="viewport"
           content="width=device-width,
@@ -9,7 +10,7 @@
                    user-scalable=no">
 
     {% block title %}
-      <title> report - social proximity sensing </title>
+      <title>SPYDER - social proximity sensing</title>
     {% endblock %}
 
     <!-- JQuery CDN -->
@@ -35,7 +36,13 @@
         width:90%;
       }
       .table th, .table td {
-         text-align: center;
+        text-align: center;
+      }
+      .tab-pane {
+        margin: 10px;
+        padding: 15px;
+        border: 1px LightGray solid;
+        border-radius: 15px;
       }
     </style>
 
