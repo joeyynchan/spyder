@@ -8,10 +8,8 @@ import android.test.suitebuilder.annotation.SmallTest;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
 
-import com.android.internal.util.Predicate;
-
 import g1436218.com.spyder.R;
-import g1436218.com.spyder.fragment.AttendeeFragment;
+import g1436218.com.spyder.fragment.AttendeeFragmentTest;
 import g1436218.com.spyder.fragment.EventListFragment;
 import g1436218.com.spyder.fragment.InteractionFragment;
 import g1436218.com.spyder.fragment.ProfileFragment;
@@ -87,7 +85,7 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
         TouchUtils.clickView(this, button);
         Fragment fragment = activity.getFragmentManager().findFragmentByTag("CURRENT_FRAGMENT");
         assertNotNull("Fragment is null", fragment);
-        assertEquals("Fragment is no InteractionFragment Class", AttendeeFragment.class, fragment.getClass());
+        assertEquals("Fragment is no InteractionFragment Class", AttendeeFragmentTest.class, fragment.getClass());
     }
 
     @SmallTest
