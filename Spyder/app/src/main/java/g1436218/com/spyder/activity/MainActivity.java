@@ -185,4 +185,8 @@ public class MainActivity extends BaseActivity {
         return attendees;
     }
 
+    public MainActivityReceiver getReceiver() {
+        return receiver;
+    }
+
 }
