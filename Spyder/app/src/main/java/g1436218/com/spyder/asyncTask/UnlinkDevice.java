@@ -28,6 +28,7 @@ public class UnlinkDevice extends BaseAsyncTask {
         JSONObject jsonObject = getJSONFromUrl(URL, Requests.POST);
         Log.d(TAG, this.statusCode + "");
 
+        //TODO : This is not working
         return null;
     }
 }
