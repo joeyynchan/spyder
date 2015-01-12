@@ -15,6 +15,10 @@ public class CreateAccount extends BaseLoginAsyncTask {
     private final String TAG = "RegisterFragment";
     private final String URL = GlobalConfiguration.DEFAULT_URL + "register";
 
+    private String username;
+    private String password;
+    private String password2;
+
     public CreateAccount(LoginActivity activity) {
         super(activity);
     }
@@ -26,9 +30,9 @@ public class CreateAccount extends BaseLoginAsyncTask {
         EditText register_edittext_password1 = (EditText) activity.findViewById(R.id.edittext_fragment_register_password1);
         EditText register_edittext_password2 = (EditText) activity.findViewById(R.id.edittext_fragment_register_password2);
 
-        String username = register_edittext_name.getText().toString();
-        String password = register_edittext_password1.getText().toString();
-        String password2 = register_edittext_password2.getText().toString();
+        username = register_edittext_name.getText().toString();
+        password = register_edittext_password1.getText().toString();
+        password2 = register_edittext_password2.getText().toString();
         Log.d(TAG, username + " : " + password);
 
         if (password.equals(password2)) {
@@ -49,7 +53,7 @@ public class CreateAccount extends BaseLoginAsyncTask {
         switch (statusCode) {
             case 201: {
                 login_text_errmsg.setText("Account has been successfully created");
-                activity.displayLoginFragment();
+                new LinkDevice(activity, username, password).execute();
                 break;
             }
             case 409: {
