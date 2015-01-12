@@ -12,9 +12,6 @@ import g1436218.com.spyder.config.GlobalConfiguration;
 import g1436218.com.spyder.fragment.EventFragment;
 import g1436218.com.spyder.object.Event;
 
-/**
- * Created by Cherie on 12/4/2014.
- */
 public class FetchEventDetails extends BaseMainAsyncTask{
 
     protected String URL = GlobalConfiguration.DEFAULT_URL + "event_data?event_id=";
@@ -66,7 +63,6 @@ public class FetchEventDetails extends BaseMainAsyncTask{
     private void insertDataToEvent(JSONObject jsonObject) {
         try {
             event.setName(jsonObject.has("name") ? jsonObject.getString("name") : "");
-            event.setStatus(jsonObject.has("status") ? jsonObject.getString("status") : "");
             event.setStartTime(jsonObject.has("start_time") ? jsonObject.getString("start_time") : "");
             event.setEndTime(jsonObject.has("end_time") ? jsonObject.getString("end_time") : "");
             event.setLocation(jsonObject.has("address") ? jsonObject.getString("address") : "");

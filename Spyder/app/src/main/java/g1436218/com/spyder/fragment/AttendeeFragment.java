@@ -13,8 +13,10 @@ import android.widget.TextView;
 
 import com.android.internal.util.Predicate;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Iterator;
 
 import g1436218.com.spyder.R;
 import g1436218.com.spyder.activity.MainActivity;
@@ -23,6 +25,7 @@ import g1436218.com.spyder.asyncTask.FetchAttendees;
 import g1436218.com.spyder.asyncTask.FetchUserProfile;
 import g1436218.com.spyder.object.Action;
 import g1436218.com.spyder.object.Attendee;
+import g1436218.com.spyder.object.Attendees;
 import g1436218.com.spyder.receiver.AttendeeFragmentReceiver;
 
 public class AttendeeFragment extends BaseMainFragmentWithReceiver implements AdapterView.OnItemClickListener, SearchView.OnQueryTextListener, SwipeRefreshLayout.OnRefreshListener {
@@ -101,16 +104,17 @@ public class AttendeeFragment extends BaseMainFragmentWithReceiver implements Ad
 
     public void searchAttendees() {
         adapter.clear();
-        Collections.sort(activity.getAttendees(), new SortAttendeesByUsername());
+        ArrayList<Attendee> list = new ArrayList<Attendee>(activity.getAttendees().values());
+        Collections.sort(list, new SortAttendeesByUsername());
         String keyword = searchview_attendee.getQuery().toString();
         if (!keyword.equals("")) {
-            for (Attendee attendee : activity.getAttendees()) {
+            for (Attendee attendee : list) {
                 if (attendee.containKeyword(keyword)) {
                     adapter.add(attendee);
                 }
             }
         } else {
-            adapter.addAll(activity.getAttendees());
+            adapter.addAll(list);
         }
     }
 

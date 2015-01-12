@@ -2,6 +2,7 @@ package g1436218.com.spyder.fragment;
 
 import android.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -60,6 +61,7 @@ public class EventListFragment extends BaseMainFragmentWithReceiver implements A
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Event item = (Event) parent.getItemAtPosition(position);
+        Log.d("ITEM", item.getId());
         new FetchEventDetails(activity, item).execute();
     }
 

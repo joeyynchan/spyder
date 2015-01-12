@@ -8,8 +8,6 @@ public class Interaction {
     public Interaction(Attendee attendee, int strength){
         this.attendee = attendee;
         this.strength = strength;
-        //this.profile_pic_url = "Dummy Profile Picture URL";
-        //this.gcm_id = "APA91bFhURIRWQd5YLy-fKtdQi0j3qNHIUi372Ej3rxfTUk5bszEeZvMvXfabLg5ViP7rp3dgoEDESNBfE7xZ7aO8626oGFEu1cv5D0n9swpknb5Kqm1iZ80oH6UJ3vArlgHSiLEUBQdM4x2366jwATI2b93N5IMsg";
     }
 
     public String getUsername(){

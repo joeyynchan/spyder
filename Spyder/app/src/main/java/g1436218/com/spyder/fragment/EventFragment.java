@@ -85,6 +85,9 @@ public class EventFragment extends BaseMainFragment implements View.OnClickListe
         SharedPreferences sharedPref = activity.getSharedPreferences(
                 activity.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         String event_id = sharedPref.getString("EVENT_ID", "");
+        Log.d("expected event_id", event_id);
+        Log.d("actual event_id", event.getId());
+        Log.d("event_status", event.getStatus());
         if (event_id.equals(event.getId())) {
             button_setToCurrentEvent.setClickable(false);
             button_setToCurrentEvent.setText("Current Event");

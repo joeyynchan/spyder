@@ -48,13 +48,7 @@ public class FetchUserProfile extends BaseMainAsyncTask {
 
     @Override
     protected Void doInBackgroundOffline(Void... params) {
-        user.setName("OFF");
-        user.setGender("M");
-        user.setCompany("Offline Ltd");
-        user.setOccupation("CEO");
-        user.setPhone("+44 7392729371");
-        user.setEmail("offline@offline.com");
-        user.setExternal_link("www.offline.com");
+
         return null;
     }
 

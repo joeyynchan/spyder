@@ -11,13 +11,12 @@ import java.util.ArrayList;
 
 import g1436218.com.spyder.R;
 import g1436218.com.spyder.asyncTask.FetchAttendees;
-import g1436218.com.spyder.asyncTask.SendMessage;
 import g1436218.com.spyder.intentfilter.MainActivityIntentFilter;
 import g1436218.com.spyder.object.Attendee;
 import g1436218.com.spyder.object.BluetoothController;
 import g1436218.com.spyder.object.InteractionPackage;
 import g1436218.com.spyder.object.UIController;
-import g1436218.com.spyder.object.UserMap;
+import g1436218.com.spyder.object.Attendees;
 import g1436218.com.spyder.receiver.MainActivityReceiver;
 
 
@@ -42,8 +41,7 @@ public class MainActivity extends BaseActivity {
 
     private final String TAG = "MainActivity";
 
-    private UserMap userMap;
-    private ArrayList<Attendee> attendees;
+    private Attendees attendees;
     private InteractionPackage interactionPackage;
     private MainActivityReceiver receiver;
     private UIController uiController;
@@ -59,7 +57,7 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState, R.layout.activity_main);
 
         interactionPackage = new InteractionPackage();
-        attendees = new ArrayList<Attendee>();
+        attendees = Attendees.getInstance();
 
         uiController = new UIController(this);
 
@@ -180,7 +178,7 @@ public class MainActivity extends BaseActivity {
         return uiController;
     }
 
-    public ArrayList<Attendee> getAttendees() {
+    public Attendees getAttendees() {
         return attendees;
     }
 

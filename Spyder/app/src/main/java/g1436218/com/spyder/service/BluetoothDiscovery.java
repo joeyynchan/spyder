@@ -11,13 +11,9 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 
-import java.util.HashSet;
-
-import g1436218.com.spyder.asyncTask.SubmitBluetoothData;
 import g1436218.com.spyder.config.GlobalConfiguration;
 import g1436218.com.spyder.object.Action;
-import g1436218.com.spyder.object.Interaction;
-import g1436218.com.spyder.object.UserMap;
+import g1436218.com.spyder.object.Attendees;
 
 public class BluetoothDiscovery extends Service {
 
@@ -26,7 +22,7 @@ public class BluetoothDiscovery extends Service {
 
     private BluetoothAdapter BTAdapter = BluetoothAdapter.getDefaultAdapter();
     private Handler handler = new Handler();
-    private UserMap userMap;
+    private Attendees attendees;
     private int count = 1;
 
     private final BroadcastReceiver receiver = new BroadcastReceiver(){
@@ -40,7 +36,7 @@ public class BluetoothDiscovery extends Service {
                 int strength = intent.getShortExtra(BluetoothDevice.EXTRA_RSSI, Short.MIN_VALUE);
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 
-                if (userMap.containsKey(device.getAddress())) {
+                if (attendees.containsKey(device.getAddress())) {
                     broadcastDeviceDetected(device.getAddress(), strength);
                 }
 
@@ -112,7 +108,7 @@ public class BluetoothDiscovery extends Service {
             BTAdapter.enable();
         }
 
-        userMap = UserMap.getInstance();
+        attendees = Attendees.getInstance();
         initializeIntentFilter();
 
         handler.post(mDiscoveryTask);

@@ -4,20 +4,16 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
-
-import java.util.ArrayList;
 
 import g1436218.com.spyder.activity.MainActivity;
 import g1436218.com.spyder.asyncTask.FetchAttendees;
 import g1436218.com.spyder.asyncTask.SubmitBluetoothData;
 import g1436218.com.spyder.object.Action;
-import g1436218.com.spyder.object.Attendee;
 import g1436218.com.spyder.object.BluetoothController;
 import g1436218.com.spyder.object.Interaction;
 import g1436218.com.spyder.object.InteractionPackage;
 import g1436218.com.spyder.object.UIController;
-import g1436218.com.spyder.object.UserMap;
+import g1436218.com.spyder.object.Attendees;
 
 public class MainActivityReceiver extends BroadcastReceiver {
 
@@ -41,7 +37,7 @@ public class MainActivityReceiver extends BroadcastReceiver {
 
             String macAddress = intent.getStringExtra("MAC_ADDRESS");
             int strength = intent.getIntExtra("STRENGTH", 0);
-            UserMap usermap = UserMap.getInstance();
+            Attendees usermap = Attendees.getInstance();
             interactionPackage.addInteraction(new Interaction(usermap.get(macAddress), strength));
 
         } else if (Action.RESET_LIST.equals(action)) {
