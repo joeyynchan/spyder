@@ -7,6 +7,7 @@ import android.util.Log;
 import g1436218.com.spyder.R;
 import g1436218.com.spyder.activity.MainActivity;
 import g1436218.com.spyder.config.GlobalConfiguration;
+import g1436218.com.spyder.dialogFragment.AlertFragment;
 import g1436218.com.spyder.object.User;
 
 public class UpdateProfile extends BaseMainAsyncTask {
@@ -27,11 +28,6 @@ public class UpdateProfile extends BaseMainAsyncTask {
     }
 
     @Override
-    protected Void doInBackgroundOffline(Void... params) {
-        return null;
-    }
-
-    @Override
     protected Void doInBackgroundOnline(Void... params) {
 
         addToParams("name", user.getName());
@@ -48,6 +44,14 @@ public class UpdateProfile extends BaseMainAsyncTask {
         getJSONFromUrl(url, Requests.POST);
         Log.i("UpdateProfile", statusCode + "");
         return null;
+    }
+
+    @Override
+    public void onPostExecute(Void v) {
+        if (offline) {
+            new AlertFragment("No Connection", "User profile cannot be updated").show(activity.getFragmentManager(), "Alert");
+            return;
+        }
     }
 
 }

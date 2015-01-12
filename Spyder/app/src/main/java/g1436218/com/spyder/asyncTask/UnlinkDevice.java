@@ -22,7 +22,6 @@ public class UnlinkDevice extends BaseAsyncTask {
 
     @Override
     protected Void doInBackground(Void... params) {
-        Log.d(TAG, "doInBackground" + username + password);
         addToParams("user_name", username);
         addToParams("password", password);
 

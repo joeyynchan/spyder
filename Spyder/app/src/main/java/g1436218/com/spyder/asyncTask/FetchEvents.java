@@ -11,6 +11,7 @@ import org.json.JSONObject;
 
 import g1436218.com.spyder.R;
 import g1436218.com.spyder.config.GlobalConfiguration;
+import g1436218.com.spyder.dialogFragment.AlertFragment;
 import g1436218.com.spyder.fragment.EventListFragment;
 import g1436218.com.spyder.object.Action;
 
@@ -31,21 +32,6 @@ public class FetchEvents extends BaseMainAsyncTask {
     @Override
     public void onPreExecute() {
         broadcastClearAdapter();
-    }
-
-    @Override
-    protected Void doInBackgroundOffline(Void... params) {
-
-        broadcastAddItem("Attending" , "0001", "Attending 1");
-        broadcastAddItem("Attending" , "0002", "Attending 2");
-        broadcastAddItem("Attending" , "0003", "Attending 3");
-        broadcastAddItem("Hosting"   , "0004", "Hosting 1");
-        broadcastAddItem("Hosting"   , "0005", "Hosting 2");
-        broadcastAddItem("Hosting"   , "0006", "Hosting 3");
-        broadcastAddItem("Nothing"   , "0007", "Nothing 1");
-        broadcastAddItem("Nothing"   , "0008", "Nothing 2");
-
-        return null;
     }
 
     @Override
@@ -83,6 +69,13 @@ public class FetchEvents extends BaseMainAsyncTask {
 
         return null;
 
+    }
+
+    @Override
+    public void onPostExecute(Void v) {
+        if (offline) {
+            new AlertFragment("No Connection", "Event list cannot be updated").show(activity.getFragmentManager(), "Alert");
+        }
     }
 
     private void broadcastAddItem(String status, String event_id, String event_name) {

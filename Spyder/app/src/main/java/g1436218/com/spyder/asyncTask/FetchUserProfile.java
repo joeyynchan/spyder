@@ -23,6 +23,7 @@ import java.net.URL;
 import g1436218.com.spyder.R;
 import g1436218.com.spyder.activity.MainActivity;
 import g1436218.com.spyder.config.GlobalConfiguration;
+import g1436218.com.spyder.dialogFragment.AlertFragment;
 import g1436218.com.spyder.fragment.ProfileFragment;
 import g1436218.com.spyder.object.User;
 
@@ -47,12 +48,6 @@ public class FetchUserProfile extends BaseMainAsyncTask {
     }
 
     @Override
-    protected Void doInBackgroundOffline(Void... params) {
-
-        return null;
-    }
-
-    @Override
     protected Void doInBackgroundOnline(Void... params) {
         Log.d(TAG, URL);
         JSONObject jsonObject = getJSONFromUrl(URL, Requests.GET);
@@ -69,6 +64,10 @@ public class FetchUserProfile extends BaseMainAsyncTask {
 
     @Override
     protected void onPostExecute(Void v) {
+        if (offline) {
+            new AlertFragment("No Connection", "User Profile cannot be fetched").show(activity.getFragmentManager(), "Alert");
+            return;
+        }
         Fragment fragment = activity.getFragmentManager().findFragmentByTag("CURRENT_FRAGMENT");
         ProfileFragment eventFragment = new ProfileFragment(activity, user);
         if (!(fragment instanceof ProfileFragment)) {

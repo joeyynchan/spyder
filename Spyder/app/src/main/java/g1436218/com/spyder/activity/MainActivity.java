@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import java.util.ArrayList;
 
 import g1436218.com.spyder.R;
+import g1436218.com.spyder.asyncTask.CheckConnection;
 import g1436218.com.spyder.asyncTask.FetchAttendees;
 import g1436218.com.spyder.intentfilter.MainActivityIntentFilter;
 import g1436218.com.spyder.object.Attendee;
@@ -60,6 +61,7 @@ public class MainActivity extends BaseActivity {
         attendees = Attendees.getInstance();
 
         uiController = new UIController(this);
+        uiController.showInteractions();
 
         bluetoothController = new BluetoothController(this);
 
@@ -68,7 +70,7 @@ public class MainActivity extends BaseActivity {
         registerReceiver(receiver, new MainActivityIntentFilter());
 
         new FetchAttendees(this).execute();
-        uiController.showInteractions();
+        new CheckConnection(this).execute();
 
     }
 

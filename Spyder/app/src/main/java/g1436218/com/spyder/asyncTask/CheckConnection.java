@@ -14,6 +14,7 @@ import java.net.Socket;
 import java.net.SocketAddress;
 
 import g1436218.com.spyder.config.GlobalConfiguration;
+import g1436218.com.spyder.dialogFragment.AlertFragment;
 
 public class CheckConnection extends AsyncTask<Void, Void, Void> {
 
@@ -36,19 +37,8 @@ public class CheckConnection extends AsyncTask<Void, Void, Void> {
             Log.i("SERVER_STATUS", "ONLINE");
         } catch (IOException e) {
             Log.i("SERVER_STATUS", "OFFLINE");
-            new NoConnectionFragment().show(activity.getFragmentManager(), "Title");
+            new AlertFragment("No Connection", "Server is not running at the moment.").show(activity.getFragmentManager(), "Alert");
         }
         return null;
-    }
-
-
-    public class NoConnectionFragment extends DialogFragment {
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            return new AlertDialog.Builder(getActivity())
-                    .setTitle("No Connection")
-                    .setMessage("Server is not running at the moment.")
-                    .create();
-        }
     }
 }

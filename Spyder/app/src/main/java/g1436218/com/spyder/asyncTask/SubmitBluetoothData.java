@@ -30,11 +30,6 @@ public class SubmitBluetoothData extends BaseMainAsyncTask{
     }
 
     @Override
-    protected Void doInBackgroundOffline(Void... params) {
-        return null;
-    }
-
-    @Override
     protected Void doInBackgroundOnline(Void... params) {
         Context context = activity;
         SharedPreferences sharedPref = context.getSharedPreferences(

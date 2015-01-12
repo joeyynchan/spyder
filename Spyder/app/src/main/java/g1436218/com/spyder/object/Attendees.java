@@ -1,5 +1,6 @@
 package g1436218.com.spyder.object;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -28,9 +29,9 @@ public class Attendees extends HashMap<String, Attendee> {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         Iterator iterator = this.entrySet().iterator();
-        while (iterator.hasNext()) {
-            HashMap.Entry pairs = (HashMap.Entry)iterator.next();
-            sb.append("\n" + pairs.getKey() + " : " + pairs.getValue());
+        ArrayList<Attendee> attendees = new ArrayList<Attendee>(this.values());
+        for (Attendee attendee : attendees) {
+            sb.append(attendee.getMacAddress() + " : " + attendee.getUsername() + "\n");
         }
         return sb.toString();
     }
