@@ -23,4 +23,6 @@ public class Action {
     public static final String UPDATE_CURRENT_EVENT = "UPDATE_CURRENT_EVENT";
     public static final String FETCH_EVENTS = "FETCH_EVENTS";
     public static final String SHOW_MESSAGE = "SHOW_MESSAGE";
+    public static final String START_EVENT = "START_EVENT";
+    public static final String STOP_EVENT = "STOP_EVENT";
 }

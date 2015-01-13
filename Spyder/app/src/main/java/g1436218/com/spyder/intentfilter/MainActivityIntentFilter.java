@@ -21,5 +21,7 @@ public class MainActivityIntentFilter extends IntentFilter {
         addAction(Action.UPDATE_CURRENT_EVENT);
         addAction(BluetoothAdapter.ACTION_SCAN_MODE_CHANGED);
         addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
+        addAction(Action.START_EVENT);
+        addAction(Action.STOP_EVENT);
     }
 }

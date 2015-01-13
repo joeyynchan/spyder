@@ -2,6 +2,7 @@ package g1436218.com.spyder.object;
 
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
+import android.util.Log;
 
 import g1436218.com.spyder.activity.MainActivity;
 import g1436218.com.spyder.service.BluetoothDiscovery;
@@ -34,9 +35,11 @@ public class BluetoothController {
     }
 
     public void stopDiscovery() {
-        activity.stopService(bluetoothDiscoveryIntent);
-        uiController.setStatus(BluetoothAdapter.getDefaultAdapter().getScanMode());
-        discovery = false;
+        if (discovery) {
+            activity.stopService(bluetoothDiscoveryIntent);
+            uiController.setStatus(BluetoothAdapter.getDefaultAdapter().getScanMode());
+            discovery = false;
+        }
     }
 
     public void turnOnBluetooth() {
