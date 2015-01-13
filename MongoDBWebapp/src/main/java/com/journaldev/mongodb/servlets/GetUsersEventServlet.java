@@ -61,11 +61,12 @@ public class GetUsersEventServlet extends HttpServlet {
 				jo.put("user_name", mob_user.getUserName());
 				if (userProfile != null && userProfile.getName() != null) {
 					jo.put("name", userProfile.getName());
+					jo.put("photo_url", userProfile.getExternal_link());
 				} else {
 					jo.put("name", mob_user.getUserName());
 				}
 				jo.put("gcm_id",mob_user.getGCM());
-				jo.put("photo_url", userProfile.getExternal_link());
+				
 			} catch (JSONException e) {
 			}
 			ja.put(jo);
