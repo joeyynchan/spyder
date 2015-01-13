@@ -68,14 +68,11 @@ public class FetchUserProfile extends BaseMainAsyncTask {
             new AlertFragment("No Connection", "User Profile cannot be fetched").show(activity.getFragmentManager(), "Alert");
             return;
         }
-        Fragment fragment = activity.getFragmentManager().findFragmentByTag("CURRENT_FRAGMENT");
         ProfileFragment eventFragment = new ProfileFragment(activity, user);
-        if (!(fragment instanceof ProfileFragment)) {
-            FragmentTransaction fragmentTransaction = activity.getFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.fragment_container, eventFragment, "CURRENT_FRAGMENT");
-            fragmentTransaction.addToBackStack(null);
-            fragmentTransaction.commit();
-        }
+        FragmentTransaction fragmentTransaction = activity.getFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, eventFragment, "CURRENT_FRAGMENT");
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
     }
 
     /* get profile detail from JSONObject to Profile fragment */

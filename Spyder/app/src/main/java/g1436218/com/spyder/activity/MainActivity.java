@@ -2,6 +2,7 @@ package g1436218.com.spyder.activity;
 
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -123,6 +124,7 @@ public class MainActivity extends BaseActivity {
     public void onBackPressed() {
         if (getFragmentManager().getBackStackEntryCount() != 0) {
             getFragmentManager().popBackStack();
+            Log.d("CHECKING FRAGMENT", getFragmentManager().findFragmentByTag("CURRENT_FRAGMENT").getClass().toString());
         }
         invalidateOptionsMenu();
     }
