@@ -57,9 +57,9 @@ public class FetchEvents extends BaseMainAsyncTask {
                 String status, event_id, event_name;
                 for (int i = 0; i < array.length(); i++) {
                     JSONObject item = array.getJSONObject(i);
-                    status = item.getString("status");
-                    event_id = item.getString("event_id");
-                    event_name = item.getString("event_name");
+                    status = item.optString("status");
+                    event_id = item.optString("event_id");
+                    event_name = item.optString("event_name");
                     broadcastAddItem(status, event_id, event_name);
                 }
             } catch (JSONException e) {

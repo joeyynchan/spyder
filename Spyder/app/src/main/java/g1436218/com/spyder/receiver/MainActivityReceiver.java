@@ -40,7 +40,6 @@ public class MainActivityReceiver extends BroadcastReceiver {
 
         String action = intent.getAction();
         if (Action.DEVICE_DETECTED.equals(action)) {
-
             String macAddress = intent.getStringExtra("MAC_ADDRESS");
             int strength = intent.getIntExtra("STRENGTH", 0);
             Attendees usermap = Attendees.getInstance();

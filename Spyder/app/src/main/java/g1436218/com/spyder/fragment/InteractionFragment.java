@@ -17,13 +17,12 @@ import java.util.Comparator;
 import g1436218.com.spyder.R;
 import g1436218.com.spyder.activity.MainActivity;
 import g1436218.com.spyder.adapter.InteractionAdapter;
-import g1436218.com.spyder.asyncTask.FetchUserProfile;
+import g1436218.com.spyder.asyncTask.DisplayAttendeeProfile;
 import g1436218.com.spyder.dialogFragment.MessageFragment;
 import g1436218.com.spyder.object.Action;
 import g1436218.com.spyder.object.Interaction;
 import g1436218.com.spyder.object.InteractionPackage;
 import g1436218.com.spyder.object.SwipeDetector;
-import g1436218.com.spyder.object.Attendees;
 import g1436218.com.spyder.receiver.InteractionFragmentReceiver;
 
 public class InteractionFragment extends BaseMainFragmentWithReceiver implements AdapterView.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener, View.OnClickListener {
@@ -87,7 +86,7 @@ public class InteractionFragment extends BaseMainFragmentWithReceiver implements
                 //sendMessage.setVisibility(View.GONE);
             }
         } else {
-            new FetchUserProfile(activity, item.getUsername()).execute();
+            new DisplayAttendeeProfile(activity, item.getUsername()).execute();
         }
     }
 
