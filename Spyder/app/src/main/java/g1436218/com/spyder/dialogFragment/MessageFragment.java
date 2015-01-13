@@ -57,7 +57,7 @@ public class MessageFragment extends DialogFragment implements View.OnClickListe
                 Context context = getActivity();
                 SharedPreferences sharedPref = getActivity().getSharedPreferences(
                         context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-                String sender = sharedPref.getString(context.getString(R.string.username), "");
+                String sender = sharedPref.getString("name", "");
 
                 //String _title = title.getText().toString();
                 String _message = message.getText().toString();

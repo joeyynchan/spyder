@@ -25,7 +25,7 @@ public class LogoutFragment extends DialogFragment {
         Context context = getActivity();
         SharedPreferences sharedPref = context.getSharedPreferences(
                 context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-        username = sharedPref.getString("name", sharedPref.getString("username", ""));
+        username = sharedPref.getString("name", sharedPref.getString(context.getString(R.string.username), ""));
         builder.setTitle("Logout");
         builder.setMessage(username + ", are you sure?")
                 .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {

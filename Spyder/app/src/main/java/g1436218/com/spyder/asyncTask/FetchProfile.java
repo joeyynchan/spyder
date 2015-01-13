@@ -52,19 +52,16 @@ public class FetchProfile extends BaseMainAsyncTask{
     /* get profile detail from JSONObject to Profile fragment */
     protected void insertDataToUser(JSONObject jsonObject){
         Log.d(TAG, "insertDataToUser");
-        try {
-            user.setCompany(jsonObject.getString("company"));
-            user.setEmail(jsonObject.getString("email"));
-            user.setExternal_link(jsonObject.getString("external_link"));
-            user.setGender(jsonObject.getString("gender"));
-            user.setName(jsonObject.getString("name"));
-            user.setOccupation(jsonObject.getString("job"));
-            user.setPhone(jsonObject.getString("phone"));
-            user.setPhotoURL(jsonObject.getString("photo"));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
+        user.setCompany(jsonObject.optString("company"));
+        user.setEmail(jsonObject.optString("email"));
+        user.setExternal_link(jsonObject.optString("external_link"));
+        user.setGender(jsonObject.optString("gender"));
+        user.setName(jsonObject.optString("name"));
+        Log.d(TAG, jsonObject.optString("name"));
+        user.setOccupation(jsonObject.optString("job"));
+        user.setPhone(jsonObject.optString("phone"));
+        user.setPhotoURL(jsonObject.optString("photo"));
+        
         if(user.getPhotoURL() != null){
             Bitmap bitmap = null;
             try {
