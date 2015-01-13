@@ -306,6 +306,7 @@ def can_join_event(event_id, username=None):
 
 
 @app.route('/event/profile/<event_id>', methods=['GET'])
+@cross_origin()
 def event_profile(event_id):
     if not is_currently_login():
         return redirect_to_default(

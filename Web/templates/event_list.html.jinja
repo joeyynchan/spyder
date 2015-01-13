@@ -20,7 +20,7 @@
   </tr>
   {% for profile in profiles %}
     <tr class="clickable-row" href="/event/profile/{{ profile['event_id'] }}">
-      <td>{{profile['name']}}</td>
+      <td><a href="/event/profile/{{profile['event_id']}}">{{profile['name']}}</a></td>
       <td>{{profile['start_time']}}</td>
       <td>{{profile['end_time']}}</td>
       <td><a href="/user/profile/{{profile['organiser']}}">{{profile['organiser']}}</a></td>

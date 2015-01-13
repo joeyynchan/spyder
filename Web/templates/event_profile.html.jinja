@@ -76,39 +76,6 @@
         </table>
       </div>
 
-      <div role="tabpanel" class="tab-pane" id="visualisation">
-            <div id="graph"></div>
-            <input type="text" id="myText" value="2000">
-            <div id="option">
-              <input name="updateButton" 
-               type="button" 
-               value="Run" 
-               onclick="updateInteraction()" />
-            </div>
-            <div id="option2">
-              <input name="runSampleButton" 
-               type="button" 
-               value="Run sample" 
-               onclick="buildSampleGraph()" />
-            </div>
-            <div id="option3">
-              <input name="updateButton" 
-               type="button" 
-               value="UpdateSpeed" 
-               onclick="updateSpeed()" />
-            </div>
-        <div class="panel panel-primary">
-          <div class="panel-heading">
-            <h3 class="panel-title">Chart</h3>
-          </div>
-        <div class="panel-body">
-          <div id="chart"></div>
-        </div>
-        </div>
-      </div>
-
-    </div>
-
   <!-- Khoa script part -->
   <script type="text/javascript" src="/static/lib/d3.min.js" ></script>
   <script type="text/javascript" src="/static/lib/graph.js" ></script>
@@ -123,244 +90,392 @@
     </style>
 
   <script type="text/javascript">
-  var attendees;
-  var interval;
-  var curr_t;
-  var event_end;
-  var interaction;
-  var interactionData;
-  var exFunction;
-  graph = new myGraph("#graph");
-  
-  function buildGraph(interactionObject, attendees) {
-	
-	d3.select('#chart').select("svg").remove();
-	cleanCanvas();
-	clearInterval(exFunction);
-	
-	interactionData = interactionObject;
-    	interaction = interactionData.interaction;    
-    	attendees = getAttendees();
-	
-	curr_t = new Date(interactionData.event_start_time);
-	event_end = new Date(interactionData.event_end_time);
-	
-	for (var i = 0; i < attendees.length; i++) {
-		graph.addNode(attendees[i].user_name);
-	}
+    var shift_start_time; // : int, shift second since epoch to our program format
+    var event_start_time = 0; // always = 0
+    var event_end_time; // int
+    var current_time; // int
+    var last_avaliable_time; // int
+    var cursor_time; // int
+    var interval;
 
-	document.getElementById("myText").value = Math.floor((event_end.getTime() - curr_t.getTime()) / 20);
-	
-	interval = parseInt(document.getElementById("myText").value);
+    var graph; // d3 graph
+    // list of (username : string), reflect node in graph
+    var attendee_list;
+    // set of {user_a : string, user_b : string}, reflect edge in graph
+    var graph_edges;
+    // list of {time : int, user_a : string, user_b : string, is_add: bool}
+    // ordered by time
+    var tinteractl;
 
-	updateStatistics();
-  }
+    function datetime_to_inttime_raw(datetime) {
+      var d = new Date(datetime);
+      // convert from millsecond to second
+      return d.valueOf() / 1000;
+    }
+
+    function inttime_from_now() {
+      var d = new Date();
+      return Math.floor(d.valueOf / 1000) - shift_start_time;
+    }
+
+    // convert datetime in java string format (or another format, fine new Date();)
+    // to int in second format respect to shift_start_time
+    function datetime_to_inttime(datetime) { // datetime : string
+      var d = new Date(datetime);
+      return d.valueOf() / 1000 - shift_start_time;
+    }
+
+    // sort on key values
+    function keysrt(key,desc) {
+      return function(a,b){
+       return desc ? ~~(a[key] < b[key]) : ~~(a[key] > b[key]);
+      }
+    }
+
+    function extract_interaction_list(interactions) {
+      list = [];
+      for (var i = 0; i < interactions.length; i++) {
+        start_time = datetime_to_inttime(interactions[i]["start_time"]);
+        end_time = datetime_to_inttime(interactions[i]["end_time"]);
+        user_a = interactions[i]["user1"];
+        user_b = interactions[i]["user2"];
+        if (start_time >= end_time) {
+          continue;
+        }
+        if (user_a > user_b) {
+          var user_temp = user_a;
+          user_a = user_b;
+          user_b = user_temp;
+        }
+        list.push({
+          "time": start_time,
+          "user_a": user_a,
+          "user_b": user_b,
+          "is_add": true
+        });
+        list.push({
+          "time": end_time,
+          "user_a": user_a,
+          "user_b": user_b,
+          "is_add": false
+        });
+      }
+      return list.sort(keysrt("time"));
+    }
+
+    function extract_attendee_list(attendees) {
+      list = [];
+      user_mappings_list = attendees["user_mappings"];
+      for (var i = 0; i < user_mappings_list.length; i++) {
+        list.push(user_mappings_list[i]["name"])
+      }
+      return list;
+    }
+
+    function add_all_node() {
+      for (var i = 0; i < attendee_list.length; i++) {
+        graph.addNode(attendee_list[i]);
+      }
+    }
+
+    function remove_all_node() {
+      for (var i = 0; i < attendee_list.length; i++) {
+        graph.removeNode(attendee_list[i]);
+      }
+    }
+
+    // todo: optimise it !
+    function first_index_tinteractl(time) {
+      for (var i=0; i<tinteractl.length; i++) {
+        if (tinteractl[i]["time"] >= time) {
+          return i;
+        }
+      }
+      return null;
+    }
+
+    function update_graph(time) {
+      var i;
+      var edges;
+      if (cursor_time < time) {
+        edges = graph_edges;
+        i = first_index_tinteractl(cursor_time);
+      } else {
+        edges = {}
+        for (var i = 0; i < attendee_list.length; i++) {
+          edges[attendee_list[i]] = {}
+          for (var j = i; j < attendee_list.length; j++) {
+            edges[attendee_list[i]][attendee_list[j]] = false;
+          }
+        }
+        i = 0;
+      }
+      for (; tinteractl[i]["time"] < time; i++) {
+        edges[tinteractl[i]["user_a"]][tinteractl[i]["user_b"]] = tinteractl[i]["is_add"]
+      }
+
+      graph_edges = edges;
+      for (user_a in graph_edges) {
+        for (user_b in graph_edges[user_a]) {
+          if(edges[user_a][user_b]) {
+            graph.addLink(user_a, user_b);
+          } else {
+            graph.removeLink(user_a, user_b);
+          }
+        }
+      }
+    }
+    function init(interactions, attendees) {
+      graph = new myGraph("#graph");
+      shift_start_time = datetime_to_inttime_raw(interactions["event_start_time"]);
+      event_end_time = datetime_to_inttime(interactions["event_end_time"]);
+      current_time = inttime_from_now();
+      // this is live event
+      if (current_time < event_end_time) {
+        last_avaliable_time = current_time;
+        cursor_time = current_time;
+      } else { // this is replay event
+        last_avaliable_time = event_end_time;
+        current_time = event_end_time;
+      }
+
+      tinteractl = extract_interaction_list(interactions["interaction"]);
+      attendee_list = extract_attendee_list(attendees);
+
+      remove_all_node();
+      add_all_node();
+
+      d3.select('#chart').select("svg").remove();
+      updateStatistics(interactions);
+    }
+  // var attendees;
+  // var interval;
+  // var curr_t;
+  // var event_end;
+  // var interaction;
+  // var interactionData;
+  // var exFunction;
   
-  function buildSampleGraph() {
-	cleanCanvas();
-	clearInterval(exFunction);
-	
-	interactionData = getSampleInteraction();
-    	interaction = interactionData.interaction; 
+  // function buildGraph(interactionObject, attendees) {
+  
+  // d3.select('#chart').select("svg").remove();
+  // cleanCanvas();
+  // clearInterval(exFunction);
+  
+  // interactionData = interactionObject;
+  //     interaction = interactionData.interaction;    
+  //     attendees = getAttendees();
+  
+  // curr_t = new Date(interactionData.event_start_time);
+  // event_end = new Date(interactionData.event_end_time);
+  
+  // for (var i = 0; i < attendees.length; i++) {
+  //   graph.addNode(attendees[i].user_name);
+  // }
+
+  // document.getElementById("myText").value = Math.floor((event_end.getTime() - curr_t.getTime()) / 20);
+  
+  // interval = parseInt(document.getElementById("myText").value);
+
+  // updateStatistics();
+  // }
+  
+  // function buildSampleGraph() {
+  // cleanCanvas();
+  // clearInterval(exFunction);
+  
+  // interactionData = getSampleInteraction();
+  //     interaction = interactionData.interaction; 
     
-	curr_t = new Date(0);
-	event_end = new Date(10000);
-	
-	document.getElementById("myText").value = Math.floor((event_end.getTime() - curr_t.getTime()) / 40);
-	
-	interval = parseInt(document.getElementById("myText").value);
-	
-	exFunction = setInterval(function () {updateSampleData()}, 1000);
-	updateStatistics();
-  }
+  // curr_t = new Date(0);
+  // event_end = new Date(10000);
+  
+  // document.getElementById("myText").value = Math.floor((event_end.getTime() - curr_t.getTime()) / 40);
+  
+  // interval = parseInt(document.getElementById("myText").value);
+  
+  // exFunction = setInterval(function () {updateSampleData()}, 1000);
+  // updateStatistics();
+  // }
 
-  function updateData(interactionObject) {
-	interactionData = interactionObject;
-    	interaction = interactionData.interaction;  
-	if (curr_t.getTime() <= event_end.getTime()) {
-		for (var i = 0; i < interaction.length; i++) {
-			var interaction_start = new Date(interaction[i].start_time);
-			var interaction_end = new Date(interaction[i].end_time);
-			if ( (interaction_start.getTime() <= curr_t.getTime()+ interval)  && (interaction_end.getTime() >= curr_t.getTime()) ) {
-				graph.addLink(interaction[i].user1,interaction[i].user2);
-			}
-			if (interaction_end.getTime() <= curr_t.getTime()) {
-				graph.removeLink(interaction[i].user1,interaction[i].user2);
-			}
-		}
-		curr_t.setTime(curr_t.getTime() + interval);
-	} else {
-		clearInterval(exFunction);
-	}
-  }
+  // function updateData(interactionObject) {
+  // interactionData = interactionObject;
+  //     interaction = interactionData.interaction;  
+  // if (curr_t.getTime() <= event_end.getTime()) {
+  //   for (var i = 0; i < interaction.length; i++) {
+  //     var interaction_start = new Date(interaction[i].start_time);
+  //     var interaction_end = new Date(interaction[i].end_time);
+  //     if ( (interaction_start.getTime() <= curr_t.getTime()+ interval)  && (interaction_end.getTime() >= curr_t.getTime()) ) {
+  //       graph.addLink(interaction[i].user1,interaction[i].user2);
+  //     }
+  //     if (interaction_end.getTime() <= curr_t.getTime()) {
+  //       graph.removeLink(interaction[i].user1,interaction[i].user2);
+  //     }
+  //   }
+  //   curr_t.setTime(curr_t.getTime() + interval);
+  // } else {
+  //   clearInterval(exFunction);
+  // }
+  // }
   
-  function updateSampleData() {
-	if (curr_t.getTime() <= event_end.getTime()) {
-		for (var i = 0; i < interaction.length; i++) {
-			var interaction_start = new Date(parseInt(interaction[i].start_time));
-			var interaction_end = new Date(parseInt(interaction[i].end_time));
-			if ( (interaction_start.getTime() <= curr_t.getTime()+ interval)  && (interaction_end.getTime() >= curr_t.getTime()) ) {
-				graph.addNode(interaction[i].user1);
-				graph.addNode(interaction[i].user2);
-				graph.addLink(interaction[i].user1,interaction[i].user2);
-			}
-			if (interaction_end.getTime() <= curr_t.getTime()) {
-				graph.removeLink(interaction[i].user1,interaction[i].user2);
-				//graph.removeNode(interaction[i].user1);
-				//graph.removeNode(interaction[i].user2);
-			}
-		}
-		curr_t.setTime(curr_t.getTime() + interval);
-	} else {
-		clearInterval(exFunction);
-	}
-  }
+  // function updateSampleData() {
+  // if (curr_t.getTime() <= event_end.getTime()) {
+  //   for (var i = 0; i < interaction.length; i++) {
+  //     var interaction_start = new Date(parseInt(interaction[i].start_time));
+  //     var interaction_end = new Date(parseInt(interaction[i].end_time));
+  //     if ( (interaction_start.getTime() <= curr_t.getTime()+ interval)  && (interaction_end.getTime() >= curr_t.getTime()) ) {
+  //       graph.addNode(interaction[i].user1);
+  //       graph.addNode(interaction[i].user2);
+  //       graph.addLink(interaction[i].user1,interaction[i].user2);
+  //     }
+  //     if (interaction_end.getTime() <= curr_t.getTime()) {
+  //       graph.removeLink(interaction[i].user1,interaction[i].user2);
+  //       //graph.removeNode(interaction[i].user1);
+  //       //graph.removeNode(interaction[i].user2);
+  //     }
+  //   }
+  //   curr_t.setTime(curr_t.getTime() + interval);
+  // } else {
+  //   clearInterval(exFunction);
+  // }
+  // }
 
   
-  function updateGraphSpeed(interactionObject) {
-	interval = parseInt(document.getElementById("myText").value);
-	clearInterval(exFunction);
-	cleanCanvas();
-	for (var i = 0; i < attendees.length; i++) {
-		graph.addNode(attendees[i].user_name);
-	}
-	exFunction = setInterval(function () {updateData(interactionObject)}, 1500);
-  }
+  // function updateGraphSpeed(interactionObject) {
+  // interval = parseInt(document.getElementById("myText").value);
+  // clearInterval(exFunction);
+  // cleanCanvas();
+  // for (var i = 0; i < attendees.length; i++) {
+  //   graph.addNode(attendees[i].user_name);
+  // }
+  // exFunction = setInterval(function () {updateData(interactionObject)}, 1500);
+  // }
   
-  function updateStatistics() {
-	var results,
+  function updateStatistics(interactionObject) {
+  var   interactionData = interactionObject;
+        interaction = interactionData.interaction;
+        event_end = new Date(interactionData.event_end_time);
+  var results,
         data = [],
         chart,
-		temp_t,
+    temp_t,
         bars,
         margin = 100,
         w = 8,
         h = 500,
         x, y,
         xAxis, yAxis;
-	temp_t = new Date(interactionData.event_start_time);
-	 
-	while (temp_t.getTime() <= event_end.getTime()) {
-		var count = 0;
-		for (var i = 0; i < interaction.length; i++) {
-			var interaction_start = new Date (interaction[i].start_time);
-			var interaction_end = new Date(interaction[i].end_time);
-			if ( (interaction_start.getTime() <= temp_t.getTime()+ interval)  && (interaction_end.getTime() >= temp_t.getTime()) ) {
-				count++;
-			}
-		}
-		result = {};
-		result.time = temp_t.toLocaleTimeString(); 
-		result.interaction= count;
-		data.push( result );
-		temp_t.setTime(temp_t.getTime() + interval);
-	}
-	
-	var valueLabelWidth = 40; // space reserved for value labels (right)
-	var barHeight = 20; // height of one bar
-	var barLabelWidth = 100; // space reserved for bar labels
-	var barLabelPadding = 5; // padding between bar and bar labels (left)
-	var gridLabelHeight = 18; // space reserved for gridline labels
-	var gridChartOffset = 3; // space between start of grid and first bar
-	var maxBarWidth = 420; // width of the bar with the max value
-
-	// accessor functions 
-	var barLabel = function(d) { return d['time']; };
-	var barValue = function(d) { return parseFloat(d['interaction']); };
- 
-	// scales
-	var yScale = d3.scale.ordinal().domain(d3.range(0, data.length)).rangeBands([0, data.length * barHeight]);
-	var y = function(d, i) { return yScale(i); };
-	var yText = function(d, i) { return y(d, i) + yScale.rangeBand() / 2; };
-	var x = d3.scale.linear().domain([0, d3.max(data, barValue)]).range([0, maxBarWidth]);
-	// svg container element
-	var chart = d3.select('#chart').append("svg")
-		.attr('width', maxBarWidth + barLabelWidth + valueLabelWidth)
-		.attr('height', gridLabelHeight + gridChartOffset + data.length * barHeight);
-	// grid line labels
-	var gridContainer = chart.append('g')
-		.attr('transform', 'translate(' + barLabelWidth + ',' + gridLabelHeight + ')'); 
-	gridContainer.selectAll("text").data(x.ticks(10)).enter().append("text")
-		.attr("x", x)
-		.attr("dy", -3)
-		.attr("text-anchor", "middle")
-		.text(String);
-	// vertical grid lines
-	gridContainer.selectAll("line").data(x.ticks(10)).enter().append("line")
-		.attr("x1", x)
-		.attr("x2", x)
-		.attr("y1", 0)
-		.attr("y2", yScale.rangeExtent()[1] + gridChartOffset)
-		.style("stroke", "#ccc");
-	// bar labels
-	var labelsContainer = chart.append('g')
-		.attr('transform', 'translate(' + (barLabelWidth - barLabelPadding) + ',' + (gridLabelHeight + gridChartOffset) + ')'); 
-			labelsContainer.selectAll('text').data(data).enter().append('text')
-		.attr('y', yText)
-		.attr('stroke', 'none')
-		.attr('fill', 'black')
-		.attr("dy", ".35em") // vertical-align: middle
-		.attr('text-anchor', 'end')
-		.text(barLabel);
-	// bars
-	var barsContainer = chart.append('g')
-		.attr('transform', 'translate(' + barLabelWidth + ',' + (gridLabelHeight + gridChartOffset) + ')'); 
-			barsContainer.selectAll("rect").data(data).enter().append("rect")
-		.attr('y', y)
-		.attr('height', yScale.rangeBand())
-		.attr('width', function(d) { return x(barValue(d)); })
-		.attr('stroke', 'white')
-		.attr('fill', 'steelblue')
-		.on("click", synchronizedClick);
-	// bar value labels
-	barsContainer.selectAll("text").data(data).enter().append("text")
-		.attr("x", function(d) { return x(barValue(d)); })
-		.attr("y", yText)
-		.attr("dx", 3) // padding-left
-		.attr("dy", ".35em") // vertical-align: middle
-		.attr("text-anchor", "start") // text-align: right
-		.attr("fill", "black")
-		.attr("stroke", "none")
-		.text(function(d) { return d3.round(barValue(d), 2); });
-	// start line
-	barsContainer.append("line")
-		.attr("y1", -gridChartOffset)
-		.attr("y2", yScale.rangeExtent()[1] + gridChartOffset)
-		.style("stroke", "#000");
-
+  temp_t = new Date(interactionData.event_start_time);
+   
+  while (temp_t.getTime() <= event_end.getTime()) {
+    var count = 0;
+    for (var i = 0; i < interaction.length; i++) {
+      var interaction_start = new Date(interaction[i].start_time);
+      var interaction_end = new Date(interaction[i].end_time);
+      if ( (interaction_start.getTime() <= temp_t.getTime()+ Math.floor(last_avaliable_time / 1000))  && (interaction_end.getTime() >= temp_t.getTime()) ) {
+        count++;
+      }
+    }
+    result = {};
+    result.time = temp_t.toLocaleTimeString(); 
+    result.interaction= count;
+    data.push( result );
+    temp_t.setTime(temp_t.getTime() + interval);
   }
-
-  function synchronizedClick(d,time) {
-	clearInterval(exFunction);
-	curr_t = new Date(interactionData.event_start_time);
-	for (var count = 0; count <= time; count++) {
-		for (var i = 0; i < interaction.length; i++) {
-			var interaction_start = new Date(interaction[i].start_time);
-			var interaction_end = new Date(interaction[i].end_time);
-			if ( (interaction_start.getTime() <= curr_t.getTime()+ interval)  && (interaction_end.getTime() >= curr_t.getTime()) ) {
-				graph.addLink(interaction[i].user1,interaction[i].user2);
-			}
-			if (interaction_end.getTime() < curr_t.getTime()) {
-				graph.removeLink(interaction[i].user1,interaction[i].user2);
-			}
-			if (interaction_start.getTime() > curr_t.getTime() + interval) {
-				graph.removeLink(interaction[i].user1,interaction[i].user2);
-			}
-		}
-		curr_t.setTime(curr_t.getTime() + interval);
-	}	
-  };
   
-  function cleanCanvas() {
-	if (interaction !=  null) {
-		for (var i = 0; i < interaction.length; i++) {
-			graph.removeNode(interaction[i].user1);
-			graph.removeNode(interaction[i].user2);
-		}
-	}
-  }
+  var valueLabelWidth = 40; // space reserved for value labels (right)
+  var barHeight = 20; // height of one bar
+  var barLabelWidth = 100; // space reserved for bar labels
+  var barLabelPadding = 5; // padding between bar and bar labels (left)
+  var gridLabelHeight = 18; // space reserved for gridline labels
+  var gridChartOffset = 3; // space between start of grid and first bar
+  var maxBarWidth = 420; // width of the bar with the max value
+
+  // accessor functions 
+  var barLabel = function(d) { return d['time']; };
+  var barValue = function(d) { return parseFloat(d['interaction']); };
  
-  <!-- Khoa script end part -->
+  // scales
+  var yScale = d3.scale.ordinal().domain(d3.range(0, data.length)).rangeBands([0, data.length * barHeight]);
+  var y = function(d, i) { return yScale(i); };
+  var yText = function(d, i) { return y(d, i) + yScale.rangeBand() / 2; };
+  var x = d3.scale.linear().domain([0, d3.max(data, barValue)]).range([0, maxBarWidth]);
+  // svg container element
+  var chart = d3.select('#chart').append("svg")
+    .attr('width', maxBarWidth + barLabelWidth + valueLabelWidth)
+    .attr('height', gridLabelHeight + gridChartOffset + data.length * barHeight);
+  // grid line labels
+  var gridContainer = chart.append('g')
+    .attr('transform', 'translate(' + barLabelWidth + ',' + gridLabelHeight + ')'); 
+  gridContainer.selectAll("text").data(x.ticks(10)).enter().append("text")
+    .attr("x", x)
+    .attr("dy", -3)
+    .attr("text-anchor", "middle")
+    .text(String);
+  // vertical grid lines
+  gridContainer.selectAll("line").data(x.ticks(10)).enter().append("line")
+    .attr("x1", x)
+    .attr("x2", x)
+    .attr("y1", 0)
+    .attr("y2", yScale.rangeExtent()[1] + gridChartOffset)
+    .style("stroke", "#ccc");
+  // bar labels
+  var labelsContainer = chart.append('g')
+    .attr('transform', 'translate(' + (barLabelWidth - barLabelPadding) + ',' + (gridLabelHeight + gridChartOffset) + ')'); 
+      labelsContainer.selectAll('text').data(data).enter().append('text')
+    .attr('y', yText)
+    .attr('stroke', 'none')
+    .attr('fill', 'black')
+    .attr("dy", ".35em") // vertical-align: middle
+    .attr('text-anchor', 'end')
+    .text(barLabel);
+  // bars
+  var barsContainer = chart.append('g')
+    .attr('transform', 'translate(' + barLabelWidth + ',' + (gridLabelHeight + gridChartOffset) + ')'); 
+      barsContainer.selectAll("rect").data(data).enter().append("rect")
+    .attr('y', y)
+    .attr('height', yScale.rangeBand())
+    .attr('width', function(d) { return x(barValue(d)); })
+    .attr('stroke', 'white')
+    .attr('fill', 'steelblue');
+  // bar value labels
+  barsContainer.selectAll("text").data(data).enter().append("text")
+    .attr("x", function(d) { return x(barValue(d)); })
+    .attr("y", yText)
+    .attr("dx", 3) // padding-left
+    .attr("dy", ".35em") // vertical-align: middle
+    .attr("text-anchor", "start") // text-align: right
+    .attr("fill", "black")
+    .attr("stroke", "none")
+    .text(function(d) { return d3.round(barValue(d), 2); });
+  // start line
+  barsContainer.append("line")
+    .attr("y1", -gridChartOffset)
+    .attr("y2", yScale.rangeExtent()[1] + gridChartOffset)
+    .style("stroke", "#000");
+
+  }
+
+  // function synchronizedClick(d,time) {
+  // clearInterval(exFunction);
+  // curr_t = new Date(interactionData.event_start_time);
+  // for (var count = 0; count <= time; count++) {
+  //   for (var i = 0; i < interaction.length; i++) {
+  //     var interaction_start = new Date(interaction[i].start_time);
+  //     var interaction_end = new Date(interaction[i].end_time);
+  //     if ( (interaction_start.getTime() <= curr_t.getTime()+ interval)  && (interaction_end.getTime() >= curr_t.getTime()) ) {
+  //       graph.addLink(interaction[i].user1,interaction[i].user2);
+  //     }
+  //     if (interaction_end.getTime() < curr_t.getTime()) {
+  //       graph.removeLink(interaction[i].user1,interaction[i].user2);
+  //     }
+  //     if (interaction_start.getTime() > curr_t.getTime() + interval) {
+  //       graph.removeLink(interaction[i].user1,interaction[i].user2);
+  //     }
+  //   }
+  //   curr_t.setTime(curr_t.getTime() + interval);
+  // } 
+  // };
     // setTimeout(function() {
     //   window.document.location = '/dashboard';
     // }, 10 * 1000);
@@ -370,21 +485,72 @@
     //   // alert("Hello")
     // }, 30 * 1000);
 
-    function updateInteraction() {
-      $.ajax({
-        url: '/xhr/event_visualisation_data/{{event_id}}',
-        success:function(result){
-          buildGraph(result['interaction'], result['attendees']);
-        }
-      });
-    }
-    function updateSpeed() {
-      $.ajax({
-        url: '/xhr/event_visualisation_data/{{event_id}}',
-        success:function(result){
-          updateGraphSpeed(result['interaction'], result['attendees']);
-        }
-      });
-    }
+    // function initGraph() {
+    //   $.ajax({
+    //     url: '/xhr/event_visualisation_data/{{event_id}}',
+    //     success:function(result){
+    //       buildGraph(result['interaction'], result['attendees']);
+    //     }
+    //   });
+    // }
+    // function updateSpeed() {
+    //   $.ajax({
+    //     url: '/xhr/event_visualisation_data/{{event_id}}',
+    //     success:function(result){
+    //       updateGraphSpeed(result['interaction'], result['attendees']);
+    //     }
+    //   });
+    // }
   </script>
+
+      <div role="tabpanel" class="tab-pane" id="visualisation">
+            <div id="graph"></div>
+            <script>
+              $.ajax({
+                url: '/xhr/event_visualisation_data/{{event_id}}',
+                success:function(result){
+                  init(result['interaction'], result['attendees']);
+                  update_graph(datetime_to_inttime("Tue Jan 13 11:47:24 GMT 2015"));
+                }
+              });
+              // setInterval(function() {
+              //   $.ajax({
+              //     url: '/xhr/event_visualisation_data/{{event_id}}',
+              //     success:function(result){
+              //       updateData(result['interaction']);//, result['attendees']);
+              //       // todo - update chart
+              //     }
+              //   });
+              // }, 1000);
+            </script>
+<!--             <input type="text" id="myText" value="2000">
+            <div id="option">
+              <input name="updateButton" 
+               type="button" 
+               value="Run" 
+               onclick="updateInteraction()" />
+            </div> -->
+<!--             <div id="option2">
+              <input name="runSampleButton" 
+               type="button" 
+               value="Run sample" 
+               onclick="buildSampleGraph()" />
+            </div> -->
+<!--             <div id="option3">
+              <input name="updateButton" 
+               type="button" 
+               value="UpdateSpeed" 
+               onclick="updateSpeed()" />
+            </div> -->
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+            <h3 class="panel-title">Chart</h3>
+          </div>
+        <div class="panel-body">
+          <div id="chart"></div>
+        </div>
+        </div>
+      </div>
+
+    </div>
 {% endblock %}
