@@ -66,14 +66,10 @@ public class FetchEventDetails extends BaseMainAsyncTask{
     }
 
     private void insertDataToEvent(JSONObject jsonObject) {
-        try {
-            event.setName(jsonObject.has("name") ? jsonObject.getString("name") : "");
-            event.setStartTime(jsonObject.has("start_time") ? jsonObject.getString("start_time") : "");
-            event.setEndTime(jsonObject.has("end_time") ? jsonObject.getString("end_time") : "");
-            event.setLocation(jsonObject.has("address") ? jsonObject.getString("address") : "");
-        } catch (JSONException e) {
-            Log.d(TAG, "JSONException");
-        }
+        event.setName(jsonObject.optString("name"));
+        event.setStartTime(jsonObject.optString("start_time"));
+        event.setEndTime(jsonObject.optString("end_time"));
+        event.setLocation(jsonObject.optString("address"));
 
     }
 }

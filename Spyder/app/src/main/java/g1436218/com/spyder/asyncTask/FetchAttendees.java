@@ -52,15 +52,17 @@ public class FetchAttendees extends BaseMainAsyncTask {
                 JSONArray array = resultJObj.getJSONArray("user_mappings");
                 String macAddress, username, name, gcm_id, photo_url;
                 for (int i = 0; i < array.length(); i++) {
-                    JSONObject item = array.getJSONObject(i);
-                    macAddress = item.has("mac_address") ? item.getString("mac_address") : "";
-                    macAddress = macAddress.equals("") ? dummy_count++ +"" : macAddress;
-                    username = item.has("user_name") ? item.getString("user_name") : "";
-                    name = item.has("name") ? item.getString("name") : "";
-                    gcm_id = item.has("gcm_id") ? item.getString("gcm_id") : "";
-                    photo_url = item.has("photo_url") ? item.getString("photo_url") : "";
-                    Attendee attendee = new Attendee(macAddress, username, name, gcm_id, photo_url);
-                    attendees.put(macAddress, attendee);
+                    JSONObject item = array.optJSONObject(i);
+                    if(item == null) {
+                        macAddress = item.optString("mac_address");
+                        macAddress = macAddress.equals("") ? dummy_count++ + "" : macAddress;
+                        username = item.optString("user_name");
+                        name = item.optString("name");
+                        gcm_id = item.optString("gcm_id");
+                        photo_url = item.optString("photo_url");
+                        Attendee attendee = new Attendee(macAddress, username, name, gcm_id, photo_url);
+                        attendees.put(macAddress, attendee);
+                    }
                 }
             } catch (JSONException e) {
             }

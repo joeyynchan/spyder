@@ -61,7 +61,7 @@ public class FetchProfile extends BaseMainAsyncTask{
         user.setOccupation(jsonObject.optString("job"));
         user.setPhone(jsonObject.optString("phone"));
         user.setPhotoURL(jsonObject.optString("photo"));
-        
+
         if(user.getPhotoURL() != null){
             Bitmap bitmap = null;
             try {
