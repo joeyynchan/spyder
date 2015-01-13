@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import g1436218.com.spyder.R;
 import g1436218.com.spyder.activity.MainActivity;
-import g1436218.com.spyder.asyncTask.DisplayProfile;
+import g1436218.com.spyder.asyncTask.DisplayUserProfile;
 import g1436218.com.spyder.asyncTask.FetchAttendees;
 import g1436218.com.spyder.fragment.AttendeeFragment;
 import g1436218.com.spyder.fragment.EventListFragment;
@@ -128,7 +128,7 @@ public class UIController {
     }
 
     public void showProfile() {
-        new DisplayProfile(activity).execute();
+        new DisplayUserProfile(activity).execute();
         resetButtonState();
         button_profile.setClickable(false);
         imageview_profile.setImageResource(R.drawable.main_activity_profile_pressed);

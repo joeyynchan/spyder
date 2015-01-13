@@ -40,7 +40,7 @@ public class MessageFragment extends DialogFragment implements View.OnClickListe
         send = (Button) rootView.findViewById(R.id.button_fragment_message_send);
         send.setOnClickListener(this);
 
-        title = (EditText) rootView.findViewById(R.id.edittext_fragment_message_title);
+        //title = (EditText) rootView.findViewById(R.id.edittext_fragment_message_title);
         message = (EditText) rootView.findViewById(R.id.edittext_fragment_message_message);
 
         return rootView;
@@ -59,9 +59,9 @@ public class MessageFragment extends DialogFragment implements View.OnClickListe
                         context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
                 String sender = sharedPref.getString(context.getString(R.string.username), "");
 
-                String _title = title.getText().toString();
+                //String _title = title.getText().toString();
                 String _message = message.getText().toString();
-                new SendMessage(_title, _message, sender, gcm_id).execute();
+                new SendMessage("", _message, sender, gcm_id).execute();
                 this.dismiss();
             }
         }

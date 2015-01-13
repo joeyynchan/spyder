@@ -4,6 +4,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import g1436218.com.spyder.activity.MainActivity;
 import g1436218.com.spyder.asyncTask.FetchAttendees;
@@ -34,7 +35,6 @@ public class MainActivityReceiver extends BroadcastReceiver {
 
         String action = intent.getAction();
         if (Action.DEVICE_DETECTED.equals(action)) {
-
             String macAddress = intent.getStringExtra("MAC_ADDRESS");
             int strength = intent.getIntExtra("STRENGTH", 0);
             Attendees usermap = Attendees.getInstance();

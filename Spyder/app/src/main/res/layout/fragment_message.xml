@@ -6,30 +6,11 @@
     android:layout_height="fill_parent"
     tools:context="g1436218.com.spyder.MessageFragment">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Message to"
-        android:layout_gravity="center"
-        android:id="@+id/textView" />
-
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="400dp"
         android:layout_gravity="center_horizontal|top">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Title:"
-            android:id="@+id/textView2" />
-
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/edittext_fragment_message_title" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -42,7 +23,8 @@
             android:layout_height="fill_parent"
             android:inputType="textMultiLine"
             android:ems="10"
-            android:id="@+id/edittext_fragment_message_message" />
+            android:id="@+id/edittext_fragment_message_message"
+            android:textAlignment="textStart" />
     </LinearLayout>
 
     <LinearLayout

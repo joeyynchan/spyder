@@ -4,28 +4,23 @@ import android.content.Context;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
 
-import com.android.internal.util.Predicate;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Iterator;
 
 import g1436218.com.spyder.R;
 import g1436218.com.spyder.activity.MainActivity;
 import g1436218.com.spyder.adapter.AttendeeAdapter;
 import g1436218.com.spyder.asyncTask.FetchAttendees;
-import g1436218.com.spyder.asyncTask.FetchUserProfile;
+import g1436218.com.spyder.asyncTask.DisplayAttendeeProfile;
 import g1436218.com.spyder.object.Action;
 import g1436218.com.spyder.object.Attendee;
-import g1436218.com.spyder.object.Attendees;
 import g1436218.com.spyder.receiver.AttendeeFragmentReceiver;
 
 public class AttendeeFragment extends BaseMainFragmentWithReceiver implements AdapterView.OnItemClickListener, SearchView.OnQueryTextListener, SwipeRefreshLayout.OnRefreshListener {
@@ -87,7 +82,7 @@ public class AttendeeFragment extends BaseMainFragmentWithReceiver implements Ad
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Attendee item = (Attendee) parent.getItemAtPosition(position);
-        new FetchUserProfile(activity, item.getUsername()).execute();
+        new DisplayAttendeeProfile(activity, item.getUsername()).execute();
     }
 
     @Override
