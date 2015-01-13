@@ -171,12 +171,14 @@ def user_profile(username=None):
 
     if user_dict['is_success']:
         for event in user_dict['events']:
-            event['can_join_event'] = can_join_event(event['event_id'])
+            event['can_join_event'] = can_join_event(
+                event['event_id'], username)
 
         organised_events = []
         spoken_events = []
         for event in db_api.get_all_event_profile():
-            event['can_join_event'] = can_join_event(event['event_id'])
+            event['can_join_event'] = can_join_event(
+                event['event_id'], username)
             if event.get('organiser', '') == username:
                 organised_events.append(event.copy())
             if event.get('speaker', '') == username:
@@ -202,9 +204,12 @@ def update_profile_page():
     user_profile = db_api.get_user_profile(session['current_user_username'])
 
     # remember for unused profile friend list
-    session['profile_connections'] = user_profile['connections']
-    # user_profile can get None from db_api but I doesn't matter for render
-    return render('update_profile.html.jinja', user_profile)
+    if user_profile:
+        session['profile_connections'] = user_profile['connections']
+        return render('update_profile.html.jinja', user_profile)
+    else:
+        session['profile_connections'] = '[]'
+        return render('update_profile.html.jinja')
 
 
 @app.route('/user/update-profile', methods=['POST'])
@@ -315,7 +320,7 @@ def event_profile(event_id):
     return render('event_profile.html.jinja', param_dict)
 
 
-@app.route('/event/list')
+@app.route('/event/list', methods=['GET'])
 def event_list():
     profiles = []
     for profile in db_api.get_all_event_profile():
