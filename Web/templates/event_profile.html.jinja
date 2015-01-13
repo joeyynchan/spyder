@@ -139,8 +139,8 @@
 	clearInterval(exFunction);
 	
 	interactionData = interactionObject;
-    interaction = interactionData.interaction;    
-    attendees = getAttendees();
+    	interaction = interactionData.interaction;    
+    	attendees = getAttendees();
 	
 	curr_t = new Date(interactionData.event_start_time);
 	event_end = new Date(interactionData.event_end_time);
@@ -152,7 +152,7 @@
 	document.getElementById("myText").value = Math.floor((event_end.getTime() - curr_t.getTime()) / 20);
 	
 	interval = parseInt(document.getElementById("myText").value);
-	exFunction = setInterval(function () {updateData()}, 1500);
+
 	updateStatistics();
   }
   
@@ -161,7 +161,7 @@
 	clearInterval(exFunction);
 	
 	interactionData = getSampleInteraction();
-    interaction = interactionData.interaction; 
+    	interaction = interactionData.interaction; 
     
 	curr_t = new Date(0);
 	event_end = new Date(10000);
@@ -174,7 +174,9 @@
 	updateStatistics();
   }
 
-  function updateData() {
+  function updateData(interactionObject) {
+	interactionData = interactionObject;
+    	interaction = interactionData.interaction;  
 	if (curr_t.getTime() <= event_end.getTime()) {
 		for (var i = 0; i < interaction.length; i++) {
 			var interaction_start = new Date(interaction[i].start_time);
@@ -215,14 +217,14 @@
   }
 
   
-  function updateSpeed() {
+  function updateGraphSpeed(interactionObject) {
 	interval = parseInt(document.getElementById("myText").value);
 	clearInterval(exFunction);
 	cleanCanvas();
 	for (var i = 0; i < attendees.length; i++) {
 		graph.addNode(attendees[i].user_name);
 	}
-	exFunction = setInterval(function () {updateData()}, 1500);
+	exFunction = setInterval(function () {updateData(interactionObject)}, 1500);
   }
   
   function updateStatistics() {
@@ -373,6 +375,14 @@
         url: '/xhr/event_visualisation_data/{{event_id}}',
         success:function(result){
           buildGraph(result['interaction'], result['attendees']);
+        }
+      });
+    }
+    function updateSpeed() {
+      $.ajax({
+        url: '/xhr/event_visualisation_data/{{event_id}}',
+        success:function(result){
+          updateGraphSpeed(result['interaction'], result['attendees']);
         }
       });
     }
