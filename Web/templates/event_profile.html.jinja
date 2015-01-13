@@ -133,7 +133,8 @@
   graph = new myGraph("#graph");
   
   function buildGraph(interactionObject, attendees) {
-
+	
+	d3.select('#chart').select("svg").remove();
 	cleanCanvas();
 	clearInterval(exFunction);
 	
@@ -307,7 +308,8 @@
 		.attr('height', yScale.rangeBand())
 		.attr('width', function(d) { return x(barValue(d)); })
 		.attr('stroke', 'white')
-		.attr('fill', 'steelblue');
+		.attr('fill', 'steelblue')
+		.on("click", synchronizedClick);
 	// bar value labels
 	barsContainer.selectAll("text").data(data).enter().append("text")
 		.attr("x", function(d) { return x(barValue(d)); })
@@ -325,6 +327,27 @@
 		.style("stroke", "#000");
 
   }
+
+  function synchronizedClick(d,time) {
+	clearInterval(exFunction);
+	curr_t = new Date(interactionData.event_start_time);
+	for (var count = 0; count <= time; count++) {
+		for (var i = 0; i < interaction.length; i++) {
+			var interaction_start = new Date(interaction[i].start_time);
+			var interaction_end = new Date(interaction[i].end_time);
+			if ( (interaction_start.getTime() <= curr_t.getTime()+ interval)  && (interaction_end.getTime() >= curr_t.getTime()) ) {
+				graph.addLink(interaction[i].user1,interaction[i].user2);
+			}
+			if (interaction_end.getTime() < curr_t.getTime()) {
+				graph.removeLink(interaction[i].user1,interaction[i].user2);
+			}
+			if (interaction_start.getTime() > curr_t.getTime() + interval) {
+				graph.removeLink(interaction[i].user1,interaction[i].user2);
+			}
+		}
+		curr_t.setTime(curr_t.getTime() + interval);
+	}	
+  };
   
   function cleanCanvas() {
 	if (interaction !=  null) {
