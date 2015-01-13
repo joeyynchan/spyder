@@ -29,6 +29,8 @@ public class LinkDevice extends BaseLoginAsyncTask{
 
     private String username;
     private String password;
+    private String macAddress;
+    private String gcmID;
 
     public LinkDevice(LoginActivity activity, String username, String password) {
         super(activity);
@@ -40,23 +42,25 @@ public class LinkDevice extends BaseLoginAsyncTask{
     protected Void doInBackground(Void... params) {
 
         GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(activity);
-        String regid = "";
+        gcmID = "";
         try {
-            regid = gcm.register(GlobalConfiguration.PROJECT_NUMBER);
+            gcmID = gcm.register(GlobalConfiguration.PROJECT_NUMBER);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+        macAddress = getDefaultAdapter().getAddress();
+
         addToParams("user_name", username);
         addToParams("password", password);
-        addToParams("mac_address", getDefaultAdapter().getAddress());
-        addToParams("gcm_id", regid);
+        addToParams("mac_address", macAddress);
+        addToParams("gcm_id", gcmID);
 
-        Log.i("GCM", "GCM ID=" + regid);
+        Log.i("GCM", "GCM ID=" + gcmID);
 
         Intent intent = new Intent();
         intent.setAction(Action.GET_GCM);
-        intent.putExtra("GCMID", regid);
+        intent.putExtra("GCMID", gcmID);
         activity.sendBroadcast(intent);
 
         if (username.equals(GlobalConfiguration.OFFLINE_MODE)) {
@@ -110,6 +114,9 @@ public class LinkDevice extends BaseLoginAsyncTask{
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString(context.getString(R.string.username), username);
         editor.putString(context.getString(R.string.password), password);
+        editor.putString("macAddress", macAddress);
+        editor.putString("gcmID", gcmID);
+
         editor.putBoolean(GlobalConfiguration.OFFLINE_MODE, username.equals(GlobalConfiguration.OFFLINE_MODE));
         editor.commit();
         /* start mainActivity */

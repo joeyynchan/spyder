@@ -32,8 +32,7 @@ public class UnlinkFragment extends DialogFragment {
                         username = sharedPref.getString(context.getString(R.string.username), "");
                         password = sharedPref.getString(context.getString(R.string.password), "");
                         SharedPreferences.Editor editor = sharedPref.edit();
-                        editor.remove(context.getString(R.string.username));
-                        editor.remove(context.getString(R.string.password));
+                        editor.clear();
                         editor.commit();
                         new UnlinkDevice(getActivity(), username, password).execute();
                     }
