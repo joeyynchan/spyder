@@ -95,12 +95,6 @@ public class BluetoothDiscovery extends Service {
     }
 
     @Override
-    public IBinder onBind(Intent intent) {
-        // TODO: Return the communication channel to the service.
-        throw new UnsupportedOperationException("Not yet implemented");
-    }
-
-    @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
 		/* Enable Bluetooth */
@@ -120,5 +114,10 @@ public class BluetoothDiscovery extends Service {
         super.onDestroy();
         unregisterReceiver(receiver);
         handler.removeCallbacks(mDiscoveryTask);
+    }
+
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
     }
 }

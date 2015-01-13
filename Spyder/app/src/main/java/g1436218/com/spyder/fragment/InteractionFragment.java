@@ -106,9 +106,9 @@ public class InteractionFragment extends BaseMainFragmentWithReceiver implements
 
     @Override
     public void onRefresh() {
-        this.interactionPackage.copyInteractionsToClone();
-        updateAdapter();
-        swipeRefreshLayout.setRefreshing(false);
+        //this.interactionPackage.copyInteractionsToClone();
+        //updateAdapter();
+        //swipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
