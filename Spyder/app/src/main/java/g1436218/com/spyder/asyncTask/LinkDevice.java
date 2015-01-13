@@ -115,6 +115,7 @@ public class LinkDevice extends BaseLoginAsyncTask{
         /* start mainActivity */
         Intent intent = new Intent(activity, MainActivity.class);
         activity.startActivity(intent);
+        activity.finish();
     }
 
     private void setErrMsgToNotFound(){

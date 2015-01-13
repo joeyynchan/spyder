@@ -1,15 +1,18 @@
 package g1436218.com.spyder.dialogFragment;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 
 import g1436218.com.spyder.R;
+import g1436218.com.spyder.activity.LoginActivity;
 import g1436218.com.spyder.activity.MainActivity;
 import g1436218.com.spyder.asyncTask.UnlinkDevice;
 
@@ -39,8 +42,12 @@ public class LogoutFragment extends DialogFragment {
                         SharedPreferences.Editor editor = sharedPref.edit();
                         editor.clear();
                         editor.commit();
-                        new UnlinkDevice((MainActivity)getActivity(), username, password).execute();
-                        getActivity().finish();
+                        new UnlinkDevice((MainActivity) getActivity(), username, password).execute();
+                        /* Start Login Activity */
+                        Activity activity = getActivity();
+                        Intent intent = new Intent(activity, LoginActivity.class);
+                        activity.startActivity(intent);
+                        activity.finish();
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
