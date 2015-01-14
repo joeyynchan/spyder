@@ -97,7 +97,15 @@ public class LinkDevice extends BaseLoginAsyncTask{
                 setErrMsgToNotFound();
                 showUnlink();
                 break;
-
+            case (410):
+                setErrMsgToNotFound();
+                break;
+            case (411):
+                setErrMsgToNotFound();
+                break;
+            case (412):
+                setErrMsgToNotFound();
+                break;
             case (999):
                 gotoMainActivity();
 
@@ -137,18 +145,15 @@ public class LinkDevice extends BaseLoginAsyncTask{
                 case (409):
                     login_text_errmsg.setText("User is already linked with other device\n");
                     break;
-                case 410: {
+                case 410:
                     login_text_errmsg.setText("Username cannot be empty");
                     break;
-                }
-                case 411: {
+                case 411:
                     login_text_errmsg.setText("Password cannot be empty");
                     break;
-                }
-                case 412: {
-                    login_text_errmsg.setText("This device is used by antoher user.");
+                case 412:
+                    login_text_errmsg.setText("This device is used by another user.");
                     break;
-                }
                 default:
                     login_text_errmsg.setText("No response from server, please try again later\n");
                     break;
