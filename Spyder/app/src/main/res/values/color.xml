@@ -6,7 +6,7 @@
     <color name="container_activity_login">#ff192939</color>
     <color name="backgroundColor">#ff607080</color>
     <color name="divider">#ff505050</color>
-    <color name="profile_title">#ffd0d0d0</color>
     <color name="main_activity_button_text_pressed">#fff0a040</color>
     <color name="themeColor">#ff102030</color>
+    <color name="profile_title">#ff20e0a0</color>
 </resources>

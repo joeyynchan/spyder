@@ -25,13 +25,21 @@
             android:layout_marginTop="20dp"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
-            android:background="#fff0f0f0">
+            android:background="#ffffffff">
 
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="fill_parent"
-                android:layout_height="40dp"
-                android:background="@color/profile_title">
+                android:layout_height="60dp"
+                android:background="#ff20e0a0">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="10dp"
+                    android:id="@+id/imageView"
+                    android:src="@android:drawable/ic_menu_info_details" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -51,7 +59,7 @@
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="fill_parent"
-                android:layout_height="40dp">
+                android:layout_height="60dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -79,7 +87,7 @@
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="fill_parent"
-                android:layout_height="40dp">
+                android:layout_height="60dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -107,7 +115,7 @@
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="fill_parent"
-                android:layout_height="40dp">
+                android:layout_height="60dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -135,7 +143,7 @@
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="fill_parent"
-                android:layout_height="40dp">
+                android:layout_height="60dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -169,17 +177,27 @@
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
             android:layout_marginTop="20dp"
-            android:background="#fff0f0f0">
+            android:background="#ffffffff">
 
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="fill_parent"
-                android:layout_height="40dp"
-                android:background="@color/profile_title">
+                android:layout_height="60dp"
+                android:background="#FF20E0A0">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="10dp"
+                    android:id="@+id/imageView2"
+                    android:src="@android:drawable/ic_menu_call" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="5dp"
                     android:text="Contact Info" />
 
             </LinearLayout>
@@ -192,7 +210,7 @@
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="fill_parent"
-                android:layout_height="40dp">
+                android:layout_height="60dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -221,7 +239,7 @@
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="fill_parent"
-                android:layout_height="40dp">
+                android:layout_height="60dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -250,7 +268,7 @@
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="fill_parent"
-                android:layout_height="40dp">
+                android:layout_height="60dp">
 
                 <TextView
                     android:layout_width="wrap_content"

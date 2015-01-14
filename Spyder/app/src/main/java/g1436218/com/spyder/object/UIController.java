@@ -105,7 +105,7 @@ public class UIController {
         fragmentTransaction.commit();
         resetButtonState();
         button_attendee_list.setClickable(false);
-        imageview_attendee_list.setImageResource(R.drawable.main_activity_attendee_list_pressed);
+        //imageview_attendee_list.setImageResource(R.drawable.main_activity_attendee_list_pressed);
         textview_attendee_list.setTextColor(activity.getResources().getColor(R.color.main_activity_button_text_pressed));
     }
 
@@ -118,7 +118,7 @@ public class UIController {
         activity.sendBroadcast(intent);
         resetButtonState();
         button_event_list.setClickable(false);
-        imageview_event_list.setImageResource(R.drawable.main_activity_event_list_pressed);
+        //imageview_event_list.setImageResource(R.drawable.main_activity_event_list_pressed);
         textview_event_list.setTextColor(activity.getResources().getColor(R.color.main_activity_button_text_pressed));
     }
 
@@ -128,7 +128,7 @@ public class UIController {
         fragmentTransaction.commit();
         resetButtonState();
         button_interactions.setClickable(false);
-        imageview_interactions.setImageResource(R.drawable.main_activity_interactions_icon_pressed);
+        //imageview_interactions.setImageResource(R.drawable.main_activity_interactions_icon_pressed);
         textview_interatcions.setTextColor(activity.getResources().getColor(R.color.main_activity_button_text_pressed));
     }
 
@@ -136,7 +136,7 @@ public class UIController {
         new DisplayUserProfile(activity).execute();
         resetButtonState();
         button_profile.setClickable(false);
-        imageview_profile.setImageResource(R.drawable.main_activity_profile_pressed);
+        //imageview_profile.setImageResource(R.drawable.main_activity_profile_pressed);
         textview_profile.setTextColor(activity.getResources().getColor(R.color.main_activity_button_text_pressed));
     }
 
@@ -151,10 +151,10 @@ public class UIController {
     }
 
     private void resetButtonState() {
-        imageview_attendee_list.setImageResource(R.drawable.main_activity_attendee_list_normal);
-        imageview_event_list.setImageResource(R.drawable.main_activity_event_list_normal);
-        imageview_interactions.setImageResource(R.drawable.main_activity_interactions_icon_normal);
-        imageview_profile.setImageResource(R.drawable.main_activity_profile_normal);
+        //imageview_attendee_list.setImageDrawable();
+        //imageview_event_list.setImageResource(R.drawable.main_activity_event_list_normal);
+        //imageview_interactions.setImageResource(R.drawable.main_activity_interactions_icon_normal);
+        //imageview_profile.setImageResource(R.drawable.main_activity_profile_normal);
 
         textview_attendee_list.setTextColor(activity.getResources().getColor(R.color.textedit_background));
         textview_event_list.setTextColor(activity.getResources().getColor(R.color.textedit_background));

@@ -67,7 +67,6 @@ public class FetchProfile extends BaseMainAsyncTask{
             try {
                 bitmap = getImageFromURL(new java.net.URL(user.getPhotoURL()));
             } catch (MalformedURLException e) {
-                e.printStackTrace();
             }
             user.setPhoto(bitmap);
         }

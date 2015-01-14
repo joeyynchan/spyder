@@ -33,7 +33,7 @@
         <EditText
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPersonName"
+            android:inputType="text|textEmailAddress"
             android:hint="Username"
             android:ems="10"
             android:id="@+id/edittext_fragment_register_username"
