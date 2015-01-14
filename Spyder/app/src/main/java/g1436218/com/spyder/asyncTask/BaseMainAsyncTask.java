@@ -23,6 +23,7 @@ import g1436218.com.spyder.R;
 import g1436218.com.spyder.activity.LoginActivity;
 import g1436218.com.spyder.activity.MainActivity;
 import g1436218.com.spyder.config.GlobalConfiguration;
+import g1436218.com.spyder.config.SharedPref;
 import g1436218.com.spyder.dialogFragment.AlertFragment;
 
 public abstract class BaseMainAsyncTask extends BaseAsyncTask {
@@ -65,12 +66,10 @@ public abstract class BaseMainAsyncTask extends BaseAsyncTask {
             return doInBackgroundOffline();
         }
 
-        SharedPreferences sharedPref = activity.getSharedPreferences(
-                activity.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-        username = sharedPref.getString(activity.getString(R.string.username), "");
-        password = sharedPref.getString(activity.getString(R.string.password), "");
-        macAddress = sharedPref.getString("macAddress", "");
-        gcmID = sharedPref.getString("gcmID", "");
+        username = activity.getSharedPrefString(SharedPref.USERNAME);
+        password = activity.getSharedPrefString(SharedPref.PASSWORD);
+        macAddress = activity.getSharedPrefString(SharedPref.MAC_ADDRESS);
+        gcmID = activity.getSharedPrefString(SharedPref.GCM_ID);
 
         addToParams("user_name", username);
         addToParams("password", password);
@@ -86,13 +85,8 @@ public abstract class BaseMainAsyncTask extends BaseAsyncTask {
 
             Log.d(TAG, "Logging out");
             if(logout){
-            /* clear anything that was stored in sharedPref */
-                Context context = activity;
-                SharedPreferences.Editor editor = sharedPref.edit();
-                editor.clear();
-                editor.commit();
-
-
+                /* clear anything that was stored in sharedPref */
+                activity.clearSharedPref();
                 new AlertFragment("Logging out", username + "has logged in on another device.", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
