@@ -37,10 +37,7 @@ public class FetchEvents extends BaseMainAsyncTask {
     @Override
     protected Void doInBackgroundOnline(Void... params) {
 
-        Context context = activity;
-        SharedPreferences sharedPref = context.getSharedPreferences(
-                context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-        String username = sharedPref.getString(context.getString(R.string.username), "");
+        String username = activity.getSharedPrefString("Username");
 
         addToParams("user_name", username);
         addToParams("event_search_string", keyword);

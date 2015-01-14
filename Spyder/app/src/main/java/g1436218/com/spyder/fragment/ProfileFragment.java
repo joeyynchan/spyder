@@ -47,12 +47,7 @@ public class ProfileFragment extends BaseMainFragment {
 
     @Override
     public void onPrepareOptionsMenu(Menu menu){
-
-        Log.d(TAG, "onPrepareOptions");
-        super.onPrepareOptionsMenu(menu);
-        SharedPreferences sharedPref = activity.getSharedPreferences(
-                activity.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-        String currUsername = sharedPref.getString(activity.getString(R.string.username), "");
+        String currUsername = activity.getSharedPrefString("Username");
         if(user.getUsername().equals(currUsername)){
             menu.findItem(R.id.action_edit).setVisible(true);
         }

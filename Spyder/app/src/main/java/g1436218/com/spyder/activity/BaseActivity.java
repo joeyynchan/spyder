@@ -63,12 +63,46 @@ public abstract class BaseActivity extends Activity implements View.OnClickListe
         super.onPause();
     }
 
+    /* Retreive String with tag from SharedPreference */
     public String getSharedPrefString(String tag) {
         SharedPreferences sharedPref = getSharedPreferences(
                 getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         String result = sharedPref.getString(tag, "");
         return result;
     }
+
+    /* Put String with tag into SharedPreference */
+    public void putSharedPrefString(String tag, String value) {
+        SharedPreferences sharedPref = getSharedPreferences(
+                getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString(tag, value);
+        editor.commit();
+    }
+
+    public boolean getSharedPrefBoolean(String tag) {
+        SharedPreferences sharedPref = getSharedPreferences(
+                getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        boolean result = sharedPref.getBoolean(tag, false);
+        return result;
+    }
+
+    public void putSharedPrefBoolean(String tag, boolean bool) {
+        SharedPreferences sharedPref = getSharedPreferences(
+                getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putBoolean(tag, bool);
+        editor.commit();
+    }
+
+    public void clearSharedPref() {
+        SharedPreferences sharedPref = getSharedPreferences(
+                getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.clear();
+        editor.commit();
+    }
+
 
     public abstract void onClick(View v);
     public abstract void initializeView();

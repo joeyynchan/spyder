@@ -108,17 +108,12 @@ public class LinkDevice extends BaseLoginAsyncTask{
 
     private void gotoMainActivity(){
         /* insert (username, password) into sharedPreference */
-        Context context = activity;
-        SharedPreferences sharedPref = context.getSharedPreferences(
-                context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString(context.getString(R.string.username), username);
-        editor.putString(context.getString(R.string.password), password);
-        editor.putString("macAddress", macAddress);
-        editor.putString("gcmID", gcmID);
+        activity.putSharedPrefString("Username", username);
+        activity.putSharedPrefString("Password", password);
+        activity.putSharedPrefString("macAddress", macAddress);
+        activity.putSharedPrefString("gcmID", gcmID);
+        activity.putSharedPrefBoolean(GlobalConfiguration.OFFLINE_MODE, username.equals(GlobalConfiguration.OFFLINE_MODE));
 
-        editor.putBoolean(GlobalConfiguration.OFFLINE_MODE, username.equals(GlobalConfiguration.OFFLINE_MODE));
-        editor.commit();
         /* start mainActivity */
         Intent intent = new Intent(activity, MainActivity.class);
         activity.startActivity(intent);
@@ -167,13 +162,8 @@ public class LinkDevice extends BaseLoginAsyncTask{
 
     private void showUnlink() {
                 /* insert (username, password) into sharedPreference */
-        Context context = activity;
-        SharedPreferences sharedPref = context.getSharedPreferences(
-                context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString(context.getString(R.string.username), username);
-        editor.putString(context.getString(R.string.password), password);
-        editor.commit();
+        activity.putSharedPrefString("Username", username);
+        activity.putSharedPrefString("Password", password);
         FragmentManager fragmentManager = activity.getFragmentManager();
         new UnlinkFragment().show(fragmentManager, "Unlink");
         TextView textview_errmsg = (TextView) activity.findViewById(R.id.textview_fragment_login_errmsg);

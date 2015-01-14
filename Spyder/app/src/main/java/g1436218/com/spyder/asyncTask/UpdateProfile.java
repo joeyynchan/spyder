@@ -19,11 +19,7 @@ public class UpdateProfile extends BaseMainAsyncTask {
 
     public UpdateProfile(MainActivity activity, User user) {
         super(activity);
-
-        Context context = activity;
-        SharedPreferences sharedPref = context.getSharedPreferences(
-                context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-        String username = sharedPref.getString(context.getString(R.string.username), "");
+        String username = activity.getSharedPrefString("Username");
 
         this.user = user;
         this.url = GlobalConfiguration.DEFAULT_URL + "user/profile?user_name=" + username;

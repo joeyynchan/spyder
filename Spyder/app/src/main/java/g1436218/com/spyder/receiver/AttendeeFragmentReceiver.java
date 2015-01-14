@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 
 import g1436218.com.spyder.R;
+import g1436218.com.spyder.activity.BaseActivity;
 import g1436218.com.spyder.adapter.AttendeeAdapter;
 import g1436218.com.spyder.fragment.AttendeeFragment;
 import g1436218.com.spyder.object.Action;
@@ -35,7 +36,7 @@ public class AttendeeFragmentReceiver extends BroadcastReceiver {
 
             SharedPreferences sharedPref = fragment.getActivity().getSharedPreferences(
                     context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-            String _event_name = sharedPref.getString("EVENT_NAME", "");
+            String _event_name = fragment.getMainActivity().getSharedPrefString("EVENT_NAME");
 
             event_name.setText(_event_name);
 

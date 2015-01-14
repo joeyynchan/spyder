@@ -1,6 +1,7 @@
 package g1436218.com.spyder.adapter;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +32,7 @@ public class AttendeeAdapter extends ArrayAdapter<Attendee> {
         Attendee item = getItem(position);
         username.setText(item.getName());
 
+        SharedPreferences
 
         return v;
     }

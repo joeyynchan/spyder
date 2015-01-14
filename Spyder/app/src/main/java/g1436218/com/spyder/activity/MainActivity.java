@@ -189,12 +189,8 @@ public class MainActivity extends BaseActivity {
     }
 
     public void setToCurrentEvent(String event_id, String event_name) {
-        SharedPreferences sharedPref = getSharedPreferences(
-                getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString("EVENT_ID", event_id);
-        editor.putString("EVENT_NAME", event_name);
-        editor.commit();
+        putSharedPrefString("EVENT_ID", event_id);
+        putSharedPrefString("EVENT_NAME", event_name);
         Log.d("Event ID", event_id);
         Log.d("Event Name", event_name);
         new FetchAttendees(this).execute();

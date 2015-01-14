@@ -58,10 +58,8 @@ public class AttendeeFragment extends BaseMainFragmentWithReceiver implements Ad
         swipeRefreshLayout.setDistanceToTriggerSync(200);
         swipeRefreshLayout.setOnRefreshListener(this);
 
-        SharedPreferences sharedPref = activity.getSharedPreferences(
-                activity.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-        String event_id = sharedPref.getString("EVENT_ID", "");
-        String event_name = sharedPref.getString("EVENT_NAME", "");
+        String event_id = activity.getSharedPrefString("EVENT_ID");
+        String event_name = activity.getSharedPrefString("EVENT_NAME");
 
         if (!event_id.equals("")) {
             textview_name.setText(event_name);

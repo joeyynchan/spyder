@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import g1436218.com.spyder.R;
+import g1436218.com.spyder.activity.BaseActivity;
 import g1436218.com.spyder.asyncTask.SendMessage;
 
 public class SendMessageFragment extends DialogFragment implements View.OnClickListener {
@@ -55,9 +56,8 @@ public class SendMessageFragment extends DialogFragment implements View.OnClickL
             }
             case R.id.button_fragment_message_send: {
                 Context context = getActivity();
-                SharedPreferences sharedPref = getActivity().getSharedPreferences(
-                        context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-                String sender = sharedPref.getString("name", "");
+
+                String sender = ((BaseActivity) getActivity()).getSharedPrefString("name");
 
                 //String _title = title.getText().toString();
                 String _message = message.getText().toString();

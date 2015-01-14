@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 import g1436218.com.spyder.R;
+import g1436218.com.spyder.activity.BaseActivity;
 import g1436218.com.spyder.activity.MainActivity;
 import g1436218.com.spyder.asyncTask.FetchAttendees;
 import g1436218.com.spyder.asyncTask.SubmitBluetoothData;
@@ -158,9 +159,7 @@ public class MainActivityReceiver extends BroadcastReceiver {
 
             String event_id = intent.getStringExtra("event_id");
 
-            SharedPreferences sharedPref = activity.getSharedPreferences(
-                    context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-            String EVENT_ID = sharedPref.getString("EVENT_ID", "");
+            String EVENT_ID = activity.getSharedPrefString("EVENT_ID");
 
             if (event_id.equals(EVENT_ID)) {
                 bluetoothController.stopDiscovery();

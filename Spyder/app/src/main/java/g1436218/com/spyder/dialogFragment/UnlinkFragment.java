@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import g1436218.com.spyder.R;
+import g1436218.com.spyder.activity.BaseActivity;
 import g1436218.com.spyder.asyncTask.UnlinkDevice;
 
 public class UnlinkFragment extends DialogFragment {
@@ -29,8 +30,8 @@ public class UnlinkFragment extends DialogFragment {
                         Context context = getActivity();
                         SharedPreferences sharedPref = context.getSharedPreferences(
                                 context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-                        username = sharedPref.getString(context.getString(R.string.username), "");
-                        password = sharedPref.getString(context.getString(R.string.password), "");
+                        username = ((BaseActivity) getActivity()).getSharedPrefString("Username");
+                        password = ((BaseActivity) getActivity()).getSharedPrefString("Password");
                         SharedPreferences.Editor editor = sharedPref.edit();
                         editor.clear();
                         editor.commit();

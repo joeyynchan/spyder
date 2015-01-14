@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import g1436218.com.spyder.R;
+import g1436218.com.spyder.activity.BaseActivity;
 import g1436218.com.spyder.activity.LoginActivity;
 import g1436218.com.spyder.activity.MainActivity;
 import g1436218.com.spyder.asyncTask.UnlinkDevice;
@@ -23,25 +24,21 @@ public class LogoutFragment extends DialogFragment {
     protected String password;
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+
+
+        username = ((BaseActivity) getActivity()).getSharedPrefString("Username");
+
         // Use the Builder class for convenient dialog construction
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        Context context = getActivity();
-        SharedPreferences sharedPref = context.getSharedPreferences(
-                context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-        username = sharedPref.getString("name", sharedPref.getString(context.getString(R.string.username), ""));
         builder.setTitle("Logout");
         builder.setMessage(username + ", are you sure?")
                 .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         Log.d(TAG, "Yes, please log me out");
-                        Context context = getActivity();
-                        SharedPreferences sharedPref = context.getSharedPreferences(
-                                context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-                        username = sharedPref.getString(context.getString(R.string.username), "");
-                        password = sharedPref.getString(context.getString(R.string.password), "");
-                        SharedPreferences.Editor editor = sharedPref.edit();
-                        editor.clear();
-                        editor.commit();
+
+                        username = ((BaseActivity) getActivity()).getSharedPrefString("Username");
+                        password = ((BaseActivity) getActivity()).getSharedPrefString("Password");
+                        ((BaseActivity) getActivity()).clearSharedPref();
                         new UnlinkDevice((MainActivity) getActivity(), username, password).execute();
                         /* Start Login Activity */
                         Activity activity = getActivity();
