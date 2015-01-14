@@ -26,4 +26,5 @@ public class Action {
     public static final String START_EVENT = "START_EVENT";
     public static final String STOP_EVENT = "STOP_EVENT";
     public static final String CLEAR_INTERACTION_FRAGMENT_ADAPTER = "CLEAR_INTERACTION_FRAGMENT_ADAPTER";
+    public static final String EVENT_ADAPTER_SORT_ITEM = "EVENT_ADAPTER_SORT_ITEM";
 }

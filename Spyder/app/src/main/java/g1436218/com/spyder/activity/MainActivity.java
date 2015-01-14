@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import g1436218.com.spyder.R;
 import g1436218.com.spyder.asyncTask.CheckConnection;
 import g1436218.com.spyder.asyncTask.FetchAttendees;
+import g1436218.com.spyder.config.SharedPref;
 import g1436218.com.spyder.intentfilter.MainActivityIntentFilter;
 import g1436218.com.spyder.object.Attendees;
 import g1436218.com.spyder.object.BluetoothController;
@@ -184,8 +185,8 @@ public class MainActivity extends BaseActivity {
     }
 
     public void setToCurrentEvent(String event_id, String event_name) {
-        putSharedPrefString("EVENT_ID", event_id);
-        putSharedPrefString("EVENT_NAME", event_name);
+        putSharedPrefString(SharedPref.EVENT_ID, event_id);
+        putSharedPrefString(SharedPref.EVENT_NAME, event_name);
         Log.d("Event ID", event_id);
         Log.d("Event Name", event_name);
         new FetchAttendees(this).execute();

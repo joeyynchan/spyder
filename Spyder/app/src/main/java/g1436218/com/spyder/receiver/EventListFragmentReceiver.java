@@ -32,6 +32,8 @@ public class EventListFragmentReceiver extends BroadcastReceiver {
             fragment.clearAdapter();
         } else if (Action.FETCH_EVENTS.equals(action)) {
             fragment.searchEvent();
+        } else if (Action.EVENT_ADAPTER_SORT_ITEM.equals(action)) {
+            fragment.sortEvents();
         }
     }
 

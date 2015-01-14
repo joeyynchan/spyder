@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -183,6 +184,19 @@ public class EventListAdapter extends BaseAdapter {
             return v;
         }
 
+    }
+
+    public void sort() {
+        for (String key: sections.keySet()) {
+            EventAdapter eventAdapter = sections.get(key);
+            eventAdapter.sort(new Comparator<Event>() {
+                @Override
+                public int compare(Event lhs, Event rhs) {
+                   return lhs.getName().compareTo(rhs.getName());
+                }
+            });
+            eventAdapter.notifyDataSetChanged();
+        }
     }
 
 

@@ -17,6 +17,7 @@ import g1436218.com.spyder.R;
 import g1436218.com.spyder.activity.LoginActivity;
 import g1436218.com.spyder.activity.MainActivity;
 import g1436218.com.spyder.config.GlobalConfiguration;
+import g1436218.com.spyder.config.SharedPref;
 import g1436218.com.spyder.dialogFragment.UnlinkFragment;
 import g1436218.com.spyder.object.Action;
 
@@ -63,7 +64,7 @@ public class LinkDevice extends BaseLoginAsyncTask{
         intent.putExtra("GCMID", gcmID);
         activity.sendBroadcast(intent);
 
-        if (username.equals(GlobalConfiguration.OFFLINE_MODE)) {
+        if (username.equals(SharedPref.OFFLINE_MODE)) {
             statusCode = 999;
         } else {
             JSONObject jsonObject = getJSONFromUrl(URL, Requests.POST);
@@ -108,11 +109,11 @@ public class LinkDevice extends BaseLoginAsyncTask{
 
     private void gotoMainActivity(){
         /* insert (username, password) into sharedPreference */
-        activity.putSharedPrefString("Username", username);
-        activity.putSharedPrefString("Password", password);
-        activity.putSharedPrefString("macAddress", macAddress);
-        activity.putSharedPrefString("gcmID", gcmID);
-        activity.putSharedPrefBoolean(GlobalConfiguration.OFFLINE_MODE, username.equals(GlobalConfiguration.OFFLINE_MODE));
+        activity.putSharedPrefString(SharedPref.USERNAME, username);
+        activity.putSharedPrefString(SharedPref.PASSWORD, password);
+        activity.putSharedPrefString(SharedPref.MAC_ADDRESS, macAddress);
+        activity.putSharedPrefString(SharedPref.GCM_ID, gcmID);
+        activity.putSharedPrefBoolean(SharedPref.OFFLINE_MODE, username.equals(SharedPref.OFFLINE_MODE));
 
         /* start mainActivity */
         Intent intent = new Intent(activity, MainActivity.class);
@@ -162,8 +163,8 @@ public class LinkDevice extends BaseLoginAsyncTask{
 
     private void showUnlink() {
                 /* insert (username, password) into sharedPreference */
-        activity.putSharedPrefString("Username", username);
-        activity.putSharedPrefString("Password", password);
+        activity.putSharedPrefString(SharedPref.USERNAME, username);
+        activity.putSharedPrefString(SharedPref.PASSWORD, password);
         FragmentManager fragmentManager = activity.getFragmentManager();
         new UnlinkFragment().show(fragmentManager, "Unlink");
         TextView textview_errmsg = (TextView) activity.findViewById(R.id.textview_fragment_login_errmsg);

@@ -98,6 +98,11 @@ public class EventListFragment extends BaseMainFragmentWithReceiver implements A
     @Override
     public void onRefresh() {
         searchEvent();
+        adapter.sort();
         swipeRefreshLayout.setRefreshing(false);
+    }
+
+    public void sortEvents() {
+        adapter.sort();
     }
 }

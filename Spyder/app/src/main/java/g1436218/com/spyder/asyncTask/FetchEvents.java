@@ -74,6 +74,7 @@ public class FetchEvents extends BaseMainAsyncTask {
         if (offline) {
             new AlertFragment("No Connection", "Event list cannot be updated").show(activity.getFragmentManager(), "Alert");
         }
+        //broadcastSortItems();
     }
 
     private void broadcastAddItem(String status, String event_id, String event_name) {
@@ -88,6 +89,12 @@ public class FetchEvents extends BaseMainAsyncTask {
     private void broadcastClearAdapter() {
         Intent intent = new Intent();
         intent.setAction(Action.EVENT_ADAPTER_CLEAR);
+        activity.sendBroadcast(intent);
+    }
+
+    private void broadcastSortItems() {
+        Intent intent = new Intent();
+        intent.setAction(Action.EVENT_ADAPTER_SORT_ITEM);
         activity.sendBroadcast(intent);
     }
 
