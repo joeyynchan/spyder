@@ -1,6 +1,7 @@
 package g1436218.com.spyder.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -184,19 +185,30 @@ public class EventListAdapter extends BaseAdapter {
             return v;
         }
 
+        public String toString() {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < this.getCount(); i++) {
+                sb.append(this.getItem(i).getName() + " --> ");
+            }
+            return sb.toString();
+        }
+
     }
 
     public void sort() {
+        Log.d("EventlistAdapter", "sort() is called!");
         for (String key: sections.keySet()) {
             EventAdapter eventAdapter = sections.get(key);
             eventAdapter.sort(new Comparator<Event>() {
                 @Override
                 public int compare(Event lhs, Event rhs) {
-                   return lhs.getName().compareTo(rhs.getName());
+                    return lhs.getName().compareTo(rhs.getName());
                 }
             });
+            Log.d("EventAdapter", eventAdapter.toString());
             eventAdapter.notifyDataSetChanged();
         }
+        notifyDataSetChanged();
     }
 
 

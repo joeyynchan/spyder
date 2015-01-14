@@ -74,7 +74,7 @@ public class FetchEvents extends BaseMainAsyncTask {
         if (offline) {
             new AlertFragment("No Connection", "Event list cannot be updated").show(activity.getFragmentManager(), "Alert");
         }
-        //broadcastSortItems();
+        broadcastSortItems();
     }
 
     private void broadcastAddItem(String status, String event_id, String event_name) {
