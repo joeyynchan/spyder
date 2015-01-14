@@ -119,7 +119,7 @@
 
     function inttime_from_now() {
       var d = new Date();
-      return Math.floor(d.valueOf / 1000) - shift_start_time;
+      return Math.floor(d.valueOf() / 1000) - shift_start_time;
     }
 
     // convert datetime in java string format (or another format, fine new Date();)
@@ -135,9 +135,17 @@
     }
 
     // sort on key values
-    function keysrt(key,desc) {
+    // function keysrt(key,desc) {
+    //   return function(a,b){
+    //    return desc ? ~~(a[key] < b[key]) : ~~(a[key] > b[key]);
+    //   }
+    // }
+
+    function keysrt(key) {
       return function(a,b){
-       return desc ? ~~(a[key] < b[key]) : ~~(a[key] > b[key]);
+       if (a[key] > b[key]) return 1;
+       if (a[key] < b[key]) return -1;
+       return 0;
       }
     }
 
@@ -169,7 +177,7 @@
           "is_add": false
         });
       }
-      return list.sort(keysrt("time"));
+      return list.sort(keysrt('time'));
     }
 
     function extract_attendee_list(attendees) {
@@ -178,6 +186,7 @@
       for (var i = 0; i < user_mappings_list.length; i++) {
         list.push(user_mappings_list[i]["user_name"])
       }
+      list.sort();
       return list;
     }
 
@@ -211,14 +220,14 @@
       console.log(time);
       var i;
       var edges;
-      if (cursor_time < time) {
+      if (false) { /*graph_edges !== undefined && cursor_time < time*/
         edges = graph_edges;
         i = first_index_tinteractl(cursor_time);
       } else {
         edges = {}
         for (var i = 0; i < attendee_list.length; i++) {
           edges[attendee_list[i]] = {}
-          for (var j = i; j < attendee_list.length; j++) {
+          for (var j = 0; j <= i; j++) {
             edges[attendee_list[i]][attendee_list[j]] = false;
           }
         }
@@ -261,8 +270,7 @@
           return inittime_to_datetime(value);
         },
         max: last_avaliable_time - 1,
-        step: step_frames,
-        value: current_time
+        step: step_frames
       });
       slider.on("slide", function(slideEvt) {
         update_graph(slideEvt.value);
@@ -278,6 +286,14 @@
     }
 
     function play_one_step() {
+      current_time = inttime_from_now();
+      // this is live event
+      if (current_time < event_end_time) {
+        last_avaliable_time = current_time;
+      } else { // this is replay event
+        last_avaliable_time = event_end_time;
+      }
+      slider.setAttribute("max", last_avaliable_time - 1);
       if (is_playing) {
         var mill_diff_time = step_frames * 1000 / interval_per_second + rem_play;
         if (mill_diff_time > 0) {
@@ -305,7 +321,8 @@
       // this is live event
       if (current_time < event_end_time) {
         last_avaliable_time = current_time;
-        cursor_time = current_time;
+        cursor_time = last_avaliable_time - 1;
+        is_playing = true;
       } else { // this is replay event
         last_avaliable_time = event_end_time;
         current_time = 0;
@@ -324,7 +341,11 @@
 
       stepInterval = setInterval(play_one_step, step_interval);
       
-      update_graph(0);
+      if (current_time < event_end_time) {
+        update_graph(current_time);
+      } else {
+        update_graph(0);
+      }
 
       setInterval(function() {
         $.ajax({
@@ -464,7 +485,7 @@
                   data-slider-min="0"
                   data-slider-max="?"
                   data-slider-step="?"
-                  data-slider-value="?"
+                  data-slider-value="0"
                   style="width: 100%;"/>
               </div>
               </div>
@@ -506,7 +527,7 @@
             </div>
             <link rel="stylesheet" href="/static/node_modules/bootstrap-slider/dist/css/bootstrap-slider.min.css">
             <style type="text/css">
-              .link { stroke: #ccc; }
+              .link { stroke: #000000; }
               .nodetext {
                 pointer-events: none;
                 font: 10px sans-serif;
