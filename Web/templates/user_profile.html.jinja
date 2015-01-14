@@ -37,11 +37,16 @@
               </dl>
             </div>
             <p hidden id="profile-picture-src">
-              {{profile['photo']}}
+              {% if profile['photo'] %}
+                {{profile['photo']}}
+              {% else %}
+                http://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Orange_Icon_User.svg/301px-Orange_Icon_User.svg.png
+              {% endif %}
             </p>
             <div class="col-md-4">
               <img id="profile-picture" width=160 height=160/>
               <script>
+              
                   var source = $('#profile-picture-src').text();
                   // change to correct profile picture
                   var img = document.createElement('img');

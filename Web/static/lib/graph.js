@@ -106,7 +106,7 @@ function myGraph(el) {
             .attr("height", "16px");
 
         nodeEnter.append("a")
-			.attr("xlink:href", function (d) { return "http://www.example.com/flare/" + d.id; })
+			.attr("xlink:href", function (d) { return "/user/profile/" + d.id; })
 			.append("text")
 			.attr("class", "clickable")
             .attr("dx", 12)

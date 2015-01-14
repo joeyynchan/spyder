@@ -11,20 +11,21 @@
     </form>
   {% endif %}
 
-  <div role="tabpanel">
+  <div role="tabpanel" style="width: 100%">
 
     <!-- Nav tabs -->
     <ul class="nav nav-tabs" role="tablist">
-      <li role="presentation" class="active"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Event Profile</a></li>
+      <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Event Profile</a></li>
       <li role="presentation"><a href="#attendee-list" aria-controls="attendee-list" role="tab" data-toggle="tab">Attendees</a></li>
       <li role="presentation"><a href="#interaction" aria-controls="interaction" role="tab" data-toggle="tab">Interaction</a></li>
-      <li role="presentation"><a href="#visualisation" aria-controls="visualisation" role="tab" data-toggle="tab">Visualisation</a></li>
+      <li role="presentation" class="active"><a href="#visualisation" aria-controls="visualisation" role="tab" data-toggle="tab">Visualisation</a></li>
+      <li role="presentation"><a href="#chart" aria-controls="chart" role="tab" data-toggle="tab">Chart</a></li>
     </ul>
 
     <!-- Tab panes -->
     <div class="tab-content">
 
-      <div role="tabpanel" class="tab-pane active" id="profile">
+      <div role="tabpanel" class="tab-pane" id="profile">
         <dl class="dl-horizontal">
           <dt>Event name</dt>   <dd>{{profile['name']}}</dd>
           <dt>Start time</dt>   <dd>{{profile['start_time']}}</dd>
@@ -76,18 +77,11 @@
         </table>
       </div>
 
-  <!-- Khoa script part -->
   <script type="text/javascript" src="/static/lib/d3.min.js" ></script>
   <script type="text/javascript" src="/static/lib/graph.js" ></script>
   <script type="text/javascript" src="/static/lib/get_interact_data.js" ></script>
   <script type="text/javascript" src="/static/lib/get_interact_data_sample.js" ></script>
   <script type="text/javascript" src="/static/lib/get_attendees.js" ></script>
-    <style type="text/css">
-        .link { stroke: #ccc; }
-        .nodetext { pointer-events: none; font: 10px sans-serif; }
-/*        body { width:100%; height:100%; margin:none; padding:none; }*/
-        #graph { width:100%;height:500px; border:3px solid black;border-radius:12px; margin:auto; }
-    </style>
 
   <script type="text/javascript">
     var shift_start_time; // : int, shift second since epoch to our program format
@@ -96,7 +90,17 @@
     var current_time; // int
     var last_avaliable_time; // int
     var cursor_time; // int
-    var interval;
+    var rem_play = 0; // for play_one_step
+
+    var lock = false; // lock for update interactions and attendees
+    var fetch_interval = 1000; // time (in millsecond) for refreshing
+
+    var slider;
+    var step_interval = 200; // time (in millsecond) for playing one step
+    var interval_per_second = 1000 / step_interval;
+    var step_frames = 1; // how many (second in event) change per step
+
+    var is_playing = false;
 
     var graph; // d3 graph
     // list of (username : string), reflect node in graph
@@ -123,6 +127,11 @@
     function datetime_to_inttime(datetime) { // datetime : string
       var d = new Date(datetime);
       return d.valueOf() / 1000 - shift_start_time;
+    }
+
+    function inittime_to_datetime(time) {
+      var d = new Date(1000 * (time + shift_start_time));
+      return d.toLocaleString();
     }
 
     // sort on key values
@@ -167,7 +176,7 @@
       list = [];
       user_mappings_list = attendees["user_mappings"];
       for (var i = 0; i < user_mappings_list.length; i++) {
-        list.push(user_mappings_list[i]["name"])
+        list.push(user_mappings_list[i]["user_name"])
       }
       return list;
     }
@@ -195,6 +204,11 @@
     }
 
     function update_graph(time) {
+      if (lock) {
+        console.log(time + "lock!!");
+        return;
+      }
+      console.log(time);
       var i;
       var edges;
       if (cursor_time < time) {
@@ -210,11 +224,12 @@
         }
         i = 0;
       }
-      for (; tinteractl[i]["time"] < time; i++) {
-        edges[tinteractl[i]["user_a"]][tinteractl[i]["user_b"]] = tinteractl[i]["is_add"]
+      for (; i < tinteractl.length && tinteractl[i]["time"] < time; i++) {
+        edges[tinteractl[i]["user_a"]][tinteractl[i]["user_b"]] = tinteractl[i]["is_add"];
       }
 
       graph_edges = edges;
+      cursor_time = time;
       for (user_a in graph_edges) {
         for (user_b in graph_edges[user_a]) {
           if(edges[user_a][user_b]) {
@@ -224,7 +239,64 @@
           }
         }
       }
+
+      slider.setValue(cursor_time, false);
+      $("#slider-val").text(inittime_to_datetime(cursor_time));
     }
+
+    function speed_from_value(value) {
+      if (value >= 0) {
+        sign = 1;
+      } else {
+        sign = -1;
+        value *= -1;
+        value -= 1;
+      }
+      return sign * Math.pow(2, value);
+    }
+
+    function init_slider() {
+      slider = new Slider("#slider", {
+        formatter: function(value) {
+          return inittime_to_datetime(value);
+        },
+        max: last_avaliable_time - 1,
+        step: step_frames,
+        value: current_time
+      });
+      slider.on("slide", function(slideEvt) {
+        update_graph(slideEvt.value);
+      });
+      speeder = new Slider("#speed", {
+        formatter: function(value) {
+          return "x " + speed_from_value(value);
+        }
+      });
+      speeder.on("slide", function(slideEvt) {
+        step_frames = speed_from_value(slideEvt.value);
+      });
+    }
+
+    function play_one_step() {
+      if (is_playing) {
+        var mill_diff_time = step_frames * 1000 / interval_per_second + rem_play;
+        if (mill_diff_time > 0) {
+          rem_play = mill_diff_time % 1000;
+          time = cursor_time + Math.floor(mill_diff_time / 1000);
+          time = Math.min(time, last_avaliable_time - 1);
+        } else {
+          if (mill_diff_time % 1000 == 0) {
+            rem_play = 0
+          } else {
+            rem_play = 1000 + (mill_diff_time % 1000)
+          }
+          time = cursor_time + Math.floor(mill_diff_time / 1000);
+          time = Math.max(time, 0);
+        }
+        update_graph(time);
+      }
+    }
+
     function init(interactions, attendees) {
       graph = new myGraph("#graph");
       shift_start_time = datetime_to_inttime_raw(interactions["event_start_time"]);
@@ -236,7 +308,7 @@
         cursor_time = current_time;
       } else { // this is replay event
         last_avaliable_time = event_end_time;
-        current_time = event_end_time;
+        current_time = 0;
       }
 
       tinteractl = extract_interaction_list(interactions["interaction"]);
@@ -247,310 +319,242 @@
 
       d3.select('#chart').select("svg").remove();
       updateStatistics(interactions);
+
+      init_slider();
+
+      stepInterval = setInterval(play_one_step, step_interval);
+      
+      update_graph(0);
+
+      setInterval(function() {
+        $.ajax({
+          url: '/xhr/event_visualisation_data/{{event_id}}',
+          success:function(result){
+            interactions = result['interaction'];
+            attendees = result['attendees'];
+            lock = true;
+            tinteractl = extract_interaction_list(interactions["interaction"]);
+            attendee_list = extract_attendee_list(attendees);
+            lock = false;
+
+            d3.select('#chart').select("svg").remove();
+            updateStatistics(interactions);
+          }
+        });
+      }, fetch_interval);
     }
-  // var attendees;
-  // var interval;
-  // var curr_t;
-  // var event_end;
-  // var interaction;
-  // var interactionData;
-  // var exFunction;
-  
-  // function buildGraph(interactionObject, attendees) {
-  
-  // d3.select('#chart').select("svg").remove();
-  // cleanCanvas();
-  // clearInterval(exFunction);
-  
-  // interactionData = interactionObject;
-  //     interaction = interactionData.interaction;    
-  //     attendees = getAttendees();
-  
-  // curr_t = new Date(interactionData.event_start_time);
-  // event_end = new Date(interactionData.event_end_time);
-  
-  // for (var i = 0; i < attendees.length; i++) {
-  //   graph.addNode(attendees[i].user_name);
-  // }
 
-  // document.getElementById("myText").value = Math.floor((event_end.getTime() - curr_t.getTime()) / 20);
-  
-  // interval = parseInt(document.getElementById("myText").value);
-
-  // updateStatistics();
-  // }
-  
-  // function buildSampleGraph() {
-  // cleanCanvas();
-  // clearInterval(exFunction);
-  
-  // interactionData = getSampleInteraction();
-  //     interaction = interactionData.interaction; 
-    
-  // curr_t = new Date(0);
-  // event_end = new Date(10000);
-  
-  // document.getElementById("myText").value = Math.floor((event_end.getTime() - curr_t.getTime()) / 40);
-  
-  // interval = parseInt(document.getElementById("myText").value);
-  
-  // exFunction = setInterval(function () {updateSampleData()}, 1000);
-  // updateStatistics();
-  // }
-
-  // function updateData(interactionObject) {
-  // interactionData = interactionObject;
-  //     interaction = interactionData.interaction;  
-  // if (curr_t.getTime() <= event_end.getTime()) {
-  //   for (var i = 0; i < interaction.length; i++) {
-  //     var interaction_start = new Date(interaction[i].start_time);
-  //     var interaction_end = new Date(interaction[i].end_time);
-  //     if ( (interaction_start.getTime() <= curr_t.getTime()+ interval)  && (interaction_end.getTime() >= curr_t.getTime()) ) {
-  //       graph.addLink(interaction[i].user1,interaction[i].user2);
-  //     }
-  //     if (interaction_end.getTime() <= curr_t.getTime()) {
-  //       graph.removeLink(interaction[i].user1,interaction[i].user2);
-  //     }
-  //   }
-  //   curr_t.setTime(curr_t.getTime() + interval);
-  // } else {
-  //   clearInterval(exFunction);
-  // }
-  // }
-  
-  // function updateSampleData() {
-  // if (curr_t.getTime() <= event_end.getTime()) {
-  //   for (var i = 0; i < interaction.length; i++) {
-  //     var interaction_start = new Date(parseInt(interaction[i].start_time));
-  //     var interaction_end = new Date(parseInt(interaction[i].end_time));
-  //     if ( (interaction_start.getTime() <= curr_t.getTime()+ interval)  && (interaction_end.getTime() >= curr_t.getTime()) ) {
-  //       graph.addNode(interaction[i].user1);
-  //       graph.addNode(interaction[i].user2);
-  //       graph.addLink(interaction[i].user1,interaction[i].user2);
-  //     }
-  //     if (interaction_end.getTime() <= curr_t.getTime()) {
-  //       graph.removeLink(interaction[i].user1,interaction[i].user2);
-  //       //graph.removeNode(interaction[i].user1);
-  //       //graph.removeNode(interaction[i].user2);
-  //     }
-  //   }
-  //   curr_t.setTime(curr_t.getTime() + interval);
-  // } else {
-  //   clearInterval(exFunction);
-  // }
-  // }
-
-  
-  // function updateGraphSpeed(interactionObject) {
-  // interval = parseInt(document.getElementById("myText").value);
-  // clearInterval(exFunction);
-  // cleanCanvas();
-  // for (var i = 0; i < attendees.length; i++) {
-  //   graph.addNode(attendees[i].user_name);
-  // }
-  // exFunction = setInterval(function () {updateData(interactionObject)}, 1500);
-  // }
-  
   function updateStatistics(interactionObject) {
-  var   interactionData = interactionObject;
-        interaction = interactionData.interaction;
-        event_end = new Date(interactionData.event_end_time);
-  var results,
-        data = [],
-        chart,
-    temp_t,
-        bars,
-        margin = 100,
-        w = 8,
-        h = 500,
-        x, y,
-        xAxis, yAxis;
-  temp_t = new Date(interactionData.event_start_time);
-   
-  while (temp_t.getTime() <= event_end.getTime()) {
-    var count = 0;
-    for (var i = 0; i < interaction.length; i++) {
-      var interaction_start = new Date(interaction[i].start_time);
-      var interaction_end = new Date(interaction[i].end_time);
-      if ( (interaction_start.getTime() <= temp_t.getTime()+ Math.floor(last_avaliable_time / 1000))  && (interaction_end.getTime() >= temp_t.getTime()) ) {
-        count++;
+    var   interactionData = interactionObject;
+          interaction = interactionData.interaction;
+          event_end = new Date(interactionData.event_end_time);
+          interval = Math.floor(last_avaliable_time * 1000 / 20) ;
+    var results,
+          data = [],
+          chart,
+      temp_t,
+          bars,
+          margin = 100,
+          w = 8,
+          h = 500,
+          x, y,
+          xAxis, yAxis;
+    temp_t = new Date(interactionData.event_start_time);
+     
+    while (temp_t.getTime() <= event_end.getTime()) {
+      var count = 0;
+      for (var i = 0; i < interaction.length; i++) {
+        var interaction_start = new Date(interaction[i].start_time);
+        var interaction_end = new Date(interaction[i].end_time);
+        if ( (interaction_start.getTime() <= temp_t.getTime()+ interval)  && (interaction_end.getTime() >= temp_t.getTime()) ) {
+          count++;
+        }
       }
+      result = {};
+      result.time = temp_t.toLocaleTimeString(); 
+      result.interaction= count;
+      data.push( result );
+      temp_t.setTime(temp_t.getTime() + interval);
     }
-    result = {};
-    result.time = temp_t.toLocaleTimeString(); 
-    result.interaction= count;
-    data.push( result );
-    temp_t.setTime(temp_t.getTime() + interval);
-  }
-  
-  var valueLabelWidth = 40; // space reserved for value labels (right)
-  var barHeight = 20; // height of one bar
-  var barLabelWidth = 100; // space reserved for bar labels
-  var barLabelPadding = 5; // padding between bar and bar labels (left)
-  var gridLabelHeight = 18; // space reserved for gridline labels
-  var gridChartOffset = 3; // space between start of grid and first bar
-  var maxBarWidth = 420; // width of the bar with the max value
+    
+    var valueLabelWidth = 40; // space reserved for value labels (right)
+    var barHeight = 20; // height of one bar
+    var barLabelWidth = 100; // space reserved for bar labels
+    var barLabelPadding = 5; // padding between bar and bar labels (left)
+    var gridLabelHeight = 18; // space reserved for gridline labels
+    var gridChartOffset = 3; // space between start of grid and first bar
+    var maxBarWidth = 420; // width of the bar with the max value
 
-  // accessor functions 
-  var barLabel = function(d) { return d['time']; };
-  var barValue = function(d) { return parseFloat(d['interaction']); };
- 
-  // scales
-  var yScale = d3.scale.ordinal().domain(d3.range(0, data.length)).rangeBands([0, data.length * barHeight]);
-  var y = function(d, i) { return yScale(i); };
-  var yText = function(d, i) { return y(d, i) + yScale.rangeBand() / 2; };
-  var x = d3.scale.linear().domain([0, d3.max(data, barValue)]).range([0, maxBarWidth]);
-  // svg container element
-  var chart = d3.select('#chart').append("svg")
-    .attr('width', maxBarWidth + barLabelWidth + valueLabelWidth)
-    .attr('height', gridLabelHeight + gridChartOffset + data.length * barHeight);
-  // grid line labels
-  var gridContainer = chart.append('g')
-    .attr('transform', 'translate(' + barLabelWidth + ',' + gridLabelHeight + ')'); 
-  gridContainer.selectAll("text").data(x.ticks(10)).enter().append("text")
-    .attr("x", x)
-    .attr("dy", -3)
-    .attr("text-anchor", "middle")
-    .text(String);
-  // vertical grid lines
-  gridContainer.selectAll("line").data(x.ticks(10)).enter().append("line")
-    .attr("x1", x)
-    .attr("x2", x)
-    .attr("y1", 0)
-    .attr("y2", yScale.rangeExtent()[1] + gridChartOffset)
-    .style("stroke", "#ccc");
-  // bar labels
-  var labelsContainer = chart.append('g')
-    .attr('transform', 'translate(' + (barLabelWidth - barLabelPadding) + ',' + (gridLabelHeight + gridChartOffset) + ')'); 
-      labelsContainer.selectAll('text').data(data).enter().append('text')
-    .attr('y', yText)
-    .attr('stroke', 'none')
-    .attr('fill', 'black')
-    .attr("dy", ".35em") // vertical-align: middle
-    .attr('text-anchor', 'end')
-    .text(barLabel);
-  // bars
-  var barsContainer = chart.append('g')
-    .attr('transform', 'translate(' + barLabelWidth + ',' + (gridLabelHeight + gridChartOffset) + ')'); 
-      barsContainer.selectAll("rect").data(data).enter().append("rect")
-    .attr('y', y)
-    .attr('height', yScale.rangeBand())
-    .attr('width', function(d) { return x(barValue(d)); })
-    .attr('stroke', 'white')
-    .attr('fill', 'steelblue');
-  // bar value labels
-  barsContainer.selectAll("text").data(data).enter().append("text")
-    .attr("x", function(d) { return x(barValue(d)); })
-    .attr("y", yText)
-    .attr("dx", 3) // padding-left
-    .attr("dy", ".35em") // vertical-align: middle
-    .attr("text-anchor", "start") // text-align: right
-    .attr("fill", "black")
-    .attr("stroke", "none")
-    .text(function(d) { return d3.round(barValue(d), 2); });
-  // start line
-  barsContainer.append("line")
-    .attr("y1", -gridChartOffset)
-    .attr("y2", yScale.rangeExtent()[1] + gridChartOffset)
-    .style("stroke", "#000");
-
+    // accessor functions 
+    var barLabel = function(d) { return d['time']; };
+    var barValue = function(d) { return parseFloat(d['interaction']); };
+   
+    // scales
+    var yScale = d3.scale.ordinal().domain(d3.range(0, data.length)).rangeBands([0, data.length * barHeight]);
+    var y = function(d, i) { return yScale(i); };
+    var yText = function(d, i) { return y(d, i) + yScale.rangeBand() / 2; };
+    var x = d3.scale.linear().domain([0, d3.max(data, barValue)]).range([0, maxBarWidth]);
+    // svg container element
+    var chart = d3.select('#chart').append("svg")
+      .attr('width', maxBarWidth + barLabelWidth + valueLabelWidth)
+      .attr('height', gridLabelHeight + gridChartOffset + data.length * barHeight);
+    // grid line labels
+    var gridContainer = chart.append('g')
+      .attr('transform', 'translate(' + barLabelWidth + ',' + gridLabelHeight + ')'); 
+    gridContainer.selectAll("text").data(x.ticks(10)).enter().append("text")
+      .attr("x", x)
+      .attr("dy", -3)
+      .attr("text-anchor", "middle")
+      .text(String);
+    // vertical grid lines
+    gridContainer.selectAll("line").data(x.ticks(10)).enter().append("line")
+      .attr("x1", x)
+      .attr("x2", x)
+      .attr("y1", 0)
+      .attr("y2", yScale.rangeExtent()[1] + gridChartOffset)
+      .style("stroke", "#ccc");
+    // bar labels
+    var labelsContainer = chart.append('g')
+      .attr('transform', 'translate(' + (barLabelWidth - barLabelPadding) + ',' + (gridLabelHeight + gridChartOffset) + ')'); 
+        labelsContainer.selectAll('text').data(data).enter().append('text')
+      .attr('y', yText)
+      .attr('stroke', 'none')
+      .attr('fill', 'black')
+      .attr("dy", ".35em") // vertical-align: middle
+      .attr('text-anchor', 'end')
+      .text(barLabel);
+    // bars
+    var barsContainer = chart.append('g')
+      .attr('transform', 'translate(' + barLabelWidth + ',' + (gridLabelHeight + gridChartOffset) + ')'); 
+        barsContainer.selectAll("rect").data(data).enter().append("rect")
+      .attr('y', y)
+      .attr('height', yScale.rangeBand())
+      .attr('width', function(d) { return x(barValue(d)); })
+      .attr('stroke', 'white')
+      .attr('fill', 'steelblue');
+    // bar value labels
+    barsContainer.selectAll("text").data(data).enter().append("text")
+      .attr("x", function(d) { return x(barValue(d)); })
+      .attr("y", yText)
+      .attr("dx", 3) // padding-left
+      .attr("dy", ".35em") // vertical-align: middle
+      .attr("text-anchor", "start") // text-align: right
+      .attr("fill", "black")
+      .attr("stroke", "none")
+      .text(function(d) { return d3.round(barValue(d), 2); });
+    // start line
+    barsContainer.append("line")
+      .attr("y1", -gridChartOffset)
+      .attr("y2", yScale.rangeExtent()[1] + gridChartOffset)
+      .style("stroke", "#000");
   }
 
-  // function synchronizedClick(d,time) {
-  // clearInterval(exFunction);
-  // curr_t = new Date(interactionData.event_start_time);
-  // for (var count = 0; count <= time; count++) {
-  //   for (var i = 0; i < interaction.length; i++) {
-  //     var interaction_start = new Date(interaction[i].start_time);
-  //     var interaction_end = new Date(interaction[i].end_time);
-  //     if ( (interaction_start.getTime() <= curr_t.getTime()+ interval)  && (interaction_end.getTime() >= curr_t.getTime()) ) {
-  //       graph.addLink(interaction[i].user1,interaction[i].user2);
-  //     }
-  //     if (interaction_end.getTime() < curr_t.getTime()) {
-  //       graph.removeLink(interaction[i].user1,interaction[i].user2);
-  //     }
-  //     if (interaction_start.getTime() > curr_t.getTime() + interval) {
-  //       graph.removeLink(interaction[i].user1,interaction[i].user2);
-  //     }
-  //   }
-  //   curr_t.setTime(curr_t.getTime() + interval);
-  // } 
-  // };
-    // setTimeout(function() {
-    //   window.document.location = '/dashboard';
-    // }, 10 * 1000);
-    // updateInteraction();
-    // setInterval(function(){
-    //   updateInteraction();
-    //   // alert("Hello")
-    // }, 30 * 1000);
-
-    // function initGraph() {
-    //   $.ajax({
-    //     url: '/xhr/event_visualisation_data/{{event_id}}',
-    //     success:function(result){
-    //       buildGraph(result['interaction'], result['attendees']);
-    //     }
-    //   });
-    // }
-    // function updateSpeed() {
-    //   $.ajax({
-    //     url: '/xhr/event_visualisation_data/{{event_id}}',
-    //     success:function(result){
-    //       updateGraphSpeed(result['interaction'], result['attendees']);
-    //     }
-    //   });
-    // }
   </script>
 
-      <div role="tabpanel" class="tab-pane" id="visualisation">
+      <div role="tabpanel" class="tab-pane active" id="visualisation" style="width: 100%">
             <div id="graph"></div>
+
+            <div class="container-fluid">
+            <div class="row">
+              <div class="col-md-10">
+              <div id="slider-wrapper">
+                <input id="slider"
+                  type="text"
+                  data-slider-id='silder-container' 
+                  data-slider-min="0"
+                  data-slider-max="?"
+                  data-slider-step="?"
+                  data-slider-value="?"
+                  style="width: 100%;"/>
+              </div>
+              </div>
+              <div class="col-md-2">
+              <div id="slider-val-wrapper">
+                  <span id="slider-val"></span>
+              </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-1">
+              </div>
+              <div class="col-md-1">
+                <button type="button" class="btn btn-default"
+                  onclick="is_playing = true;">Play</button>
+              </div>
+              <div class="col-md-1">
+                <button type="button" class="btn btn-default" 
+                  onclick="is_playing = false;">Pause</button>
+              </div>
+              <div class="col-md-1">
+              </div>
+              <div class="col-md-1">
+                Speed:
+              </div>
+              <div class="col-md-6">
+                <div id="speed-wrapper">
+                  <input id="speed"
+                    type="text"
+                    data-slider-id='silder-container' 
+                    data-slider-min="-16"
+                    data-slider-max="15"
+                    data-slider-step="1"
+                    data-slider-value="0"
+                    style="width: 100%;"/>
+                </div>
+              </div>
+            </div>
+            </div>
+            <link rel="stylesheet" href="/static/node_modules/bootstrap-slider/dist/css/bootstrap-slider.min.css">
+            <style type="text/css">
+              .link { stroke: #ccc; }
+              .nodetext {
+                pointer-events: none;
+                font: 10px sans-serif;
+              }
+              #graph {
+                width:100%;
+                height:500px;
+                border:3px solid black;
+                border-radius:12px;
+                margin:auto;
+              }
+              #slider-wrapper {
+                width: 100%;
+                margin-top: 30px;
+                margin-bottom: 20px;
+                margin-left:auto;
+                margin-right:auto;
+              }
+              #slider-val-wrapper {
+                width: 100%;
+                margin-top: 30px;
+                margin-bottom: 20px;
+                margin-left:auto;
+                margin-right:auto;
+              }
+            </style>
+            <style>
+              #silder-container .slider-selection {
+                background: #BABABA;
+              }
+            </style>
+            <!-- bootstrap-slider -->
+            <script src="/static/node_modules/bootstrap-slider/js/bootstrap-slider.js"></script>
+
             <script>
               $.ajax({
                 url: '/xhr/event_visualisation_data/{{event_id}}',
                 success:function(result){
                   init(result['interaction'], result['attendees']);
-                  update_graph(datetime_to_inttime("Tue Jan 13 11:47:24 GMT 2015"));
                 }
               });
-              // setInterval(function() {
-              //   $.ajax({
-              //     url: '/xhr/event_visualisation_data/{{event_id}}',
-              //     success:function(result){
-              //       updateData(result['interaction']);//, result['attendees']);
-              //       // todo - update chart
-              //     }
-              //   });
-              // }, 1000);
             </script>
-<!--             <input type="text" id="myText" value="2000">
-            <div id="option">
-              <input name="updateButton" 
-               type="button" 
-               value="Run" 
-               onclick="updateInteraction()" />
-            </div> -->
-<!--             <div id="option2">
-              <input name="runSampleButton" 
-               type="button" 
-               value="Run sample" 
-               onclick="buildSampleGraph()" />
-            </div> -->
-<!--             <div id="option3">
-              <input name="updateButton" 
-               type="button" 
-               value="UpdateSpeed" 
-               onclick="updateSpeed()" />
-            </div> -->
-        <div class="panel panel-primary">
-          <div class="panel-heading">
-            <h3 class="panel-title">Chart</h3>
-          </div>
-        <div class="panel-body">
-          <div id="chart"></div>
-        </div>
-        </div>
       </div>
 
+      <div role="tabpanel" class="tab-pane" id="chart">
+          <div style="margin: auto;">
+            <div id="chart"></div>
+          </div>
+      </div>
     </div>
 {% endblock %}
