@@ -38,16 +38,9 @@ public class LoginActivity extends BaseActivity {
         super.onCreate(savedInstanceState, R.layout.activity_login);
         getActionBar().hide();
 
-        Context context = this;
-        SharedPreferences sharedPref = getSharedPreferences(
-                context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-        String username = sharedPref.getString(context.getString(R.string.username), "");
-        String password = sharedPref.getString(context.getString(R.string.password), "");
+        String username = getSharedPrefString("Username");
+        String password = getSharedPrefString("Password");
 
-
-
-
-        Log.d(TAG, username + ":" + password);
         if(!username.equals("")){
             new LinkDevice(this, username, password).execute();
         }

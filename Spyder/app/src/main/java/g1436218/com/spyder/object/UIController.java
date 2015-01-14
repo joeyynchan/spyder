@@ -74,14 +74,19 @@ public class UIController {
         menu.findItem(R.id.action_edit).setVisible(false);
         menu.findItem(R.id.action_done).setVisible(false);
 
+        /* Display Start/Stop Bluetooth Button */
         if (BluetoothAdapter.getDefaultAdapter().getState() == BluetoothAdapter.STATE_OFF) {
             menu.findItem(R.id.action_start_bluetooth).setVisible(true);
         } else {
             menu.findItem(R.id.action_stop_bluetooth).setVisible(true);
         }
+
+        /* Display Set Discoverable Button if the device is not discoverable*/
         if (BluetoothAdapter.getDefaultAdapter().getScanMode() == BluetoothAdapter.SCAN_MODE_CONNECTABLE) {
             menu.findItem(R.id.action_set_discoverable).setVisible(true);
         }
+
+        /* Display Start/Stop Discovery Button */
         if (BluetoothAdapter.getDefaultAdapter().getScanMode() == BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE) {
             BluetoothController bluetoothController = activity.getBluetoothController();
             if (bluetoothController.isDiscovery()) {
@@ -164,18 +169,22 @@ public class UIController {
 
     public void setStatus(int status) {
         switch (status) {
-            case DISCOVERY_ON:
+            case DISCOVERY_ON: {
                 imageview_status.setImageResource(R.drawable.main_activity_status_discovery_on);
                 break;
-            case BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE:
+            }
+            case BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE: {
                 imageview_status.setImageResource(R.drawable.main_activity_status_discoverable);
                 break;
-            case BluetoothAdapter.SCAN_MODE_CONNECTABLE:
+            }
+            case BluetoothAdapter.SCAN_MODE_CONNECTABLE: {
                 imageview_status.setImageResource(R.drawable.main_activity_status_discovering);
                 break;
-            default:
+            }
+            default: {
                 imageview_status.setImageResource(R.drawable.main_activity_status_normal);
                 break;
+            }
         }
     }
 

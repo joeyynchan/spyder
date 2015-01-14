@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -59,6 +61,13 @@ public abstract class BaseActivity extends Activity implements View.OnClickListe
     @Override
     protected void onPause() {
         super.onPause();
+    }
+
+    public String getSharedPrefString(String tag) {
+        SharedPreferences sharedPref = getSharedPreferences(
+                getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        String result = sharedPref.getString(tag, "");
+        return result;
     }
 
     public abstract void onClick(View v);

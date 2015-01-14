@@ -47,6 +47,9 @@ public class MainActivityReceiver extends BroadcastReceiver {
             Attendees usermap = Attendees.getInstance();
             interactionPackage.addInteraction(new Interaction(usermap.get(macAddress), strength));
 
+
+
+
         } else if (Action.RESET_LIST.equals(action)) {
 
             /* RESET LIST is performed when a discovery session finishes.
@@ -55,7 +58,6 @@ public class MainActivityReceiver extends BroadcastReceiver {
              * 3) Clear interactions
              * 4) Tell InteractionFragment to update using clone
              */
-
             interactionPackage.addInteractionsToPackage();
             interactionPackage.copyInteractionsToClone();
             interactionPackage.createInteractions();
@@ -64,6 +66,12 @@ public class MainActivityReceiver extends BroadcastReceiver {
             _intent.setAction(Action.UPDATE_INTERACTION_FRAGMENT_ADAPTER);
             activity.sendBroadcast(_intent);
 
+
+
+
+
+
+
         } else if (Action.SEND_DATA.equals(action)) {
 
             if (!interactionPackage.isPackageEmpty()) {
@@ -71,6 +79,11 @@ public class MainActivityReceiver extends BroadcastReceiver {
             } else {
                 interactionPackage.clear();
             }
+
+
+
+
+
 
         } else if (Action.START_DISCOVERY.equals(action)) {
             bluetoothController.startDiscovery();
@@ -81,14 +94,26 @@ public class MainActivityReceiver extends BroadcastReceiver {
         } else if (Action.STOP_DISCOVERY.equals(action)) {
             bluetoothController.stopDiscovery();
 
+
+
+
         } else if (Action.FETCH_ATTENDEES.equals(action)) {
             new FetchAttendees(activity).execute();
+
+
+
 
         } else if (Action.START_BLUETOOTH.equals(action)) {
             bluetoothController.turnOnBluetooth();
 
+
+
+
         } else if (Action.STOP_BLUETOOTH.equals(action)) {
             bluetoothController.turnOffBluetooth();
+
+
+
 
         } else if (BluetoothAdapter.ACTION_SCAN_MODE_CHANGED.equals(action)) {
 
@@ -105,21 +130,30 @@ public class MainActivityReceiver extends BroadcastReceiver {
             String message = intent.getStringExtra("message");
             String sender = intent.getStringExtra("sender");
             uiController.showMessage(sender, title, message);
+
         } else if (Action.START_EVENT.equals(action)) {
             String event_id = intent.getStringExtra("event_id");
             String event_name = intent.getStringExtra("event_name");
             activity.setToCurrentEvent(event_id, event_name);
-            if (BluetoothAdapter.getDefaultAdapter().getScanMode() == BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE) {
-                bluetoothController.startDiscovery();
-            } else if (BluetoothAdapter.getDefaultAdapter().getScanMode() == BluetoothAdapter.SCAN_MODE_CONNECTABLE) {
-                activity.registerReceiver(receiver, new StartBluetoothIntentFilter());
-                receiver_registered = true;
-                bluetoothController.setDiscoverable();
-            } else {
-                activity.registerReceiver(receiver, new StartBluetoothIntentFilter());
-                receiver_registered = true;
-                bluetoothController.turnOnBluetooth();
+
+            switch (BluetoothAdapter.getDefaultAdapter().getScanMode()) {
+                case BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE: {
+                    bluetoothController.startDiscovery();
+                    break;
+                }
+                case BluetoothAdapter.SCAN_MODE_CONNECTABLE: {
+                    activity.registerReceiver(receiver, new StartBluetoothIntentFilter());
+                    receiver_registered = true;
+                    bluetoothController.setDiscoverable();
+                    break;
+                }
+                default: {
+                    activity.registerReceiver(receiver, new StartBluetoothIntentFilter());
+                    receiver_registered = true;
+                    bluetoothController.turnOnBluetooth();
+                }
             }
+
         } else if (Action.STOP_EVENT.equals(action)) {
 
             String event_id = intent.getStringExtra("event_id");

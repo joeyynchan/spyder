@@ -1,6 +1,7 @@
 package g1436218.com.spyder.fragment;
 
 import android.content.BroadcastReceiver;
+import android.content.IntentFilter;
 
 import g1436218.com.spyder.activity.MainActivity;
 

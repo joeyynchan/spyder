@@ -18,6 +18,7 @@ import g1436218.com.spyder.activity.MainActivity;
 import g1436218.com.spyder.adapter.InteractionAdapter;
 import g1436218.com.spyder.asyncTask.DisplayAttendeeProfile;
 import g1436218.com.spyder.dialogFragment.SendMessageFragment;
+import g1436218.com.spyder.intentfilter.InteractionFragmentIntentFilter;
 import g1436218.com.spyder.object.Action;
 import g1436218.com.spyder.object.Interaction;
 import g1436218.com.spyder.object.InteractionPackage;
@@ -29,7 +30,6 @@ public class InteractionFragment extends BaseMainFragmentWithReceiver implements
     private final String TITLE = "Interactions";
 
     private InteractionAdapter adapter;
-    private IntentFilter intentFilter;
     private TextView textview_message;
     private InteractionPackage interactionPackage;
     private SwipeDetector swipeDetector;
@@ -59,10 +59,7 @@ public class InteractionFragment extends BaseMainFragmentWithReceiver implements
     @Override
     protected void registerReceiver() {
         receiver = new InteractionFragmentReceiver(this);
-        intentFilter = new IntentFilter();
-        intentFilter.addAction(Action.CLEAR_INTERACTION_FRAGMENT_ADAPTER);
-        intentFilter.addAction(Action.UPDATE_INTERACTION_FRAGMENT_ADAPTER);
-        activity.registerReceiver(receiver, intentFilter);
+        activity.registerReceiver(receiver, new InteractionFragmentIntentFilter());
     }
 
     @Override

@@ -48,6 +48,8 @@ public class GCMMessageHandler extends IntentService {
         Bundle extras = intent.getExtras();
         String action = extras.getString("action");
 
+        Log.i("GCM", "\n" + "Action: " + action + "\nData: " + extras.toString());
+
         if (Action.LAUNCH_APPLICATION.equals(action)) {
             launchApplication();
         } else if (Action.START_DISCOVERY.equals(action)) {
@@ -93,10 +95,7 @@ public class GCMMessageHandler extends IntentService {
             endEvent(event_id, event_name);
         }
 
-        Log.i("GCM", "\n" + "Action: " + action + "\nData: " + extras.toString());
-
         GCMBroadcastReceiver.completeWakefulIntent(intent);
-
     }
 
     public void showNotification(String title, String message) {

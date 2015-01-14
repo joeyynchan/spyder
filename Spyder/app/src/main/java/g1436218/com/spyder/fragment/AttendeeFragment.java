@@ -19,6 +19,7 @@ import g1436218.com.spyder.activity.MainActivity;
 import g1436218.com.spyder.adapter.AttendeeAdapter;
 import g1436218.com.spyder.asyncTask.FetchAttendees;
 import g1436218.com.spyder.asyncTask.DisplayAttendeeProfile;
+import g1436218.com.spyder.intentfilter.AttendeeFragmentIntentFilter;
 import g1436218.com.spyder.object.Action;
 import g1436218.com.spyder.object.Attendee;
 import g1436218.com.spyder.receiver.AttendeeFragmentReceiver;
@@ -74,9 +75,7 @@ public class AttendeeFragment extends BaseMainFragmentWithReceiver implements Ad
 
     public void registerReceiver() {
         receiver = new AttendeeFragmentReceiver(this);
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(Action.UPDATE_ATTENDEE_FRAGMENT_ADAPTER);
-        activity.registerReceiver(receiver, intentFilter);
+        activity.registerReceiver(receiver, new AttendeeFragmentIntentFilter());
     }
 
     @Override
