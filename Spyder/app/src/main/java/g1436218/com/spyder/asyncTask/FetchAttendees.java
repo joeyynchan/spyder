@@ -48,12 +48,13 @@ public class FetchAttendees extends BaseMainAsyncTask {
         resultJObj = getJSONFromUrl(URL+event_id, Requests.GET);
         int dummy_count = 0;
         if (resultJObj != null) {
+            Log.d("FETCH ATTENDEES", resultJObj.toString());
             try {
                 JSONArray array = resultJObj.getJSONArray("user_mappings");
                 String macAddress, username, name, gcm_id, photo_url;
                 for (int i = 0; i < array.length(); i++) {
                     JSONObject item = array.optJSONObject(i);
-                    if(item == null) {
+                    if(item != null) {
                         macAddress = item.optString("mac_address");
                         macAddress = macAddress.equals("") ? dummy_count++ + "" : macAddress;
                         username = item.optString("user_name");
