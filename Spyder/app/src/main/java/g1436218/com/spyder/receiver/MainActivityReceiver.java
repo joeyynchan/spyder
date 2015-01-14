@@ -108,7 +108,7 @@ public class MainActivityReceiver extends BroadcastReceiver {
         } else if (Action.START_EVENT.equals(action)) {
             String event_id = intent.getStringExtra("event_id");
             String event_name = intent.getStringExtra("event_name");
-            setToCurrentEvent(event_id, event_name);
+            activity.setToCurrentEvent(event_id, event_name);
             if (BluetoothAdapter.getDefaultAdapter().getScanMode() == BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE) {
                 bluetoothController.startDiscovery();
             } else if (BluetoothAdapter.getDefaultAdapter().getScanMode() == BluetoothAdapter.SCAN_MODE_CONNECTABLE) {
@@ -133,16 +133,6 @@ public class MainActivityReceiver extends BroadcastReceiver {
                 bluetoothController.turnOffBluetooth();
             }
         }
-    }
-
-    private void setToCurrentEvent(String event_id, String event_name) {
-        SharedPreferences sharedPref = activity.getSharedPreferences(
-                activity.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString("EVENT_ID", event_id);
-        editor.putString("EVENT_NAME", event_name);
-        editor.commit();
-        new FetchAttendees(activity).execute();
     }
 
 }

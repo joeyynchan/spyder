@@ -1,6 +1,8 @@
 package g1436218.com.spyder.activity;
 
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -184,6 +186,18 @@ public class MainActivity extends BaseActivity {
 
     public Attendees getAttendees() {
         return attendees;
+    }
+
+    public void setToCurrentEvent(String event_id, String event_name) {
+        SharedPreferences sharedPref = getSharedPreferences(
+                getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("EVENT_ID", event_id);
+        editor.putString("EVENT_NAME", event_name);
+        editor.commit();
+        Log.d("Event ID", event_id);
+        Log.d("Event Name", event_name);
+        new FetchAttendees(this).execute();
     }
 
 }

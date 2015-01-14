@@ -68,24 +68,13 @@ public class EventFragment extends BaseMainFragment implements View.OnClickListe
                 new JoinEvent(this, event.getId()).execute();
             } break;
             case R.id.button_fragment_event_setToCurrentEvent: {
-                setToCurrentEvent(event.getId(), event.getName());
+                activity.setToCurrentEvent(event.getId(), event.getName());
                 checkCurrentEvent();
             } break;
             default: break;
         }
     }
 
-    private void setToCurrentEvent(String event_id, String event_name) {
-        SharedPreferences sharedPref = activity.getSharedPreferences(
-                activity.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString("EVENT_ID", event_id);
-        editor.putString("EVENT_NAME", event_name);
-        editor.commit();
-        Log.d("Event ID", event.getId());
-        Log.d("Event Name", event.getName());
-        new FetchAttendees(activity).execute();
-    }
 
     private void checkCurrentEvent() {
         SharedPreferences sharedPref = activity.getSharedPreferences(
