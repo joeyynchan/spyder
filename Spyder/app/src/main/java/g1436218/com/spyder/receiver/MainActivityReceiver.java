@@ -72,7 +72,7 @@ public class MainActivityReceiver extends BroadcastReceiver {
 
         } else if (Action.START_DISCOVERY.equals(action)) {
             bluetoothController.startDiscovery();
-            activity.unregisterReceiver(receiver);
+            //activity.unregisterReceiver(receiver);
 
         } else if (Action.STOP_DISCOVERY.equals(action)) {
             bluetoothController.stopDiscovery();
