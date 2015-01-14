@@ -32,8 +32,6 @@ public class AttendeeAdapter extends ArrayAdapter<Attendee> {
         Attendee item = getItem(position);
         username.setText(item.getName());
 
-        SharedPreferences
-
         return v;
     }
 
