@@ -61,6 +61,7 @@ public class LoginServlet extends HttpServlet {
 			String mac_address = (String) jsonObj.get("mac_address");
 			String gcm_id = (String) jsonObj.get("gcm_id");
 			
+			
 
 			MongoClient mongo = (MongoClient) request.getServletContext()
 					.getAttribute("MONGO_CLIENT");
@@ -68,14 +69,16 @@ public class LoginServlet extends HttpServlet {
 			User login_user = muDAO.getUserByName(user_name);
 			System.out.println("Login User: " + login_user);
 
-			System.out.println();
-
 			if (login_user == null) {
 				response.sendError(HttpServletResponse.SC_NOT_FOUND);
 				return;
 			}
 			String encrypted_pass = Encryption.sha1_encypt(password
 					+ login_user.get_salt());
+			
+			muDAO.clear_mac_addresses(muDAO.getAllUsersWithSameMac(login_user.getMacAddress(),login_user.getUserName()));
+			
+			
 			if (!login_user.getPassword().endsWith(encrypted_pass)) {
 				response.sendError(HttpServletResponse.SC_NOT_FOUND);
 				return;

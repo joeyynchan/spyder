@@ -37,6 +37,7 @@ public class EventTimesContextListener implements ServletContextListener {
 			e.printStackTrace();
 			return;
 		}
+		System.out.println("STASRTeDS");
 		scheduler.scheduleAtFixedRate(runnable, 5, 5, TimeUnit.SECONDS);
 	}
 

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,7 +16,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.journaldev.mongodb.dao.MongoDBProfileDAO;
 import com.journaldev.mongodb.dao.MongoDBUsersDAO;
+import com.journaldev.mongodb.model.Profile;
 import com.journaldev.mongodb.model.User;
 import com.journaldev.mongodb.utils.Encryption;
 import com.mongodb.MongoClient;
@@ -56,6 +59,7 @@ public class AddUserServlet extends HttpServlet {
 			MongoClient mongo = (MongoClient) request.getServletContext() 
 					.getAttribute("MONGO_CLIENT");
 			MongoDBUsersDAO muDAO = new MongoDBUsersDAO(mongo);
+			MongoDBProfileDAO profileDAO = new MongoDBProfileDAO(mongo);
 
             response.setContentType("application/json");
             response.setHeader("Cache-Control", "nocache");
@@ -78,6 +82,9 @@ public class AddUserServlet extends HttpServlet {
 
 			}
 
+			Profile profile = new Profile(user_name, user_name, null, null, null, null, null, null, null, new ArrayList<String>());
+			profileDAO.createProfile(profile);
+			
             response.sendError(HttpServletResponse.SC_CREATED);
 
 			printout.print(JObject);

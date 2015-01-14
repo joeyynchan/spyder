@@ -48,7 +48,6 @@ public class SubmitDataServlet extends HttpServlet {
 		}
 		try {
 			JSONObject jsonObj = new JSONObject(json);
-			System.out.println(json);
 			String user_name = (String) jsonObj.get("user_name");
 			String event_id = (String) jsonObj.get("event_id");
 
@@ -106,11 +105,9 @@ public class SubmitDataServlet extends HttpServlet {
 						if (dataPair.getB() > -60) {
 							Interaction latestInteraction = interactionDAO.findLatestInteraction(event_id, user_name, dataPair.getA());
 							if (latestInteraction != null && c.getTime().getTime() - new Date(latestInteraction.getEnd_time()).getTime() < 100000) {
-								System.out.println("Updated " + user_name + " and " + dataPair.getA());
 								latestInteraction.setEnd_time(endTime);
 								interactionDAO.updateInteraction(latestInteraction);
 							} else {
-								System.out.println("Added " + user_name + " and " + dataPair.getA());
 								latestInteraction = new Interaction(event_id, user_name, dataPair.getA(), time, endTime);
 								interactionDAO.createInteraction(latestInteraction);
 							}

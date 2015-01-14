@@ -36,7 +36,6 @@ public class MongoDBEventDAO {
 	}
 
 	public void updateEvent(Event e) {
-		System.out.println("ID:" + e.getId());
 		DBObject query = BasicDBObjectBuilder.start()
 				.append("_id", new ObjectId(e.getId())).get();
 		this.col.update(query, EventConverter.toDBObject(e));
@@ -63,7 +62,6 @@ public class MongoDBEventDAO {
 		if (e.getId() == null) {
 			return null;
 		}
-		System.out.println(e.getId());
 		DBObject query;
 		try {
 			query = BasicDBObjectBuilder.start()

@@ -43,11 +43,9 @@ public class JoinEventServlet extends HttpServlet {
 			jsonBuilder.append(nextLine);
 		}
 		String json = jsonBuilder.toString();
-		System.out.println("json " + json);
 
 		try {
 			JSONObject jsonObj = new JSONObject(json);
-			System.out.println(jsonObj.toString());
 			String user_id = (String) jsonObj.get("user_name");
 			MongoClient mongo = (MongoClient) request.getServletContext()
 					.getAttribute("MONGO_CLIENT");

@@ -44,7 +44,6 @@ public class SearchEventServlet extends HttpServlet {
 			}
 		}
 		json = jsonBuilder.toString();
-		System.out.println(json);
 
 		try {
 			JSONObject jsonObj = new JSONObject(json);
@@ -99,13 +98,10 @@ public class SearchEventServlet extends HttpServlet {
 					}
 					jObject.put("status", pair.getB());
 					jArray.put(jObject);
-					System.out.println(pair.getA().getId());
 				}
 			} catch (JSONException excep) {
 				System.out.println("JSON Exception");
 			}
-
-			System.out.println(jArray);
 			
 			printout.print(jArray);
 			printout.flush();

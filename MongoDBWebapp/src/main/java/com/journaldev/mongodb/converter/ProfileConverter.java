@@ -45,7 +45,6 @@ public class ProfileConverter {
                 (String) doc.get("gender"),
                 connections);
         newProfile.setId(((ObjectId) doc.get("_id")).toString());
-        System.out.println("hereh:" + newProfile.getId());
         return newProfile;
 
     }
