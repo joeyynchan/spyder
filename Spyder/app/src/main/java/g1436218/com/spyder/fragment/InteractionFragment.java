@@ -25,7 +25,7 @@ import g1436218.com.spyder.object.InteractionPackage;
 import g1436218.com.spyder.object.SwipeDetector;
 import g1436218.com.spyder.receiver.InteractionFragmentReceiver;
 
-public class InteractionFragment extends BaseMainFragmentWithReceiver implements AdapterView.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener, View.OnClickListener {
+public class InteractionFragment extends BaseMainFragmentWithReceiver implements AdapterView.OnItemClickListener, View.OnClickListener {
 
     private final String TITLE = "Interactions";
 
@@ -33,7 +33,6 @@ public class InteractionFragment extends BaseMainFragmentWithReceiver implements
     private IntentFilter intentFilter;
     private TextView textview_message;
     private InteractionPackage interactionPackage;
-    private SwipeRefreshLayout swipeRefreshLayout;
     private SwipeDetector swipeDetector;
 
     public InteractionFragment(MainActivity activity) {
@@ -47,10 +46,6 @@ public class InteractionFragment extends BaseMainFragmentWithReceiver implements
         getActivity().setTitle(TITLE);
 
         textview_message = (TextView) activity.findViewById(R.id.textview_fragment_interaction_message);
-
-        swipeRefreshLayout = (SwipeRefreshLayout) activity.findViewById(R.id.swiperefreshlayout_interaction);
-        swipeRefreshLayout.setOnRefreshListener(this);
-        swipeRefreshLayout.setDistanceToTriggerSync(200);
 
         /* Initialize Listview */
         this.adapter = new InteractionAdapter(getActivity(), R.layout.listview_interaction);
@@ -101,13 +96,6 @@ public class InteractionFragment extends BaseMainFragmentWithReceiver implements
         adapter.addAllToAdapter(clone);
         textview_message.setText(clone.isEmpty() ? "No Interactions Detected" : "");
 
-    }
-
-    @Override
-    public void onRefresh() {
-        //this.interactionPackage.copyInteractionsToClone();
-        //updateAdapter();
-        //swipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
