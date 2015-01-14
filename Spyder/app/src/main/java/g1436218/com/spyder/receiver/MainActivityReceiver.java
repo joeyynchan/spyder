@@ -26,6 +26,7 @@ public class MainActivityReceiver extends BroadcastReceiver {
     BluetoothController bluetoothController;
     UIController uiController;
     StartBluetoothReceiver receiver;
+    boolean receiver_registered;
 
     public MainActivityReceiver(MainActivity activity) {
         this.activity = activity;
@@ -33,6 +34,7 @@ public class MainActivityReceiver extends BroadcastReceiver {
         this.bluetoothController = activity.getBluetoothController();
         this.uiController = activity.getUIController();
         this.receiver = new StartBluetoothReceiver(activity);
+        this.receiver_registered = false;
     }
 
     @Override
@@ -72,7 +74,9 @@ public class MainActivityReceiver extends BroadcastReceiver {
 
         } else if (Action.START_DISCOVERY.equals(action)) {
             bluetoothController.startDiscovery();
-            //activity.unregisterReceiver(receiver);
+            if (receiver_registered) {
+                activity.unregisterReceiver(receiver);
+            }
 
         } else if (Action.STOP_DISCOVERY.equals(action)) {
             bluetoothController.stopDiscovery();
@@ -109,16 +113,21 @@ public class MainActivityReceiver extends BroadcastReceiver {
                 bluetoothController.startDiscovery();
             } else if (BluetoothAdapter.getDefaultAdapter().getScanMode() == BluetoothAdapter.SCAN_MODE_CONNECTABLE) {
                 activity.registerReceiver(receiver, new StartBluetoothIntentFilter());
+                receiver_registered = true;
                 bluetoothController.setDiscoverable();
             } else {
                 activity.registerReceiver(receiver, new StartBluetoothIntentFilter());
+                receiver_registered = true;
                 bluetoothController.turnOnBluetooth();
             }
         } else if (Action.STOP_EVENT.equals(action)) {
+
             String event_id = intent.getStringExtra("event_id");
+
             SharedPreferences sharedPref = activity.getSharedPreferences(
                     context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
             String EVENT_ID = sharedPref.getString("EVENT_ID", "");
+
             if (event_id.equals(EVENT_ID)) {
                 bluetoothController.stopDiscovery();
                 bluetoothController.turnOffBluetooth();

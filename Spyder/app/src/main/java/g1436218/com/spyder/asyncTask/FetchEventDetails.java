@@ -70,6 +70,5 @@ public class FetchEventDetails extends BaseMainAsyncTask{
         event.setStartTime(jsonObject.optString("start_time"));
         event.setEndTime(jsonObject.optString("end_time"));
         event.setLocation(jsonObject.optString("address"));
-
     }
 }

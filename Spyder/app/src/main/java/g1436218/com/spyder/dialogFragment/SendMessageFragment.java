@@ -13,7 +13,7 @@ import android.widget.EditText;
 import g1436218.com.spyder.R;
 import g1436218.com.spyder.asyncTask.SendMessage;
 
-public class MessageFragment extends DialogFragment implements View.OnClickListener {
+public class SendMessageFragment extends DialogFragment implements View.OnClickListener {
 
     private String gcm_id;
     private String recipient;
@@ -23,7 +23,7 @@ public class MessageFragment extends DialogFragment implements View.OnClickListe
     private EditText message;
     private EditText title;
 
-    public MessageFragment(String recipient, String gcm_id) {
+    public SendMessageFragment(String recipient, String gcm_id) {
         this.gcm_id = gcm_id;
         this.recipient = recipient;
     }

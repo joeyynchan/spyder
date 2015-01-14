@@ -2,7 +2,6 @@ package g1436218.com.spyder.fragment;
 
 import android.app.FragmentManager;
 import android.content.IntentFilter;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -18,7 +17,7 @@ import g1436218.com.spyder.R;
 import g1436218.com.spyder.activity.MainActivity;
 import g1436218.com.spyder.adapter.InteractionAdapter;
 import g1436218.com.spyder.asyncTask.DisplayAttendeeProfile;
-import g1436218.com.spyder.dialogFragment.MessageFragment;
+import g1436218.com.spyder.dialogFragment.SendMessageFragment;
 import g1436218.com.spyder.object.Action;
 import g1436218.com.spyder.object.Interaction;
 import g1436218.com.spyder.object.InteractionPackage;
@@ -61,6 +60,7 @@ public class InteractionFragment extends BaseMainFragmentWithReceiver implements
     protected void registerReceiver() {
         receiver = new InteractionFragmentReceiver(this);
         intentFilter = new IntentFilter();
+        intentFilter.addAction(Action.CLEAR_INTERACTION_FRAGMENT_ADAPTER);
         intentFilter.addAction(Action.UPDATE_INTERACTION_FRAGMENT_ADAPTER);
         activity.registerReceiver(receiver, intentFilter);
     }
@@ -75,8 +75,8 @@ public class InteractionFragment extends BaseMainFragmentWithReceiver implements
                 //sendMessage.setVisibility(View.VISIBLE);
                 Log.d("Right to Left Movement Detected", "Right To Left");
                 FragmentManager fragmentManager = activity.getFragmentManager();
-                MessageFragment messageFragment = new MessageFragment(item.getName(), item.getGcm_id());
-                messageFragment.show(getFragmentManager(), "Message");
+                SendMessageFragment sendMessageFragment = new SendMessageFragment(item.getName(), item.getGcm_id());
+                sendMessageFragment.show(getFragmentManager(), "Message");
             } else if (swipeDetector.getMovement().equals(SwipeDetector.Movement.LR)) {
                 //sendMessage.setVisibility(View.GONE);
             }
@@ -96,6 +96,11 @@ public class InteractionFragment extends BaseMainFragmentWithReceiver implements
         adapter.addAllToAdapter(clone);
         textview_message.setText(clone.isEmpty() ? "No Interactions Detected" : "");
 
+    }
+
+    public void clearAdapter() {
+        adapter.clear();
+        adapter.notifyDataSetChanged();
     }
 
     @Override

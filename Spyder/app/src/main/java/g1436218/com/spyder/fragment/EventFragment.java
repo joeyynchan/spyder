@@ -64,23 +64,27 @@ public class EventFragment extends BaseMainFragment implements View.OnClickListe
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.button_fragment_event_joinEvent: new JoinEvent(this, event.getId()).execute(); break;
-            case R.id.button_fragment_event_setToCurrentEvent: setToCurrentEvent(); break;
+            case R.id.button_fragment_event_joinEvent: {
+                new JoinEvent(this, event.getId()).execute();
+            } break;
+            case R.id.button_fragment_event_setToCurrentEvent: {
+                setToCurrentEvent(event.getId(), event.getName());
+                checkCurrentEvent();
+            } break;
             default: break;
         }
     }
 
-    private void setToCurrentEvent() {
+    private void setToCurrentEvent(String event_id, String event_name) {
         SharedPreferences sharedPref = activity.getSharedPreferences(
                 activity.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString("EVENT_ID", event.getId());
-        editor.putString("EVENT_NAME", event.getName());
+        editor.putString("EVENT_ID", event_id);
+        editor.putString("EVENT_NAME", event_name);
         editor.commit();
         Log.d("Event ID", event.getId());
         Log.d("Event Name", event.getName());
         new FetchAttendees(activity).execute();
-        checkCurrentEvent();
     }
 
     private void checkCurrentEvent() {

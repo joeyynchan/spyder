@@ -38,6 +38,9 @@ public class BluetoothController {
         if (discovery) {
             activity.stopService(bluetoothDiscoveryIntent);
             uiController.setStatus(BluetoothAdapter.getDefaultAdapter().getScanMode());
+            Intent intent = new Intent();
+            intent.setAction(Action.CLEAR_INTERACTION_FRAGMENT_ADAPTER);
+            activity.sendBroadcast(intent);
             discovery = false;
         }
     }

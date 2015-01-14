@@ -25,4 +25,5 @@ public class Action {
     public static final String SHOW_MESSAGE = "SHOW_MESSAGE";
     public static final String START_EVENT = "START_EVENT";
     public static final String STOP_EVENT = "STOP_EVENT";
+    public static final String CLEAR_INTERACTION_FRAGMENT_ADAPTER = "CLEAR_INTERACTION_FRAGMENT_ADAPTER";
 }
