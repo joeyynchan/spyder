@@ -110,7 +110,7 @@ public class MongoDBUsersDAO {
 		while (cursor.hasNext()) {
 			DBObject doc = cursor.next();
 			User p = UserConverter.toUser(doc);
-			if(p.getMacAddress().equals(mac_address) && !p.getUserName().equals(user_name)){
+			if(p.getMacAddress() != null && p.getMacAddress().equals(mac_address) && !p.getUserName().equals(user_name)){
 				result.add(p);
 			}
 		}

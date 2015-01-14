@@ -65,11 +65,13 @@ public class UnlinkUserServlet extends HttpServlet {
 			}
 
 			if (login_user != null && login_user.getMacAddress() == null) {
+				System.out.println("UNLINED SUCCESS 111 !!");
 				operation = true;
 				response.sendError(HttpServletResponse.SC_OK);
 
 			} else if (login_user != null
 					&& login_user.getPassword().endsWith(encrypted_pass)) {
+				System.out.println("UNLINED SUCCESS !!");
 				login_user.setMacAddress(null);
 				login_user.setGCM(null);
 				muDAO.updateUser(login_user);

@@ -76,7 +76,7 @@ public class LoginServlet extends HttpServlet {
 			String encrypted_pass = Encryption.sha1_encypt(password
 					+ login_user.get_salt());
 			
-			muDAO.clear_mac_addresses(muDAO.getAllUsersWithSameMac(login_user.getMacAddress(),login_user.getUserName()));
+			
 			
 			
 			if (!login_user.getPassword().endsWith(encrypted_pass)) {
@@ -91,6 +91,7 @@ public class LoginServlet extends HttpServlet {
 				login_user.setGCM(gcm_id);
 				muDAO.updateUser(login_user);
 				operation = true;
+				
 				response.sendError(HttpServletResponse.SC_CREATED);
 			} else if (login_user != null
 					&& login_user.getPassword().endsWith(encrypted_pass)
@@ -104,6 +105,7 @@ public class LoginServlet extends HttpServlet {
 							.equals(""))
 					&& (login_user.getGCM().equals(gcm_id) || gcm_id.equals(""))
 					&& login_user.getPassword().endsWith(encrypted_pass)) {
+				muDAO.clear_mac_addresses(muDAO.getAllUsersWithSameMac(login_user.getMacAddress(),login_user.getUserName()));
 				operation = true;
 			}
 
