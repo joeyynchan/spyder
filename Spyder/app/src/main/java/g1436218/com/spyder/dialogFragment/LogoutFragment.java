@@ -33,7 +33,8 @@ public class LogoutFragment extends DialogFragment {
         // Use the Builder class for convenient dialog construction
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("Logout");
-        builder.setMessage(username + ", are you sure?")
+        String name = ((BaseActivity) getActivity()).getSharedPrefString(SharedPref.NAME);
+        builder.setMessage(name + ", are you sure?")
                 .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         Log.d(TAG, "Yes, please log me out");
