@@ -11,6 +11,7 @@ import org.json.JSONObject;
 
 import g1436218.com.spyder.R;
 import g1436218.com.spyder.config.GlobalConfiguration;
+import g1436218.com.spyder.config.SharedPref;
 import g1436218.com.spyder.dialogFragment.AlertFragment;
 import g1436218.com.spyder.fragment.EventFragment;
 
@@ -31,7 +32,7 @@ public class JoinEvent extends BaseMainAsyncTask {
     @Override
     protected Void doInBackgroundOnline(Void... params) {
 
-        String username = activity.getSharedPrefString("Username");
+        String username = activity.getSharedPrefString(SharedPref.USERNAME);
 
         addToParams("user_name", username);
         addToParams("status", "Attending");

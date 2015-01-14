@@ -14,6 +14,7 @@ import java.util.Iterator;
 import g1436218.com.spyder.R;
 import g1436218.com.spyder.activity.MainActivity;
 import g1436218.com.spyder.config.GlobalConfiguration;
+import g1436218.com.spyder.config.SharedPref;
 import g1436218.com.spyder.object.Interaction;
 import g1436218.com.spyder.object.InteractionPackage;
 import g1436218.com.spyder.object.Interactions;
@@ -32,8 +33,8 @@ public class SubmitBluetoothData extends BaseMainAsyncTask{
     @Override
     protected Void doInBackgroundOnline(Void... params) {
 
-        String username = activity.getSharedPrefString("Username");
-        String event_id = activity.getSharedPrefString("EVENT_ID");
+        String username = activity.getSharedPrefString(SharedPref.USERNAME);
+        String event_id = activity.getSharedPrefString(SharedPref.EVENT_NAME);
 
         addToParams("user_name", username);
         addToParams("event_id", event_id);

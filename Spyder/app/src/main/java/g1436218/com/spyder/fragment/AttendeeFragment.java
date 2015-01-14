@@ -19,6 +19,7 @@ import g1436218.com.spyder.activity.MainActivity;
 import g1436218.com.spyder.adapter.AttendeeAdapter;
 import g1436218.com.spyder.asyncTask.FetchAttendees;
 import g1436218.com.spyder.asyncTask.DisplayAttendeeProfile;
+import g1436218.com.spyder.config.SharedPref;
 import g1436218.com.spyder.intentfilter.AttendeeFragmentIntentFilter;
 import g1436218.com.spyder.object.Action;
 import g1436218.com.spyder.object.Attendee;
@@ -58,8 +59,8 @@ public class AttendeeFragment extends BaseMainFragmentWithReceiver implements Ad
         swipeRefreshLayout.setDistanceToTriggerSync(200);
         swipeRefreshLayout.setOnRefreshListener(this);
 
-        String event_id = activity.getSharedPrefString("EVENT_ID");
-        String event_name = activity.getSharedPrefString("EVENT_NAME");
+        String event_id = activity.getSharedPrefString(SharedPref.EVENT_ID);
+        String event_name = activity.getSharedPrefString(SharedPref.EVENT_NAME);
 
         if (!event_id.equals("")) {
             textview_name.setText(event_name);

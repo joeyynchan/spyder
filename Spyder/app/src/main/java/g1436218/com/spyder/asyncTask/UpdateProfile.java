@@ -9,6 +9,7 @@ import org.json.JSONObject;
 import g1436218.com.spyder.R;
 import g1436218.com.spyder.activity.MainActivity;
 import g1436218.com.spyder.config.GlobalConfiguration;
+import g1436218.com.spyder.config.SharedPref;
 import g1436218.com.spyder.dialogFragment.AlertFragment;
 import g1436218.com.spyder.object.User;
 
@@ -19,7 +20,7 @@ public class UpdateProfile extends BaseMainAsyncTask {
 
     public UpdateProfile(MainActivity activity, User user) {
         super(activity);
-        String username = activity.getSharedPrefString("Username");
+        String username = activity.getSharedPrefString(SharedPref.USERNAME);
 
         this.user = user;
         this.url = GlobalConfiguration.DEFAULT_URL + "user/profile?user_name=" + username;

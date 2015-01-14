@@ -1,25 +1,14 @@
 package g1436218.com.spyder.activity;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
-
-import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.net.Socket;
-import java.net.SocketAddress;
 
 import g1436218.com.spyder.R;
 import g1436218.com.spyder.asyncTask.CheckConnection;
-import g1436218.com.spyder.config.GlobalConfiguration;
 
 public abstract class BaseActivity extends Activity implements View.OnClickListener {
 

@@ -1,8 +1,6 @@
 package g1436218.com.spyder.activity;
 
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -10,17 +8,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 
-import java.util.ArrayList;
-
 import g1436218.com.spyder.R;
 import g1436218.com.spyder.asyncTask.CheckConnection;
 import g1436218.com.spyder.asyncTask.FetchAttendees;
 import g1436218.com.spyder.intentfilter.MainActivityIntentFilter;
-import g1436218.com.spyder.object.Attendee;
+import g1436218.com.spyder.object.Attendees;
 import g1436218.com.spyder.object.BluetoothController;
 import g1436218.com.spyder.object.InteractionPackage;
 import g1436218.com.spyder.object.UIController;
-import g1436218.com.spyder.object.Attendees;
 import g1436218.com.spyder.receiver.MainActivityReceiver;
 
 

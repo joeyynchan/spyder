@@ -11,6 +11,7 @@ import g1436218.com.spyder.R;
 import g1436218.com.spyder.activity.MainActivity;
 import g1436218.com.spyder.asyncTask.FetchAttendees;
 import g1436218.com.spyder.asyncTask.JoinEvent;
+import g1436218.com.spyder.config.SharedPref;
 import g1436218.com.spyder.object.Event;
 
 public class EventFragment extends BaseMainFragment implements View.OnClickListener {
@@ -77,7 +78,7 @@ public class EventFragment extends BaseMainFragment implements View.OnClickListe
 
 
     private void checkCurrentEvent() {
-        String event_id = activity.getSharedPrefString("EVENT_ID");
+        String event_id = activity.getSharedPrefString(SharedPref.EVENT_ID);
         if (event_id.equals(event.getId())) {
             button_setToCurrentEvent.setClickable(false);
             button_setToCurrentEvent.setText("Current Event");

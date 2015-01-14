@@ -16,6 +16,7 @@ import g1436218.com.spyder.activity.BaseActivity;
 import g1436218.com.spyder.activity.LoginActivity;
 import g1436218.com.spyder.activity.MainActivity;
 import g1436218.com.spyder.asyncTask.UnlinkDevice;
+import g1436218.com.spyder.config.SharedPref;
 
 public class LogoutFragment extends DialogFragment {
 
@@ -26,7 +27,8 @@ public class LogoutFragment extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
 
-        username = ((BaseActivity) getActivity()).getSharedPrefString("Username");
+        username = ((BaseActivity) getActivity()).getSharedPrefString(SharedPref.USERNAME);
+        password = ((BaseActivity) getActivity()).getSharedPrefString(SharedPref.PASSWORD);
 
         // Use the Builder class for convenient dialog construction
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -35,9 +37,6 @@ public class LogoutFragment extends DialogFragment {
                 .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         Log.d(TAG, "Yes, please log me out");
-
-                        username = ((BaseActivity) getActivity()).getSharedPrefString("Username");
-                        password = ((BaseActivity) getActivity()).getSharedPrefString("Password");
                         ((BaseActivity) getActivity()).clearSharedPref();
                         new UnlinkDevice((MainActivity) getActivity(), username, password).execute();
                         /* Start Login Activity */

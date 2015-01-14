@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 
 import g1436218.com.spyder.R;
 import g1436218.com.spyder.activity.MainActivity;
+import g1436218.com.spyder.config.SharedPref;
 import g1436218.com.spyder.object.User;
 
 public class ProfileFragment extends BaseMainFragment {
@@ -47,7 +48,7 @@ public class ProfileFragment extends BaseMainFragment {
 
     @Override
     public void onPrepareOptionsMenu(Menu menu){
-        String currUsername = activity.getSharedPrefString("Username");
+        String currUsername = activity.getSharedPrefString(SharedPref.USERNAME);
         if(user.getUsername().equals(currUsername)){
             menu.findItem(R.id.action_edit).setVisible(true);
         }

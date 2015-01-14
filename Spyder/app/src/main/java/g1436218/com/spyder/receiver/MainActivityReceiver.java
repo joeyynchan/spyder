@@ -12,6 +12,7 @@ import g1436218.com.spyder.activity.BaseActivity;
 import g1436218.com.spyder.activity.MainActivity;
 import g1436218.com.spyder.asyncTask.FetchAttendees;
 import g1436218.com.spyder.asyncTask.SubmitBluetoothData;
+import g1436218.com.spyder.config.SharedPref;
 import g1436218.com.spyder.intentfilter.StartBluetoothIntentFilter;
 import g1436218.com.spyder.object.Action;
 import g1436218.com.spyder.object.BluetoothController;
@@ -159,7 +160,7 @@ public class MainActivityReceiver extends BroadcastReceiver {
 
             String event_id = intent.getStringExtra("event_id");
 
-            String EVENT_ID = activity.getSharedPrefString("EVENT_ID");
+            String EVENT_ID = activity.getSharedPrefString(SharedPref.EVENT_ID);
 
             if (event_id.equals(EVENT_ID)) {
                 bluetoothController.stopDiscovery();
