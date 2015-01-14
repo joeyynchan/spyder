@@ -36,6 +36,7 @@ public class UnlinkUserServlet extends HttpServlet {
 		if (br != null) {
 			json = br.readLine();
 		}
+		
 
 		System.out.println("Unlinked called");
 
@@ -65,13 +66,15 @@ public class UnlinkUserServlet extends HttpServlet {
 			}
 
 			if (login_user != null && login_user.getMacAddress() == null) {
-				System.out.println("UNLINED SUCCESS 111 !!");
+				System.out.println("Trying to unlink: "  + login_user);
+				
+				System.out.println("UNLINK FAIL !! " + login_user.getUserName());
 				operation = true;
 				response.sendError(HttpServletResponse.SC_OK);
 
 			} else if (login_user != null
 					&& login_user.getPassword().endsWith(encrypted_pass)) {
-				System.out.println("UNLINED SUCCESS !!");
+				System.out.println("UNLINK SUCCESS !! " + login_user.getUserName());
 				login_user.setMacAddress(null);
 				login_user.setGCM(null);
 				muDAO.updateUser(login_user);
