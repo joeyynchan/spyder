@@ -213,10 +213,8 @@
 
     function update_graph(time) {
       if (lock) {
-        console.log(time + "lock!!");
         return;
       }
-      console.log(time);
 
       var edges;
       edges = {};
@@ -344,7 +342,15 @@
               attendees = result['attendees'];
               lock = true;
               tinteractl = extract_interaction_list(interactions["interaction"]);
-              attendee_list = extract_attendee_list(attendees);
+              new_attendee_list = extract_attendee_list(attendees);
+              var i, j;
+              for (var i=0,j=0; i < new_attendee_list.length; i++) {
+                if (new_attendee_list[i] == attendee_list[j]) {
+                  j ++;
+                } else {
+                  graph.addNode(new_attendee_list[i]);
+                }
+              }
               lock = false;
 
               d3.select('#chart').select("svg").remove();
