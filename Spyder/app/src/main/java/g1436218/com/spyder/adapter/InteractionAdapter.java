@@ -20,6 +20,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 
 import g1436218.com.spyder.R;
+import g1436218.com.spyder.asyncTask.DownloadImageTask;
 import g1436218.com.spyder.object.Interaction;
 
 public class InteractionAdapter extends ArrayAdapter<Interaction> {
@@ -51,40 +52,20 @@ public class InteractionAdapter extends ArrayAdapter<Interaction> {
 
         Interaction item = getItem(position);
         name.setText(item.getName());
-        Log.d(TAG, "Getting photo url : " + item.getPhoto_url());
-        new DownloadImageTask(image).execute(item.getPhoto_url());
+        if(item.getPhoto_url().equals("")){
+            Log.d(TAG, "Display default picture for " + item.getAttendee().toString());
+            image.setImageResource(R.drawable.ic_launcher);
+        }else {
+            if (item.getPhoto() == null) {
+                new DownloadImageTask(image, item.getAttendee()).execute(item.getPhoto_url());
+            } else {
+                image.setImageBitmap(item.getPhoto());
+            }
+        }
         strength.setText(new Integer(item.getStrength()).toString() + "dBm");
 
 
         return v;
-    }
-
-    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-        ImageView bmImage;
-
-        public DownloadImageTask(ImageView bmImage) {
-            this.bmImage = bmImage;
-        }
-
-        protected Bitmap doInBackground(String... urls) {
-            String urldisplay = urls[0];
-            Bitmap mIcon11 = null;
-            try {
-                InputStream in = new java.net.URL(urldisplay).openStream();
-                mIcon11 = BitmapFactory.decodeStream(in);
-            } catch (Exception e) {
-                return null;
-            }
-            return mIcon11;
-        }
-
-        protected void onPostExecute(Bitmap result) {
-            if (result == null) {
-                bmImage.setImageResource(R.drawable.main_activity_user_normal);
-            } else {
-                bmImage.setImageBitmap(result);
-            }
-        }
     }
 
 

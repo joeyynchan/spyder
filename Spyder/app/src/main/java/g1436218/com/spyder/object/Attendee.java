@@ -1,5 +1,7 @@
 package g1436218.com.spyder.object;
 
+import android.graphics.Bitmap;
+
 public class Attendee {
 
     String name;
@@ -7,6 +9,7 @@ public class Attendee {
     String macAddress;
     String gcm_id;
     String photo_url;
+    private Bitmap photo;
 
     public Attendee(String macAddress, String username, String name, String gcm_id, String photo_url) {
         this.macAddress = macAddress;
@@ -34,6 +37,13 @@ public class Attendee {
         return photo_url;
     }
 
+    public Bitmap getPhoto(){
+        return photo;
+    }
+
+    public void setPhoto (Bitmap photo){
+        this.photo = photo;
+    }
     public String toString() {
         return macAddress + " : " + username;
     }

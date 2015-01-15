@@ -1,5 +1,7 @@
 package g1436218.com.spyder.object;
 
+import android.graphics.Bitmap;
+
 public class Interaction {
 
     private Attendee attendee;
@@ -36,6 +38,18 @@ public class Interaction {
             return false;
         }
         return getUsername().equals(((Interaction) obj).getUsername());
+    }
+
+    public Bitmap getPhoto(){
+        return attendee.getPhoto();
+    }
+
+    public void setPhoto(Bitmap photo){
+        attendee.setPhoto(photo);
+    }
+
+    public Attendee getAttendee(){
+        return attendee;
     }
 
     @Override
