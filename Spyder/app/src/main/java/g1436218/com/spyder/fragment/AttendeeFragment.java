@@ -41,7 +41,11 @@ public class AttendeeFragment extends BaseMainFragmentWithReceiver implements Ad
 
     @Override
     protected void initializeView() {
-        getActivity().setTitle(TITLE);
+
+        String event_id = activity.getSharedPrefString(SharedPref.EVENT_ID);
+        String event_name = activity.getSharedPrefString(SharedPref.EVENT_NAME);
+
+        getActivity().setTitle(event_id.equals("") ? TITLE : event_name);
         adapter = new AttendeeAdapter(activity, R.layout.listview_attendees);
 
         listview_attendee = (ListView) getActivity().findViewById(R.id.listview_attendee);
@@ -59,15 +63,13 @@ public class AttendeeFragment extends BaseMainFragmentWithReceiver implements Ad
         swipeRefreshLayout.setDistanceToTriggerSync(200);
         swipeRefreshLayout.setOnRefreshListener(this);
 
-        String event_id = activity.getSharedPrefString(SharedPref.EVENT_ID);
-        String event_name = activity.getSharedPrefString(SharedPref.EVENT_NAME);
-
         if (!event_id.equals("")) {
-            textview_name.setText(event_name);
+            //textview_name.setText(event_name);
+            activity.setTitle(event_name);
             textview_msg.setVisibility(View.GONE);
         } else {
             textview_msg.setText("There is no ongoing event.");
-            textview_name.setVisibility(View.GONE);
+            //textview_name.setVisibility(View.GONE);
             listview_attendee.setVisibility(View.GONE);
         }
     }

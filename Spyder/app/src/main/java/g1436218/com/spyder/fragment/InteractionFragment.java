@@ -17,6 +17,7 @@ import g1436218.com.spyder.R;
 import g1436218.com.spyder.activity.MainActivity;
 import g1436218.com.spyder.adapter.InteractionAdapter;
 import g1436218.com.spyder.asyncTask.DisplayAttendeeProfile;
+import g1436218.com.spyder.config.SharedPref;
 import g1436218.com.spyder.dialogFragment.SendMessageFragment;
 import g1436218.com.spyder.intentfilter.InteractionFragmentIntentFilter;
 import g1436218.com.spyder.object.Action;
@@ -42,7 +43,10 @@ public class InteractionFragment extends BaseMainFragmentWithReceiver implements
 
     @Override
     protected void initializeView() {
-        getActivity().setTitle(TITLE);
+
+        String event_id = activity.getSharedPrefString(SharedPref.EVENT_ID);
+        String event_name = activity.getSharedPrefString(SharedPref.EVENT_NAME);
+        getActivity().setTitle(event_id.equals("") ? TITLE : event_name);
 
         textview_message = (TextView) activity.findViewById(R.id.textview_fragment_interaction_message);
 

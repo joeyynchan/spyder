@@ -15,7 +15,7 @@
         android:layout_gravity="center_horizontal"
         android:hint="@string/username"
         android:inputType="text|textEmailAddress"
-        android:background="@drawable/login_activity_textedit_xml" />
+        android:background="@drawable/round_white_xml" />
 
     <EditText
         android:layout_width="match_parent"
@@ -28,7 +28,7 @@
         android:layout_gravity="center_horizontal"
         android:hint="@string/password"
         android:layout_marginTop="15dp"
-        android:background="@drawable/login_activity_textedit_xml" />
+        android:background="@drawable/round_white_xml" />
 
     <TextView
         android:layout_width="wrap_content"

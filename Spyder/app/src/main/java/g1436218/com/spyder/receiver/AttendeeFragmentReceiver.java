@@ -33,13 +33,9 @@ public class AttendeeFragmentReceiver extends BroadcastReceiver {
         String action = intent.getAction();
         if (Action.UPDATE_ATTENDEE_FRAGMENT_ADAPTER.equals(action)) {
             fragment.searchAttendees();
-            TextView event_name = (TextView) fragment.getActivity().findViewById(R.id.textview_fragment_attendee_eventName);
 
-            SharedPreferences sharedPref = fragment.getActivity().getSharedPreferences(
-                    context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-            String _event_name = fragment.getMainActivity().getSharedPrefString(SharedPref.EVENT_NAME);
-
-            event_name.setText(_event_name);
+            //String event_name = ((BaseActivity) fragment.getActivity()).getSharedPrefString(SharedPref.EVENT_NAME);
+            //fragment.getActivity().setTitle(event_name);
 
         }
     }

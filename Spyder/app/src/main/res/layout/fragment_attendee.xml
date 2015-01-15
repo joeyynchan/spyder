@@ -10,12 +10,14 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@android:color/white"
+        android:background="@color/backgroundColor"
         android:id="@+id/textview_fragment_attendee_eventName" />
 
     <SearchView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/searchview_attendee"
+        android:background="@color/backgroundColor"
         android:layout_gravity="center_horizontal" />
 
     <TextView

@@ -20,7 +20,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
-        android:background="@drawable/login_activity_textedit_xml">
+        android:background="@drawable/round_white_xml">
 
         <TextView
             android:layout_width="fill_parent"
@@ -51,7 +51,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
-        android:background="@drawable/login_activity_textedit_xml">
+        android:background="@drawable/round_white_xml">
 
         <TextView
             android:layout_width="fill_parent"

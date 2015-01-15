@@ -78,7 +78,7 @@ public class InteractionAdapter extends ArrayAdapter<Interaction> {
 
         protected void onPostExecute(Bitmap result) {
             if (result == null) {
-                bmImage.setImageResource(R.drawable.ic_launcher);
+                bmImage.setImageResource(R.drawable.main_activity_user_normal);
             } else {
                 bmImage.setImageBitmap(result);
             }
