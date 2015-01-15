@@ -34,7 +34,7 @@ public class SubmitBluetoothData extends BaseMainAsyncTask{
     protected Void doInBackgroundOnline(Void... params) {
 
         String username = activity.getSharedPrefString(SharedPref.USERNAME);
-        String event_id = activity.getSharedPrefString(SharedPref.EVENT_NAME);
+        String event_id = activity.getSharedPrefString(SharedPref.EVENT_ID);
 
         addToParams("user_name", username);
         addToParams("event_id", event_id);
@@ -44,6 +44,7 @@ public class SubmitBluetoothData extends BaseMainAsyncTask{
         Log.i(TAG, this.params.toString());
 
         JSONObject obj = getJSONFromUrl(URL, Requests.POST);
+        Log.i(TAG, statusCode+"");
         Log.i(TAG, obj.toString());
         return null;
     }
