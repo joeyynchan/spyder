@@ -26,7 +26,7 @@ function getSampleInteraction()
 			var start_t = new Date(start[start.length - 1]);
 			in_count++;
 			var end = interaction[in_count].split("]");
-			var end_t = new Date(end[0];
+			var end_t = new Date(end[0]);
 			data = data + '{"start_time":"' + start_t + '","end_time":"' + end_t + '","user1":"' + user1 + '","user2":"' + user2 + '"}';
 			in_count++;
 			if (in_count+1 < interaction.length) {

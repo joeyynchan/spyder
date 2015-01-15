@@ -1,7 +1,7 @@
 {% extends 'privileged_base.html.jinja' %}
 
 {% block title %}
-  <title>Event Profile of {{event_id}} - SPYDER - social proximity sensing</title>
+  <title>Event Profile of "{{profile['name']}}" - SPYDER - social proximity sensing</title>
 {% endblock %}
 
 {% block privileged_base_content %}
@@ -28,7 +28,7 @@
       <div role="tabpanel" class="tab-pane" id="profile">
         <dl class="dl-horizontal">
           <dt>Event name</dt>   <dd>{{profile['name']}}</dd>
-          <dt>Start time</dt>   <dd>{{profile['start_time']}}</dd>
+          <dt>Start time</dt>   <dd id="start_time_string">{{profile['start_time']}}</dd>
           <dt>End time</dt>     <dd>{{profile['end_time']}}</dd>
           <dt>Organiser</dt>    <dd><a href="/user/profile/{{profile['organiser']}}">{{profile['organiser']}}</a></dd>
           <dt>Speaker</dt>      <dd><a href="/user/profile/{{profile['speaker']}}">{{profile['speaker']}}</a></dd>
@@ -106,7 +106,7 @@
     // list of (username : string), reflect node in graph
     var attendee_list;
     // set of {user_a : string, user_b : string}, reflect edge in graph
-    var graph_edges;
+    // var graph_edges;
     // list of {time : int, user_a : string, user_b : string, is_add: bool}
     // ordered by time
     var tinteractl;
@@ -129,7 +129,7 @@
       return d.valueOf() / 1000 - shift_start_time;
     }
 
-    function inittime_to_datetime(time) {
+    function inttime_to_datetime(time) {
       var d = new Date(1000 * (time + shift_start_time));
       return d.toLocaleString();
     }
@@ -202,7 +202,6 @@
       }
     }
 
-    // todo: optimise it !
     function first_index_tinteractl(time) {
       for (var i=0; i<tinteractl.length; i++) {
         if (tinteractl[i]["time"] >= time) {
@@ -218,29 +217,22 @@
         return;
       }
       console.log(time);
-      var i;
+
       var edges;
-      if (false) { /*graph_edges !== undefined && cursor_time < time*/
-        edges = graph_edges;
-        i = first_index_tinteractl(cursor_time);
-      } else {
-        edges = {}
-        for (var i = 0; i < attendee_list.length; i++) {
-          edges[attendee_list[i]] = {}
-          for (var j = 0; j <= i; j++) {
-            edges[attendee_list[i]][attendee_list[j]] = false;
-          }
+      edges = {};
+      for (var i = 0; i < attendee_list.length; i++) {
+        edges[attendee_list[i]] = {}
+        for (var j = 0; j <= i; j++) {
+          edges[attendee_list[i]][attendee_list[j]] = false;
         }
-        i = 0;
       }
-      for (; i < tinteractl.length && tinteractl[i]["time"] < time; i++) {
+      for (var i = 0; i < tinteractl.length && tinteractl[i]["time"] < time; i++) {
         edges[tinteractl[i]["user_a"]][tinteractl[i]["user_b"]] = tinteractl[i]["is_add"];
       }
 
-      graph_edges = edges;
       cursor_time = time;
-      for (user_a in graph_edges) {
-        for (user_b in graph_edges[user_a]) {
+      for (user_a in edges) {
+        for (user_b in edges[user_a]) {
           if(edges[user_a][user_b]) {
             graph.addLink(user_a, user_b);
           } else {
@@ -250,7 +242,7 @@
       }
 
       slider.setValue(cursor_time, false);
-      $("#slider-val").text(inittime_to_datetime(cursor_time));
+      $("#slider-val").text(inttime_to_datetime(cursor_time));
     }
 
     function speed_from_value(value) {
@@ -267,7 +259,7 @@
     function init_slider() {
       slider = new Slider("#slider", {
         formatter: function(value) {
-          return inittime_to_datetime(value);
+          return inttime_to_datetime(value);
         },
         max: last_avaliable_time - 1,
         step: step_frames
@@ -320,56 +312,62 @@
       current_time = inttime_from_now();
       // this is live event
       if (current_time < event_end_time) {
+        $(".live-label").show();
         last_avaliable_time = current_time;
         cursor_time = last_avaliable_time - 1;
         is_playing = true;
       } else { // this is replay event
+        $(".live-label").hide();
         last_avaliable_time = event_end_time;
-        current_time = 0;
+        cursor_time = 0;
       }
 
       tinteractl = extract_interaction_list(interactions["interaction"]);
       attendee_list = extract_attendee_list(attendees);
 
+      // reset node
       remove_all_node();
       add_all_node();
-
-      d3.select('#chart').select("svg").remove();
-      updateStatistics(interactions);
 
       init_slider();
 
       stepInterval = setInterval(play_one_step, step_interval);
       
       if (current_time < event_end_time) {
-        update_graph(current_time);
+        update_graph(current_time - 1);
+
+        setInterval(function() {
+          $.ajax({
+            url: '/xhr/event_visualisation_data/{{event_id}}',
+            success:function(result){
+              interactions = result['interaction'];
+              attendees = result['attendees'];
+              lock = true;
+              tinteractl = extract_interaction_list(interactions["interaction"]);
+              attendee_list = extract_attendee_list(attendees);
+              lock = false;
+
+              d3.select('#chart').select("svg").remove();
+              updateStatistics(interactions);
+
+              if (current_time >= event_end_time + 2) {
+                window.location.href = '/event/profile/{{event_id}}';
+              }
+            }
+          });
+        }, fetch_interval);
       } else {
+        d3.select('#chart').select("svg").remove();
+        updateStatistics(interactions);
         update_graph(0);
       }
-
-      setInterval(function() {
-        $.ajax({
-          url: '/xhr/event_visualisation_data/{{event_id}}',
-          success:function(result){
-            interactions = result['interaction'];
-            attendees = result['attendees'];
-            lock = true;
-            tinteractl = extract_interaction_list(interactions["interaction"]);
-            attendee_list = extract_attendee_list(attendees);
-            lock = false;
-
-            d3.select('#chart').select("svg").remove();
-            updateStatistics(interactions);
-          }
-        });
-      }, fetch_interval);
     }
 
   function updateStatistics(interactionObject) {
     var   interactionData = interactionObject;
           interaction = interactionData.interaction;
           event_end = new Date(interactionData.event_end_time);
-          interval = Math.floor(last_avaliable_time * 1000 / 20) ;
+          interval = Math.floor(last_avaliable_time * 1000 / 7) ;
     var results,
           data = [],
           chart,
@@ -472,10 +470,17 @@
 
   </script>
 
+
+      <div role="tabpanel" class="tab-pane" id="chart">
+                 <button type="text" class="live-label btn btn-success" style="margin-right:5px;">LIVE</button>
+          <div style="margin: auto;">
+            <div id="chart"></div>
+          </div>
+      </div>
+
       <div role="tabpanel" class="tab-pane active" id="visualisation" style="width: 100%">
             <div id="graph"></div>
-
-            <div class="container-fluid">
+            <div id="control-panel" class="container-fluid">
             <div class="row">
               <div class="col-md-10">
               <div id="slider-wrapper">
@@ -497,6 +502,7 @@
             </div>
             <div class="row">
               <div class="col-md-1">
+                 <button type="text" class="live-label btn btn-success" style="margin-right:5px;">LIVE</button>
               </div>
               <div class="col-md-1">
                 <button type="button" class="btn btn-default"
@@ -563,19 +569,39 @@
             <script src="/static/node_modules/bootstrap-slider/js/bootstrap-slider.js"></script>
 
             <script>
-              $.ajax({
-                url: '/xhr/event_visualisation_data/{{event_id}}',
-                success:function(result){
-                  init(result['interaction'], result['attendees']);
-                }
-              });
+              var countdown_interval;
+              var start_ftime = (new Date($("#start_time_string").html())).valueOf();
+              var cur_ftime = (new Date()).valueOf();
+              if (start_ftime>=cur_ftime) {
+                $("#graph").html(
+                  '<div style="margin: 20px;">'
+                  +'Sorry, this event has not started, yet. Came back in '
+                  +'<span id="countdown-val">' + Math.floor((start_ftime - cur_ftime + 2000) / 1000) + '</span> seconds.</div>');
+                $('.live-label').hide();
+                $('#control-panel').hide();
+                countdown_interval = setInterval(function() {
+                  cur_ftime = (new Date()).valueOf();
+                  $("#countdown-val").html(Math.floor((start_ftime - cur_ftime + 2000) / 1000));
+                }, 1000);
+                setTimeout(start_visualisation, start_ftime - cur_ftime + 2000);
+              } else {
+                start_visualisation();
+              }
+
+              function start_visualisation() {
+                clearInterval(countdown_interval);
+                $("#graph").html("");
+                $('#control-panel').show();
+                $('.live-label').show();
+                $.ajax({
+                  url: '/xhr/event_visualisation_data/{{event_id}}',
+                  success:function(result){
+                    init(result['interaction'], result['attendees']);
+                  }
+                });
+              }
             </script>
       </div>
 
-      <div role="tabpanel" class="tab-pane" id="chart">
-          <div style="margin: auto;">
-            <div id="chart"></div>
-          </div>
-      </div>
     </div>
 {% endblock %}
