@@ -24,6 +24,7 @@ import g1436218.com.spyder.object.Interaction;
 
 public class InteractionAdapter extends ArrayAdapter<Interaction> {
 
+    private static final String TAG = "InteractionAdapter";
     private Context context;
 
     public InteractionAdapter(Context context, int resource) {
@@ -50,6 +51,7 @@ public class InteractionAdapter extends ArrayAdapter<Interaction> {
 
         Interaction item = getItem(position);
         name.setText(item.getName());
+        Log.d(TAG, "Getting photo url : " + item.getPhoto_url());
         new DownloadImageTask(image).execute(item.getPhoto_url());
         strength.setText(new Integer(item.getStrength()).toString() + "dBm");
 

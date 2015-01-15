@@ -55,12 +55,14 @@ public class FetchAttendees extends BaseMainAsyncTask {
                 for (int i = 0; i < array.length(); i++) {
                     JSONObject item = array.optJSONObject(i);
                     if(item != null) {
+                        Log.d(TAG, item.toString());
                         macAddress = item.optString("mac_address");
                         macAddress = macAddress.equals("") ? dummy_count++ + "" : macAddress;
                         username = item.optString("user_name");
                         name = item.optString("name");
                         gcm_id = item.optString("gcm_id");
                         photo_url = item.optString("photo_url");
+                        Log.d(TAG, "photo" + photo_url);
                         Attendee attendee = new Attendee(macAddress, username, name, gcm_id, photo_url);
                         attendees.put(macAddress, attendee);
                     }

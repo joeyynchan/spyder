@@ -25,6 +25,8 @@ public class UnlinkDevice extends BaseAsyncTask {
         addToParams("user_name", username);
         addToParams("password", password);
 
+        Log.d(TAG, URL);
+        Log.d(TAG, params.toString());
         JSONObject jsonObject = getJSONFromUrl(URL, Requests.POST);
         Log.d(TAG, this.statusCode + "");
 
