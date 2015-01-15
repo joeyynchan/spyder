@@ -54,7 +54,7 @@ public class InteractionAdapter extends ArrayAdapter<Interaction> {
         name.setText(item.getName());
         if(item.getPhoto_url().equals("")){
             Log.d(TAG, "Display default picture for " + item.getAttendee().toString());
-            image.setImageResource(R.drawable.ic_launcher);
+            image.setImageResource(R.drawable.main_activity_user_normal);
         }else {
             if (item.getPhoto() == null) {
                 new DownloadImageTask(image, item.getAttendee()).execute(item.getPhoto_url());
