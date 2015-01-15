@@ -16,15 +16,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Message:"
-            android:id="@+id/textView3" />
+            android:id="@+id/textView3"
+            android:textSize="18sp" />
 
         <EditText
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:inputType="textMultiLine"
-            android:ems="10"
             android:id="@+id/edittext_fragment_message_message"
-            android:textAlignment="textStart" />
+            android:textSize="18sp"
+            android:layout_gravity="left|top" />
     </LinearLayout>
 
     <LinearLayout
@@ -38,7 +38,15 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Cancel"
-            android:id="@+id/button_fragment_message_cancel" />
+            android:id="@+id/button_fragment_message_cancel"
+            android:background="#FFFFFF"
+            android:clickable="true"
+            android:textColor="@android:color/holo_blue_dark" />
+
+        <TextView
+            android:layout_width="1dp"
+            android:layout_height="fill_parent"
+            android:background="@android:color/holo_blue_dark" />
 
         <Button
             android:layout_width="0dp"
@@ -46,7 +54,9 @@
             android:layout_weight="1"
             android:text="Send"
             android:layout_toRightOf="@+id/button_fragment_message_cancel"
-            android:id="@+id/button_fragment_message_send" />
+            android:id="@+id/button_fragment_message_send"
+            android:background="#FFFFFF"
+            android:textColor="@android:color/holo_blue_dark" />
     </LinearLayout>
 
 

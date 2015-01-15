@@ -23,8 +23,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="20dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
             android:background="#ffffffff">
 
             <LinearLayout
@@ -47,6 +47,8 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="5dp"
                     android:text="Basic Info"
+                    android:textSize="20sp"
+                    android:textColor="@android:color/white"
                     android:id="@+id/textview_fragment_profile_basicInfo" />
 
             </LinearLayout>
@@ -67,6 +69,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="5dp"
                     android:text="Name"
+                    android:textSize="18sp"
                     android:id="@+id/textview_fragment_profile_name1" />
 
                 <TextView
@@ -76,6 +79,8 @@
                     android:layout_marginRight="5dp"
                     android:gravity="right"
                     android:text="Name"
+                    android:textSize="18sp"
+                    android:textColor="#ff808080"
                     android:id="@+id/textview_fragment_profile_name" />
             </LinearLayout>
 
@@ -95,6 +100,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="5dp"
                     android:text="Gender"
+                    android:textSize="18sp"
                     android:id="@+id/textview_fragment_profile_gender1" />
 
                 <TextView
@@ -104,6 +110,8 @@
                     android:layout_marginRight="5dp"
                     android:gravity="right"
                     android:text="Gender"
+                    android:textSize="18sp"
+                    android:textColor="#ff808080"
                     android:id="@+id/textview_fragment_profile_gender" />
             </LinearLayout>
 
@@ -123,6 +131,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="5dp"
                     android:text="Occupation"
+                    android:textSize="18sp"
                     android:id="@+id/textview_fragment_profile_occupation1" />
 
                 <TextView
@@ -132,6 +141,8 @@
                     android:layout_marginRight="5dp"
                     android:gravity="right"
                     android:text="Occupation"
+                    android:textSize="18sp"
+                    android:textColor="#ff808080"
                     android:id="@+id/textview_fragment_profile_occupation" />
             </LinearLayout>
 
@@ -151,6 +162,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="5dp"
                     android:text="Company"
+                    android:textSize="18sp"
                     android:id="@+id/textview_fragment_profile_company1" />
 
                 <TextView
@@ -160,6 +172,8 @@
                     android:layout_marginRight="5dp"
                     android:gravity="right"
                     android:text="Company"
+                    android:textSize="18sp"
+                    android:textColor="#ff808080"
                     android:id="@+id/textview_fragment_profile_company" />
             </LinearLayout>
 
@@ -174,8 +188,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
             android:layout_marginTop="20dp"
             android:background="#ffffffff">
 
@@ -198,7 +212,9 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="5dp"
-                    android:text="Contact Info" />
+                    android:text="Contact Info"
+                    android:textSize="20sp"
+                    android:textColor="@android:color/white" />
 
             </LinearLayout>
 
@@ -218,6 +234,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="5dp"
                     android:text="Phone"
+                    android:textSize="18sp"
                     android:id="@+id/textview_fragment_profile_phone1" />
 
                 <TextView
@@ -227,6 +244,8 @@
                     android:layout_marginRight="5dp"
                     android:gravity="right"
                     android:text="Phone"
+                    android:textSize="18sp"
+                    android:textColor="#ff808080"
                     android:autoLink="phone"
                     android:id="@+id/textview_fragment_profile_phone" />
             </LinearLayout>
@@ -247,6 +266,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="5dp"
                     android:text="Email"
+                    android:textSize="18sp"
                     android:id="@+id/textview_fragment_profile_email1" />
 
                 <TextView
@@ -256,6 +276,8 @@
                     android:layout_marginRight="5dp"
                     android:gravity="right"
                     android:text="Email"
+                    android:textSize="18sp"
+                    android:textColor="#ff808080"
                     android:autoLink="email"
                     android:id="@+id/textview_fragment_profile_email" />
             </LinearLayout>
@@ -276,6 +298,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="5dp"
                     android:text="Link"
+                    android:textSize="18sp"
                     android:id="@+id/textview_fragment_profile_link1" />
 
                 <TextView
@@ -285,6 +308,8 @@
                     android:layout_marginRight="5dp"
                     android:gravity="right"
                     android:text="Link"
+                    android:textSize="18sp"
+                    android:textColor="#ff808080"
                     android:autoLink="web"
                     android:id="@+id/textview_fragment_profile_link" />
             </LinearLayout>

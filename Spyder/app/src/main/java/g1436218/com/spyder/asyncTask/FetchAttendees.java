@@ -39,7 +39,7 @@ public class FetchAttendees extends BaseMainAsyncTask {
 
 
         attendees.clear();
-        //attendees.put("48:74:6E:75:64:75", new Attendee("", "iPhone", "iPhoneee", "", ""));
+        attendees.put("48:74:6E:75:64:75", new Attendee("", "iPhone", "iPhoneee", "", ""));
 
         if (event_id.equals("")) {
             return null;
