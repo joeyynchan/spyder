@@ -99,7 +99,7 @@ public class LoginFragmentTest extends ActivityInstrumentationTestCase2<LoginAct
         getInstrumentation().sendStringSync("demo3");
         getInstrumentation().waitForIdleSync();
         TouchUtils.clickView(this, login);
-        assertEquals("Username should not be empty", message.getText().toString());
+        assertEquals("Username cannot be empty", message.getText().toString());
     }
 
     @LargeTest
@@ -111,7 +111,7 @@ public class LoginFragmentTest extends ActivityInstrumentationTestCase2<LoginAct
         getInstrumentation().sendStringSync("");
         getInstrumentation().waitForIdleSync();
         TouchUtils.clickView(this, login);
-        assertEquals("Password should not be empty", message.getText().toString());
+        assertEquals("Password cannot be empty", message.getText().toString());
     }
 
     @LargeTest

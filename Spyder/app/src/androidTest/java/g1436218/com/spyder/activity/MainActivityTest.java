@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.widget.LinearLayout;
 
 import g1436218.com.spyder.R;
+import g1436218.com.spyder.fragment.AttendeeFragment;
 import g1436218.com.spyder.fragment.AttendeeFragmentTest;
 import g1436218.com.spyder.fragment.EventListFragment;
 import g1436218.com.spyder.fragment.InteractionFragment;
@@ -85,7 +86,7 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
         TouchUtils.clickView(this, button);
         Fragment fragment = activity.getFragmentManager().findFragmentByTag("CURRENT_FRAGMENT");
         assertNotNull("Fragment is null", fragment);
-        assertEquals("Fragment is no InteractionFragment Class", AttendeeFragmentTest.class, fragment.getClass());
+        assertEquals("Fragment is no InteractionFragment Class", AttendeeFragment.class, fragment.getClass());
     }
 
     @SmallTest
@@ -100,7 +101,7 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
     @SmallTest
     public void testOptionMenu() {
         getInstrumentation().invokeMenuActionSync(activity, R.menu.menu_main, 0);
-        assertTrue("Bluetooth should not be On!", BluetoothAdapter.getDefaultAdapter().isEnabled());
+        assertTrue("Bluetooth should not be On!", !BluetoothAdapter.getDefaultAdapter().isEnabled());
         MenuItem item = (MenuItem) activity.findViewById(R.id.action_start_bluetooth);
 
     }
