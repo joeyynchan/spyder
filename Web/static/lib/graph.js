@@ -1,8 +1,8 @@
 function myGraph(el) {
 
     // Add and remove elements on the graph object
-    this.addNode = function (id) {
-        nodes.push({"id":id});
+    this.addNode = function (id, link) {
+        nodes.push({"id":id, "icon": link});
         update();
     }
 
@@ -99,14 +99,14 @@ function myGraph(el) {
         nodeEnter.append("image")
             .attr("class", "circle")
 			.attr("class", "clickable")
-            .attr("xlink:href", "http://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Orange_Icon_User.svg/301px-Orange_Icon_User.svg.png")
+            .attr("xlink:href", function(d) {return d.icon;})
             .attr("x", "-8px")
             .attr("y", "-8px")
             .attr("width", "16px")
             .attr("height", "16px");
 
         nodeEnter.append("a")
-			.attr("xlink:href", function (d) { return "/user/profile/" + d.id; })
+			.attr("xlink:href", function (d) { return "http://www.example.com/flare/" + d.id; })
 			.append("text")
 			.attr("class", "clickable")
             .attr("dx", 12)
