@@ -13,7 +13,7 @@
         android:layout_alignParentLeft="true"
         android:layout_marginRight="6dip"
         android:contentDescription="TODO"
-        android:src="@drawable/ic_launcher" />
+        android:src="@drawable/main_activity_user_normal" />
 
     <LinearLayout
         android:orientation="vertical"

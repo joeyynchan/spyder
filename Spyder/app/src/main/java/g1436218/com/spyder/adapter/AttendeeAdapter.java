@@ -44,7 +44,7 @@ public class AttendeeAdapter extends ArrayAdapter<Attendee> {
         username.setText(item.getName());
         if(item.getPhoto_url().equals("")){
             Log.d(TAG, "Display default picture for " + item.toString());
-            image.setImageResource(R.drawable.ic_launcher);
+            image.setImageResource(R.drawable.main_activity_user_normal);
         }else {
             if (item.getPhoto() == null) {
                 new DownloadImageTask(image, item).execute(item.getPhoto_url());
