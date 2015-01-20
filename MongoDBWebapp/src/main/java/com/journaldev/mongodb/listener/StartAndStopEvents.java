@@ -27,7 +27,6 @@ public class StartAndStopEvents implements Runnable {
 	
 	@Override
 	public void run() {
-		System.out.println("RUN");
 		URL url;
 		try {
 			url = new URL("https://android.googleapis.com/gcm/send");

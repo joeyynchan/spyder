@@ -57,7 +57,7 @@ public class GetUsersEventServlet extends HttpServlet {
 				jo.put("user_name", mob_user.getUserName());
 				if (userProfile != null && userProfile.getName() != null) {
 					jo.put("name", userProfile.getName());
-					jo.put("photo_url", userProfile.getExternal_link());
+					jo.put("photo_url", userProfile.getPhoto());
 				} else {
 					jo.put("name", mob_user.getUserName());
 				}
