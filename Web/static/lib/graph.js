@@ -2,7 +2,15 @@ function myGraph(el) {
 
     // Add and remove elements on the graph object
     this.addNode = function (id, link) {
-        nodes.push({"id":id, "icon": link});
+        if (role == 1) {
+			nodes.push({"id":id, "icon": link, "size": "24px", "fontSize": "22px", "fontWeight": "bold", "fontStyle": "normal"});
+		} else {
+			if (role == 2) {
+				nodes.push({"id":id, "icon": link, "size": "16px", "fontSize": "18px", "fontWeight": "normal", "fontStyle": "italic"});
+			} else {
+				nodes.push({"id":id, "icon": link, "size": "12px", "fontSize": "12px", "fontWeight": "lighter", "fontStyle": "normal"});
+			}
+		}
         update();
     }
 
@@ -102,8 +110,8 @@ function myGraph(el) {
             .attr("xlink:href", function(d) {return d.icon;})
             .attr("x", "-8px")
             .attr("y", "-8px")
-            .attr("width", "16px")
-            .attr("height", "16px");
+            .attr("width", function(d) {return d.size;})
+            .attr("height", function(d) {return d.size;});
 
         nodeEnter.append("a")
 			.attr("xlink:href", function (d) { return "http://www.example.com/flare/" + d.id; })
@@ -111,6 +119,9 @@ function myGraph(el) {
 			.attr("class", "clickable")
             .attr("dx", 12)
             .attr("dy", ".35em")
+            .attr("font-size", function(d) {return d.fontSize;})
+			.attr("font-weight", function(d) {return d.fontWeight;})
+			.attr("font-style", function(d) {return d.fontStyle;})
             .text(function(d) {return d.id});
 
         node.exit().remove();
