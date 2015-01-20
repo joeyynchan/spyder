@@ -8,7 +8,9 @@ import android.content.IntentFilter;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.TouchUtils;
 import android.view.KeyEvent;
+import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import g1436218.com.spyder.R;
 import g1436218.com.spyder.activity.MainActivity;
@@ -43,7 +45,7 @@ public class ProfileFragmentTest extends ActivityInstrumentationTestCase2<MainAc
     }
 
     public void testEditProfile() {
-        activity.putSharedPrefString(SharedPref.USERNAME, "demo014");
+        activity.putSharedPrefString(SharedPref.USERNAME, "demo009");
         getInstrumentation().invokeMenuActionSync(activity, R.id.action_edit, 0);
         Instrumentation.ActivityMonitor monitor = new Instrumentation.ActivityMonitor(new IntentFilter(), null, false);
         getInstrumentation().addMonitor(monitor);
@@ -51,5 +53,6 @@ public class ProfileFragmentTest extends ActivityInstrumentationTestCase2<MainAc
         Fragment fragment = activity.getFragmentManager().findFragmentByTag("CURRENT_FRAGMENT");
         assertEquals(EditProfileFragment.class, fragment.getClass());
     }
+
 
 }
