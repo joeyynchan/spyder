@@ -14,9 +14,6 @@ import g1436218.com.spyder.R;
 import g1436218.com.spyder.activity.MainActivity;
 import g1436218.com.spyder.config.SharedPref;
 
-/**
- * Created by Joey on 11/01/2015.
- */
 public class ProfileFragmentTest extends ActivityInstrumentationTestCase2<MainActivity> {
 
     private MainActivity activity;
