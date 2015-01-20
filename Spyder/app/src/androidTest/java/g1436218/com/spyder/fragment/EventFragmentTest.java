@@ -21,58 +21,7 @@ public class EventFragmentTest extends ActivityInstrumentationTestCase2<MainActi
         super(MainActivity.class);
     }
 
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-        activity = getActivity();
-        BluetoothAdapter.getDefaultAdapter().disable();
-        assertNotNull("MainActivity is null", activity);
-        assertEquals("activity is not MainActivity.class", MainActivity.class, activity.getClass());
-        LinearLayout button = (LinearLayout) activity.findViewById(R.id.button_event_list);
-        TouchUtils.clickView(this, button);
-    }
 
-    @Override
-    protected void tearDown() throws Exception {
-        super.tearDown();
-        //activity.clearSharedPref();
-    }
-
-    public void testListViewNotNull() {
-        ListView listview = (ListView) activity.findViewById(R.id.listview_eventlist);
-        assertNotNull(listview);
-    }
-
-    public void testSwipeRefreshLayoutNotNull() {
-        SwipeRefreshLayout listview = (SwipeRefreshLayout) activity.findViewById(R.id.swiperefreshlayout_eventlist);
-        assertNotNull(listview);
-    }
-
-    public void testSearchView() {
-        SearchView searchview = (SearchView) activity.findViewById(R.id.searchview_eventlist);
-        assertNotNull(searchview);
-    }
-
-    public void testNoEvent() {
-        String expected = "Event List";
-        String actual = activity.getTitle().toString();
-        assertEquals(expected, actual);
-    }
-
-    public void testWithEvent() {
-        LinearLayout button = (LinearLayout) activity.findViewById(R.id.button_interactions);
-        TouchUtils.clickView(this, button);
-
-        activity.putSharedPrefString(SharedPref.EVENT_ID, "dummy id");
-        activity.putSharedPrefString(SharedPref.EVENT_NAME, "TestWithEvent");
-
-        button = (LinearLayout) activity.findViewById(R.id.button_event_list);
-        TouchUtils.clickView(this, button);
-
-        String expected = "TestWithEvent";
-        String actual = activity.getTitle().toString();
-        assertEquals(expected, actual);
-    }
 
 
 }

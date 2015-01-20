@@ -1,7 +1,9 @@
 package g1436218.com.spyder.activity;
 
 import android.app.Fragment;
+import android.app.Instrumentation;
 import android.bluetooth.BluetoothAdapter;
+import android.content.IntentFilter;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.TouchUtils;
 import android.test.suitebuilder.annotation.SmallTest;
@@ -98,12 +100,25 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
         assertEquals("Fragment is no EventListFragment Class", EventListFragment.class, fragment.getClass());
     }
 
-    @SmallTest
-    public void testOptionMenu() {
-        getInstrumentation().invokeMenuActionSync(activity, R.menu.menu_main, 0);
-        assertTrue("Bluetooth should not be On!", !BluetoothAdapter.getDefaultAdapter().isEnabled());
-        MenuItem item = (MenuItem) activity.findViewById(R.id.action_start_bluetooth);
+    public void testMenuStartBluetooth() {
+        getInstrumentation().invokeMenuActionSync(activity, R.id.action_start_bluetooth, 0);
+        Instrumentation.ActivityMonitor monitor = new Instrumentation.ActivityMonitor(new IntentFilter(), null, false);
+        getInstrumentation().addMonitor(monitor);
+        getInstrumentation().waitForMonitorWithTimeout(monitor, 1000);
+        assertTrue(BluetoothAdapter.getDefaultAdapter().isEnabled());
+        BluetoothAdapter.getDefaultAdapter().disable();
+    }
 
+    public void testMenuStopBluetooth() {
+        BluetoothAdapter.getDefaultAdapter().enable();
+        Instrumentation.ActivityMonitor monitor = new Instrumentation.ActivityMonitor(new IntentFilter(), null, false);
+        getInstrumentation().addMonitor(monitor);
+        getInstrumentation().waitForMonitorWithTimeout(monitor, 1000);
+        assertTrue(BluetoothAdapter.getDefaultAdapter().isEnabled());
+        getInstrumentation().invokeMenuActionSync(activity, R.id.action_stop_bluetooth, 0);
+        getInstrumentation().addMonitor(monitor);
+        getInstrumentation().waitForMonitorWithTimeout(monitor, 1000);
+        assertTrue(!BluetoothAdapter.getDefaultAdapter().isEnabled());
     }
 
 }
