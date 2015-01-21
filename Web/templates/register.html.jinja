@@ -1,0 +1,44 @@
+{% extends 'welcome.html.jinja' %}
+
+{% block title %}
+  <title>Register - SPYDER - social proximity sensing</title>
+{% endblock %}
+
+{% block welcome_content %}
+  <form id="register-panel" class="form-horizontal" role="form" action="/register" method="post">
+    <div class="form-group">
+      <label for="register-username" class="col-sm-3 control-label">Username</label>
+      <div class="col-sm-7">
+        <input type="text" class="form-control" name="username" id="register-username" value={{register_username if register_username else '""'}} placeholder="username" required>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="register-password" class="col-sm-3 control-label">Password</label>
+      <div class="col-sm-7">
+        <input type="password" class="form-control" name="password" id="register-password" placeholder="password" required>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="register-confirm-password" class="col-sm-3 control-label">Confirm Password</label>
+      <div class="col-sm-7">
+        <input type="password" class="form-control" name="confirm_password" id="register-confirm-password" placeholder="confirm-password" required>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-sm-offset-3 col-sm-9">
+        <button type="submit" class="btn btn-primary">Register</button>
+        <a class="btn btn-default" href="/" role="button">Cancel</a>
+      </div>
+    </div>
+  </form>
+
+  <script>
+    $('#register-panel').submit(function(event) {
+      // hashPassword function is in welcome.html.jinja
+      var hashedPassword = hashPassword($('#register-password').val());
+      $('#register-password').val(hashedPassword);
+      var hashedConfirmPassword = hashPassword($('#register-confirm-password').val());
+      $('#register-confirm-password').val(hashedConfirmPassword);
+    });
+  </script>
+{% endblock %}

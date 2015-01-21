@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta Access-Control-Allow-Origin="*">
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width,
+                   initial-scale=1,
+                   maximum-scale=1,
+                   user-scalable=no">
+
+    {% block title %}
+      <title>SPYDER - social proximity sensing</title>
+    {% endblock %}
+
+    <!-- JQuery CDN -->
+    <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js">
+    </script>
+
+
+  </head>
+  <body>
+    <style>
+      body {
+        padding-top: 80px;
+        margin-left: auto;
+        margin-right: auto;
+        display:block;
+        width:90%;
+      }
+      .table th, .table td {
+        text-align: center;
+      }
+      .tab-pane {
+        margin: 10px;
+        padding: 15px;
+        border: 1px LightGray solid;
+        border-radius: 15px;
+      }
+    </style>
+
+    {% if success_message %}
+      <div class="alert alert-success" role="alert">
+        {{ success_message }}
+      </div>
+    {% endif %}
+
+    {% if info_message %}
+      <div class="alert alert-info" role="alert">
+        {{ info_message }}
+      </div>
+    {% endif %}
+
+    {% if error_message %}
+      <div class="alert alert-danger" role="alert">
+        {{ error_message }}
+      </div>
+    {% endif %}
+
+    {% block base_content %}
+    {% endblock %}
+
+    <script>
+      $(".clickable-row").click(function() {
+            window.document.location = $(this).attr("href");
+      });
+    </script>
+  </body>
+</html>

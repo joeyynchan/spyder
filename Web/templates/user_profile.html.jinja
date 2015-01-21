@@ -1,0 +1,166 @@
+{% extends 'privileged_base.html.jinja' %}
+
+{% block title %}
+  <title>User Profile of {{username}} - SPYDER - social proximity sensing</title>
+{% endblock %}
+
+{% block privileged_base_content %}
+  {% if current_user_username in friends %}
+    <form style="margin:10px" align="right" action="/user/delete/{{username}}" method="POST">
+      <button type="submit" class="btn btn-default">Unfriend</button>
+    </form>
+  {% elif current_user_username != username %}
+    <form style="margin:10px" align="right" action="/user/add/{{username}}" method="POST">
+      <button type="submit" class="btn btn-primary">Add Friend</button>
+    </form>
+  {% endif %}
+
+  <div role="tabpanel">
+
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs" role="tablist">
+      <li role="presentation" class="active"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">User Profile</a></li>
+      <li role="presentation"><a href="#friends" aria-controls="friends" role="tab" data-toggle="tab">Friends</a></li>
+      <li role="presentation"><a href="#organised-events" aria-controls="organised-events" role="tab" data-toggle="tab">Organised Events</a></li>
+      <li role="presentation"><a href="#spoken-events" aria-controls="spoken-events" role="tab" data-toggle="tab">Spoken Events</a></li>
+      <li role="presentation"><a href="#attended-events" aria-controls="attended-events" role="tab" data-toggle="tab">Attended Events</a></li>
+    </ul>
+
+
+    <!-- Tab panes -->
+    <div class="tab-content">
+
+      <div role="tabpanel" class="tab-pane active" id="profile">
+        {% if profile %}
+          <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-8">
+              <dl class="dl-horizontal">
+                <dt>name</dt>          <dd>{{profile['name']}}</dd>
+                <dt>occupation</dt>    <dd>{{profile['job']}}</dd>
+                <dt>organisation</dt>  <dd>{{profile['company']}}</dd>
+                <dt>email</dt>         <dd>{{profile['email']}}</dd>
+                <dt>phone</dt>         <dd>{{profile['phone']}}</dd>
+                <dt>external_link</dt> <dd>{{profile['external_link']}}</dd>
+                <dt>gender</dt>        <dd>{{profile['gender']}}</dd>
+              </dl>
+            </div>
+            <div class="col-md-4">
+              <div class="profile-picture-container">
+                <p hidden>{{profile['photo']}}</p>
+                <img width=160 height=160/>
+              </div>
+            </div>
+          </div>
+          </div>
+        {% else %}
+          <p>{{username}} has not created profile yet.</p>
+        {% endif %}
+      </div>
+
+      <div role="tabpanel" class="tab-pane" id="friends">
+        {% if friends %}
+          <table class="table table-hover">
+            <tr>
+              <th>Photo</th>
+              <th>Username</th>
+              <th>Name</th>
+            </tr>
+            {% for friend_username, friend_record in friends.items() %}
+              <tr class="clickable-row" href="/user/profile/{{ friend_username }}">
+                <td>
+                  <div class="profile-picture-container">
+                    <p hidden>{{ friend_record['photo'] }}</p>
+                    <img width=40 height=40/>
+                  </div>
+                </td>
+                <td><a href="/user/profile/{{ friend_username }}">{{ friend_username }}</a></td>
+                <td>{{ friend_record['name'] }}</td>
+              </tr>
+            {% endfor %}
+          </table>
+        {% else %}
+          <p>{{username}} doesn't have any friends.</p>
+        {% endif %}
+      </div>
+
+      <div role="tabpanel" class="tab-pane" id="organised-events">
+      {% if organised_events %}
+        <table class="table table-hover">
+          <tr>
+            <th>Event name</th>
+            <th>Start time</th>
+            <th>End time</th>
+            <th>Join Event?</th>
+          </tr>
+          {% for event_record in organised_events %}
+            <tr class="clickable-row" href="/event/profile/{{ event_record['event_id'] }}">
+              <td><a href="/event/profile/{{ event_record['event_id'] }}">{{ event_record['name'] }}</a></td>
+              <td>{{ event_record['start_time'] }}</td>
+              <td>{{ event_record['end_time'] }}</td>
+              <td>
+                {% if event_record['can_join_event'] %}
+                  <form style="margin:0px" action="/event/join/{{event_record['event_id']}}" method="POST">
+                    <button type="submit" class="btn btn-default btn-sm">Join Event</button>
+                  </form>
+                {% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+        </table>
+      {% else %}
+        <p>{{username}} doesn't have any organised events.</p>
+      {% endif %}
+      </div>
+
+      <div role="tabpanel" class="tab-pane" id="spoken-events">
+      {% if spoken_events %}
+        <table class="table table-hover">
+          <tr>
+            <th>Event name</th>
+            <th>Start time</th>
+            <th>End time</th>
+            <th>Join Event?</th>
+          </tr>
+          {% for event_record in spoken_events %}
+            <tr class="clickable-row" href="/event/profile/{{ event_record['event_id'] }}">
+              <td><a href="/event/profile/{{ event_record['event_id'] }}">{{ event_record['name'] }}</a></td>
+              <td>{{ event_record['start_time'] }}</td>
+              <td>{{ event_record['end_time'] }}</td>
+              <td>
+                {% if event_record['can_join_event'] %}
+                  <form style="margin:0px" action="/event/join/{{event_record['event_id']}}" method="POST">
+                    <button type="submit" class="btn btn-default btn-sm">Join Event</button>
+                  </form>
+                {% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+        </table>
+      {% else %}
+        <p>{{username}} doesn't have any spoken events.</p>
+      {% endif %}
+      </div>
+
+      <div role="tabpanel" class="tab-pane" id="attended-events">
+      {% if events %}
+        <table class="table table-hover">
+          <tr>
+            <th>Event name</th>
+            <th>Start time</th>
+            <th>End time</th>
+          </tr>
+          {% for event_record in events %}
+            <tr class="clickable-row" href="/event/profile/{{ event_record['event_id'] }}">
+              <td><a href="/event/profile/{{ event_record['event_id'] }}">{{ event_record['name'] }}</a></td>
+              <td>{{ event_record['start_time'] }}</td>
+              <td>{{ event_record['end_time'] }}</td>
+            </tr>
+          {% endfor %}
+        </table>
+      {% else %}
+        <p>{{username}} doesn't have any attended events.</p>
+      {% endif %}
+      </div>
+    </div>
+{% endblock %}
