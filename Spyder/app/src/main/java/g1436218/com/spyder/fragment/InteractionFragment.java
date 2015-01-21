@@ -60,6 +60,10 @@ public class InteractionFragment extends BaseMainFragmentWithReceiver implements
 
     }
 
+    public InteractionAdapter getAdapter() {
+        return adapter;
+    }
+
     @Override
     protected void registerReceiver() {
         receiver = new InteractionFragmentReceiver(this);
