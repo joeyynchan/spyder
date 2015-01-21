@@ -2,21 +2,21 @@ package g1436218.com.spyder.activity;
 
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 
-import java.util.ArrayList;
-
 import g1436218.com.spyder.R;
+import g1436218.com.spyder.asyncTask.CheckConnection;
 import g1436218.com.spyder.asyncTask.FetchAttendees;
+import g1436218.com.spyder.config.SharedPref;
 import g1436218.com.spyder.intentfilter.MainActivityIntentFilter;
-import g1436218.com.spyder.object.Attendee;
+import g1436218.com.spyder.object.Attendees;
 import g1436218.com.spyder.object.BluetoothController;
 import g1436218.com.spyder.object.InteractionPackage;
 import g1436218.com.spyder.object.UIController;
-import g1436218.com.spyder.object.UserMap;
 import g1436218.com.spyder.receiver.MainActivityReceiver;
 
 
@@ -41,8 +41,7 @@ public class MainActivity extends BaseActivity {
 
     private final String TAG = "MainActivity";
 
-    private UserMap userMap;
-    private ArrayList<Attendee> attendees;
+    private Attendees attendees;
     private InteractionPackage interactionPackage;
     private MainActivityReceiver receiver;
     private UIController uiController;
@@ -58,7 +57,7 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState, R.layout.activity_main);
 
         interactionPackage = new InteractionPackage();
-        attendees = new ArrayList<Attendee>();
+        attendees = Attendees.getInstance();
 
         uiController = new UIController(this);
         uiController.showInteractions();
@@ -70,6 +69,8 @@ public class MainActivity extends BaseActivity {
         registerReceiver(receiver, new MainActivityIntentFilter());
 
         new FetchAttendees(this).execute();
+        new CheckConnection(this).execute();
+
     }
 
     @Override
@@ -121,6 +122,7 @@ public class MainActivity extends BaseActivity {
     public void onBackPressed() {
         if (getFragmentManager().getBackStackEntryCount() != 0) {
             getFragmentManager().popBackStack();
+            Log.d("CHECKING FRAGMENT", getFragmentManager().findFragmentByTag("CURRENT_FRAGMENT").getClass().toString());
         }
         invalidateOptionsMenu();
     }
@@ -178,8 +180,16 @@ public class MainActivity extends BaseActivity {
         return uiController;
     }
 
-    public ArrayList<Attendee> getAttendees() {
+    public Attendees getAttendees() {
         return attendees;
+    }
+
+    public void setToCurrentEvent(String event_id, String event_name) {
+        putSharedPrefString(SharedPref.EVENT_ID, event_id);
+        putSharedPrefString(SharedPref.EVENT_NAME, event_name);
+        Log.d("Event ID", event_id);
+        Log.d("Event Name", event_name);
+        new FetchAttendees(this).execute();
     }
 
 }

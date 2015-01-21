@@ -170,6 +170,7 @@ public abstract class BaseAsyncTask extends AsyncTask<Void, Void, Void> {
 
         return bitmap;
     }
+
     protected String addUrlParams(ArrayList<NameValuePair> list){
         NameValuePair elem = list.remove(0);
         String result = "?" + elem.getName() + "=" + elem.getValue();
@@ -179,5 +180,6 @@ public abstract class BaseAsyncTask extends AsyncTask<Void, Void, Void> {
         }
         return result;
     }
+
 
 }

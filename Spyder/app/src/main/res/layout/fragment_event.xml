@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/backgroundColor">
 
+    <!--
     <TextView
         android:id="@+id/textview_fragment_event_name"
         android:background="@color/themeColor"
@@ -13,7 +14,7 @@
         android:layout_height="wrap_content"
         android:text="Event name"
         android:textSize="30dp"
-        android:textColor="#ffffffff"/>
+        android:textColor="#ffffffff"/> -->
 
     <LinearLayout
         android:orientation="vertical"
@@ -22,24 +23,51 @@
         android:layout_marginTop="10dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:background="@drawable/login_activity_textedit_xml">
+        android:background="@drawable/round_white_xml">
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
+            android:layout_gravity="left"
+            android:text="Host"
+            android:textSize="20dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_gravity="right"
             android:text="Host"
             android:textSize="20dp"
+            android:textColor="#ff808080"
             android:id="@+id/textview_fragment_event_host" />
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:background="@color/divider" />
+
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
+            android:layout_gravity="left"
+            android:text="Location"
+            android:textSize="20dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_gravity="right"
             android:text="Location"
             android:textSize="20dp"
+            android:textColor="#ff808080"
             android:id="@+id/textview_fragment_event_location" />
 
 
@@ -52,24 +80,51 @@
         android:layout_marginTop="10dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:background="@drawable/login_activity_textedit_xml">
+        android:background="@drawable/round_white_xml">
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
+            android:layout_gravity="left"
+            android:text="Start Time"
+            android:textSize="20dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_gravity="right"
             android:text="Start Time"
             android:textSize="20dp"
+            android:textColor="#ff808080"
             android:id="@+id/textview_fragment_event_startTime" />
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:background="@color/divider" />
+
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
+            android:layout_gravity="left"
+            android:text="End Time"
+            android:textSize="20dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_gravity="right"
             android:text="End Time"
             android:textSize="20dp"
+            android:textColor="#ff808080"
             android:id="@+id/textview_fragment_event_endTime" />
 
     </LinearLayout>
@@ -81,15 +136,25 @@
         android:layout_marginTop="10dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:background="@drawable/login_activity_textedit_xml">
+        android:background="@drawable/round_white_xml">
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
+            android:layout_gravity="left"
             android:text="Description"
+            android:textSize="20dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:text="N/A"
             android:textSize="20dp"
+            android:textColor="#ff808080"
             android:id="@+id/textview_fragment_event_description" />
 
     </LinearLayout>

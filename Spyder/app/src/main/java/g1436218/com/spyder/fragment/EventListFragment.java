@@ -2,6 +2,7 @@ package g1436218.com.spyder.fragment;
 
 import android.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -12,6 +13,7 @@ import g1436218.com.spyder.activity.MainActivity;
 import g1436218.com.spyder.adapter.EventListAdapter;
 import g1436218.com.spyder.asyncTask.FetchEventDetails;
 import g1436218.com.spyder.asyncTask.FetchEvents;
+import g1436218.com.spyder.config.SharedPref;
 import g1436218.com.spyder.intentfilter.EventListFragmentIntentFilter;
 import g1436218.com.spyder.object.Event;
 import g1436218.com.spyder.receiver.EventListFragmentReceiver;
@@ -43,7 +45,11 @@ public class EventListFragment extends BaseMainFragmentWithReceiver implements A
 
     @Override
     protected void initializeView() {
-        getActivity().setTitle(TITLE);
+
+        String event_id = activity.getSharedPrefString(SharedPref.EVENT_ID);
+        String event_name = activity.getSharedPrefString(SharedPref.EVENT_NAME);
+        getActivity().setTitle(event_id.equals("") ? TITLE : event_name);
+
         this.adapter = new EventListAdapter(activity, R.layout.listview_interaction);
         listview_eventlist = (ListView) activity.findViewById(R.id.listview_eventlist);
         listview_eventlist.setAdapter(adapter);
@@ -53,16 +59,14 @@ public class EventListFragment extends BaseMainFragmentWithReceiver implements A
         searchview_eventlist.setOnQueryTextListener(this);
 
         swipeRefreshLayout = (SwipeRefreshLayout) activity.findViewById(R.id.swiperefreshlayout_eventlist);
-        swipeRefreshLayout.setColorSchemeResources(android.R.color.white,
-                                                      android.R.color.white,
-                                                      android.R.color.white,
-                                                      android.R.color.white);
+        swipeRefreshLayout.setDistanceToTriggerSync(200);
         swipeRefreshLayout.setOnRefreshListener(this);
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Event item = (Event) parent.getItemAtPosition(position);
+        Log.d("ITEM", item.getId());
         new FetchEventDetails(activity, item).execute();
     }
 
@@ -100,5 +104,9 @@ public class EventListFragment extends BaseMainFragmentWithReceiver implements A
     public void onRefresh() {
         searchEvent();
         swipeRefreshLayout.setRefreshing(false);
+    }
+
+    public void sortEvents() {
+        adapter.sort();
     }
 }

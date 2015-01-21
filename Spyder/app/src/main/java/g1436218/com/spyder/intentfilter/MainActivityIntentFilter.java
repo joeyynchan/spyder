@@ -17,8 +17,11 @@ public class MainActivityIntentFilter extends IntentFilter {
         addAction(Action.STOP_BLUETOOTH);
         addAction(Action.FETCH_ATTENDEES);
         addAction(Action.GET_GCM);
+        addAction(Action.SHOW_MESSAGE);
         addAction(Action.UPDATE_CURRENT_EVENT);
         addAction(BluetoothAdapter.ACTION_SCAN_MODE_CHANGED);
         addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
+        addAction(Action.START_EVENT);
+        addAction(Action.STOP_EVENT);
     }
 }

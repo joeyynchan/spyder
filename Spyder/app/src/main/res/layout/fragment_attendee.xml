@@ -1,6 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/backgroundColor">
 
@@ -9,20 +10,24 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@android:color/white"
+        android:background="@color/backgroundColor"
         android:id="@+id/textview_fragment_attendee_eventName" />
 
     <SearchView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/searchview_attendee"
+        android:background="@color/backgroundColor"
         android:layout_gravity="center_horizontal" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:id="@+id/textview_fragment_attendee_eventMsg"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="@android:color/white"
         android:layout_gravity="center"
-        android:gravity="center_vertical" />
+        android:gravity="center_vertical"
+        android:id="@+id/textview_fragment_attendee_eventMsg" />
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:layout_width="match_parent"

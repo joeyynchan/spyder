@@ -1,0 +1,66 @@
+{% extends 'privileged_base.html.jinja' %}
+
+{% block title %}
+  <title>Add Event - SPYDER - social proximity sensing</title>
+{% endblock %}
+
+{% block privileged_base_content %}
+  <link rel="stylesheet" href="/static/lib/anytime.5.0.5.min.css" />
+  <script src="/static/lib/anytime.5.0.5.min.js"></script>
+  <script src="/static/lib/anytimetz.js"></script>
+
+  <form id="add-event-panel" class="form-horizontal" role="form" action="/event/add" method="POST">
+    <div class="form-group">
+      <label for="add-event-start-time" class="col-sm-3 control-label">Start Time</label>
+      <div class="col-sm-7">
+        <input type="text" class="form-control" name="start_time" id="add-event-start-time" value="{{start_time if start_time else ''}}" placeholder="Click here to select start time" required>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="add-event-end-time" class="col-sm-3 control-label">End Time</label>
+      <div class="col-sm-7">
+        <input type="text" class="form-control" name="end_time" id="add-event-end-time" value="{{end_time if end_time else ''}}" placeholder="Click here to select end time" required>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="add-event-address" class="col-sm-3 control-label">Address</label>
+      <div class="col-sm-7">
+        <input type="text" class="form-control" name="address" id="add-event-address" value="{{address if address else ''}}" placeholder="Enter address here">
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="add-event-name" class="col-sm-3 control-label">Name</label>
+      <div class="col-sm-7">
+        <input type="text" class="form-control" name="name" id="add-event-name" placeholder="Plase enter event name here" required>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="add-event-description" class="col-sm-3 control-label">Description</label>
+      <div class="col-sm-7">
+        <input type="text" class="form-control" name="description" id="add-event-description" value="{{description if description else ''}}" placeholder="Enter description here">
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="add-event-speaker-username" class="col-sm-3 control-label">Speaker username</label>
+      <div class="col-sm-7">
+        <input type="text" class="form-control" name="speaker_id" id="add-event-speaker-username" value="{{speaker_id if speaker_id else ''}}" placeholder="Enter speaker username here">
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="add-event-attendees-list" class="col-sm-3 control-label">Attendees List</label>
+      <div class="col-sm-7">
+        <input type="text" class="form-control" name="attendees" id="add-event-attendees-list" value="{{attendees if attendees else ''}}" placeholder="Enter attendees usernames (separated by spacebar)">
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-sm-offset-3 col-sm-9">
+        <button type="submit" class="btn btn-primary">Add Event</button>
+        <a class="btn btn-default" href="/" role="button">Cancel</a>
+      </div>
+    </div>
+  </form>
+  <script>
+    $("#add-event-start-time").AnyTime_picker({ format: "%a %b %d %T %@ %Z"} );
+    $("#add-event-end-time").AnyTime_picker({ format: "%a %b %d %T %@ %Z"} );
+  </script>
+{% endblock %}

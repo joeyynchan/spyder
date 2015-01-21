@@ -9,6 +9,7 @@ public class EventListFragmentIntentFilter extends IntentFilter{
     public EventListFragmentIntentFilter() {
         addAction(Action.EVENT_ADAPTER_ADD_ITEM);
         addAction(Action.EVENT_ADAPTER_CLEAR);
+        addAction(Action.EVENT_ADAPTER_SORT_ITEM);
         addAction(Action.FETCH_EVENTS);
     }
 

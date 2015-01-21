@@ -2,22 +2,18 @@ package g1436218.com.spyder.activity;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
-import android.content.BroadcastReceiver;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
-
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 
-
 import g1436218.com.spyder.R;
 import g1436218.com.spyder.asyncTask.LinkDevice;
+import g1436218.com.spyder.config.SharedPref;
 import g1436218.com.spyder.fragment.LoginFragment;
 import g1436218.com.spyder.fragment.RegisterFragment;
 import g1436218.com.spyder.object.Action;
@@ -38,16 +34,9 @@ public class LoginActivity extends BaseActivity {
         super.onCreate(savedInstanceState, R.layout.activity_login);
         getActionBar().hide();
 
-        Context context = this;
-        SharedPreferences sharedPref = getSharedPreferences(
-                context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-        String username = sharedPref.getString(context.getString(R.string.username), "");
-        String password = sharedPref.getString(context.getString(R.string.password), "");
+        String username = getSharedPrefString(SharedPref.USERNAME);
+        String password = getSharedPrefString(SharedPref.PASSWORD);
 
-
-
-
-        Log.d(TAG, username + ":" + password);
         if(!username.equals("")){
             new LinkDevice(this, username, password).execute();
         }

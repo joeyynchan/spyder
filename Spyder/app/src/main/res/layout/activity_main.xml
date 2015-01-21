@@ -24,7 +24,6 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_gravity="center_horizontal|top"
-        android:background="@color/backgroundColor"
         android:layout_below="@+id/status_bar"
         android:layout_above="@+id/bottom_bar">
 
@@ -48,12 +47,12 @@
             android:background="@drawable/main_activity_button_xml">
 
             <ImageView
-                android:layout_width="60px"
-                android:layout_height="60px"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="30px"
                 android:layout_gravity="center"
                 android:id="@+id/button_interactions_icon"
-                android:src="@drawable/main_activity_interactions_icon_normal"/>
+                android:src="@android:drawable/ic_menu_always_landscape_portrait"/>
 
             <TextView
                 android:layout_width="fill_parent"
@@ -75,12 +74,12 @@
             android:background="@drawable/main_activity_button_xml">
 
             <ImageView
-                android:layout_width="60px"
-                android:layout_height="60px"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="30px"
                 android:layout_gravity="center"
                 android:id="@+id/button_attendee_list_icon"
-                android:src="@drawable/main_activity_attendee_list_normal"/>
+                android:src="@android:drawable/ic_menu_agenda"/>
 
             <TextView
                 android:layout_width="fill_parent"
@@ -102,12 +101,12 @@
             android:background="@drawable/main_activity_button_xml">
 
             <ImageView
-                android:layout_width="60px"
-                android:layout_height="60px"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="30px"
                 android:layout_gravity="center"
                 android:id="@+id/button_event_list_icon"
-                android:src="@drawable/main_activity_event_list_normal"/>
+                android:src="@android:drawable/ic_menu_month"/>
 
             <TextView
                 android:layout_width="fill_parent"
@@ -129,12 +128,12 @@
             android:background="@drawable/main_activity_button_xml">
 
             <ImageView
-                android:layout_width="60px"
-                android:layout_height="60px"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="30px"
                 android:layout_gravity="center"
                 android:id="@+id/button_profile_icon"
-                android:src="@drawable/main_activity_profile_normal"/>
+                android:src="@android:drawable/ic_menu_info_details"/>
 
             <TextView
                 android:layout_width="fill_parent"

@@ -17,7 +17,8 @@ import g1436218.com.spyder.R;
 import g1436218.com.spyder.activity.LoginActivity;
 import g1436218.com.spyder.activity.MainActivity;
 import g1436218.com.spyder.config.GlobalConfiguration;
-import g1436218.com.spyder.fragment.UnlinkFragment;
+import g1436218.com.spyder.config.SharedPref;
+import g1436218.com.spyder.dialogFragment.UnlinkFragment;
 import g1436218.com.spyder.object.Action;
 
 import static android.bluetooth.BluetoothAdapter.getDefaultAdapter;
@@ -29,6 +30,8 @@ public class LinkDevice extends BaseLoginAsyncTask{
 
     private String username;
     private String password;
+    private String macAddress;
+    private String gcmID;
 
     public LinkDevice(LoginActivity activity, String username, String password) {
         super(activity);
@@ -40,40 +43,39 @@ public class LinkDevice extends BaseLoginAsyncTask{
     protected Void doInBackground(Void... params) {
 
         GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(activity);
-        String regid = "";
+        gcmID = "";
         try {
-            regid = gcm.register(GlobalConfiguration.PROJECT_NUMBER);
+            gcmID = gcm.register(GlobalConfiguration.PROJECT_NUMBER);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+        macAddress = getDefaultAdapter().getAddress();
+
         addToParams("user_name", username);
         addToParams("password", password);
-        addToParams("mac_address", getDefaultAdapter().getAddress());
-        addToParams("gcm_id", regid);
+        addToParams("mac_address", macAddress);
+        addToParams("gcm_id", gcmID);
 
-        Log.i("GCM", "Device registered, registration ID=" + regid);
+        Log.i("GCM", "GCM ID=" + gcmID);
 
         Intent intent = new Intent();
         intent.setAction(Action.GET_GCM);
-        intent.putExtra("GCMID", regid);
+        intent.putExtra("GCMID", gcmID);
         activity.sendBroadcast(intent);
 
-        if (!username.equals(GlobalConfiguration.OFFLINE_MODE)) {
-            JSONObject jsonObject = getJSONFromUrl(URL, Requests.POST);
-        } else {
+        if (username.equals(SharedPref.OFFLINE_MODE)) {
             statusCode = 999;
+        } else {
+            JSONObject jsonObject = getJSONFromUrl(URL, Requests.POST);
         }
-        Log.d(TAG, username + ":" + password);
-        Log.d(TAG, statusCode + "");
-
+        Log.i(TAG, "Login Attempt: " + username + ":" + password + " ---------- Result:" + statusCode);
         return null;
     }
 
     //Start MainActivity if login succeed
     @Override
     public void onPostExecute(Void v) {
-        Log.d(TAG, "onPostExecute");
         switch(this.statusCode) {
             case (200):{
                 setErrMsgToNotFound();
@@ -95,7 +97,15 @@ public class LinkDevice extends BaseLoginAsyncTask{
                 setErrMsgToNotFound();
                 showUnlink();
                 break;
-
+            case (410):
+                setErrMsgToNotFound();
+                break;
+            case (411):
+                setErrMsgToNotFound();
+                break;
+            case (412):
+                setErrMsgToNotFound();
+                break;
             case (999):
                 gotoMainActivity();
 
@@ -107,17 +117,16 @@ public class LinkDevice extends BaseLoginAsyncTask{
 
     private void gotoMainActivity(){
         /* insert (username, password) into sharedPreference */
-        Context context = activity;
-        SharedPreferences sharedPref = context.getSharedPreferences(
-                context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString(context.getString(R.string.username), username);
-        editor.putString(context.getString(R.string.password), password);
-        editor.putBoolean(GlobalConfiguration.OFFLINE_MODE, username.equals(GlobalConfiguration.OFFLINE_MODE));
-        editor.commit();
+        activity.putSharedPrefString(SharedPref.USERNAME, username);
+        activity.putSharedPrefString(SharedPref.PASSWORD, password);
+        activity.putSharedPrefString(SharedPref.MAC_ADDRESS, macAddress);
+        activity.putSharedPrefString(SharedPref.GCM_ID, gcmID);
+        activity.putSharedPrefBoolean(SharedPref.OFFLINE_MODE, username.equals(SharedPref.OFFLINE_MODE));
+
         /* start mainActivity */
         Intent intent = new Intent(activity, MainActivity.class);
         activity.startActivity(intent);
+        activity.finish();
     }
 
     private void setErrMsgToNotFound(){
@@ -136,6 +145,15 @@ public class LinkDevice extends BaseLoginAsyncTask{
                 case (409):
                     login_text_errmsg.setText("User is already linked with other device\n");
                     break;
+                case 410:
+                    login_text_errmsg.setText("Username cannot be empty");
+                    break;
+                case 411:
+                    login_text_errmsg.setText("Password cannot be empty");
+                    break;
+                case 412:
+                    login_text_errmsg.setText("This device is used by another user.");
+                    break;
                 default:
                     login_text_errmsg.setText("No response from server, please try again later\n");
                     break;
@@ -150,13 +168,8 @@ public class LinkDevice extends BaseLoginAsyncTask{
 
     private void showUnlink() {
                 /* insert (username, password) into sharedPreference */
-        Context context = activity;
-        SharedPreferences sharedPref = context.getSharedPreferences(
-                context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString(context.getString(R.string.username), username);
-        editor.putString(context.getString(R.string.password), password);
-        editor.commit();
+        activity.putSharedPrefString(SharedPref.USERNAME, username);
+        activity.putSharedPrefString(SharedPref.PASSWORD, password);
         FragmentManager fragmentManager = activity.getFragmentManager();
         new UnlinkFragment().show(fragmentManager, "Unlink");
         TextView textview_errmsg = (TextView) activity.findViewById(R.id.textview_fragment_login_errmsg);

@@ -11,12 +11,13 @@ import android.widget.TextView;
 
 import g1436218.com.spyder.R;
 import g1436218.com.spyder.activity.MainActivity;
-import g1436218.com.spyder.asyncTask.DisplayProfile;
+import g1436218.com.spyder.asyncTask.DisplayUserProfile;
 import g1436218.com.spyder.asyncTask.FetchAttendees;
 import g1436218.com.spyder.fragment.AttendeeFragment;
 import g1436218.com.spyder.fragment.EventListFragment;
 import g1436218.com.spyder.fragment.InteractionFragment;
-import g1436218.com.spyder.fragment.LogoutFragment;
+import g1436218.com.spyder.dialogFragment.LogoutFragment;
+import g1436218.com.spyder.dialogFragment.ReceiveMessageFragment;
 
 public class UIController {
 
@@ -73,14 +74,19 @@ public class UIController {
         menu.findItem(R.id.action_edit).setVisible(false);
         menu.findItem(R.id.action_done).setVisible(false);
 
+        /* Display Start/Stop Bluetooth Button */
         if (BluetoothAdapter.getDefaultAdapter().getState() == BluetoothAdapter.STATE_OFF) {
             menu.findItem(R.id.action_start_bluetooth).setVisible(true);
         } else {
             menu.findItem(R.id.action_stop_bluetooth).setVisible(true);
         }
+
+        /* Display Set Discoverable Button if the device is not discoverable*/
         if (BluetoothAdapter.getDefaultAdapter().getScanMode() == BluetoothAdapter.SCAN_MODE_CONNECTABLE) {
             menu.findItem(R.id.action_set_discoverable).setVisible(true);
         }
+
+        /* Display Start/Stop Discovery Button */
         if (BluetoothAdapter.getDefaultAdapter().getScanMode() == BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE) {
             BluetoothController bluetoothController = activity.getBluetoothController();
             if (bluetoothController.isDiscovery()) {
@@ -99,7 +105,7 @@ public class UIController {
         fragmentTransaction.commit();
         resetButtonState();
         button_attendee_list.setClickable(false);
-        imageview_attendee_list.setImageResource(R.drawable.main_activity_attendee_list_pressed);
+        //imageview_attendee_list.setImageResource(R.drawable.main_activity_attendee_list_pressed);
         textview_attendee_list.setTextColor(activity.getResources().getColor(R.color.main_activity_button_text_pressed));
     }
 
@@ -112,7 +118,7 @@ public class UIController {
         activity.sendBroadcast(intent);
         resetButtonState();
         button_event_list.setClickable(false);
-        imageview_event_list.setImageResource(R.drawable.main_activity_event_list_pressed);
+        //imageview_event_list.setImageResource(R.drawable.main_activity_event_list_pressed);
         textview_event_list.setTextColor(activity.getResources().getColor(R.color.main_activity_button_text_pressed));
     }
 
@@ -122,15 +128,15 @@ public class UIController {
         fragmentTransaction.commit();
         resetButtonState();
         button_interactions.setClickable(false);
-        imageview_interactions.setImageResource(R.drawable.main_activity_interactions_icon_pressed);
+        //imageview_interactions.setImageResource(R.drawable.main_activity_interactions_icon_pressed);
         textview_interatcions.setTextColor(activity.getResources().getColor(R.color.main_activity_button_text_pressed));
     }
 
     public void showProfile() {
-        new DisplayProfile(activity).execute();
+        new DisplayUserProfile(activity).execute();
         resetButtonState();
         button_profile.setClickable(false);
-        imageview_profile.setImageResource(R.drawable.main_activity_profile_pressed);
+        //imageview_profile.setImageResource(R.drawable.main_activity_profile_pressed);
         textview_profile.setTextColor(activity.getResources().getColor(R.color.main_activity_button_text_pressed));
     }
 
@@ -139,11 +145,16 @@ public class UIController {
         new LogoutFragment().show(fragmentManager, "Logout");
     }
 
+    public void showMessage(String sender, String title, String message) {
+        FragmentManager fragmentManager = activity.getFragmentManager();
+        new ReceiveMessageFragment(sender, title, message).show(fragmentManager, "showMessage");
+    }
+
     private void resetButtonState() {
-        imageview_attendee_list.setImageResource(R.drawable.main_activity_attendee_list_normal);
-        imageview_event_list.setImageResource(R.drawable.main_activity_event_list_normal);
-        imageview_interactions.setImageResource(R.drawable.main_activity_interactions_icon_normal);
-        imageview_profile.setImageResource(R.drawable.main_activity_profile_normal);
+        //imageview_attendee_list.setImageDrawable();
+        //imageview_event_list.setImageResource(R.drawable.main_activity_event_list_normal);
+        //imageview_interactions.setImageResource(R.drawable.main_activity_interactions_icon_normal);
+        //imageview_profile.setImageResource(R.drawable.main_activity_profile_normal);
 
         textview_attendee_list.setTextColor(activity.getResources().getColor(R.color.textedit_background));
         textview_event_list.setTextColor(activity.getResources().getColor(R.color.textedit_background));
@@ -158,18 +169,22 @@ public class UIController {
 
     public void setStatus(int status) {
         switch (status) {
-            case DISCOVERY_ON:
+            case DISCOVERY_ON: {
                 imageview_status.setImageResource(R.drawable.main_activity_status_discovery_on);
                 break;
-            case BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE:
+            }
+            case BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE: {
                 imageview_status.setImageResource(R.drawable.main_activity_status_discoverable);
                 break;
-            case BluetoothAdapter.SCAN_MODE_CONNECTABLE:
+            }
+            case BluetoothAdapter.SCAN_MODE_CONNECTABLE: {
                 imageview_status.setImageResource(R.drawable.main_activity_status_discovering);
                 break;
-            default:
+            }
+            default: {
                 imageview_status.setImageResource(R.drawable.main_activity_status_normal);
                 break;
+            }
         }
     }
 

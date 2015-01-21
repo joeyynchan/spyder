@@ -22,4 +22,9 @@ public class Action {
     public static final String GET_GCM = "GET_GCM" ;
     public static final String UPDATE_CURRENT_EVENT = "UPDATE_CURRENT_EVENT";
     public static final String FETCH_EVENTS = "FETCH_EVENTS";
+    public static final String SHOW_MESSAGE = "SHOW_MESSAGE";
+    public static final String START_EVENT = "START_EVENT";
+    public static final String STOP_EVENT = "STOP_EVENT";
+    public static final String CLEAR_INTERACTION_FRAGMENT_ADAPTER = "CLEAR_INTERACTION_FRAGMENT_ADAPTER";
+    public static final String EVENT_ADAPTER_SORT_ITEM = "EVENT_ADAPTER_SORT_ITEM";
 }

@@ -13,43 +13,21 @@ import java.util.ArrayList;
 import g1436218.com.spyder.R;
 import g1436218.com.spyder.activity.MainActivity;
 import g1436218.com.spyder.config.GlobalConfiguration;
+import g1436218.com.spyder.dialogFragment.AlertFragment;
 import g1436218.com.spyder.object.Action;
 import g1436218.com.spyder.object.Attendee;
-import g1436218.com.spyder.object.UserMap;
+import g1436218.com.spyder.object.Attendees;
 
 public class FetchAttendees extends BaseMainAsyncTask {
 
     private final String TAG = "FetchAttendeeList";
     private final String URL = GlobalConfiguration.DEFAULT_URL + "eventUsers?event_id=";
 
-    private UserMap userMap;
-    private ArrayList<Attendee> attendees;
+    private Attendees attendees;
 
     public FetchAttendees(MainActivity activity) {
         super(activity);
-        this.userMap = UserMap.getInstance();
-        this.attendees = activity.getAttendees();
-    }
-
-    @Override
-    protected Void doInBackgroundOffline(Void... params) {
-
-        attendees.clear();
-        userMap.clear();
-        userMap.put("48:74:6E:75:64:75", "iPhone");
-
-        attendees.add(new Attendee("00:00:00:00:00:01", "Demo001", "TestingSortingAlgorithm"));
-        attendees.add(new Attendee("00:00:00:00:00:02", "Demo002", "Joey"));
-        attendees.add(new Attendee("00:00:00:00:00:03", "Demo003", "Cherie"));
-        attendees.add(new Attendee("00:00:00:00:00:04", "Demo004", "Pavan"));
-        attendees.add(new Attendee("00:00:00:00:00:05", "Demo005", "Kuo"));
-        attendees.add(new Attendee("00:00:00:00:00:06", "Demo006", "Khoa"));
-        attendees.add(new Attendee("00:00:00:00:00:07", "Demo007", "MrGun"));
-        attendees.add(new Attendee("00:00:00:00:00:08", "Demo008", "Alice"));
-        attendees.add(new Attendee("00:00:00:00:00:09", "Demo009", "Alicia"));
-        attendees.add(new Attendee("00:00:00:00:00:0A", "Demo010", "Adam"));
-
-        return null;
+        this.attendees = Attendees.getInstance();
     }
 
     @Override
@@ -59,30 +37,35 @@ public class FetchAttendees extends BaseMainAsyncTask {
                 activity.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         String event_id = sharedPref.getString("EVENT_ID", "");
 
+
         attendees.clear();
-        userMap.clear();
-        userMap.put("48:74:6E:75:64:75", "iPhone");
+        //attendees.put("48:74:6E:75:64:75", new Attendee("", "iPhone", "iPhoneee", "", ""));
 
         if (event_id.equals("")) {
             return null;
         }
 
         resultJObj = getJSONFromUrl(URL+event_id, Requests.GET);
+        int dummy_count = 0;
         if (resultJObj != null) {
+            Log.d("FETCH ATTENDEES", resultJObj.toString());
             try {
                 JSONArray array = resultJObj.getJSONArray("user_mappings");
-                String macAddress, username, name;
+                String macAddress, username, name, gcm_id, photo_url;
                 for (int i = 0; i < array.length(); i++) {
-                    JSONObject item = array.getJSONObject(i);
-                    Log.i("Object", item.toString());
-                    macAddress = item.getString("mac_address");
-                    username = item.getString("user_name");
-                    name = item.getString("name");
-                    attendees.add(new Attendee(macAddress, username, name));
-                    userMap.put(macAddress, name);
+                    JSONObject item = array.optJSONObject(i);
+                    if(item != null) {
+                        macAddress = item.optString("mac_address");
+                        macAddress = macAddress.equals("") ? dummy_count++ + "" : macAddress;
+                        username = item.optString("user_name");
+                        name = item.optString("name");
+                        gcm_id = item.optString("gcm_id");
+                        photo_url = item.optString("photo_url");
+                        Attendee attendee = new Attendee(macAddress, username, name, gcm_id, photo_url);
+                        attendees.put(macAddress, attendee);
+                    }
                 }
             } catch (JSONException e) {
-                e.getMessage();
             }
         }
 
@@ -91,10 +74,13 @@ public class FetchAttendees extends BaseMainAsyncTask {
 
     @Override
     public void onPostExecute(Void v) {
-        Intent intent = new Intent();
-        intent.setAction(Action.UPDATE_ATTENDEE_FRAGMENT_ADAPTER);
-        activity.sendBroadcast(intent);
-        //Log.i(TAG, userMap.toString());
+        if (offline) {
+            new AlertFragment("No Connection", "Attendee list cannot be updated").show(activity.getFragmentManager(), "Alert");
+        } else {
+            Intent intent = new Intent();
+            intent.setAction(Action.UPDATE_ATTENDEE_FRAGMENT_ADAPTER);
+            activity.sendBroadcast(intent);
+        }
     }
 
 }

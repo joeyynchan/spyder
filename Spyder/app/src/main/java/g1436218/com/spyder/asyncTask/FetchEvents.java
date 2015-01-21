@@ -11,6 +11,8 @@ import org.json.JSONObject;
 
 import g1436218.com.spyder.R;
 import g1436218.com.spyder.config.GlobalConfiguration;
+import g1436218.com.spyder.config.SharedPref;
+import g1436218.com.spyder.dialogFragment.AlertFragment;
 import g1436218.com.spyder.fragment.EventListFragment;
 import g1436218.com.spyder.object.Action;
 
@@ -34,27 +36,9 @@ public class FetchEvents extends BaseMainAsyncTask {
     }
 
     @Override
-    protected Void doInBackgroundOffline(Void... params) {
-
-        broadcastAddItem("Attending" , "0001", "Attending 1");
-        broadcastAddItem("Attending" , "0002", "Attending 2");
-        broadcastAddItem("Attending" , "0003", "Attending 3");
-        broadcastAddItem("Hosting"   , "0004", "Hosting 1");
-        broadcastAddItem("Hosting"   , "0005", "Hosting 2");
-        broadcastAddItem("Hosting"   , "0006", "Hosting 3");
-        broadcastAddItem("Nothing"   , "0007", "Nothing 1");
-        broadcastAddItem("Nothing"   , "0008", "Nothing 2");
-
-        return null;
-    }
-
-    @Override
     protected Void doInBackgroundOnline(Void... params) {
 
-        Context context = activity;
-        SharedPreferences sharedPref = context.getSharedPreferences(
-                context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-        String username = sharedPref.getString(context.getString(R.string.username), "");
+        String username = activity.getSharedPrefString(SharedPref.USERNAME);
 
         addToParams("user_name", username);
         addToParams("event_search_string", keyword);
@@ -71,9 +55,9 @@ public class FetchEvents extends BaseMainAsyncTask {
                 String status, event_id, event_name;
                 for (int i = 0; i < array.length(); i++) {
                     JSONObject item = array.getJSONObject(i);
-                    status = item.getString("status");
-                    event_id = item.getString("event_id");
-                    event_name = item.getString("event_name");
+                    status = item.optString("status");
+                    event_id = item.optString("event_id");
+                    event_name = item.optString("event_name");
                     broadcastAddItem(status, event_id, event_name);
                 }
             } catch (JSONException e) {
@@ -83,6 +67,14 @@ public class FetchEvents extends BaseMainAsyncTask {
 
         return null;
 
+    }
+
+    @Override
+    public void onPostExecute(Void v) {
+        if (offline) {
+            new AlertFragment("No Connection", "Event list cannot be updated").show(activity.getFragmentManager(), "Alert");
+        }
+        broadcastSortItems();
     }
 
     private void broadcastAddItem(String status, String event_id, String event_name) {
@@ -97,6 +89,12 @@ public class FetchEvents extends BaseMainAsyncTask {
     private void broadcastClearAdapter() {
         Intent intent = new Intent();
         intent.setAction(Action.EVENT_ADAPTER_CLEAR);
+        activity.sendBroadcast(intent);
+    }
+
+    private void broadcastSortItems() {
+        Intent intent = new Intent();
+        intent.setAction(Action.EVENT_ADAPTER_SORT_ITEM);
         activity.sendBroadcast(intent);
     }
 

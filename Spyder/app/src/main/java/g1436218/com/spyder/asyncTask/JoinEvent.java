@@ -11,6 +11,8 @@ import org.json.JSONObject;
 
 import g1436218.com.spyder.R;
 import g1436218.com.spyder.config.GlobalConfiguration;
+import g1436218.com.spyder.config.SharedPref;
+import g1436218.com.spyder.dialogFragment.AlertFragment;
 import g1436218.com.spyder.fragment.EventFragment;
 
 public class JoinEvent extends BaseMainAsyncTask {
@@ -28,22 +30,9 @@ public class JoinEvent extends BaseMainAsyncTask {
     }
 
     @Override
-    protected Void doInBackgroundOffline(Void... params) {
-        return null;
-    }
-
-    @Override
     protected Void doInBackgroundOnline(Void... params) {
-        return null;
-    }
 
-    @Override
-    protected Void doInBackground(Void... params) {
-
-        Context context = activity;
-        SharedPreferences sharedPref = context.getSharedPreferences(
-                context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-        String username = sharedPref.getString(context.getString(R.string.username), "");
+        String username = activity.getSharedPrefString(SharedPref.USERNAME);
 
         addToParams("user_name", username);
         addToParams("status", "Attending");
@@ -54,9 +43,19 @@ public class JoinEvent extends BaseMainAsyncTask {
 
     @Override
     public void onPostExecute(Void v) {
+        if (offline) {
+            new AlertFragment("No Connection", "Cannot Join Event!").show(activity.getFragmentManager(), "Alert");
+            return;
+        }
         switch(statusCode) {
-            case 200: joinedEvent(); break;
-            case 403: joinedEvent(); break;
+            case 200: {
+                joinedEvent();
+                break;
+            }
+            case 403: {
+                joinedEvent();
+                break;
+            }
             default: break;
         }
         Log.i(TAG, statusCode + "");

@@ -20,23 +20,24 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
-        android:background="@drawable/login_activity_textedit_xml">
+        android:background="@drawable/round_white_xml">
 
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Name:"
-            android:id="@+id/textview_fragment_register_name"
+            android:text="Username:"
+            android:id="@+id/textview_fragment_register_username"
+            android:inputType="text|textEmailAddress"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp" />
 
         <EditText
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:hint="Name"
+            android:inputType="text|textEmailAddress"
+            android:hint="Username"
             android:ems="10"
-            android:id="@+id/edittext_fragment_register_name"
+            android:id="@+id/edittext_fragment_register_username"
             android:layout_gravity="right"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp" />
@@ -50,7 +51,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
-        android:background="@drawable/login_activity_textedit_xml">
+        android:background="@drawable/round_white_xml">
 
         <TextView
             android:layout_width="fill_parent"
@@ -82,90 +83,11 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:background="@drawable/login_activity_textedit_xml">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Gender:"
-            android:id="@+id/textview_fragment_register_gender"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp" />
-
-        <RadioGroup
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp">
-
-            <RadioButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Male"
-                android:id="@+id/radiobutton_fragment_register_male"
-                android:checked="false" />
-
-            <RadioButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Female"
-                android:id="@+id/radiobutton_fragment_register_female"
-                android:checked="false" />
-
-            <RadioButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Other"
-                android:id="@+id/radiobutton_fragment_register_other"
-                android:checked="false" />
-
-        </RadioGroup>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/login_activity_textedit_xml">
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="Email:"
-            android:id="@+id/textview_fragment_register_email"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp" />
-
-        <EditText
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textEmailAddress"
-            android:ems="10"
-            android:hint="Enter your email"
-            android:id="@+id/edittext_fragment_register_email"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp" />
-
-    </LinearLayout>
-
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="25dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:text=" "
         android:textColor="@color/errorColor"
         android:id="@+id/textview_fragment_register_errmsg"
         android:layout_gravity="center_horizontal" />

@@ -15,7 +15,6 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import g1436218.com.spyder.R;
 import g1436218.com.spyder.activity.LoginActivity;
-import g1436218.com.spyder.activity.MainActivity;
 import g1436218.com.spyder.config.GlobalConfiguration;
 import g1436218.com.spyder.object.Action;
 import g1436218.com.spyder.receiver.GCMBroadcastReceiver;
@@ -49,6 +48,8 @@ public class GCMMessageHandler extends IntentService {
         Bundle extras = intent.getExtras();
         String action = extras.getString("action");
 
+        Log.i("GCM", "\n" + "Action: " + action + "\nData: " + extras.toString());
+
         if (Action.LAUNCH_APPLICATION.equals(action)) {
             launchApplication();
         } else if (Action.START_DISCOVERY.equals(action)) {
@@ -76,12 +77,25 @@ public class GCMMessageHandler extends IntentService {
             String id = intent.getExtras().getString("event_id", "");
             String name = intent.getExtras().getString("event_name", "");
             updateCurrentEvent(id, name);
+        } else if (Action.SHOW_MESSAGE.equals(action)) {
+            launchApplication();
+            String title = intent.getExtras().getString("title", "(No Title)");
+            String message = intent.getExtras().getString("message", "");
+            String sender = intent.getExtras().getString("sender", "");
+            showMessage(title, message, sender);
+        } else if (Action.START_EVENT.equals(action)) {
+            launchApplication();
+            String event_id = intent.getExtras().getString("event_id", "NO_EVENT");
+            String event_name = intent.getExtras().getString("event_name", "NO EVENT");
+            startEvent(event_id, event_name);
+        } else if (Action.STOP_EVENT.equals(action)) {
+            launchApplication();
+            String event_id = intent.getExtras().getString("event_id", "NO_EVENT");
+            String event_name = intent.getExtras().getString("event_name", "NO EVENT");
+            endEvent(event_id, event_name);
         }
 
-        Log.i("GCM", "\n" + "Action: " + action + "\nData: " + extras.toString());
-
         GCMBroadcastReceiver.completeWakefulIntent(intent);
-
     }
 
     public void showNotification(String title, String message) {
@@ -171,6 +185,32 @@ public class GCMMessageHandler extends IntentService {
         intent.setAction(Action.UPDATE_CURRENT_EVENT);
         intent.putExtra("EVENT_ID", id);
         intent.putExtra("EVENT_NAME", name);
+        sendBroadcast(intent);
+    }
+
+    private void showMessage(String title, String message, String sender) {
+        launchApplication();
+        Intent intent = new Intent();
+        intent.setAction(Action.SHOW_MESSAGE);
+        intent.putExtra("title", title);
+        intent.putExtra("message", message);
+        intent.putExtra("sender", sender);
+        sendBroadcast(intent);
+    }
+
+    private void startEvent(String event_id, String event_name) {
+        Intent intent = new Intent();
+        intent.setAction(Action.START_EVENT);
+        intent.putExtra("event_id", event_id);
+        intent.putExtra("event_name", event_name);
+        sendBroadcast(intent);
+    }
+
+    private void endEvent(String event_id, String event_name) {
+        Intent intent = new Intent();
+        intent.setAction(Action.STOP_EVENT);
+        intent.putExtra("event_id", event_id);
+        intent.putExtra("event_name", event_name);
         sendBroadcast(intent);
     }
 

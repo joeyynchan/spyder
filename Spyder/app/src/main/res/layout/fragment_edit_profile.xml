@@ -26,13 +26,22 @@
             android:layout_marginTop="20dp"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
-            android:background="#fff0f0f0">
+            android:background="#ffffffff">
 
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="fill_parent"
-                android:layout_height="40dp"
+                android:layout_height="60dp"
                 android:background="@color/profile_title">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="10dp"
+                    android:id="@+id/imageView_"
+                    android:src="@android:drawable/ic_menu_info_details" />
+
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -40,6 +49,8 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="5dp"
                     android:text="Basic Info"
+                    android:textSize="20sp"
+                    android:textColor="@android:color/white"
                     android:id="@+id/textview_fragment_edit_profile_basicInfo" />
 
             </LinearLayout>
@@ -52,7 +63,7 @@
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="fill_parent"
-                android:layout_height="40dp">
+                android:layout_height="60dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -60,6 +71,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="5dp"
                     android:text="Name"
+                    android:textSize="18sp"
                     android:id="@+id/textview_fragment_edit_profile_name1" />
 
                 <EditText
@@ -69,6 +81,8 @@
                     android:layout_marginRight="5dp"
                     android:gravity="right"
                     android:text="Name"
+                    android:textSize="18sp"
+                    android:textColor="#ff808080"
                     android:id="@+id/edittext_fragment_edit_profile_name" />
             </LinearLayout>
 
@@ -80,7 +94,7 @@
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="fill_parent"
-                android:layout_height="40dp">
+                android:layout_height="60dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -88,6 +102,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="5dp"
                     android:text="Gender"
+                    android:textSize="18sp"
                     android:id="@+id/textview_fragment_edit_profile_gender1" />
 
                 <EditText
@@ -96,7 +111,9 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginRight="5dp"
                     android:gravity="right"
-                    android:text="Occupation"
+                    android:text="Gender"
+                    android:textSize="18sp"
+                    android:textColor="#ff808080"
                     android:id="@+id/edittext_fragment_edit_profile_gender" />
 
                 <RadioGroup
@@ -130,7 +147,7 @@
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="fill_parent"
-                android:layout_height="40dp">
+                android:layout_height="60dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -138,6 +155,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="5dp"
                     android:text="Occupation"
+                    android:textSize="18sp"
                     android:id="@+id/textview_fragment_edit_profile_occupation1" />
 
                 <EditText
@@ -147,6 +165,8 @@
                     android:layout_marginRight="5dp"
                     android:gravity="right"
                     android:text="Occupation"
+                    android:textSize="18sp"
+                    android:textColor="#ff808080"
                     android:id="@+id/edittext_fragment_edit_profile_occupation" />
             </LinearLayout>
 
@@ -158,7 +178,7 @@
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="fill_parent"
-                android:layout_height="40dp">
+                android:layout_height="60dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -166,6 +186,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="5dp"
                     android:text="Company"
+                    android:textSize="18sp"
                     android:id="@+id/textview_fragment_edit_profile_company1" />
 
                 <EditText
@@ -175,6 +196,8 @@
                     android:layout_marginRight="5dp"
                     android:gravity="right"
                     android:text="Company"
+                    android:textSize="18sp"
+                    android:textColor="#ff808080"
                     android:id="@+id/edittext_fragment_edit_profile_company" />
             </LinearLayout>
 
@@ -192,18 +215,30 @@
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
             android:layout_marginTop="20dp"
-            android:background="#fff0f0f0">
+            android:background="#ffffffff">
 
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="fill_parent"
-                android:layout_height="40dp"
+                android:layout_height="60dp"
                 android:background="@color/profile_title">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="10dp"
+                    android:id="@+id/imageView2_"
+                    android:src="@android:drawable/ic_menu_call" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Contact Info" />
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="5dp"
+                    android:text="Contact Info"
+                    android:textSize="20sp"
+                    android:textColor="@android:color/white" />
 
             </LinearLayout>
 
@@ -215,7 +250,7 @@
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="fill_parent"
-                android:layout_height="40dp">
+                android:layout_height="60dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -223,6 +258,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="5dp"
                     android:text="Phone"
+                    android:textSize="18sp"
                     android:id="@+id/textview_fragment_edit_profile_phone1" />
 
                 <EditText
@@ -232,6 +268,8 @@
                     android:layout_marginRight="5dp"
                     android:gravity="right"
                     android:text="Phone"
+                    android:textSize="18sp"
+                    android:textColor="#ff808080"
                     android:id="@+id/edittext_fragment_edit_profile_phone" />
             </LinearLayout>
 
@@ -243,7 +281,7 @@
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="fill_parent"
-                android:layout_height="40dp">
+                android:layout_height="60dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -251,6 +289,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="5dp"
                     android:text="Email"
+                    android:textSize="18sp"
                     android:id="@+id/textview_fragment_edit_profile_email1" />
 
                 <EditText
@@ -260,6 +299,8 @@
                     android:layout_marginRight="5dp"
                     android:gravity="right"
                     android:text="Email"
+                    android:textSize="18sp"
+                    android:textColor="#ff808080"
                     android:id="@+id/edittext_fragment_edit_profile_email" />
             </LinearLayout>
 
@@ -271,7 +312,7 @@
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="fill_parent"
-                android:layout_height="40dp">
+                android:layout_height="60dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -279,6 +320,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="5dp"
                     android:text="Link"
+                    android:textSize="18sp"
                     android:id="@+id/textview_fragment_edit_profile_link1" />
 
                 <EditText
@@ -288,6 +330,8 @@
                     android:layout_marginRight="5dp"
                     android:gravity="right"
                     android:text="Link"
+                    android:textSize="18sp"
+                    android:textColor="#ff808080"
                     android:id="@+id/edittext_fragment_edit_profile_link" />
             </LinearLayout>
 

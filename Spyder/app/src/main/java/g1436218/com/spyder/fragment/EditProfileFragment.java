@@ -12,8 +12,10 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 
 import g1436218.com.spyder.R;
+import g1436218.com.spyder.activity.BaseActivity;
 import g1436218.com.spyder.activity.MainActivity;
 import g1436218.com.spyder.asyncTask.UpdateProfile;
+import g1436218.com.spyder.config.SharedPref;
 import g1436218.com.spyder.object.User;
 
 
@@ -43,12 +45,8 @@ public class EditProfileFragment extends BaseMainFragment {
 
     @Override
     public void onPrepareOptionsMenu(Menu menu){
-
-        Log.d(TAG, "onPrepareOptions");
         super.onPrepareOptionsMenu(menu);
-        SharedPreferences sharedPref = activity.getSharedPreferences(
-                activity.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-        String currUsername = sharedPref.getString(activity.getString(R.string.username), "");
+        String currUsername = activity.getSharedPrefString(SharedPref.USERNAME);
         if(user.getUsername().equals(currUsername)){
             menu.findItem(R.id.action_done).setVisible(true);
         }

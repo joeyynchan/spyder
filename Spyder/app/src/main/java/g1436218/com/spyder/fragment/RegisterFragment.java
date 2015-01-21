@@ -13,6 +13,7 @@ public class RegisterFragment extends BaseLoginFragment implements View.OnClickL
 
     public RegisterFragment(LoginActivity activity) {
         super(activity, R.layout.fragment_register);
+
     }
 
     @Override

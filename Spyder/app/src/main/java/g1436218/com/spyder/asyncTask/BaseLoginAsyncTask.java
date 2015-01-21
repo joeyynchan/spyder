@@ -11,4 +11,12 @@ public abstract class BaseLoginAsyncTask extends BaseAsyncTask {
         this.activity = activity;
     }
 
+    @Override
+    protected void onPostExecute(Void v) {
+        if (activity.getListener() != null) {
+            activity.getListener().executionDone();
+        }
+        super.onPostExecute(v);
+    }
+
 }
