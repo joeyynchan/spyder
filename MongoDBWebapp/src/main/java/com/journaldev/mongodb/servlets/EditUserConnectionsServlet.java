@@ -161,7 +161,8 @@ public class EditUserConnectionsServlet extends HttpServlet {
                         if (userDAO.getUserByName(connection) != null) {
                                 Profile profile1 = profileDAO.readProfileByName(connection);
 
-                        List<String> existing1 = profile1.getConnections();
+                        List<String> existing1 = new ArrayList<String>();
+                        existing1.addAll(profile1.getConnections());
                         existing1.remove(user_id);
                         profile1.setConnections(existing1);
                         profileDAO.updateProfile(profile1);

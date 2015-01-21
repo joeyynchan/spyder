@@ -1,5 +1,6 @@
 package com.journaldev.mongodb.converter;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -32,7 +33,12 @@ public class ProfileConverter {
         String s = (String) doc.get("connections");
         s = s.replace("[", "").replace("]", "");
 
-        List<String> connections = Arrays.asList(s.split(","));
+        List<String> connections;
+        if (s.equals("")) {
+        	connections = new ArrayList<String>();
+        } else {
+        	connections = Arrays.asList(s.split(","));
+        }
 
         Profile newProfile = new Profile((String) doc.get("user_name"),
                 (String) doc.get("name"),
