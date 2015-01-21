@@ -30,7 +30,7 @@ public class ProfileConverter {
 
     public static Profile toProfile(DBObject doc) {
         String s = (String) doc.get("connections");
-        s.replace('[', ' ').replace(']', ' ');
+        s = s.replace("[", "").replace("]", "");
 
         List<String> connections = Arrays.asList(s.split(","));
 

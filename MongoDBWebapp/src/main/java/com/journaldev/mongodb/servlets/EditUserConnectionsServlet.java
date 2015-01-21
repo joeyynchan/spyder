@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import javax.servlet.annotation.WebServlet;
@@ -57,8 +59,11 @@ public class EditUserConnectionsServlet extends HttpServlet {
                 PrintWriter printout = response.getWriter();
                 JSONObject JObject = new JSONObject();
                 try {
+                	if (profile.getConnections().isEmpty()) {
+                		JObject.put("connections","[]");
+                	} else {
             JObject.put("connections", profile.getConnections().toString());
-
+                	}
                 } catch (JSONException excep) {
                         System.out.println("JSON Exception");
                         response.sendError(HttpServletResponse.SC_BAD_REQUEST);
@@ -111,10 +116,13 @@ public class EditUserConnectionsServlet extends HttpServlet {
                     Profile newProfile = new Profile(user_id, "", "","", "",
                             "", "", "", "", new ArrayList<String>());
                     profileDAO.createProfile(newProfile);
+                    profile = newProfile;
                 }
 
-                List<String> existing = profile.getConnections();
-                existing.addAll(connections);
+                List<String> existing = new ArrayList<String>();
+                existing.addAll(toArray(profile.getConnections()));
+                existing.addAll(connections); 
+
                 profile.setConnections(existing);
                 profileDAO.updateProfile(profile);
 
@@ -125,11 +133,13 @@ public class EditUserConnectionsServlet extends HttpServlet {
                             Profile newProfile = new Profile(connection, "", "","", "",
                                     "", "", "", "", new ArrayList<String>());
                             profileDAO.createProfile(newProfile);
+                            profile1 = newProfile;
                         }
 
-                        List<String> existing1 = profile1.getConnections();
+                        List<String> existing1 = new ArrayList<String>();
+                        existing1.addAll(toArray(profile1.getConnections()));
                         existing1.add(user_id);
-                        profile.setConnections(existing1);
+                        profile1.setConnections(existing1);
                         profileDAO.updateProfile(profile1);
 
                         }
@@ -141,7 +151,8 @@ public class EditUserConnectionsServlet extends HttpServlet {
                     return;
                 }
 
-                List<String> existing = profile.getConnections();
+                List<String> existing = new ArrayList<String>();
+                existing.addAll(profile.getConnections());
                 existing.removeAll(connections);
                 profile.setConnections(existing);
                 profileDAO.updateProfile(profile);
@@ -152,7 +163,7 @@ public class EditUserConnectionsServlet extends HttpServlet {
 
                         List<String> existing1 = profile1.getConnections();
                         existing1.remove(user_id);
-                        profile.setConnections(existing1);
+                        profile1.setConnections(existing1);
                         profileDAO.updateProfile(profile1);
 
                         }
@@ -165,5 +176,13 @@ public class EditUserConnectionsServlet extends HttpServlet {
         }
 
     }
+
+	private Collection<? extends String> toArray(List<String> connections) {
+		String[] list = new String[0];
+		if (!connections.isEmpty()) {
+			list = connections.get(0).replace("[", "").replace("]", "").split(",");
+		}
+		return Arrays.asList(list);
+	}
 
 }
