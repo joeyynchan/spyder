@@ -124,9 +124,8 @@ public class GetUserProfileServlet extends HttpServlet {
                 Profile newProfile = new Profile(user_id, name, job, company, photo,
                         email, phone, external_link, gender, connections);
                 newProfile.setId(profile.getId());
-                System.out.println(profile.getId());
-                System.out.println(newProfile.getId());
                 profileDAO.updateProfile(newProfile);
+                response.sendError(HttpServletResponse.SC_CREATED);
                 return;
             }
 

@@ -120,4 +120,14 @@ public class Profile {
         this.id = id;
     }
 
+	public String getConnection() {
+		StringBuilder strb = new StringBuilder();
+		for (String conn : connections) {
+			strb.append(conn);
+			strb.append(",");
+		}
+		strb.deleteCharAt(strb.length()-1);
+		return strb.toString();
+	}
+
 }

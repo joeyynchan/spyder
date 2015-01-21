@@ -29,11 +29,9 @@ public class GetUsersEventServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		String event_id = request.getParameter("event_id");
-		System.out.println(event_id);
 		if (event_id == null || "".equals(event_id)) {
 			throw new ServletException("id missing for edit operation");
 		}
-		System.out.println("Conference Requested with " + event_id);
 		MongoClient mongo = (MongoClient) request.getServletContext()
 				.getAttribute("MONGO_CLIENT");
 		MongoDBEventDAO eventDAO = new MongoDBEventDAO(mongo);
@@ -41,9 +39,7 @@ public class GetUsersEventServlet extends HttpServlet {
 		MongoDBProfileDAO profileDAO = new MongoDBProfileDAO(mongo);
 		
 		Set<String> user_name_list = eventDAO.getAllUsersIDEvent(event_id);
-		System.out.println(user_name_list);
 		Set<User> user_list = mobileDAO.getAllUsers(user_name_list);
-		System.out.println(user_list);
 
 		response.setContentType("application/json");
 		response.setHeader("Cache-Control", "nocache");
@@ -61,11 +57,12 @@ public class GetUsersEventServlet extends HttpServlet {
 				jo.put("user_name", mob_user.getUserName());
 				if (userProfile != null && userProfile.getName() != null) {
 					jo.put("name", userProfile.getName());
+					jo.put("photo_url", userProfile.getPhoto());
 				} else {
 					jo.put("name", mob_user.getUserName());
 				}
 				jo.put("gcm_id",mob_user.getGCM());
-				jo.put("photo_url", userProfile.getExternal_link());
+				
 			} catch (JSONException e) {
 			}
 			ja.put(jo);

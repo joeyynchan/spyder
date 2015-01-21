@@ -30,7 +30,7 @@ public class ProfileConverter {
 
     public static Profile toProfile(DBObject doc) {
         String s = (String) doc.get("connections");
-        s.replace('[', ' ').replace(']', ' ');
+        s = s.replace("[", "").replace("]", "");
 
         List<String> connections = Arrays.asList(s.split(","));
 
@@ -45,7 +45,6 @@ public class ProfileConverter {
                 (String) doc.get("gender"),
                 connections);
         newProfile.setId(((ObjectId) doc.get("_id")).toString());
-        System.out.println("hereh:" + newProfile.getId());
         return newProfile;
 
     }

@@ -30,7 +30,6 @@ public class MongoDBDataDAO {
 	public List<String> getAllData(String user_name) {
 			DBObject query = BasicDBObjectBuilder.start()
 					.append("user_name", user_name).get();
-			System.out.println(query.toString());
 			DBCursor cursor = this.col.find(query);
 			List<String> res = new ArrayList<String>();
 			while(cursor.hasNext()){

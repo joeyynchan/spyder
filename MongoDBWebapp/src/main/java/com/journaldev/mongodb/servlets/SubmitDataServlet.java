@@ -48,7 +48,6 @@ public class SubmitDataServlet extends HttpServlet {
 		}
 		try {
 			JSONObject jsonObj = new JSONObject(json);
-			System.out.println(json);
 			String user_name = (String) jsonObj.get("user_name");
 			String event_id = (String) jsonObj.get("event_id");
 
@@ -60,6 +59,8 @@ public class SubmitDataServlet extends HttpServlet {
 			MongoDBEventDAO eventDAO = new MongoDBEventDAO(mongo);
 			Set<String> user_name_list = eventDAO.getAllUsersIDEvent(event_id);
 			Set<User> user_list = userDAO.getAllUsers(user_name_list);
+			System.out.println(user_name_list);
+			System.out.println(event_id);
 
 			for (User user : user_list) {
 				if (user.getUserName().equals(user_name)) {
@@ -67,7 +68,8 @@ public class SubmitDataServlet extends HttpServlet {
 					break;
 				}
 			}
-
+			System.out.println("SUBMITTING !! : " +userDAO.getUserByName(user_name));
+			System.out.println("SUBMIT: " + user_attended);
 			if (userDAO.getUserByName(user_name) != null && user_attended) {
 
 				System.out.println("USER HAS ATTENDED");
@@ -91,7 +93,6 @@ public class SubmitDataServlet extends HttpServlet {
 				Data interaction_data = new Data(user_name, event_id,
 						time_interval, strengths);
 				MongoDBDataDAO dataDAO = new MongoDBDataDAO(mongo);
-				dataDAO.createData(interaction_data);
 				success = true;
 				
 				MongoDBInteractionDAO interactionDAO = new MongoDBInteractionDAO(mongo);
@@ -106,11 +107,9 @@ public class SubmitDataServlet extends HttpServlet {
 						if (dataPair.getB() > -60) {
 							Interaction latestInteraction = interactionDAO.findLatestInteraction(event_id, user_name, dataPair.getA());
 							if (latestInteraction != null && c.getTime().getTime() - new Date(latestInteraction.getEnd_time()).getTime() < 100000) {
-								System.out.println("Updated " + user_name + " and " + dataPair.getA());
 								latestInteraction.setEnd_time(endTime);
 								interactionDAO.updateInteraction(latestInteraction);
 							} else {
-								System.out.println("Added " + user_name + " and " + dataPair.getA());
 								latestInteraction = new Interaction(event_id, user_name, dataPair.getA(), time, endTime);
 								interactionDAO.createInteraction(latestInteraction);
 							}
@@ -119,6 +118,7 @@ public class SubmitDataServlet extends HttpServlet {
 				}
 
 			} else {
+				System.out.println("FUCK THIS SHIT");
 				success = false;
 			}
 

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.bson.types.ObjectId;
+import org.omg.PortableInterceptor.USER_EXCEPTION;
 
 import com.journaldev.mongodb.converter.UserConverter;
 import com.journaldev.mongodb.model.User;
@@ -28,7 +29,6 @@ public class MongoDBUsersDAO {
 
 	public User createUser(User p) {
 		User temp_user = getUserByName(p.getUserName());
-		System.out.println(temp_user);
 		if (temp_user == null) {
 			DBObject doc = UserConverter.toDBObject(p);
 			this.col.insert(doc);
@@ -93,8 +93,6 @@ public class MongoDBUsersDAO {
 	}
 
 	public User getUserByQuery(String user_name, String password) {
-		System.out.println(user_name);
-		System.out.println(password);
 		DBObject query = BasicDBObjectBuilder.start()
 				.append("user_name", user_name).append("password", password)
 				.get();
@@ -104,6 +102,26 @@ public class MongoDBUsersDAO {
 		}
 
 		return null;
+	}
+	
+	public List<User> getAllUsersWithSameMac(String mac_address,String user_name){
+		List<User> result = new ArrayList<User>();
+		DBCursor cursor = col.find();
+		while (cursor.hasNext()) {
+			DBObject doc = cursor.next();
+			User p = UserConverter.toUser(doc);
+			if(p.getMacAddress() != null && p.getMacAddress().equals(mac_address) && !p.getUserName().equals(user_name)){
+				result.add(p);
+			}
+		}
+		return result;
+	}
+	
+	public void clear_mac_addresses(List<User> user_list){
+		for(User user: user_list){
+			user.setMacAddress(null);
+			updateUser(user);
+		}		
 	}
 
 }
