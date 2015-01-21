@@ -35,9 +35,10 @@
       <div class="col-sm-7">
         <input type="text" class="form-control" name="gender" id="update-profile-gender" value="{{gender if gender else ''}}" placeholder="Enter gender here">
       </div>
-      <label for="update-profile-photo" class="col-sm-3 control-label">Photo</label>
+      <label for="update-profile-photo" class="col-sm-3 control-label">Photo URL</label>
       <div class="col-sm-7">
         <input type="url" class="form-control" name="photo" id="update-profile-photo" value="{{photo if photo else ''}}" placeholder="Enter photo here">
+        <p>Note: This picture must support CORS (click <a href="http://en.wikipedia.org/wiki/Cross-origin_resource_sharing">this</a> for more information).</p>
       </div>
     </div>
     <div class="form-group">

@@ -25,6 +25,26 @@
   {% block privileged_base_content %}
   {% endblock %}
 
+  
   <script>
+      $(".profile-picture-container").each(function() {
+        var source = $(this).find('p').html();
+        if (source === "") {
+          source = "http://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Orange_Icon_User.svg/301px-Orange_Icon_User.svg.png"
+        }
+        var img = $(this).find('img')[0];
+
+        // img.onload = function (e) {
+        //     var canvas = document.createElement("canvas");
+        //     var ctx = canvas.getContext("2d");
+        //     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        //     var url = canvas.toDataURL();
+        //     // var output = img;
+        //     // output.src = url;
+        // };
+
+        img.crossOrigin = 'Anonymous';
+        img.src = source;
+      });
   </script>
 {% endblock %}

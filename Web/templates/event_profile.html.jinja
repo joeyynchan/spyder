@@ -36,23 +36,33 @@
       </div>
 
       <div role="tabpanel" class="tab-pane" id="attendee-list">
+      {% if attendees['user_mappings'] %}
         <table class="table table-hover">
           <tr>
-            <th>mac_address</th>
-            <th>user_name</th>
-            <th>name</th>
+            <th>Photo</th>
+            <th>Username</th>
+            <th>Name</th>
           </tr>
           {% for record in attendees['user_mappings'] %}
             <tr class="clickable-row" href="/user/profile/{{ record['user_name'] }}">
-              <td>{{record['mac_address']}}</td>
+              <td>
+                <div class="profile-picture-container">
+                  <p hidden>{{record['photo_url']}}</p>
+                  <img width=40 height=40/>
+                </div>
+              </td>
               <td><a href="/user/profile/{{ record['user_name'] }}">{{record['user_name']}}</a></td>
               <td>{{record['name']}}</td>
             </tr>
           {% endfor %}
         </table>
+      {% else %}
+        <p>{{profile['name']}} hasn't had any attendees at the moment.</p>
+      {% endif %}
       </div>
 
       <div role="tabpanel" class="tab-pane" id="interaction">
+      {% if interaction['interaction'] %}
         <dl class="dl-horizontal">
           <dt>start_time</dt>   <dd>{{interaction['event_start_time']}}</dd>
           <dt>end_time</dt>     <dd>{{interaction['event_end_time']}}</dd>
@@ -61,7 +71,6 @@
           <tr>
             <th>user1</th>
             <th>user2</th>
-            <th>event_id</th>
             <th>start_time</th>
             <th>end_time</th>
           </tr>
@@ -69,12 +78,14 @@
             <tr>
               <td><a href="/user/profile/{{record['user1']}}">{{record['user1']}}</a></td>
               <td><a href="/user/profile/{{record['user2']}}">{{record['user2']}}</a></td>
-              <td>{{record['event_id']}}</td>
               <td>{{record['start_time']}}</td>
               <td>{{record['end_time']}}</td>
             </tr>
           {% endfor %}
         </table>
+      {% else %}
+        <p>{{profile['name']}} hasn't had any interaction at the moment.</p>
+      {% endif %}
       </div>
 
   <script type="text/javascript" src="/static/lib/d3.min.js" ></script>
@@ -582,12 +593,16 @@
                 $("#graph").html(
                   '<div style="margin: 20px;">'
                   +'Sorry, this event has not started, yet. Came back in '
-                  +'<span id="countdown-val">' + Math.floor((start_ftime - cur_ftime + 2000) / 1000) + '</span> seconds.</div>');
+                  +'<span class="countdown-val">' + Math.floor((start_ftime - cur_ftime + 2000) / 1000) + '</span> seconds.</div>');
+                $("#chart").html(
+                  '<div style="margin: 20px;">'
+                  +'Sorry, this event has not started, yet. Came back in '
+                  +'<span class="countdown-val">' + Math.floor((start_ftime - cur_ftime + 2000) / 1000) + '</span> seconds.</div>');
                 $('.live-label').hide();
                 $('#control-panel').hide();
                 countdown_interval = setInterval(function() {
                   cur_ftime = (new Date()).valueOf();
-                  $("#countdown-val").html(Math.floor((start_ftime - cur_ftime + 2000) / 1000));
+                  $(".countdown-val").html(Math.floor((start_ftime - cur_ftime + 2000) / 1000));
                 }, 1000);
                 setTimeout(start_visualisation, start_ftime - cur_ftime + 2000);
               } else {
@@ -597,6 +612,7 @@
               function start_visualisation() {
                 clearInterval(countdown_interval);
                 $("#graph").html("");
+                $("#chart").html("");
                 $('#control-panel').show();
                 $('.live-label').show();
                 $.ajax({

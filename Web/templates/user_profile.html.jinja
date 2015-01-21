@@ -5,6 +5,16 @@
 {% endblock %}
 
 {% block privileged_base_content %}
+  {% if current_user_username in friends %}
+    <form style="margin:10px" align="right" action="/user/delete/{{username}}" method="POST">
+      <button type="submit" class="btn btn-default">Unfriend</button>
+    </form>
+  {% elif current_user_username != username %}
+    <form style="margin:10px" align="right" action="/user/add/{{username}}" method="POST">
+      <button type="submit" class="btn btn-primary">Add Friend</button>
+    </form>
+  {% endif %}
+
   <div role="tabpanel">
 
     <!-- Nav tabs -->
@@ -33,36 +43,13 @@
                 <dt>phone</dt>         <dd>{{profile['phone']}}</dd>
                 <dt>external_link</dt> <dd>{{profile['external_link']}}</dd>
                 <dt>gender</dt>        <dd>{{profile['gender']}}</dd>
-                <!-- TODO(gunpinyo): add photo and friend panel -->
               </dl>
             </div>
-            <p hidden id="profile-picture-src">
-              {% if profile['photo'] %}
-                {{profile['photo']}}
-              {% else %}
-                http://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Orange_Icon_User.svg/301px-Orange_Icon_User.svg.png
-              {% endif %}
-            </p>
             <div class="col-md-4">
-              <img id="profile-picture" width=160 height=160/>
-              <script>
-              
-                  var source = $('#profile-picture-src').text();
-                  // change to correct profile picture
-                  var img = document.createElement('img');
-
-                      img.onload = function (e) {
-                          var canvas = document.createElement("canvas");
-                          var ctx = canvas.getContext("2d");
-                          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                          var url = canvas.toDataURL();
-                          var output = document.getElementById("profile-picture");
-                          output.src = url;
-                      };
-
-                      img.crossOrigin = 'anonymous';
-                      img.src = source;
-              </script>
+              <div class="profile-picture-container">
+                <p hidden>{{profile['photo']}}</p>
+                <img width=160 height=160/>
+              </div>
             </div>
           </div>
           </div>
@@ -72,10 +59,28 @@
       </div>
 
       <div role="tabpanel" class="tab-pane" id="friends">
-        ...
+        {% if friends %}
+          <table class="table table-hover">
+            <tr>
+              <th>Photo</th>
+              <th>Username</th>
+              <th>Name</th>
+            </tr>
+            {% for _, friend_record in friends.items() %}
+              <tr class="clickable-row" href="/user/profile/{{ friend_record['username'] }}">
+                <td>{{ friend_record['photo'] }}</td>
+                <td><a href="/user/profile/{{ friend_record['username'] }}">{{ friend_record['username'] }}</a></td>
+                <td>{{ friend_record['name'] }}</td>
+              </tr>
+            {% endfor %}
+          </table>
+        {% else %}
+          <p>{{username}} doesn't have any friends.</p>
+        {% endif %}
       </div>
 
       <div role="tabpanel" class="tab-pane" id="organised-events">
+      {% if organised_events %}
         <table class="table table-hover">
           <tr>
             <th>Event name</th>
@@ -98,9 +103,13 @@
             </tr>
           {% endfor %}
         </table>
+      {% else %}
+        <p>{{username}} doesn't have any organised events.</p>
+      {% endif %}
       </div>
 
       <div role="tabpanel" class="tab-pane" id="spoken-events">
+      {% if spoken_events %}
         <table class="table table-hover">
           <tr>
             <th>Event name</th>
@@ -123,9 +132,13 @@
             </tr>
           {% endfor %}
         </table>
+      {% else %}
+        <p>{{username}} doesn't have any spoken events.</p>
+      {% endif %}
       </div>
 
       <div role="tabpanel" class="tab-pane" id="attended-events">
+      {% if events %}
         <table class="table table-hover">
           <tr>
             <th>Event name</th>
@@ -140,6 +153,9 @@
             </tr>
           {% endfor %}
         </table>
+      {% else %}
+        <p>{{username}} doesn't have any attended events.</p>
+      {% endif %}
       </div>
     </div>
 {% endblock %}

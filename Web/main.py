@@ -138,7 +138,6 @@ def logout():
         return redirect_to_default(
             'You need to login in order to logout.')
 
-    # TODO(gunpiyo): research how to disable undo cache after logout
     session.clear()
     session['next_page_param_dict'] = {
         'success_message': 'You have successfully signed out.'
@@ -184,14 +183,54 @@ def user_profile(username=None):
             if event.get('speaker', '') == username:
                 spoken_events.append(event.copy())
 
+        friends = db_api.get_friends(username, include_detail=True)
+
         param_dict = user_dict.copy()
         param_dict['username'] = username
+        param_dict['friends'] = friends
+        param_dict['is_current_user_friend'] = friends
         param_dict['organised_events'] = organised_events
         param_dict['spoken_events'] = spoken_events
         return render('user_profile.html.jinja', param_dict)
     else:
         session.setdefault('next_page_param_dict', {})
         session['next_page_param_dict'].update(user_dict)
+        return redirect_to_default(stay_on_current_page=True)
+
+
+@app.route('/user/add/<username>', methods=['POST'])
+def add_friend(username):
+    if not is_currently_login():
+        return redirect_to_default(
+            'You need to login in order to add friend.')
+
+    add_friends_dict = db_api.add_friends(
+        session['current_user_username'], [username])
+
+    if add_friends_dict['is_success']:
+        session['next_page_param_dict'] = add_friends_dict.copy()
+        return redirect(url_for(
+            'user_profile', username=username))
+    else:
+        session['next_page_param_dict'] = add_friends_dict.copy()
+        return redirect_to_default(stay_on_current_page=True)
+
+
+@app.route('/user/delete/<username>', methods=['POST'])
+def delete_friend(username):
+    if not is_currently_login():
+        return redirect_to_default(
+            'You need to login in order to delete friend.')
+
+    delete_friends_dict = db_api.delete_friends(
+        session['current_user_username'], [username])
+
+    if delete_friends_dict['is_success']:
+        session['next_page_param_dict'] = delete_friends_dict.copy()
+        return redirect(url_for(
+            'user_profile', username=username))
+    else:
+        session['next_page_param_dict'] = delete_friends_dict.copy()
         return redirect_to_default(stay_on_current_page=True)
 
 
@@ -306,8 +345,9 @@ def can_join_event(event_id, username=None):
 
 
 @app.route('/event/profile/<event_id>', methods=['GET'])
+@app.route('/event/profile/<event_id>/pinned/<username>', methods=['GET'])
 @cross_origin()
-def event_profile(event_id):
+def event_profile(event_id, username=None):
     if not is_currently_login():
         return redirect_to_default(
             'You need to login in order to see event profile.')
@@ -340,43 +380,6 @@ def xhr_get_event_visualisation_data(event_id):
 def fake_xhr_get_event_visualisation_data(event_id):
     return json.jsonify(db_api.fake_xhr_get_event_visualisation_data(event_id))
 
-
-
-# @app.route('/ajax/conferences', methods=['GET'])
-# def get_list_conferences():
-#     return json.jsonify(db_interface.list_conferences())
-
-
-# # @app.get('/ajax/conference/<conference_id>/contact-list')
-# # def contact_list(conference_id):
-# #     response.content_type = 'application/json'
-# #     return db_interface.contact_list(conference_id)
-
-
-# @app.route('/ajax/contact-interval', methods=['GET'])
-# def contact_interval():
-#     return json.jsonify(
-#         db_interface.contact_interval(
-#             int(request.args.get('conference_id', '-1'))))
-
-
-# @app.route('/xhr/event/create', methods=['POST'])
-# def create_event():
-#     return json.jsonify(db_api.create_event(**request.get_json()))
-
-
-# @app.route('/xhr/event/get/<int:event_id>', methods=['GET'])
-# def get_event(event_id):
-#     return json.jsonify(db_api.get_event(event_id))
-
-# @app.route('/xhr/user/create', methods=['POST']):
-# def create_user(user_id):
-#     return json.jsonify(db_api.create_())
-
-
-# @app.route('/xhr/user/get/<int:user_id>', methods=['GET'])
-# def get_user(user_id):
-#     return json.jsonify(db_api.get_user(user_id))
 
 if __name__ == '__main__':
     # secret key for flask session

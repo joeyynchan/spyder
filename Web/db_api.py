@@ -186,6 +186,59 @@ def join_event(event_id, username, status="Attendee"):
     return response_dict[status_code]
 
 
+def get_friends(username, include_detail=False):
+    return {} if include_detail else []
+    # TODO
+    friend_usernames = db_connect('/user/connections/user_name=%s' % username)
+
+    if include_detail:
+        friends = {}
+        for friend_username in friend_usernames:
+            profile_code, profile_content = db_connect(
+                '/user/profile?user_name=%s' % friend_username)
+            if profile_code == http.client.OK:
+                friends[username] = profile_content
+        return friends
+    else:
+        friend_usernames
+
+
+def add_friends(username, friend_list):
+    status_code, content = db_connect(
+        '/user/connections?user_name=%s' % username,
+        {'operation': 'add', 'connections': friend_list})
+
+    if status_code == http.client.OK:
+        return {
+            'is_success': True,
+            'success_message':
+                'You have successfully added %s as friend' % friend_list
+        }
+    else:
+        return {
+            'is_success': False,
+            'error_message': 'You cannot add %s as friend' % friend_list
+        }
+
+
+def delete_friends(username, friend_list):
+    status_code, content = db_connect(
+        '/user/connections?user_name=%s' % username,
+        {'operation': 'delete', 'connections': friend_list})
+
+    if status_code == http.client.OK:
+        return {
+            'is_success': True,
+            'success_message':
+                'You have successfully deleted %s from friend' % friend_list
+        }
+    else:
+        return {
+            'is_success': False,
+            'error_message': 'You cannot delete %s from friend' % friend_list
+        }
+
+
 def get_user_profile(username):
     status_code, content = db_connect(
         '/user/profile?user_name=%s' % username)
