@@ -360,7 +360,7 @@ def event_profile(event_id, username=None):
     param_dict['can_join_event'] = can_join_event(event_id)
     if username:
         param_dict['pinned_username'] = username
-        param_dict['pinned_friend'] = db_api.get_friends(username)
+        param_dict['pinned_friends'] = db_api.get_friends(username)
     return render('event_profile.html.jinja', param_dict)
 
 

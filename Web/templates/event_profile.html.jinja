@@ -126,7 +126,8 @@
     var is_personal_view = {{ 'true' if pinned_username else 'false'}};
     {% if pinned_username %}
     var pinned_username = '{{pinned_username}}';
-    // var pinned_friends = {{pinned_friends}};
+    alert("{{pinned_friends}}");
+    var pinned_friends = {{pinned_friends}};
     {% endif %}
 
     function datetime_to_inttime_raw(datetime) {
@@ -203,8 +204,12 @@
 
     function addNode(username) {
       var role = 3;
-      if (is_personal_view && username === pinned_username) {
-        role = 1;
+      if (is_personal_view) {
+        if (username === pinned_username) {
+          role = 1;
+        } else if (pinned_friends.indexOf(username) > -1) {
+          role = 2;
+        }
       }
       graph.addNode(username, 'http://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Orange_Icon_User.svg/301px-Orange_Icon_User.svg.png', role);
     }
