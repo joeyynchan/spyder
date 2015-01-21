@@ -123,6 +123,12 @@
     // ordered by time
     var tinteractl;
 
+    var is_personal_view = {{ 'true' if pinned_username else 'false'}};
+    {% if pinned_username %}
+    var pinned_username = '{{pinned_username}}';
+    // var pinned_friends = {{pinned_friends}};
+    {% endif %}
+
     function datetime_to_inttime_raw(datetime) {
       var d = new Date(datetime);
       // convert from millsecond to second
@@ -195,9 +201,17 @@
       return list;
     }
 
+    function addNode(username) {
+      var role = 3;
+      if (is_personal_view && username === pinned_username) {
+        role = 1;
+      }
+      graph.addNode(username, 'http://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Orange_Icon_User.svg/301px-Orange_Icon_User.svg.png', role);
+    }
+
     function add_all_node() {
       for (var i = 0; i < attendee_list.length; i++) {
-        graph.addNode(attendee_list[i]);
+        addNode(attendee_list[i]);
       }
     }
 
@@ -352,7 +366,7 @@
                 if (new_attendee_list[i] == attendee_list[j]) {
                   j ++;
                 } else {
-                  graph.addNode(new_attendee_list[i]);
+                  addNode(new_attendee_list[i]);
                 }
               }
               lock = false;
@@ -489,6 +503,39 @@
       </div>
 
       <div role="tabpanel" class="tab-pane active" id="visualisation" style="width: 100%">
+              <div id="control-panel" class="container-fluid" style="margin:20px">
+              <div class="row">
+            {% if pinned_username %}
+                <div class="col-md-4">
+                <p>
+                  <b> Personal view of <a href="/user/profile/{{ pinned_username }}">{{pinned_username}}</a>.</b>
+                </p>
+                </div>
+                <div class="col-md-4">
+                <form style="margin:0px" action="/event/profile/{{event_id}}" method="GET">
+            <button type="submit" class="btn btn-default">Go back to global view</button>
+                </form>
+                </div>
+            {% else %}
+                <div class="col-md-8">
+                  <p><b>This is global view.</b></p>
+                </div>
+            {% endif %}
+                <div class="col-md-4">
+                  <div class="dropdown">
+                    <button class="btn btn-default dropdown-toggle" type="button" id="personal-selector" data-toggle="dropdown" aria-expanded="true">
+                      Select personal view
+                      <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="personal-selector">
+                      {% for record in attendees['user_mappings'] %}
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="/event/profile/{{event_id}}/personal/{{record['user_name']}}">{{record['user_name']}}</a></li>
+                      {% endfor %}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              </div>
             <div id="graph"></div>
             <div id="control-panel" class="container-fluid">
             <div class="row">

@@ -345,7 +345,7 @@ def can_join_event(event_id, username=None):
 
 
 @app.route('/event/profile/<event_id>', methods=['GET'])
-@app.route('/event/profile/<event_id>/pinned/<username>', methods=['GET'])
+@app.route('/event/profile/<event_id>/personal/<username>', methods=['GET'])
 @cross_origin()
 def event_profile(event_id, username=None):
     if not is_currently_login():
@@ -358,6 +358,9 @@ def event_profile(event_id, username=None):
     }
     param_dict.update(db_api.xhr_get_event_visualisation_data(event_id))
     param_dict['can_join_event'] = can_join_event(event_id)
+    if username:
+        param_dict['pinned_username'] = username
+        param_dict['pinned_friend'] = db_api.get_friends(username)
     return render('event_profile.html.jinja', param_dict)
 
 
