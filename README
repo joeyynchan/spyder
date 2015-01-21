@@ -8,4 +8,11 @@ you need to have python3 then install the following package
 then run the following command (assume that you are in root directory)
   - cd Web/
   - ./main
+
+How to start the API Server:
+  
+To start the API server, simply import the MongoDBWebApp to eclipse as a Maven Project and run the app on a Tomcat Server (v6). This should generate a war file inside the Tomcat server folder.
+Once this is done, to start the server each time without eclipse, simply navigate to <Tomcat_Server_Folder>/bin/ and then run "sudo sh startup.sh" in terminal to start the server from terminal.
+This will start the server using the war file compiled in eclipse.
+
 Finally, enjoy :D
