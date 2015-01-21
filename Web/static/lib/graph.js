@@ -1,7 +1,7 @@
 function myGraph(el) {
 
     // Add and remove elements on the graph object
-    this.addNode = function (id, link) {
+    this.addNode = function (id, link, role) {
         if (role == 1) {
 			nodes.push({"id":id, "icon": link, "size": "24px", "fontSize": "22px", "fontWeight": "bold", "fontStyle": "normal"});
 		} else {
