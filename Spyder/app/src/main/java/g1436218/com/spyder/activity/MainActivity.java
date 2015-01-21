@@ -192,4 +192,8 @@ public class MainActivity extends BaseActivity {
         new FetchAttendees(this).execute();
     }
 
+    public MainActivityReceiver getReceiver() {
+        return receiver;
+    }
+
 }
