@@ -116,6 +116,7 @@
     var graph; // d3 graph
     // list of (username : string), reflect node in graph
     var attendee_list;
+    var attendee_show = {};
     // set of {user_a : string, user_b : string}, reflect edge in graph
     // var graph_edges;
     // list of {time : int, user_a : string, user_b : string, is_add: bool}
@@ -144,13 +145,6 @@
       var d = new Date(1000 * (time + shift_start_time));
       return d.toLocaleString();
     }
-
-    // sort on key values
-    // function keysrt(key,desc) {
-    //   return function(a,b){
-    //    return desc ? ~~(a[key] < b[key]) : ~~(a[key] > b[key]);
-    //   }
-    // }
 
     function keysrt(key) {
       return function(a,b){
@@ -227,8 +221,7 @@
         return;
       }
 
-      var edges;
-      edges = {};
+      var edges = {};
       for (var i = 0; i < attendee_list.length; i++) {
         edges[attendee_list[i]] = {}
         for (var j = 0; j <= i; j++) {

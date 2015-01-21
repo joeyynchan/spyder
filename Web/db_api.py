@@ -1,5 +1,6 @@
 from db_connection import db_connect
 import http
+import json
 
 
 def register(
@@ -186,10 +187,20 @@ def join_event(event_id, username, status="Attendee"):
     return response_dict[status_code]
 
 
+def get_friends_raw(username):
+    status_code, content = db_connect(
+        '/user/connections?user_name=%s' % username)
+    if status_code == http.client.OK:
+        return [
+            string.strip()
+            for string in content['connections'][1:-1].split(',')
+        ]
+    else:
+        return []
+
+
 def get_friends(username, include_detail=False):
-    return {} if include_detail else []
-    # TODO
-    friend_usernames = db_connect('/user/connections/user_name=%s' % username)
+    friend_usernames = get_friends_raw(username)
 
     if include_detail:
         friends = {}
@@ -197,10 +208,16 @@ def get_friends(username, include_detail=False):
             profile_code, profile_content = db_connect(
                 '/user/profile?user_name=%s' % friend_username)
             if profile_code == http.client.OK:
-                friends[username] = profile_content
+                friends[friend_username] = profile_content
+            else:
+                friends[friend_username] = {'name': '', 'photo': ''}
         return friends
     else:
-        friend_usernames
+        return friend_usernames
+
+
+if __name__ == '__main__':
+    print(get_friends('peterpk'))
 
 
 def add_friends(username, friend_list):

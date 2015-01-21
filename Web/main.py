@@ -184,7 +184,7 @@ def user_profile(username=None):
                 spoken_events.append(event.copy())
 
         friends = db_api.get_friends(username, include_detail=True)
-
+        print(friends)
         param_dict = user_dict.copy()
         param_dict['username'] = username
         param_dict['friends'] = friends
@@ -363,6 +363,10 @@ def event_profile(event_id, username=None):
 
 @app.route('/event/list', methods=['GET'])
 def event_list():
+    if not is_currently_login():
+        return redirect_to_default(
+            'You need to login in order to see event list.')
+
     profiles = []
     for profile in db_api.get_all_event_profile():
         profile['can_join_event'] = can_join_event(profile['event_id'])

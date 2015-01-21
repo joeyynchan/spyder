@@ -66,10 +66,15 @@
               <th>Username</th>
               <th>Name</th>
             </tr>
-            {% for _, friend_record in friends.items() %}
-              <tr class="clickable-row" href="/user/profile/{{ friend_record['username'] }}">
-                <td>{{ friend_record['photo'] }}</td>
-                <td><a href="/user/profile/{{ friend_record['username'] }}">{{ friend_record['username'] }}</a></td>
+            {% for friend_username, friend_record in friends.items() %}
+              <tr class="clickable-row" href="/user/profile/{{ friend_username }}">
+                <td>
+                  <div class="profile-picture-container">
+                    <p hidden>{{ friend_record['photo'] }}</p>
+                    <img width=40 height=40/>
+                  </div>
+                </td>
+                <td><a href="/user/profile/{{ friend_username }}">{{ friend_username }}</a></td>
                 <td>{{ friend_record['name'] }}</td>
               </tr>
             {% endfor %}
