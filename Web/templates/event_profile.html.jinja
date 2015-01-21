@@ -126,7 +126,6 @@
     var is_personal_view = {{ 'true' if pinned_username else 'false'}};
     {% if pinned_username %}
     var pinned_username = '{{pinned_username}}';
-    alert("{{pinned_friends}}");
     var pinned_friends = {{pinned_friends}};
     {% endif %}
 
